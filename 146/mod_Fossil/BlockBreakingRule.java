@@ -69,7 +69,8 @@ public class BlockBreakingRule
 
         for (int j = (int)Math.round(destroyer.boundingBox.minX) - 1; j <= (int)Math.round(destroyer.boundingBox.maxX) + 1; j++)
         {
-            for (int k = (int)Math.round(destroyer.boundingBox.minY); (k <= (int)Math.round(destroyer.boundingBox.maxY) + 3) && (k <= 127); k++)
+//            for (int k = (int)Math.round(destroyer.boundingBox.minY); (k <= (int)Math.round(destroyer.boundingBox.maxY) + 3) && (k <= 127); k++)
+        	for (int k = (int)Math.round(destroyer.boundingBox.minY); (k <= (int)Math.round(destroyer.boundingBox.maxY) + 2) && (k <= 127); k++)
             {
                 for (int l = (int)Math.round(destroyer.boundingBox.minZ) - 1; l <= (int)Math.round(destroyer.boundingBox.maxZ) + 1; l++)
                 {
@@ -96,5 +97,6 @@ public class BlockBreakingRule
                 }
             }
         }
+        
     }
 }

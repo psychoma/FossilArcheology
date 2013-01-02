@@ -377,7 +377,7 @@ public class Entitydil extends EntityDinosaurce
                     setTamed(false);
                     setOwner("");
                     ItemInMouth = null;
-                    //setSelfAngry(true);
+                    setSelfAngry(true);
                     this.setTarget((EntityLiving)entity);
                     this.PreyChecked = true;
                     isPlayerAttack = true;
@@ -407,13 +407,13 @@ public class Entitydil extends EntityDinosaurce
     }
     protected Entity findPlayerToAttack()
     {
-        /*if(isSelfAngry())
+        if(isSelfAngry())
         {
             return worldObj.getClosestPlayerToEntity(this, 16D);
         } else
-        {*/
+        {
         return null;
-        //}
+        }
     }
     protected void attackEntity(Entity entity, float f)
     {

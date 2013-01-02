@@ -175,6 +175,16 @@ public class EntityTRex extends EntityDinosaurce
     {
         if (entity instanceof EntityLiving && !(entity instanceof EntityPlayer))
         {
+        	if ((this.getHunger() < this.getHungerLimit()/2) && this.onGround && this.getDinoAge() > 3)
+        	{
+//        this.onKillEntity((EntityLiving)entity);
+        ((EntityLiving)entity).attackEntityFrom(DamageSource.causeMobDamage(this), 10);
+        return;
+        	}
+        }
+    	/*
+        if (entity instanceof EntityLiving && !(entity instanceof EntityPlayer))
+        {
             if ((this.riddenByEntity != null || this.isSelfAngry()) && this.onGround && this.getDinoAge() > 3)
             {
                 this.onKillEntity((EntityLiving)entity);
@@ -184,6 +194,7 @@ public class EntityTRex extends EntityDinosaurce
         }
 
         super.applyEntityCollision(entity);
+        */
     }
     public boolean getSelfShaking()
     {
@@ -334,7 +345,6 @@ public class EntityTRex extends EntityDinosaurce
         if (getDinoAge() >= 3)
         {
             worldObj.playSoundAtEntity(this, "TRex_scream", getSoundVolume() * 2.0F, 1.0F);
-            System.err.println("rawr");
         }
 
         if (!isWeak())
@@ -839,7 +849,15 @@ public class EntityTRex extends EntityDinosaurce
     public boolean isWeak()
     {
 //        return false;
-        return ((this.getHunger()==1 || this.getHealth()<=20) && this.getDinoAge()>3 && !this.isTamed());
+        if (this.getHunger() < 5 && this.getHealth() <= 20 && this.getDinoAge()>3 && !this.isTamed()) 
+        {
+        	return true;
+        }
+        else
+        {
+            return false;
+        }
+ //       return ((this.getHunger()==1 || this.getHealth()<=20) && this.getDinoAge()>3 && !this.isTamed());
     }
     private void HandleWeak()
     {
@@ -1089,12 +1107,6 @@ public class EntityTRex extends EntityDinosaurce
     {
         // TODO Auto-generated method stub
         return 0;
-    }
-
-    @Override
-    public void HandleEating(Item food)
-    {
-        // TODO Auto-generated method stub
     }
 
     @Override

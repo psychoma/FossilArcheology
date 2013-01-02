@@ -48,9 +48,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.common.Configuration;
 
 //because we are using random values below.
-@Mod(modid = "mod_Fossil", name = "Fossil/Archeology", version = "v7.1.0a Unofficial")
+@Mod(modid = "mod_Fossil", name = "Fossil/Archeology", version = "v7.2.0a Unofficial")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 
 public class mod_Fossil
@@ -273,7 +274,7 @@ public class mod_Fossil
         SetupID();
         //SetupOptions();
         initBlockAndItems();
-        registBlocks();
+        registerBlocks();
         /*
          * MutiLanguage:Set names
          */
@@ -353,7 +354,7 @@ public class mod_Fossil
     public String getVersion() //every mod for modloader need this function,too.
     //or modloader will refuse to load this mod.
     {
-        return "v7.1.0a Unofficial";
+        return "v7.2.0a Unofficial";
     }
     @SideOnly(Side.CLIENT)
     public void registingRenderer()
@@ -577,6 +578,11 @@ public class mod_Fossil
                 //if (props.containsKey("Mode Debug") && !OldFileDetected) DebugMode=Boolean.getBoolean(props.getProperty("Mode Debug"));
                 //Storeback.setProperty("Mode Debug", Boolean.toString(DebugMode));
                 System.out.println(new StringBuilder().append("Anu Spawn:").append(FossilOptions.ShouldAnuSpawn ? "Engaged" : "Disabled"));
+                System.out.println(new StringBuilder().append("SpawnShipWrecks:").append(FossilOptions.SpawnShipwrecks ? "Engaged" : "Disabled"));
+                System.out.println(new StringBuilder().append("SpawnWeaponShop:").append(FossilOptions.SpawnWeaponShop ? "Engaged" : "Disabled"));
+                System.out.println(new StringBuilder().append("SpawnAcademy:").append(FossilOptions.SpawnAcademy ? "Engaged" : "Disabled"));
+                System.out.println(new StringBuilder().append("TRexBreakingBlocks:").append(FossilOptions.TRexBreakingBlocks ? "Engaged" : "Disabled"));
+                System.out.println(new StringBuilder().append("BraBreakingBlocks:").append(FossilOptions.BraBreakingBlocks ? "Engaged" : "Disabled"));            
                 System.out.println(new StringBuilder().append("Debug Mode:").append(DebugMode ? "Engaged" : "Disabled"));
             }
 
@@ -616,7 +622,7 @@ public class mod_Fossil
     {
         return input.ToInt();
     }
-    private void registBlocks()
+    private void registerBlocks()
     {
         GameRegistry.registerBlock(blockFossil, "fossil_blockFossil");
         GameRegistry.registerBlock(blockSkull, "fossil_blockSkull");
@@ -682,7 +688,8 @@ public class mod_Fossil
         Ancientegg = new ItemAncientEgg(ItemIDs[4]).setItemName("TriceratopsEgg").setCreativeTab(CreativeTabs.tabMaterials);
         AncientSword = new ItemAncientsword(ItemIDs[5]).setItemName("ancientsword").setCreativeTab(CreativeTabs.tabCombat);
         BrokenSword = new ItemBrokenSword(ItemIDs[6]).setItemName("Brokensword").setCreativeTab(CreativeTabs.tabMaterials);
-        FernSeed = new ItemSeeds(ItemIDs[7], Ferns.blockID, Block.grass.blockID).setItemName("FernSeed").setCreativeTab(CreativeTabs.tabMaterials);
+//        FernSeed = new ItemSeeds(ItemIDs[7], Ferns.blockID, Block.grass.blockID).setItemName("FernSeed").setCreativeTab(CreativeTabs.tabMaterials);
+        FernSeed = new ItemFernSeed(ItemIDs[7], Ferns.blockID).setItemName("FernSeed").setCreativeTab(CreativeTabs.tabMaterials);
         FernSeed.setTextureFile("/skull/Fos_items.png");
 
         if (FMLCommonHandler.instance().getSide().isClient())

@@ -16,6 +16,8 @@ public class BlockFern extends BlockFlower
         setTickRandomly(true);
         float f = 0.5F;
         setBlockBounds(0.5F - f, 0.0F, 0.5F - f, 0.5F + f, 0.25F, 0.5F + f);
+        this.disableStats();
+        this.setRequiresSelfNotify();
     }
     protected BlockFern(int i, int j, boolean flag)
     {
@@ -30,6 +32,7 @@ public class BlockFern extends BlockFlower
     {
         return i == Block.grass.blockID;
     }
+    
     public void updateTick(World world, int i, int j, int k, Random random)
     {
         super.updateTick(world, i, j, k, random);
@@ -157,6 +160,7 @@ public class BlockFern extends BlockFlower
         return f;
     }
 
+
     public int getBlockTextureFromSideAndMetadata(int i, int j)
     {
         if (j < 0)
@@ -210,7 +214,8 @@ public class BlockFern extends BlockFlower
 
     public int idDropped(int i, Random random, int unused)
     {
-        return -1;
+ //       return -1;
+    	return 0;
     }
 
     public int quantityDropped(Random random)
@@ -270,5 +275,8 @@ public class BlockFern extends BlockFlower
     		//((EntityTriceratops)entity).heal(3);
     	//}
     }*/
-
+    public int idPicked(World par1World, int par2, int par3, int par4)
+    {
+        return mod_Fossil.FernSeed.shiftedIndex;
+    }
 }

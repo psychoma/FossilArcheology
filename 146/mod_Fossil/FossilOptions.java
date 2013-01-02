@@ -8,8 +8,8 @@ public class FossilOptions
     public static boolean SpawnAcademy = true;
     public static boolean DinoGrows = true;
     public static boolean DinoHunger = true;
-    public static boolean TRexBreakingBlocks = true;
-    public static boolean BraBreakingBlocks = true;
+    public static boolean TRexBreakingBlocks = false;
+    public static boolean BraBreakingBlocks = false;
     public static final String[] negWords = {"false", "no", "off", "close"};
     public static boolean isNegtiveWord(String tester)
     {

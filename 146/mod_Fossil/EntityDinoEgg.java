@@ -82,7 +82,15 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     }
 
     protected void entityInit()
-    {
+    {	
+    	if (mod_Fossil.DebugMode == true)
+    	{
+    		HatchTime = 1;
+    	}
+    	else {
+    		HatchTime = 3000;
+    	}
+        
     }
 
     public AxisAlignedBB getCollisionBox(Entity entity)
@@ -680,7 +688,15 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     public EnumDinoType DinoInside;
     public int BirthTick = 0;
     public String ParentOwner = "";
-    public final int HatchingNeedTime = 3000; //Normal:3000
+	private int HatchTime;
+	
+
+    
+    
+    
+//        public final int HatchingNeedTime = 3000; //Normal:3000
+    public final int HatchingNeedTime = HatchTime; //Normal:3000
+
     @Override
     public void writeSpawnData(ByteArrayDataOutput data)
     {
