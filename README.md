@@ -16,14 +16,16 @@ Copy /SupportFiles/* and /<mc version>/mcmod.info into a zip and place inside yo
 
 Your package structure should look like:
 
+***
 mod_Fossil.zip
 
   /mod_Fossil
   
-    <class files>
+    (class files)
     
-  <resource files>
+  (resource files)
   
   mcmod.info
+***
 
 =========================
