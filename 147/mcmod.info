@@ -1,0 +1,21 @@
+{
+  "modinfoversion": 2,
+  "modlist": [{
+    "modid": "mod_Fossil",
+    "name": "Fossils and Archeology",
+    "description": "Team July's Fossils and Archeology mod. This is the code found under github (https://github.com/fls81245/FossilArcheology).",
+    "version": "7.3.0a Unofficial",
+    "mcversion": "1.4.7",
+    "url": "http://www.minecraftforum.net/topic/1667403-147sspsmp-fossilarcheology-fans-renaissance-v10-recruiting/",
+    "updateUrl": "",
+    "authors": [ "Flammarilva", "Team July" ],
+    "credits": "Authored by Flammarilva of Team July, maintained by 4f6f3b",
+    "logoFile": "fossilarcheology.png",
+    "screenshots": [ ],
+    "parent": "",
+    "requiredMods": [ "Forge" ],
+    "dependencies": [ ],
+    "dependants": [ ],
+    "useDependencyInformation": "false"
+  }]
+}
