@@ -8,8 +8,14 @@ public class EntityFailuresaurus extends EntityZombie
     public EntityFailuresaurus(World world)
     {
         super(world);
-        texture = "/skull/Failuresaurus.png";
     }
+    
+    public String getTexture()
+    {
+    	return "/skull/Failuresaurus.png";
+    }
+    
+    
     protected int getDropItemId()
     {
         return mod_Fossil.biofossil.itemID;
