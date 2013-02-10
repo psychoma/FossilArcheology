@@ -12,7 +12,7 @@ public class RenderPterosaur extends RenderLiving
     {
         super(modelbase, f);
     }
-    private float func_77034_a(float par1, float par2, float par3)
+    private float interpolateRotation(float par1, float par2, float par3)
     {
         float var4;
 

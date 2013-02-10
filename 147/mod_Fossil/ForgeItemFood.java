@@ -22,7 +22,7 @@ public class ForgeItemFood extends ItemFood
     }
     public String getTextureFile()
     {
-        return "/skull/Fos_items.png";
+        return FossilCommonProxy.FOS_ITEMS_PNG;
     }
     public ItemStack onFoodEaten(ItemStack itemstack, World world, EntityPlayer entityplayer)
     {

@@ -86,7 +86,7 @@ public class GuiFeeder extends GuiContainer
                 if (var12.getItemStack() == null && var6 != null && var6.getHasStack())
                 {
                     ItemStack var13 = var6.getStack();
-                    this.func_74184_a(var13, par1 - var4, par2 - var5);
+                    this.drawItemStackTooltip(var13, par1 - var4, par2 - var5);
                 }
                 */
         fontRenderer.drawString(new StringBuilder().append(FeederInventory.getCurrentMeat()).toString(), 23, 32, 0xFF0000);
@@ -99,7 +99,7 @@ public class GuiFeeder extends GuiContainer
     /*
     private boolean isMouseOverSlot(Slot par1Slot, int par2, int par3)
     {
-        return this.func_74188_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
+        return this.isPointInRegion(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
     }
 
      private void drawSlotInventory(Slot par1Slot)

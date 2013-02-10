@@ -18,7 +18,7 @@ public class RenderTRex extends RenderLiving
     {
         super(modelbase, f); // try not to modify anything here, except the referenced class names, for example, "EntityTiger".
     }
-    private float func_77034_a(float par1, float par2, float par3)
+    private float interpolateRotation(float par1, float par2, float par3)
     {
         float var4;
 
@@ -54,8 +54,8 @@ public class RenderTRex extends RenderLiving
 
         try
         {
-            float var10 = this.func_77034_a(par1EntityLiving.prevRenderYawOffset, par1EntityLiving.renderYawOffset, par9);
-            float var11 = this.func_77034_a(par1EntityLiving.prevRotationYawHead, par1EntityLiving.rotationYawHead, par9);
+            float var10 = this.interpolateRotation(par1EntityLiving.prevRenderYawOffset, par1EntityLiving.renderYawOffset, par9);
+            float var11 = this.interpolateRotation(par1EntityLiving.prevRotationYawHead, par1EntityLiving.rotationYawHead, par9);
             float var12 = par1EntityLiving.prevRotationPitch + (par1EntityLiving.rotationPitch - par1EntityLiving.prevRotationPitch) * par9;
             this.renderLivingAt(par1EntityLiving, par2, par4, par6);
             float var13 = this.handleRotationFloat(par1EntityLiving, par9);

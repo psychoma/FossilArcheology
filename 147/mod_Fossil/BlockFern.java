@@ -26,7 +26,7 @@ public class BlockFern extends BlockFlower
     }
     public String getTextureFile()
     {
-        return "/skull/Fos_terrian.png";
+        return FossilCommonProxy.FOS_TERRIAN_PNG;
     }
     protected boolean canThisPlantGrowOnThisBlockID(int i)
     {

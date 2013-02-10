@@ -22,13 +22,13 @@ public class RenderNautilus extends RenderLiving
         super(modelbase, f);
     }
 
-    public void func_77123_a(EntityNautilus entityNautilus, double d, double d1, double d2,
+    public void renderLivingSquid(EntityNautilus entityNautilus, double d, double d1, double d2,
             float f, float f1)
     {
         super.doRenderLiving(entityNautilus, d, d1, d2, f, f1);
     }
 
-    protected void func_77122_a(EntityNautilus entityNautilus, float f, float f1, float par4)
+    protected void rotateSquidsCorpse(EntityNautilus entityNautilus, float f, float f1, float par4)
     {
         //float var5 = entityNautilus.field_70862_e + (entityNautilus.field_70861_d - entityNautilus.field_70862_e) * par4;
         float var6 = entityNautilus.field_70860_g + (entityNautilus.field_70859_f - entityNautilus.field_70860_g) * par4;
@@ -52,18 +52,18 @@ public class RenderNautilus extends RenderLiving
 
     protected void rotateCorpse(EntityLiving entityliving, float f, float f1, float f2)
     {
-        func_77122_a((EntityNautilus)entityliving, f, f1, f2);
+        rotateSquidsCorpse((EntityNautilus)entityliving, f, f1, f2);
     }
 
     public void doRenderLiving(EntityLiving entityliving, double d, double d1, double d2,
             float f, float f1)
     {
-        func_77123_a((EntityNautilus)entityliving, d, d1, d2, f, f1);
+        renderLivingSquid((EntityNautilus)entityliving, d, d1, d2, f, f1);
     }
 
     public void doRender(Entity entity, double d, double d1, double d2,
             float f, float f1)
     {
-        func_77123_a((EntityNautilus)entity, d, d1, d2, f, f1);
+        renderLivingSquid((EntityNautilus)entity, d, d1, d2, f, f1);
     }
 }

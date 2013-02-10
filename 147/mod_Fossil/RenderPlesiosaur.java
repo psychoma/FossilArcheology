@@ -43,7 +43,7 @@ public class RenderPlesiosaur extends RenderLiving
     {
         renderCow((EntityPlesiosaur)entity, d, d1, d2, f, f1);
     }
-    private float func_77034_a(float par1, float par2, float par3)
+    private float interpolateRotation(float par1, float par2, float par3)
     {
         float var4;
 
@@ -80,8 +80,8 @@ public class RenderPlesiosaur extends RenderLiving
 
         try
         {
-            float var10 = this.func_77034_a(entityPlesiosaur.prevRenderYawOffset, entityPlesiosaur.renderYawOffset, f1);
-            float var11 = this.func_77034_a(entityPlesiosaur.prevRotationYawHead, entityPlesiosaur.rotationYawHead, f1);
+            float var10 = this.interpolateRotation(entityPlesiosaur.prevRenderYawOffset, entityPlesiosaur.renderYawOffset, f1);
+            float var11 = this.interpolateRotation(entityPlesiosaur.prevRotationYawHead, entityPlesiosaur.rotationYawHead, f1);
             float var12 = entityPlesiosaur.prevRotationPitch + (entityPlesiosaur.rotationPitch - entityPlesiosaur.prevRotationPitch) * f1;
             this.renderLivingAt(entityPlesiosaur, d, d1, d2);
             float var13 = this.handleRotationFloat(entityPlesiosaur, f1);

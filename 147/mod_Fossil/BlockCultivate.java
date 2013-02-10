@@ -361,6 +361,6 @@ public class BlockCultivate extends BlockContainer
     }
     public String getTextureFile()
     {
-        return "/skull/Fos_terrian.png";
+        return FossilCommonProxy.FOS_TERRIAN_PNG;
     }
 }

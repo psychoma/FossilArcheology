@@ -91,7 +91,7 @@ public class ContainerFeeder extends Container
         return tileEntityFeeder.isUseableByPlayer(entityplayer);
     }
     /*
-    public ItemStack func_82846_b(int i)
+    public ItemStack transferStackInSlot(int i)
     {
     	return null;
     }

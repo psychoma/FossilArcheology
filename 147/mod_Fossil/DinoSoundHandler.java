@@ -11,8 +11,10 @@ public class DinoSoundHandler
     private static final String DINOSOUND_LOC = "/DinoSounds/";
 
 
+
+
     @ForgeSubscribe
-    public void onSoundsLoaded(SoundLoadEvent event)
+    public void onSound(SoundLoadEvent event)
     {
     	SoundManager manager = event.manager;
 
@@ -21,11 +23,14 @@ public class DinoSoundHandler
             File soundFileList = new File(this.getClass().getResource(DINOSOUND_LOC).getFile());
             String[] soundNameList = soundFileList.list();
             String nameTmp;
+            mod_Fossil.DebugMessage("Sound location:" + soundFileList.getPath());
 
             for (int i = 0; i < soundNameList.length; i++)
             {
 
                 nameTmp = soundFileList.getPath() + "/" + soundNameList[i];
+ //           	nameTmp = soundFileList.getPath() + soundNameList[i];
+                mod_Fossil.DebugMessage("SOUND DEBUG1:" + nameTmp);
                 event.manager.soundPoolSounds.addSound(soundNameList[i], new File(nameTmp));
 
                 

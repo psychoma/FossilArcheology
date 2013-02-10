@@ -86,7 +86,7 @@ public class ContainerTimeMachine extends Container
     /**
      * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
-    public ItemStack func_82846_b(int par1)
+    public ItemStack transferStackInSlot(int par1)
     {
         return null;
     }

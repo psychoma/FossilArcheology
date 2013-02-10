@@ -35,7 +35,7 @@ public class ItemAncientEgg extends Item
     }
     public String getTextureFile()
     {
-        return "/skull/Fos_items.png";
+        return FossilCommonProxy.FOS_ITEMS_PNG;
     }
     public int getIconFromDamage(int i)
     {

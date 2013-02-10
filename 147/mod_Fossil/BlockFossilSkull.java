@@ -16,7 +16,7 @@ public class BlockFossilSkull extends BlockDirectional
     }
     public String getTextureFile()
     {
-        return "/skull/Fos_terrian.png";
+        return FossilCommonProxy.FOS_TERRIAN_PNG;
     }
     public int getBlockTextureFromSideAndMetadata(int i, int j)
     {

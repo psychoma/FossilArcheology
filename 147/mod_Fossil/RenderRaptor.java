@@ -22,7 +22,7 @@ public class RenderRaptor extends RenderLiving
     {
         super(modelbase, f);
     }
-    private float func_77034_a(float par1, float par2, float par3)
+    private float interpolateRotation(float par1, float par2, float par3)
     {
         float var4;
 
@@ -59,8 +59,8 @@ public class RenderRaptor extends RenderLiving
 
         try
         {
-            float var10 = this.func_77034_a(entityRaptor.prevRenderYawOffset, entityRaptor.renderYawOffset, f1);
-            float var11 = this.func_77034_a(entityRaptor.prevRotationYawHead, entityRaptor.rotationYawHead, f1);
+            float var10 = this.interpolateRotation(entityRaptor.prevRenderYawOffset, entityRaptor.renderYawOffset, f1);
+            float var11 = this.interpolateRotation(entityRaptor.prevRotationYawHead, entityRaptor.rotationYawHead, f1);
             float var12 = entityRaptor.prevRotationPitch + (entityRaptor.rotationPitch - entityRaptor.prevRotationPitch) * f1;
             this.renderLivingAt(entityRaptor, d, d1, d2);
             float var13 = this.handleRotationFloat(entityRaptor, f1);

@@ -88,7 +88,7 @@ public class ContainerWorktable extends Container
         return furnace.isUseableByPlayer(entityplayer);
     }
     /*
-    public ItemStack func_82846_b(int i)
+    public ItemStack transferStackInSlot(int i)
     {
         ItemStack itemstack = null;
         Slot slot = (Slot)inventorySlots.get(i);

@@ -95,7 +95,7 @@ public class ContainerCultivate extends Container
         return furnace.isUseableByPlayer(entityplayer);
     }
     /*
-    public ItemStack func_82846_b(int par1)
+    public ItemStack transferStackInSlot(int par1)
     {
     	 ItemStack itemstack = null;
             Slot slot = (Slot)inventorySlots.get(par1);

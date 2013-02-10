@@ -28,7 +28,7 @@ public class ItemDNA extends Item
     }
     public String getTextureFile()
     {
-        return "/skull/Fos_items.png";
+        return FossilCommonProxy.FOS_ITEMS_PNG;
     }
     public String getItemNameIS(ItemStack itemstack)
     {

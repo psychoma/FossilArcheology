@@ -20,7 +20,7 @@ public class RenderBrachiosaurus extends RenderLiving
     {
         super(new ModelBrachiosaurus(), f);
     }
-    private float func_77034_a(float par1, float par2, float par3)
+    private float interpolateRotation(float par1, float par2, float par3)
     {
         float var4;
 
@@ -57,8 +57,8 @@ public class RenderBrachiosaurus extends RenderLiving
 
         try
         {
-            float var10 = this.func_77034_a(Entitybrachiosaurus.prevRenderYawOffset, Entitybrachiosaurus.renderYawOffset, f1);
-            float var11 = this.func_77034_a(Entitybrachiosaurus.prevRotationYawHead, Entitybrachiosaurus.rotationYawHead, f1);
+            float var10 = this.interpolateRotation(Entitybrachiosaurus.prevRenderYawOffset, Entitybrachiosaurus.renderYawOffset, f1);
+            float var11 = this.interpolateRotation(Entitybrachiosaurus.prevRotationYawHead, Entitybrachiosaurus.rotationYawHead, f1);
             float var12 = Entitybrachiosaurus.prevRotationPitch + (Entitybrachiosaurus.rotationPitch - Entitybrachiosaurus.prevRotationPitch) * f1;
             this.renderLivingAt(Entitybrachiosaurus, d, d1, d2);
             float var13 = this.handleRotationFloat(Entitybrachiosaurus, f1);

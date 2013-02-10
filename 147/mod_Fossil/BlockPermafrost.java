@@ -20,7 +20,7 @@ public class BlockPermafrost extends BlockBreakable
     }
     public String getTextureFile()
     {
-        return "/skull/Fos_terrian.png";
+        return FossilCommonProxy.FOS_TERRIAN_PNG;
     }
     public int getRenderBlockPass()
     {

@@ -674,7 +674,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
         }
     }
     public void BlockInteractive() {};
-    public boolean func_82171_bF()
+    public boolean canBeSteered()
     {
         ItemStack var1 = ((EntityPlayer)this.riddenByEntity).getHeldItem();
         return var1 != null && var1.itemID == mod_Fossil.Whip.itemID;

@@ -18,7 +18,7 @@ public class BlockFossil extends BlockStone
     }
     public String getTextureFile()
     {
-        return "/skull/Fos_terrian.png";
+        return FossilCommonProxy.FOS_TERRIAN_PNG;
     }
     public int idDropped(int i, Random random, int j)
     //when calling this function independently,it can drop 1 item with returned ID value.

@@ -29,7 +29,7 @@ public class ItemEmbryoSyringe extends ForgeItem
     }
     public String getTextureFile()
     {
-        return "/skull/needle.png";
+        return FossilCommonProxy.NEEDLE_PNG;
     }
     public int getIconFromDamage(int i)
     {

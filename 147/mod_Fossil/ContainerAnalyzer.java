@@ -110,7 +110,7 @@ public class ContainerAnalyzer extends Container
         return analyzer.isUseableByPlayer(entityplayer);
     }
     /*
-    	public ItemStack func_82846_b(int i)
+    	public ItemStack transferStackInSlot(int i)
         {
             ItemStack itemstack = null;
             Slot slot = (Slot)inventorySlots.get(i);

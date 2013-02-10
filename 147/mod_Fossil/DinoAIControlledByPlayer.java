@@ -11,16 +11,16 @@ import net.minecraft.util.MathHelper;
 public class DinoAIControlledByPlayer extends EntityAIBase
 {
     private final EntityDinosaurce motionTarget;
-    private final float field_82638_b;
-    private float field_82639_c = 0.0F;
-    private boolean field_82636_d = false;
-    private int field_82637_e = 0;
-    private int field_82635_f = 0;
+    private final float maxSpeed;
+    private float currentSpeed = 0.0F;
+    private boolean speedBoosted = false;
+    private int speedBoostTime = 0;
+    private int maxSpeedBoostTime = 0;
 
     public DinoAIControlledByPlayer(EntityDinosaurce par1EntityLiving, float par2)
     {
         this.motionTarget = par1EntityLiving;
-        this.field_82638_b = par2;
+        this.maxSpeed = par2;
         this.setMutexBits(7);
     }
 
@@ -29,7 +29,7 @@ public class DinoAIControlledByPlayer extends EntityAIBase
      */
     public void startExecuting()
     {
-        this.field_82639_c = 0.0F;
+        this.currentSpeed = 0.0F;
     }
 
     /**
@@ -37,8 +37,8 @@ public class DinoAIControlledByPlayer extends EntityAIBase
      */
     public void resetTask()
     {
-        this.field_82636_d = false;
-        this.field_82639_c = 0.0F;
+        this.speedBoosted = false;
+        this.currentSpeed = 0.0F;
     }
 
     /**
@@ -46,7 +46,7 @@ public class DinoAIControlledByPlayer extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        return this.motionTarget.isEntityAlive() && this.motionTarget.riddenByEntity != null && this.motionTarget.riddenByEntity instanceof EntityPlayer && (this.field_82636_d || this.motionTarget.func_82171_bF());
+        return this.motionTarget.isEntityAlive() && this.motionTarget.riddenByEntity != null && this.motionTarget.riddenByEntity instanceof EntityPlayer && (this.speedBoosted || this.motionTarget.canBeSteered());
     }
 
     /**
@@ -70,29 +70,29 @@ public class DinoAIControlledByPlayer extends EntityAIBase
 
         this.motionTarget.rotationYaw = MathHelper.wrapAngleTo180_float(this.motionTarget.rotationYaw + var3);
 
-        if (this.field_82639_c < this.field_82638_b)
+        if (this.currentSpeed < this.maxSpeed)
         {
-            this.field_82639_c += (this.field_82638_b - this.field_82639_c) * 0.01F;
+            this.currentSpeed += (this.maxSpeed - this.currentSpeed) * 0.01F;
         }
 
-        if (this.field_82639_c > this.field_82638_b)
+        if (this.currentSpeed > this.maxSpeed)
         {
-            this.field_82639_c = this.field_82638_b;
+            this.currentSpeed = this.maxSpeed;
         }
 
         int var4 = MathHelper.floor_double(this.motionTarget.posX);
         int var5 = MathHelper.floor_double(this.motionTarget.posY);
         int var6 = MathHelper.floor_double(this.motionTarget.posZ);
-        float var7 = this.field_82639_c;
+        float var7 = this.currentSpeed;
 
-        if (this.field_82636_d)
+        if (this.speedBoosted)
         {
-            if (this.field_82637_e++ > this.field_82635_f)
+            if (this.speedBoostTime++ > this.maxSpeedBoostTime)
             {
-                this.field_82636_d = false;
+                this.speedBoosted = false;
             }
 
-            var7 += var7 * 1.15F * MathHelper.sin((float)this.field_82637_e / (float)this.field_82635_f * (float)Math.PI);
+            var7 += var7 * 1.15F * MathHelper.sin((float)this.speedBoostTime / (float)this.maxSpeedBoostTime * (float)Math.PI);
         }
 
         float var8 = 0.91F;
@@ -156,11 +156,11 @@ public class DinoAIControlledByPlayer extends EntityAIBase
             var2.getJumpHelper().setJumping();
         }
 
-        /*if (!var1.capabilities.isCreativeMode && this.field_82639_c >= this.field_82638_b * 0.5F && this.motionTarget.getRNG().nextFloat() < 0.006F && !this.field_82636_d)
+        /*if (!var1.capabilities.isCreativeMode && this.currentSpeed >= this.maxSpeed * 0.5F && this.motionTarget.getRNG().nextFloat() < 0.006F && !this.speedBoosted)
         {
             ItemStack var20 = var1.getHeldItem();
 
-            if (var20 != null && var20.itemID == Item.field_82793_bR.shiftedIndex)
+            if (var20 != null && var20.itemID == Item.carrotOnAStick.shiftedIndex)
             {
                 var20.damageItem(1, var1);
 
@@ -172,26 +172,26 @@ public class DinoAIControlledByPlayer extends EntityAIBase
         }*/
         this.motionTarget.moveEntityWithHeading(0.0F, var7);
 
-        if (this.field_82636_d)
+        if (this.speedBoosted)
         {
             this.motionTarget.BlockInteractive();
         }
     }
 
-    public boolean func_82634_f()
+    public boolean isSpeedBoosted()
     {
-        return this.field_82636_d;
+        return this.speedBoosted;
     }
 
-    public void func_82632_g()
+    public void boostSpeed()
     {
-        this.field_82636_d = true;
-        this.field_82637_e = 0;
-        this.field_82635_f = this.motionTarget.getRNG().nextInt(841) + 140;
+        this.speedBoosted = true;
+        this.speedBoostTime = 0;
+        this.maxSpeedBoostTime = this.motionTarget.getRNG().nextInt(841) + 140;
     }
 
-    public boolean func_82633_h()
+    public boolean isControlledByPlayer()
     {
-        return !this.func_82634_f() && this.field_82639_c > this.field_82638_b * 0.3F;
+        return !this.isSpeedBoosted() && this.currentSpeed > this.maxSpeed * 0.3F;
     }
 }

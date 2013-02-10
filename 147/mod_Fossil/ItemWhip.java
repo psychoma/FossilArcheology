@@ -33,7 +33,7 @@ public class ItemWhip extends ItemCarrotOnAStick
 
     public String getTextureFile()
     {
-        return "/skull/Fos_items.png";
+        return FossilCommonProxy.FOS_ITEMS_PNG;
     }
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
@@ -45,9 +45,9 @@ public class ItemWhip extends ItemCarrotOnAStick
         {
             EntityDinosaurce var4 = (EntityDinosaurce)par3EntityPlayer.ridingEntity;
 
-            if (var4.getRidingHandler().func_82633_h() && par1ItemStack.getMaxDamage() - par1ItemStack.getItemDamage() >= 7)
+            if (var4.getRidingHandler().isControlledByPlayer() && par1ItemStack.getMaxDamage() - par1ItemStack.getItemDamage() >= 7)
             {
-                var4.getRidingHandler().func_82632_g();
+                var4.getRidingHandler().boostSpeed();
                 par1ItemStack.damageItem(7, par3EntityPlayer);
 
                 if (par1ItemStack.stackSize == 0)

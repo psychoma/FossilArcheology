@@ -19,7 +19,7 @@ public class RenderTriceratops extends RenderLiving
         super(modelbase, f);
         setRenderPassModel(modelbase1);
     }
-    private float func_77034_a(float par1, float par2, float par3)
+    private float interpolateRotation(float par1, float par2, float par3)
     {
         float var4;
 
@@ -56,8 +56,8 @@ public class RenderTriceratops extends RenderLiving
 
         try
         {
-            float var10 = this.func_77034_a(entityTriceratops.prevRenderYawOffset, entityTriceratops.renderYawOffset, f1);
-            float var11 = this.func_77034_a(entityTriceratops.prevRotationYawHead, entityTriceratops.rotationYawHead, f1);
+            float var10 = this.interpolateRotation(entityTriceratops.prevRenderYawOffset, entityTriceratops.renderYawOffset, f1);
+            float var11 = this.interpolateRotation(entityTriceratops.prevRotationYawHead, entityTriceratops.rotationYawHead, f1);
             float var12 = entityTriceratops.prevRotationPitch + (entityTriceratops.rotationPitch - entityTriceratops.prevRotationPitch) * f1;
             this.renderLivingAt(entityTriceratops, d, d1, d2);
             float var13 = this.handleRotationFloat(entityTriceratops, f1);

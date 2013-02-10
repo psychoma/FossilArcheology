@@ -34,7 +34,9 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
@@ -66,7 +68,7 @@ public class mod_Fossil
     public static FossilGuiHandler GH = new FossilGuiHandler();
     public static Object INSTANCE;
     //public static FossilKeyHandler keyBindingService=new FossilKeyHandler();
-    public static boolean DebugMode = false;
+    public static boolean DebugMode = true;
     public static IChatListener messagerHandler = new FossilMessageHandler();
     private static int[] BlockIDs = {1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1151, 1152, 1153};
 
@@ -239,6 +241,12 @@ public class mod_Fossil
 //    {
 //    }
     
+    @Instance("mod_Fossil")
+    public static mod_Fossil instance;
+    
+	@SidedProxy(clientSide="mod_Fossil.FossilClientProxy", serverSide="mod_Fossil.FossilCommonProxy")
+	public static FossilCommonProxy proxy;
+    
     @PreInit
     public void PreLoad(FMLPreInitializationEvent event)
     {
@@ -257,16 +265,20 @@ public class mod_Fossil
         {
             LastLangSetting = ModLoader.getMinecraftInstance().gameSettings.language;
             registingRenderer();
-            forgeTextureSetUp();
             MinecraftForge.EVENT_BUS.register(new DinoSoundHandler());
             //KeyBindingRegistry.registerKeyBinding(keyBindingService);
         }
-
         NetworkRegistry.instance().registerChatListener(messagerHandler);
         GameRegistry.registerWorldGenerator(FossilGenerator);
         GameRegistry.registerWorldGenerator(AcademyA);
         GameRegistry.registerWorldGenerator(ShipA);
         GameRegistry.registerWorldGenerator(WeaponShopA);
+        
+        
+        // Call Common/Client Proxies
+        proxy.registerRenderers();
+        
+        
         //MinecraftForge.registerAchievementPage(selfArcPage);
         SetupID();
         //SetupOptions();
@@ -727,18 +739,7 @@ public class mod_Fossil
         blockPermafrost = new BlockPermafrost(BlockIDs[14], 5).setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundGrassFootstep).setBlockName("Permafrost").setRequiresSelfNotify().setCreativeTab(CreativeTabs.tabBlock);
         blockIcedStone = new BlockIcedStone(BlockIDs[15], 6).setHardness(1.5F).setResistance(10F).setStepSound(Block.soundStoneFootstep).setBlockName("IcedStone").setRequiresSelfNotify();
     }
-    @SideOnly(Side.CLIENT)
-    private void forgeTextureSetUp()
-    {
-        if (FMLCommonHandler.instance().getSide().isServer())
-        {
-            return;
-        }
 
-        MinecraftForgeClient.preloadTexture("/skull/Fos_terrian.png");
-        MinecraftForgeClient.preloadTexture("/skull/Fos_items.png");
-        MinecraftForgeClient.preloadTexture("/skull/needle.png");
-    }
     private void forgeHarvestLevelSetUp()
     {
         MinecraftForge.setBlockHarvestLevel(blockFossil, 0, "pickaxe", 2);
