@@ -6,6 +6,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -26,10 +27,11 @@ public class WorldGenAcademy implements IWorldGenerator
     private static final int GenLimit = 500;
     public WorldGenAcademy()
     {
-        //SchFile=new File(Minecraft.getMinecraftDir(), "/resources/FossilStructers/academy1.schematic");
+        SchFile=new File(Minecraft.getMinecraftDir(), "/mods/FossilStructers/academy1.schematic");
+        /*
         SchFile = new File(this.getClass().getResource("/FossilStructers/").getFile(), "academy1.schematic");
         mod_Fossil.DebugMessage("Model route:" + SchFile.getPath());
-
+*/
         if (SchFile.exists())
         {
             try
@@ -94,7 +96,8 @@ public class WorldGenAcademy implements IWorldGenerator
                 {
                     for (ScanZ = 0; ScanZ < WidthZ; ScanZ++)
                     {
-                        if (world.isBlockNormalCube(chunkX - WidthX / 2 + ScanX, posY + ScanY, chunkZ - WidthZ / 2 + ScanZ))
+//                        if (world.isBlockNormalCube(chunkX - WidthX / 2 + ScanX, posY + ScanY, chunkZ - WidthZ / 2 + ScanZ))
+                    	if (world.isBlockNormalCube(chunkX + ScanX, posY + ScanY, chunkZ + ScanZ))
                         {
                             SoildCount++;
                         }

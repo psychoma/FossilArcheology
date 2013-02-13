@@ -2,12 +2,14 @@ package mod_Fossil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -29,19 +31,24 @@ public class WorldGenWeaponShopA implements IWorldGenerator
     private static final int ShopLimit = 6250;
     public WorldGenWeaponShopA()
     {
-        //SchFile=new File(Minecraft.getMinecraftDir(), "/resources/FossilStructers/WeaponShopA.schematic");
+        SchFile=new File(Minecraft.getMinecraftDir(), "/mods/FossilStructers/WeaponShopA.schematic");
+        /*
         Class clsTmp = this.getClass();
         URL urlTmp = clsTmp.getResource("/FossilStructers/");
         String tmp = urlTmp.getFile();
         File dirTmp = new File(tmp);
         SchFile = new File(dirTmp, "WeaponShopA.schematic");
         mod_Fossil.DebugMessage("Model route:" + SchFile.getPath());
-
-        if (SchFile.exists())
+        */
+    	
+        if (SchFile.isFile())
         {
 
             try
             {
+
+            	
+            	
                 SchInp = new FileInputStream(SchFile);
                 SchSource = new NBTInputStream(SchInp);
                 ModelTagList.add((CompoundTag)SchSource.readTag());
@@ -54,6 +61,11 @@ public class WorldGenWeaponShopA implements IWorldGenerator
             };
 
             mod_Fossil.DebugMessage("WeaponShopA model loaded");
+        }
+        else
+        {
+        	mod_Fossil.DebugMessage("DSFDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        	return;
         }
     }
 

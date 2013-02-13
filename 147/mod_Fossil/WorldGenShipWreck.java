@@ -10,6 +10,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -22,6 +23,7 @@ import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenShipWreck implements IWorldGenerator
 {
+    private File SchDir;
     private File SchFile;
     private InputStream SchInp;
     private NBTInputStream SchSource = null;
@@ -40,29 +42,32 @@ public class WorldGenShipWreck implements IWorldGenerator
 
     public WorldGenShipWreck()
     {
+    	
+        SchDir = new File(Minecraft.getMinecraftDir(), "/mods/FossilStructers/shipWrecks/");
         /*File minecraftDir = FMLCommonHandler.instance()
         		.getMinecraftRootDirectory();
         File modsDir = new File(minecraftDir, "mods");
-        SourceType loadMode = checkModPro();*/
+        SourceType loadMode = checkModPro();
         // File listTmp=new File(Minecraft.getMinecraftDir(),
         // "/resources/FossilStructers/shipWrecks/");
         final String ZIP_LOC = "FossilStructers/shipWrecks/";
         final String FILE_LOC = "/" + ZIP_LOC;
         final String SCH_NAME = ".schematic";
+        */
 
         for (int i = 0; i < shipList.length; i++)
         {
             for (int j = 0; j < 360; j += 90)
             {
                 String jName = (j == 0) ? "" : "_" + String.valueOf(j);
-                URL tester = this.getClass().getResource(
-                        FILE_LOC + shipList[i] + jName + SCH_NAME);
-
+                File SchFile = new File(SchDir,  shipList[i] + jName + ".schematic");
+/*
                 if (tester == null)
                 {
+
                     continue;
                 }
-
+*/
                 try
                 {
                     /*if (loadMode == SourceType.JAR) {
@@ -75,7 +80,7 @@ public class WorldGenShipWreck implements IWorldGenerator
                     	SchInp = zipTmp.getInputStream(entryTmp);
                     	mod_Fossil.DebugMessage("Model route:"+ targetTmp);
                     } else {*/
-                    SchFile = new File(tester.getFile());
+//                    SchFile = new File(tester.getFile());
                     SchInp = new FileInputStream(SchFile);
                     mod_Fossil.DebugMessage("Model route:" + SchFile.getPath());
                     //}
@@ -173,8 +178,7 @@ public class WorldGenShipWreck implements IWorldGenerator
         Damages = new RelicHoleList(random, WidthX, Layers, WidthZ, BlockArray,
                 -1, -1);
 
-        while (!world.isBlockNormalCube(chunkX + WidthX / 2, posY, chunkZ + WidthZ
-                / 2))
+        while (!world.isBlockNormalCube(chunkX + WidthX / 2, posY, chunkZ + WidthZ / 2))
         {
             posY--;
         }
@@ -271,6 +275,7 @@ public class WorldGenShipWreck implements IWorldGenerator
                 .append("Placing shipwreck of ")
                 .append(this.SelfType.toString()).append(" at ").append(chunkX)
                 .append(',').append(posY).append(',').append(chunkZ).toString());
+        
     }
 
     private short SwapCargoBlock(Random rand)
