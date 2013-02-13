@@ -2,25 +2,21 @@ package mod_Fossil;
 
 import java.io.File;
 
-import net.minecraft.client.audio.SoundManager;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.sound.SoundLoadEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 
 public class DinoSoundHandler
 {
-    private static final String DINOSOUND_LOC = "/DinoSounds/";
-
-
-
-
+    private static final String DINOSOUND_LOC = "/mods/DinoSounds/";
+    
     @ForgeSubscribe
     public void onSound(SoundLoadEvent event)
     {
-    	SoundManager manager = event.manager;
 
         try
         {
-            File soundFileList = new File(this.getClass().getResource(DINOSOUND_LOC).getFile());
+            File soundFileList = new File(Minecraft.getMinecraftDir(), DINOSOUND_LOC);
             String[] soundNameList = soundFileList.list();
             String nameTmp;
             mod_Fossil.DebugMessage("Sound location:" + soundFileList.getPath());
@@ -41,7 +37,7 @@ public class DinoSoundHandler
         {
         	System.err.println("Error loading sound: " + e.getMessage());
         }
-        
+    	mod_Fossil.DebugMessage("Loaded Sound Handler.");
     }
 
     /*public void onLoadSoundSettings(SoundManager soundManager) {
