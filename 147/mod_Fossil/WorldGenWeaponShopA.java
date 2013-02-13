@@ -31,10 +31,10 @@ public class WorldGenWeaponShopA implements IWorldGenerator
     private static final int ShopLimit = 6250;
     public WorldGenWeaponShopA()
     {
-        SchFile=new File(Minecraft.getMinecraftDir(), "/mods/FossilStructers/WeaponShopA.schematic");
+      SchFile = new File(this.getClass().getResource("FossilStructures/").getFile(), "WeaponShopA.schematic");
         /*
         Class clsTmp = this.getClass();
-        URL urlTmp = clsTmp.getResource("/FossilStructers/");
+        URL urlTmp = clsTmp.getResource("/FossilStructures/");
         String tmp = urlTmp.getFile();
         File dirTmp = new File(tmp);
         SchFile = new File(dirTmp, "WeaponShopA.schematic");
@@ -43,12 +43,8 @@ public class WorldGenWeaponShopA implements IWorldGenerator
     	
         if (SchFile.isFile())
         {
-
             try
             {
-
-            	
-            	
                 SchInp = new FileInputStream(SchFile);
                 SchSource = new NBTInputStream(SchInp);
                 ModelTagList.add((CompoundTag)SchSource.readTag());
@@ -60,11 +56,11 @@ public class WorldGenWeaponShopA implements IWorldGenerator
                 return;
             };
 
-            mod_Fossil.DebugMessage("WeaponShopA model loaded");
+            mod_Fossil.DebugMessage("WeaponShopA model loaded.");
         }
         else
         {
-        	mod_Fossil.DebugMessage("DSFDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        	mod_Fossil.DebugMessage("Weapon shop could not be loaded!");
         	return;
         }
     }
@@ -77,7 +73,7 @@ public class WorldGenWeaponShopA implements IWorldGenerator
 
         if (ModelTagList.isEmpty())
         {
-            //mod_Fossil.DebugMessage("Ship model failed.");
+            mod_Fossil.DebugMessage("WeaponShopA failed to generate.");
 
             return;
         }

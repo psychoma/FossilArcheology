@@ -22,17 +22,14 @@ public class WorldGenAcademy implements IWorldGenerator
     private CompoundTag Tg;
     private int WidthX, Layers, WidthZ;
     private byte[] BlockArray, MDArray;
-    private int GenCount = 0;
+    private int GenCount = 1;
     private RelicHoleList Damages;
     private static final int GenLimit = 500;
     public WorldGenAcademy()
     {
-        SchFile=new File(Minecraft.getMinecraftDir(), "/mods/FossilStructers/academy1.schematic");
-        /*
-        SchFile = new File(this.getClass().getResource("/FossilStructers/").getFile(), "academy1.schematic");
-        mod_Fossil.DebugMessage("Model route:" + SchFile.getPath());
-*/
-        if (SchFile.exists())
+        SchFile = new File(this.getClass().getResource("FossilStructures/").getFile(), "academy1.schematic");
+
+        if (SchFile.isFile())
         {
             try
             {
@@ -68,7 +65,7 @@ public class WorldGenAcademy implements IWorldGenerator
 
         if (!SchFile.exists())
         {
-            //mod_Fossil.DebugMessage("Academy model failed.");
+            mod_Fossil.DebugMessage("Academy failed to generate.");
             return;
         }
 

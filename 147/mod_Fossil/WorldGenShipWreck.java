@@ -43,14 +43,14 @@ public class WorldGenShipWreck implements IWorldGenerator
     public WorldGenShipWreck()
     {
     	
-        SchDir = new File(Minecraft.getMinecraftDir(), "/mods/FossilStructers/shipWrecks/");
+        SchDir = new File(this.getClass().getResource("FossilStructures/").getFile(), "shipWrecks/");
         /*File minecraftDir = FMLCommonHandler.instance()
         		.getMinecraftRootDirectory();
         File modsDir = new File(minecraftDir, "mods");
         SourceType loadMode = checkModPro();
         // File listTmp=new File(Minecraft.getMinecraftDir(),
-        // "/resources/FossilStructers/shipWrecks/");
-        final String ZIP_LOC = "FossilStructers/shipWrecks/";
+        // "/resources/FossilStructures/shipWrecks/");
+        final String ZIP_LOC = "FossilStructures/shipWrecks/";
         final String FILE_LOC = "/" + ZIP_LOC;
         final String SCH_NAME = ".schematic";
         */

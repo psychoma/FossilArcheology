@@ -8,24 +8,23 @@ import net.minecraftforge.event.ForgeSubscribe;
 
 public class DinoSoundHandler
 {
-    private static final String DINOSOUND_LOC = "/mods/DinoSounds/";
+    private static final String DINOSOUND_LOC = "DinoSounds/";
     
     @ForgeSubscribe
     public void onSound(SoundLoadEvent event)
     {
+        File soundFileList = new File(this.getClass().getResource(DINOSOUND_LOC).getFile());
+        String[] soundNameList = soundFileList.list();
+        String nameTmp;
 
         try
         {
-            File soundFileList = new File(Minecraft.getMinecraftDir(), DINOSOUND_LOC);
-            String[] soundNameList = soundFileList.list();
-            String nameTmp;
-            mod_Fossil.DebugMessage("Sound location:" + soundFileList.getPath());
 
             for (int i = 0; i < soundNameList.length; i++)
             {
 
                 nameTmp = soundFileList.getPath() + "/" + soundNameList[i];
- //           	nameTmp = soundFileList.getPath() + soundNameList[i];
+//            	nameTmp = soundFileList.getPath() + soundNameList[i];
                 mod_Fossil.DebugMessage("SOUND DEBUG1:" + nameTmp);
                 event.manager.soundPoolSounds.addSound(soundNameList[i], new File(nameTmp));
 
