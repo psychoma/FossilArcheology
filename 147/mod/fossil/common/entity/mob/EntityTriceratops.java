@@ -72,6 +72,7 @@ public class EntityTriceratops extends EntityDinosaurce
         this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24, this.HuntLimit, EnumDinoEating.Herbivorous));
         this.tasks.addTask(7, new DinoAIPickItem(this, Item.wheat, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(7, new DinoAIPickItem(this, Item.appleRed, this.moveSpeed, 24, this.HuntLimit));
+        this.tasks.addTask(7, new DinoAIPickItem(this, Item.melon, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(8, new DinoAIWander(this, this.moveSpeed));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(10, new EntityAILookIdle(this));
@@ -328,57 +329,57 @@ public class EntityTriceratops extends EntityDinosaurce
         {
             ItemStack var2 = var1.inventory.getCurrentItem();
 
-            if (var2 != null && var2.itemID == Item.wheat.itemID)
+            if (var2 != null)
             {
-                if (this.CheckEatable(var2.itemID) && this.HandleEating(10))
-                {
-                    --var2.stackSize;
-
-                    if (var2.stackSize <= 0)
-                    {
-                        var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-                    }
-
-                    this.heal(3);
-                }
-
-                return true;
-            }
-            else if (FMLCommonHandler.instance().getSide().isClient() && var2 != null && var2.itemID == Fossil.dinoPedia.itemID)
-            {
-                EntityDinosaurce.pediaingDino = this;
-                var1.openGui(var1, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
-                return true;
-            }
-            else if (this.EOCInteract(var2, var1))
-            {
-                return true;
-            }
-            else if (var2 != null && var2.itemID == Item.stick.itemID && var1.username.equalsIgnoreCase(this.getOwnerName()))
-            {
-                if (!this.worldObj.isRemote)
-                {
-                    this.isJumping = false;
-                    this.setPathToEntity((PathEntity)null);
-                    this.OrderStatus = EnumOrderType.values()[(Fossil.EnumToInt(this.OrderStatus) + 1) % 3];
-                    this.SendOrderMessage(this.OrderStatus);
-
-                    switch (EntityTriceratops$1.$SwitchMap$mod_Fossil$EnumOrderType[this.OrderStatus.ordinal()])
-                    {
-                        case 1:
-                            this.setSelfSitting(true);
-                            break;
-
-                        case 2:
-                            this.setSelfSitting(false);
-                            break;
-
-                        case 3:
-                            this.setSelfSitting(false);
-                    }
-                }
-
-                return true;
+            	if (this.CheckEatable(var2.itemID))
+            	{
+            		if (this.HandleEating(10))
+	                {
+	                    --var2.stackSize;
+	                    if (var2.stackSize <= 0)
+	                    {
+	                        var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
+	                    }
+	                    this.heal(3);
+	                }
+            		return true;
+            	}
+            	if (FMLCommonHandler.instance().getSide().isClient() && var2.itemID == Fossil.dinoPedia.itemID)
+	            {
+	                EntityDinosaurce.pediaingDino = this;
+	                var1.openGui(var1, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
+	                return true;
+	            }
+            	if (var2.itemID == Fossil.chickenEss.itemID)
+            	{
+            		this.EOCInteract(var2, var1);
+            		return true;
+            	}
+            	if (var2.itemID == Item.stick.itemID && var1.username.equalsIgnoreCase(this.getOwnerName()))
+            	{
+	                if (!this.worldObj.isRemote)
+	                {
+	                    this.isJumping = false;
+	                    this.setPathToEntity((PathEntity)null);
+	                    this.OrderStatus = EnumOrderType.values()[(Fossil.EnumToInt(this.OrderStatus) + 1) % 3];
+	                    this.SendOrderMessage(this.OrderStatus);
+	
+	                    switch (EntityTriceratops$1.$SwitchMap$mod_Fossil$EnumOrderType[this.OrderStatus.ordinal()])
+	                    {
+	                        case 1:
+	                            this.setSelfSitting(true);
+	                            break;
+	
+	                        case 2:
+	                            this.setSelfSitting(false);
+	                            break;
+	
+	                        case 3:
+	                            this.setSelfSitting(false);
+	                    }
+	                }
+	                return true;
+            	}
             }
             else if (this.isTamed() && this.getDinoAge() > 4 && !this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == var1))
             {
@@ -388,10 +389,7 @@ public class EntityTriceratops extends EntityDinosaurce
                 this.renderYawOffset = this.rotationYaw;
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
 
@@ -515,15 +513,15 @@ public class EntityTriceratops extends EntityDinosaurce
         }
     }
 
-    private boolean FindWheats(int var1)
-    {
-        if (this.isSelfSitting())
+    /*private boolean FindWheats(int var1)
+    {DEAD CODE; replaced by DinoAIPickItem
+        if (this.isSelfSitting())//Sitting->Can't eat
         {
             return false;
         }
         else
         {
-            List var2 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(1.0D, 0.0D, 1.0D));
+            List var2 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(1.0D, 0.0D, 1.0D));//Sits on Food?
 
             if (var2 != null)
             {
@@ -533,7 +531,7 @@ public class EntityTriceratops extends EntityDinosaurce
                     {
                         EntityItem var4 = (EntityItem)var2.get(var3);
 
-                        if (var4.func_92014_d().itemID == Item.wheat.itemID)
+                        if (this.CheckEatable(var4.func_92014_d().itemID))// == Item.wheat.itemID
                         {
                             this.HandleEating(10);
                             this.worldObj.playSoundAtEntity(this, "random.pop", 0.2F, (((new Random()).nextFloat() - (new Random()).nextFloat()) * 0.7F + 1.0F) * 2.0F);
@@ -544,7 +542,7 @@ public class EntityTriceratops extends EntityDinosaurce
                 }
             }
 
-            EntityItem var8 = null;
+            EntityItem var8 = null;//Looking for food...
             List var9 = this.worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand((double)var1, 4.0D, (double)var1));
             Iterator var5 = var9.iterator();
 
@@ -556,17 +554,17 @@ public class EntityTriceratops extends EntityDinosaurce
                 {
                     EntityItem var7 = (EntityItem)var6;
 
-                    if (var7.func_92014_d().getItem().itemID == Item.wheat.itemID)
+                    if (this.CheckEatable(var7.func_92014_d().getItem().itemID))// == Item.wheat.itemID		//Is item eatable?
                     {
                         if (var8 != null)
                         {
                             if (this.GetDistanceWithEntity(var7) < this.GetDistanceWithEntity(var8))
-                            {
+                            {//go to nearer food
                                 var8 = var7;
                             }
                         }
                         else
-                        {
+                        {//it found food!
                             var8 = var7;
                         }
                     }
@@ -574,16 +572,13 @@ public class EntityTriceratops extends EntityDinosaurce
             }
 
             if (var8 != null)
-            {
+            {//go to the food
                 this.setPathToEntity(this.worldObj.getPathEntityToEntity(this, var8, (float)var1, true, false, true, false));
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;//poor dino, no food :(
         }
-    }
+    }*/
 
     /**
      * Applies a velocity to each of the entities pushing them away from each other. Args: entity
@@ -591,7 +586,7 @@ public class EntityTriceratops extends EntityDinosaurce
     public void applyEntityCollision(Entity var1)
     {
         if (var1 instanceof EntityLiving && !(var1 instanceof EntityPlayer) && this.riddenByEntity != null && this.onGround)
-        {
+        {//you can hurt others with the dino while you ride it
             this.onKillEntity((EntityLiving)var1);
             ((EntityLiving)var1).attackEntityFrom(DamageSource.causeMobDamage(this), 10);
         }
@@ -640,10 +635,10 @@ public class EntityTriceratops extends EntityDinosaurce
         }
     }
 
-    public boolean isWheat(ItemStack var1)
-    {
+    /*public boolean isWheat(ItemStack var1)
+    {Not needed, use CheckEatable instead
         return var1 != null && var1.itemID == Item.carrot.itemID;
-    }
+    }*/
 
     public void ShowPedia(EntityPlayer var1)
     {
@@ -675,9 +670,7 @@ public class EntityTriceratops extends EntityDinosaurce
     public boolean CheckEatable(int var1)
     {
         Item var2 = Item.itemsList[var1];
-        boolean var3 = false;
-        var3 = var2 == Item.wheat || var2 == Item.melon;
-        return var3;
+        return ((var2 == Item.wheat) || (var2 == Item.melon));
     }
 
     public EntityTriceratops spawnBabyAnimal(EntityAgeable var1)
