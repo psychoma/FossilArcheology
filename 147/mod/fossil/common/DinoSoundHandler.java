@@ -7,7 +7,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 
 public class DinoSoundHandler
 {
-    private static final String DINOSOUND_LOC = "/DinoSounds/";
+//    private static final String DINOSOUND_LOC = "dinoSounds/";
 
     @ForgeSubscribe
     public void onSoundsLoaded(SoundLoadEvent var1)
@@ -16,7 +16,7 @@ public class DinoSoundHandler
 
         try
         {
-            File var3 = new File(this.getClass().getResource("/DinoSounds/").getFile());
+            File var3 = new File(this.getClass().getResource("dinoSounds/").getFile());
             String[] var4 = var3.list();
 
             for (int var6 = 0; var6 < var4.length; ++var6)

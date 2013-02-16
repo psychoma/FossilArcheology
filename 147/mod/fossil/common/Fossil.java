@@ -128,6 +128,10 @@ public class Fossil
 	private static File Langfile = new File(Langdir, LastLangSetting + ".lang");
 	public static IChatListener messagerHandler = new FossilMessageHandler();
 	
+	/*
+	 * If DebugMode = true
+	 * HatchTime is set to 1
+	 */
 	public static boolean DebugMode = false;
 	public static final double MESSAGE_DISTANCE = 25.0D;
 	
