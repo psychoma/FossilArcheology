@@ -8,24 +8,9 @@ Fossils and Archeology mod for Minecraft Forge. Forked from Flammarilva/Team Jul
 
 
 =========================
- COMPILING AND PACKAGING
+ SETTING UP FORGE
 =========================
 
-Copy /<mc version>/mod_Fossil into your environment's src folder.
-Copy /SupportFiles/* and /<mc version>/mcmod.info into a zip and place inside your environment's mod folder.
-
-Your package structure should look like:
-
-***
-mod_Fossil.zip
-
-  /mod_Fossil
-  
-    (class files)
-    
-  (resource files)
-  
-  mcmod.info
-***
+Inside <MC Version>/ copy the "mod" folder into /forge/mcp/src/minecraft/
 
 =========================
