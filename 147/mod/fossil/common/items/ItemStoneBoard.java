@@ -1,5 +1,6 @@
 package mod.fossil.common.items;
 
+import mod.fossil.common.Fossil;
 import mod.fossil.common.entity.EntityStoneboard;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +22,7 @@ public class ItemStoneBoard extends Item
         return "/mod/fossil/common/textures/Fos_items.png";
     }
 
-    public boolean tryPlaceIntoWorld(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6, int var7, float var8, float var9, float var10)
+    public boolean onItemUse(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6, int var7, float var8, float var9, float var10)
     {
         if (var7 == 0)
         {
@@ -48,10 +49,8 @@ public class ItemStoneBoard extends Item
                     {
                         var3.spawnEntityInWorld(var12);
                     }
-
                     --var1.stackSize;
                 }
-
                 return true;
             }
         }

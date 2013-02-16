@@ -13,10 +13,13 @@ import mod.fossil.common.Fossil;
 import mod.fossil.common.fossilEnums.EnumStoneboard;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -40,7 +43,7 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
 
     public EntityStoneboard(World var1, int var2, int var3, int var4, int var5)
     {
-        this(var1);
+        this(var1);        
         this.xPosition = var2;
         this.yPosition = var3;
         this.zPosition = var4;
@@ -109,6 +112,7 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
         else
         {
             var4 = 0.5F;
+            this.rotationYaw = this.prevRotationYaw = (float)(Direction.footInvisibleFaceRemap[var1] * 90);//necessary?
         }
 
         var2 /= 32.0F;
@@ -119,7 +123,7 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
         float var7 = (float)this.zPosition + 0.5F;
         float var8 = 0.5625F;
 
-        if (var1 == 0)
+        if (var1 == 2)
         {
             var7 -= var8;
         }
@@ -129,7 +133,7 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
             var5 -= var8;
         }
 
-        if (var1 == 2)
+        if (var1 == 0)
         {
             var7 += var8;
         }
@@ -139,7 +143,7 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
             var5 += var8;
         }
 
-        if (var1 == 0)
+        if (var1 == 2)
         {
             var5 -= this.func_411_c(this.art.sizeX);
         }
@@ -149,7 +153,7 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
             var7 += this.func_411_c(this.art.sizeX);
         }
 
-        if (var1 == 2)
+        if (var1 == 0)
         {
             var5 += this.func_411_c(this.art.sizeX);
         }
@@ -189,73 +193,56 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
 
     public boolean onValidSurface()
     {
-        if (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() > 0)
+        if (this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() > 0)		//test for collisions
         {
             return false;
         }
         else
         {
-            int var1 = this.art.sizeX / 16;
-            int var2 = this.art.sizeY / 16;
-            int var3 = this.xPosition;
-            int var4 = this.yPosition;
-            int var5 = this.zPosition;
-
-            if (this.direction == 0)
+            int Width = this.art.sizeX / 16;	//Size of The Tablet
+            int Height = this.art.sizeY / 16;
+            
+            
+            int xPos = this.xPosition;			//Starting Position of the Tablet
+            int yPos = MathHelper.floor_double(this.posY - (double)((float)this.art.sizeY / 32.0F)); // Center is where you clicked: start at -sizeY/2
+            int zPos = this.zPosition;
+            
+            if (this.direction == 0 || this.direction == 2)//adjust the center for the corresponding directions
             {
-                var3 = MathHelper.floor_double(this.posX - (double)((float)this.art.sizeX / 32.0F));
+                xPos = MathHelper.floor_double(this.posX - (double)((float)this.art.sizeX / 32.0F));
             }
 
-            if (this.direction == 1)
+            if (this.direction == 1 || this.direction == 3)//adjust the center for the corresponding directions
             {
-                var5 = MathHelper.floor_double(this.posZ - (double)((float)this.art.sizeX / 32.0F));
+                zPos = MathHelper.floor_double(this.posZ - (double)((float)this.art.sizeX / 32.0F));
             }
 
-            if (this.direction == 2)
+            for (int side = 0; side < Width; side++)//check for the whole plane if solid blocks behind
             {
-                var3 = MathHelper.floor_double(this.posX - (double)((float)this.art.sizeX / 32.0F));
-            }
-
-            if (this.direction == 3)
-            {
-                var5 = MathHelper.floor_double(this.posZ - (double)((float)this.art.sizeX / 32.0F));
-            }
-
-            var4 = MathHelper.floor_double(this.posY - (double)((float)this.art.sizeY / 32.0F));
-            int var7;
-
-            for (int var6 = 0; var6 < var1; ++var6)
-            {
-                for (var7 = 0; var7 < var2; ++var7)
+                for (int up = 0; up < Height; up++)
                 {
-                    Material var8;
-
-                    if (this.direction != 0 && this.direction != 2)
+                    if (this.direction == 1 || this.direction == 3)
                     {
-                        var8 = this.worldObj.getBlockMaterial(this.xPosition, var4 + var7, var5 + var6);
+                        if(!this.worldObj.getBlockMaterial(this.xPosition, yPos + up, zPos + side).isSolid())
+                        	return false;
                     }
                     else
                     {
-                        var8 = this.worldObj.getBlockMaterial(var3 + var6, var4 + var7, this.zPosition);
-                    }
-
-                    if (!var8.isSolid())
-                    {
-                        return false;
+                        if(!this.worldObj.getBlockMaterial(xPos + side, yPos + up, this.zPosition).isSolid())
+                        	return false;
                     }
                 }
             }
 
-            List var9 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox);
+            List collidingEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox);//check for colliding entities
 
-            for (var7 = 0; var7 < var9.size(); ++var7)
+            for (int i = 0; i < collidingEntities.size(); i++)
             {
-                if (var9.get(var7) instanceof EnumStoneboard)
+                if ((collidingEntities.get(i) instanceof EntityStoneboard))// || (collidingEntities.get(i) instanceof EntityHanging))this line seems not to be necessary
                 {
                     return false;
                 }
             }
-
             return true;
         }
     }

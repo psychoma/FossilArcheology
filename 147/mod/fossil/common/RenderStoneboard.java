@@ -5,6 +5,7 @@ import java.util.Random;
 
 import mod.fossil.common.entity.EntityStoneboard;
 import mod.fossil.common.fossilEnums.EnumStoneboard;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -110,7 +111,7 @@ public class RenderStoneboard extends Render
         int var5 = MathHelper.floor_double(var1.posY + (double)(var3 / 16.0F));
         int var6 = MathHelper.floor_double(var1.posZ);
 
-        if (var1.direction == 0)
+        if (var1.direction == 2)
         {
             var4 = MathHelper.floor_double(var1.posX + (double)(var2 / 16.0F));
         }
@@ -120,7 +121,7 @@ public class RenderStoneboard extends Render
             var6 = MathHelper.floor_double(var1.posZ - (double)(var2 / 16.0F));
         }
 
-        if (var1.direction == 2)
+        if (var1.direction == 0)
         {
             var4 = MathHelper.floor_double(var1.posX - (double)(var2 / 16.0F));
         }
@@ -129,9 +130,7 @@ public class RenderStoneboard extends Render
         {
             var6 = MathHelper.floor_double(var1.posZ + (double)(var2 / 16.0F));
         }
-
-        float var7 = this.renderManager.worldObj.getLightBrightness(var4, var5, var6);
-        GL11.glColor3f(var7, var7, var7);
+        GL11.glColor3f(1.0F, 1.0F, 1.0F);
     }
 
     /**
