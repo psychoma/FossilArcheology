@@ -1,5 +1,7 @@
 package mod.fossil.common.entity.mob;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import mod.fossil.common.Fossil;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.world.World;
@@ -20,6 +22,16 @@ public class EntityFailuresaurus extends EntityZombie
         return Fossil.biofossil.itemID;
     }
 
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * Returns the texture's file path as a String.
+     */
+    public String getTexture()
+    {
+        return "/mod/fossil/common/textures/Failuresaurus.png";
+    }
+    
     /**
      * Causes this entity to do an upwards motion (jumping).
      */
