@@ -206,7 +206,7 @@ public class Fossil
     @cpw.mods.fml.common.Mod.PreInit
 	public void PreInit(FMLPreInitializationEvent event)
 	{
-		MinecraftForge.EVENT_BUS.register(new DinoSoundHandler());
+		proxy.registerSounds();
 	}
 	
 	@cpw.mods.fml.common.Mod.Init
