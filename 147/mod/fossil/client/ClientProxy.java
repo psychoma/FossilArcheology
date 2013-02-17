@@ -8,7 +8,9 @@ import net.minecraft.client.model.ModelZombie;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RenderPig;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 import mod.fossil.common.CommonProxy;
+import mod.fossil.common.DinoSoundHandler;
 import mod.fossil.common.RenderDinoEgg;
 import mod.fossil.common.RenderJavelin;
 import mod.fossil.common.RenderStoneboard;
@@ -169,5 +171,10 @@ public class ClientProxy extends CommonProxy
 		
 	}
 	
+	@Override
+	public void registerSounds()
+	{
+		MinecraftForge.EVENT_BUS.register(new DinoSoundHandler());
+	}
 	
 }
