@@ -5,8 +5,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import java.util.ArrayList;
 import java.util.Random;
 
+import mod.fossil.client.FossilOptions;
 import mod.fossil.common.Fossil;
-import mod.fossil.common.FossilOptions;
 import mod.fossil.common.fossilAI.DinoAIControlledByPlayer;
 import mod.fossil.common.fossilAI.DinoAIEatLeavesWithHeight;
 import mod.fossil.common.fossilAI.DinoAIFollowOwner;

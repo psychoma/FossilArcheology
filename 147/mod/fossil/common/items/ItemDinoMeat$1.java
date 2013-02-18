@@ -5,13 +5,13 @@ import mod.fossil.common.fossilEnums.EnumDinoType;
 
 class ItemDinoMeat$1
 {
-    static final int[] $SwitchMap$mod_Fossil$EnumDinoType = new int[EnumDinoType.values().length];
-
+    static final int[] $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType = new int[EnumDinoType.values().length];
+	
     static
     {
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.Triceratops.ordinal()] = 1;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.Triceratops.ordinal()] = 1;
         }
         catch (NoSuchFieldError var10)
         {
@@ -20,7 +20,7 @@ class ItemDinoMeat$1
 
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.Raptor.ordinal()] = 2;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.Raptor.ordinal()] = 2;
         }
         catch (NoSuchFieldError var9)
         {
@@ -29,7 +29,7 @@ class ItemDinoMeat$1
 
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.TRex.ordinal()] = 3;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.TRex.ordinal()] = 3;
         }
         catch (NoSuchFieldError var8)
         {
@@ -38,7 +38,7 @@ class ItemDinoMeat$1
 
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.Pterosaur.ordinal()] = 4;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.Pterosaur.ordinal()] = 4;
         }
         catch (NoSuchFieldError var7)
         {
@@ -47,7 +47,7 @@ class ItemDinoMeat$1
 
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.Nautilus.ordinal()] = 5;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.Nautilus.ordinal()] = 5;
         }
         catch (NoSuchFieldError var6)
         {
@@ -56,7 +56,7 @@ class ItemDinoMeat$1
 
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.Plesiosaur.ordinal()] = 6;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.Plesiosaur.ordinal()] = 6;
         }
         catch (NoSuchFieldError var5)
         {
@@ -65,7 +65,7 @@ class ItemDinoMeat$1
 
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.Mosasaurus.ordinal()] = 7;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.Mosasaurus.ordinal()] = 7;
         }
         catch (NoSuchFieldError var4)
         {
@@ -74,7 +74,7 @@ class ItemDinoMeat$1
 
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.Stegosaurus.ordinal()] = 8;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.Stegosaurus.ordinal()] = 8;
         }
         catch (NoSuchFieldError var3)
         {
@@ -83,7 +83,7 @@ class ItemDinoMeat$1
 
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.dilphosaur.ordinal()] = 9;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.dilphosaur.ordinal()] = 9;
         }
         catch (NoSuchFieldError var2)
         {
@@ -92,7 +92,7 @@ class ItemDinoMeat$1
 
         try
         {
-            $SwitchMap$mod_Fossil$EnumDinoType[EnumDinoType.Brachiosaurus.ordinal()] = 10;
+            $SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[EnumDinoType.Brachiosaurus.ordinal()] = 10;
         }
         catch (NoSuchFieldError var1)
         {

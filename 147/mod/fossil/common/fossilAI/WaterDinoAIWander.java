@@ -1,7 +1,7 @@
 package mod.fossil.common.fossilAI;
 
-import mod.fossil.common.IWaterDino;
 import mod.fossil.common.entity.mob.EntityDinosaurce;
+import mod.fossil.common.fossilInterface.IWaterDino;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.util.Vec3;

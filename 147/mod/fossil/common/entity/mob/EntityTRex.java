@@ -4,8 +4,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import java.util.ArrayList;
 import java.util.Random;
 
-import mod.fossil.common.BlockBreakingRule;
 import mod.fossil.common.Fossil;
+import mod.fossil.common.blocks.BlockBreakingRule;
 import mod.fossil.common.fossilAI.DinoAIAvoidEntityWhenYoung;
 import mod.fossil.common.fossilAI.DinoAIFollowOwner;
 import mod.fossil.common.fossilAI.DinoAIGrowup;

@@ -2,11 +2,11 @@ package mod.fossil.common.items;
 
 import java.util.List;
 
-import mod.fossil.common.IViviparous;
 import mod.fossil.common.entity.mob.EntityPregnantCow;
 import mod.fossil.common.entity.mob.EntityPregnantPig;
 import mod.fossil.common.entity.mob.EntityPregnantSheep;
 import mod.fossil.common.fossilEnums.EnumEmbyos;
+import mod.fossil.common.fossilInterface.IViviparous;
 import mod.fossil.common.items.forgeItems.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;

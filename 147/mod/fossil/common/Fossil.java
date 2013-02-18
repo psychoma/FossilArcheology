@@ -1,12 +1,22 @@
 package mod.fossil.common;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
+import mod.fossil.client.FossilCfgLoader;
+import mod.fossil.client.FossilGuiHandler;
+import mod.fossil.client.FossilMessageHandler;
+import mod.fossil.client.FossilOptions;
 import mod.fossil.common.*;
+import mod.fossil.common.blocks.BlockFern;
+import mod.fossil.common.blocks.BlockFossil;
+import mod.fossil.common.blocks.BlockFossilSkull;
+import mod.fossil.common.blocks.BlockIcedStone;
+import mod.fossil.common.blocks.BlockPermafrost;
 import mod.fossil.common.entity.EntityAncientJavelin;
 import mod.fossil.common.entity.EntityDinoEgg;
 import mod.fossil.common.entity.EntityJavelin;
@@ -36,11 +46,14 @@ import mod.fossil.common.fossilEnums.EnumAnimalType;
 import mod.fossil.common.fossilEnums.EnumEmbyos;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
+import mod.fossil.common.gens.FossilGenerator;
+import mod.fossil.common.gens.WorldGenShipWreck;
 import mod.fossil.common.guiBlocks.BlockAnalyzer;
 import mod.fossil.common.guiBlocks.BlockCultivate;
 import mod.fossil.common.guiBlocks.BlockDrum;
 import mod.fossil.common.guiBlocks.BlockFeeder;
 import mod.fossil.common.guiBlocks.BlockWorktable;
+import mod.fossil.common.guiBlocks.BlockTimeMachine;
 import mod.fossil.common.guiBlocks.TileEntityAnalyzer;
 import mod.fossil.common.guiBlocks.TileEntityCultivate;
 import mod.fossil.common.guiBlocks.TileEntityDrum;
@@ -73,6 +86,7 @@ import mod.fossil.common.items.forgeItems.ForgeItemPickaxe;
 import mod.fossil.common.items.forgeItems.ForgeItemSpade;
 import mod.fossil.common.items.forgeItems.ForgeItemSword;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumToolMaterial;
@@ -157,6 +171,7 @@ public class Fossil
 	public static Block blockcultivateActive;
 	public static Block blockworktableIdle;
 	public static Block blockworktableActive;
+	public static Block blockTimeMachine;
 	public static Block ferns;
 	public static Block fernUpper;
 	public static Block drum;
@@ -232,7 +247,7 @@ public class Fossil
         blockIcedStone = new BlockIcedStone(3014, 6).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundStoneFootstep).setBlockName("IcedStone").setRequiresSelfNotify();
         blockFossil = new BlockFossil(3015, 1).setHardness(3.0F).setResistance(5.0F).setStepSound(Block.soundStoneFootstep).setBlockName("fossil").setCreativeTab(CreativeTabs.tabBlock);
         blockSkull = new BlockFossilSkull(3016, 0, false).setHardness(1.0F).setStepSound(Block.soundStoneFootstep).setBlockName("Skull").setCreativeTab(CreativeTabs.tabBlock);
-        
+        blockTimeMachine = new BlockTimeMachine(3017, 0, Material.glass).setLightValue(0.9375F).setHardness(0.3F).setStepSound(Block.soundGlassFootstep).setBlockName("BlockTimeMachine").setCreativeTab(CreativeTabs.tabDecorations);
         
       //Items
 		biofossil = new ItemBioFossil(12000).setIconIndex(38).setItemName("biofossil").setCreativeTab(CreativeTabs.tabMisc);
@@ -290,7 +305,7 @@ public class Fossil
 		GameRegistry.registerBlock(feederActive, "fossil_FeederActive");
 		GameRegistry.registerBlock(blockPermafrost, "fossil_blockPermafrost");
 		GameRegistry.registerBlock(blockIcedStone, "fossil_blockIcedStone");
-
+		GameRegistry.registerBlock(blockTimeMachine, "blockTimeMachine");
 
         LanguageRegistry.addName(blockFossil, "blockFossil");
         LanguageRegistry.addName(blockSkull, "blockSkull");
@@ -331,7 +346,7 @@ public class Fossil
         LanguageRegistry.addName(goldjavelin, "goldjavelin");
         LanguageRegistry.addName(ancientJavelin, "ancientJavelin");
         LanguageRegistry.addName(whip, "whip");
-        
+        LanguageRegistry.addName(blockTimeMachine, "Time Machine");
         
 
 		GameRegistry.addRecipe(new ItemStack(skullLantern, 1), new Object[] {"X", "Y", 'X', blockSkull, 'Y', Block.torchWood});
@@ -435,11 +450,12 @@ public class Fossil
 		GameRegistry.registerTileEntity(TileEntityDrum.class, "Drum");
 		GameRegistry.registerTileEntity(TileEntityFeeder.class, "Feeder");
 		
+		proxy.registerTileEntitySpecialRenderer();
         proxy.registerRenderThings();
         
 	}
 	
-	/*public static void fillCreativeList()
+	public static void fillCreativeList()
     {
         int var2 = 0;
         int var0;
@@ -477,7 +493,7 @@ public class Fossil
         }
 
         SingleTotalList = new ItemStack[] {new ItemStack(blockFossil, 1, 0), new ItemStack(blockSkull, 1, 0), new ItemStack(skullLantern, 1, 0), new ItemStack(blockanalyzerIdle, 1, 0), new ItemStack(blockcultivateIdle, 1, 0), new ItemStack(blockworktableIdle, 1, 0), new ItemStack(ferns, 1, 0), new ItemStack(drum, 1, 0), new ItemStack(feederIdle, 1, 0), new ItemStack(blockPermafrost, 1, 0), new ItemStack(blockIcedStone, 1, 0)};
-    }*/
+    }
 	
     private void forgeHarvestLevelSetUp()
     {

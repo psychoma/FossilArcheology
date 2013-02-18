@@ -3,7 +3,6 @@ package mod.fossil.common.entity.mob;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import mod.fossil.common.Fossil;
-import mod.fossil.common.PigmenSpeaker;
 import mod.fossil.common.fossilAI.FPZAIFollowOwner;
 import mod.fossil.common.fossilAI.FPZAIOwnerHurtByTarget;
 import mod.fossil.common.fossilAI.FPZAIOwnerHurtTarget;

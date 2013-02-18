@@ -1,8 +1,8 @@
 package mod.fossil.common.fossilAI;
 
-import mod.fossil.common.IWaterDino;
 import mod.fossil.common.entity.mob.EntityDinosaurce;
 import mod.fossil.common.fossilEnums.EnumOrderType;
+import mod.fossil.common.fossilInterface.IWaterDino;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;

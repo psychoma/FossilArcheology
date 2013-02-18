@@ -1,6 +1,6 @@
 package mod.fossil.common.fossilAI;
 
-import mod.fossil.common.FossilOptions;
+import mod.fossil.client.FossilOptions;
 import mod.fossil.common.entity.mob.EntityDinosaurce;
 import mod.fossil.common.fossilEnums.EnumSituation;
 import net.minecraft.entity.ai.EntityAIBase;

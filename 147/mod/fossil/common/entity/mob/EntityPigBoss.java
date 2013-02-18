@@ -4,10 +4,8 @@ import java.util.List;
 
 import java.util.Random;
 
+import mod.fossil.client.FossilOptions;
 import mod.fossil.common.Fossil;
-import mod.fossil.common.FossilOptions;
-import mod.fossil.common.PigBossSpeaker;
-import mod.fossil.common.PigmenSpeaker;
 import mod.fossil.common.fossilEnums.EnumPigBossSpeaks;
 import mod.fossil.common.fossilEnums.EnumPigmenSpeaks;
 import net.minecraft.block.Block;

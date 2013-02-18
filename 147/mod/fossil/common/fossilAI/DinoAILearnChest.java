@@ -1,8 +1,8 @@
 package mod.fossil.common.fossilAI;
 
-import mod.fossil.common.IHighIntellegent;
 import mod.fossil.common.entity.mob.EntityDinosaurce;
 import mod.fossil.common.fossilEnums.EnumSituation;
+import mod.fossil.common.fossilInterface.IHighIntellegent;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;

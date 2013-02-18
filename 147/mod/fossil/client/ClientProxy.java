@@ -1,5 +1,6 @@
 package mod.fossil.client;
 
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 import net.minecraft.client.model.ModelBiped;
@@ -10,14 +11,13 @@ import net.minecraft.client.renderer.entity.RenderPig;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import mod.fossil.common.CommonProxy;
-import mod.fossil.common.DinoSoundHandler;
-import mod.fossil.common.RenderDinoEgg;
-import mod.fossil.common.RenderJavelin;
-import mod.fossil.common.RenderStoneboard;
 import mod.fossil.common.entity.EntityAncientJavelin;
 import mod.fossil.common.entity.EntityDinoEgg;
 import mod.fossil.common.entity.EntityJavelin;
 import mod.fossil.common.entity.EntityStoneboard;
+import mod.fossil.common.entity.RenderDinoEgg;
+import mod.fossil.common.entity.RenderJavelin;
+import mod.fossil.common.entity.RenderStoneboard;
 import mod.fossil.common.entity.mob.EntityBones;
 import mod.fossil.common.entity.mob.EntityBrachiosaurus;
 import mod.fossil.common.entity.mob.EntityFailuresaurus;
@@ -60,7 +60,8 @@ import mod.fossil.common.entity.mob.RenderStegosaurus;
 import mod.fossil.common.entity.mob.RenderTRex;
 import mod.fossil.common.entity.mob.RenderTriceratops;
 import mod.fossil.common.entity.mob.Renderdil;
-import mod.fossil.common.FossilBlockRenderHandler;
+import mod.fossil.common.guiBlocks.RenderTNClock;
+import mod.fossil.common.guiBlocks.TileEntityTimeMachine;
 
 public class ClientProxy extends CommonProxy
 {
@@ -169,6 +170,12 @@ public class ClientProxy extends CommonProxy
 
 		RenderingRegistry.registerBlockHandler(new FossilBlockRenderHandler());
 		
+	}
+	
+	@Override
+	public void registerTileEntitySpecialRenderer()
+	{
+    	ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTimeMachine.class, new RenderTNClock());
 	}
 	
 	@Override

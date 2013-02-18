@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 import mod.fossil.common.Fossil;
-import mod.fossil.common.IWaterDino;
 import mod.fossil.common.fossilAI.DinoAIGrowup;
 import mod.fossil.common.fossilAI.DinoAIStarvation;
 import mod.fossil.common.fossilAI.WaterDinoAINearestAttackableTarget;
@@ -15,6 +14,7 @@ import mod.fossil.common.fossilAI.WaterDinoAISwimming;
 import mod.fossil.common.fossilAI.WaterDinoAIWander;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
+import mod.fossil.common.fossilInterface.IWaterDino;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;

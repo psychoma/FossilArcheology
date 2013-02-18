@@ -29,7 +29,7 @@ public class ItemDinoMeat extends ForgeItemFood
 
     public String getItemNameIS(ItemStack var1)
     {
-        switch (ItemDinoMeat$1.$SwitchMap$mod_Fossil$EnumDinoType[this.GetTypeFromInt(var1.getItemDamage()).ordinal()])
+        switch (ItemDinoMeat$1.$SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[this.GetTypeFromInt(var1.getItemDamage()).ordinal()])
         {
             case 1:
                 return "Meattriceratops";

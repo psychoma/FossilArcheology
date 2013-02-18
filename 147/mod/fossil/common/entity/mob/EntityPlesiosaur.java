@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 import mod.fossil.common.Fossil;
-import mod.fossil.common.IWaterDino;
 import mod.fossil.common.fossilAI.DinoAIFishing;
 import mod.fossil.common.fossilAI.DinoAIFollowOwner;
 import mod.fossil.common.fossilAI.DinoAIGrowup;
@@ -20,6 +19,7 @@ import mod.fossil.common.fossilAI.WaterDinoAISwimming;
 import mod.fossil.common.fossilEnums.EnumDinoEating;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
+import mod.fossil.common.fossilInterface.IWaterDino;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.entity.EntityPlayerSP;

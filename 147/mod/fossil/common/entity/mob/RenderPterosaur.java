@@ -1,6 +1,5 @@
 package mod.fossil.common.entity.mob;
 
-import mod.fossil.common.ModelPTSLanding;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;

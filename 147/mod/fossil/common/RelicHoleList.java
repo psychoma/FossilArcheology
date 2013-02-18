@@ -2,7 +2,7 @@ package mod.fossil.common;
 
 import java.util.Random;
 
-class RelicHoleList
+public class RelicHoleList
 {
     private RelicHole[] Holes;
     private int DEFAULT_HOLE_COUNT = 9;

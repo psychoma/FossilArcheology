@@ -8,6 +8,8 @@ public class CommonProxy
 		
 	}
 	
+	public void registerTileEntitySpecialRenderer() {}
+	
 	public void registerSounds()
 	{
 	
