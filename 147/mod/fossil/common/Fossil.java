@@ -58,6 +58,7 @@ import mod.fossil.common.guiBlocks.TileEntityAnalyzer;
 import mod.fossil.common.guiBlocks.TileEntityCultivate;
 import mod.fossil.common.guiBlocks.TileEntityDrum;
 import mod.fossil.common.guiBlocks.TileEntityFeeder;
+import mod.fossil.common.guiBlocks.TileEntityTimeMachine;
 import mod.fossil.common.guiBlocks.TileEntityWorktable;
 import mod.fossil.common.items.ItemAncientEgg;
 import mod.fossil.common.items.ItemAncientsword;
@@ -449,6 +450,7 @@ public class Fossil
 		GameRegistry.registerTileEntity(TileEntityWorktable.class, "Worktable");
 		GameRegistry.registerTileEntity(TileEntityDrum.class, "Drum");
 		GameRegistry.registerTileEntity(TileEntityFeeder.class, "Feeder");
+		GameRegistry.registerTileEntity(TileEntityTimeMachine.class, "TimeMachine");
 		
 		proxy.registerTileEntitySpecialRenderer();
         proxy.registerRenderThings();

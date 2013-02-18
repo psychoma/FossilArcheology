@@ -86,7 +86,7 @@ public class GuiTimeMachine extends GuiContainer
     public void updateScreen()
     {
         super.updateScreen();
-        ((GuiButton)this.controlList.get(0)).enabled = this.timeMachineInstance.isCharged() && !this.timeMachineInstance.isRestoring;
-        ((GuiButton)this.controlList.get(1)).enabled = !this.timeMachineInstance.isRestoring;
+        //((GuiButton)this.controlList.get(0)).enabled = this.timeMachineInstance.isCharged() && !this.timeMachineInstance.isRestoring;
+        //((GuiButton)this.controlList.get(1)).enabled = !this.timeMachineInstance.isRestoring;
     }
 }

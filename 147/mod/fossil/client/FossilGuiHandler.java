@@ -5,15 +5,18 @@ import mod.fossil.common.guiBlocks.ContainerAnalyzer;
 import mod.fossil.common.guiBlocks.ContainerCultivate;
 import mod.fossil.common.guiBlocks.ContainerFeeder;
 import mod.fossil.common.guiBlocks.ContainerPedia;
+import mod.fossil.common.guiBlocks.ContainerTimeMachine;
 import mod.fossil.common.guiBlocks.ContainerWorktable;
 import mod.fossil.common.guiBlocks.GuiAnalyzer;
 import mod.fossil.common.guiBlocks.GuiCultivate;
 import mod.fossil.common.guiBlocks.GuiFeeder;
 import mod.fossil.common.guiBlocks.GuiPedia;
+import mod.fossil.common.guiBlocks.GuiTimeMachine;
 import mod.fossil.common.guiBlocks.GuiWorktable;
 import mod.fossil.common.guiBlocks.TileEntityAnalyzer;
 import mod.fossil.common.guiBlocks.TileEntityCultivate;
 import mod.fossil.common.guiBlocks.TileEntityFeeder;
+import mod.fossil.common.guiBlocks.TileEntityTimeMachine;
 import mod.fossil.common.guiBlocks.TileEntityWorktable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -37,7 +40,8 @@ public class FossilGuiHandler implements IGuiHandler
 		case 2: return new ContainerFeeder(player.inventory, (TileEntityFeeder) tile_entity);
 		case 3: return new ContainerWorktable(player.inventory, (TileEntityWorktable) tile_entity);
 		case 4: return new ContainerPedia();
-
+		case 5: return new ContainerTimeMachine(player.inventory, (TileEntityTimeMachine) tile_entity);
+		
 		}
 		return null;
 	}
@@ -56,6 +60,7 @@ public class FossilGuiHandler implements IGuiHandler
 		case 2: return new GuiFeeder(player.inventory, (TileEntityFeeder) tile_entity);
 		case 3: return new GuiWorktable(player.inventory, (TileEntityWorktable) tile_entity);
 		case 4: return new GuiPedia(player.inventory, EntityDinosaurce.pediaingDino, world);
+		case 5: return new GuiTimeMachine(player.inventory, (TileEntityTimeMachine) tile_entity);
 		
 		}
 
