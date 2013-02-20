@@ -12,7 +12,7 @@ public class ItemChickenSoup extends ForgeItem
     public ItemChickenSoup(int var1)
     {
         super(var1);
-        this.setHasSubtypes(true);
+        //this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.maxStackSize = 1;
     }
@@ -20,13 +20,13 @@ public class ItemChickenSoup extends ForgeItem
     /**
      * Gets an icon index based on an item's damage value
      */
-    public int getIconFromDamage(int var1)
-    {
-        return 58 + (var1 == 0 ? 0 : 2);
-    }
+    //public int getIconFromDamage(int var1)
+    //{
+    //    return 58 + (var1 == 0 ? 0 : 2);
+    //}
 
-    public String getItemNameIS(ItemStack var1)
+    /*public String getItemNameIS(ItemStack var1)
     {
         return var1.getItemDamage() == 1 ? "CookedChickenSoup" : "RawChickenSoup";
-    }
+    }*/
 }

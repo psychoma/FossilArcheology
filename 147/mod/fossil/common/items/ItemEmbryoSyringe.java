@@ -1,7 +1,6 @@
 package mod.fossil.common.items;
 
 import java.util.List;
-
 import mod.fossil.common.entity.mob.EntityPregnantCow;
 import mod.fossil.common.entity.mob.EntityPregnantPig;
 import mod.fossil.common.entity.mob.EntityPregnantSheep;
@@ -18,12 +17,12 @@ import net.minecraft.item.ItemStack;
 
 public class ItemEmbryoSyringe extends ForgeItem
 {
-    private String[] ItemNames = new String[] {"EmbyoPig", "EmbyoSheep", "EmbyoCow", "EmbyoSaberCat", "EmbyoMammoth"};
+    //private String[] ItemNames = new String[] {"EmbyoPig", "EmbyoSheep", "EmbyoCow", "EmbyoSaberCat", "EmbyoMammoth"};
 
     public ItemEmbryoSyringe(int var1)
     {
         super(var1);
-        this.setHasSubtypes(true);
+        //this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.maxStackSize = 64;
         this.initItemNameVector();
@@ -39,16 +38,16 @@ public class ItemEmbryoSyringe extends ForgeItem
     /**
      * Gets an icon index based on an item's damage value
      */
-    public int getIconFromDamage(int var1)
-    {
-        return var1;
-    }
+    //public int getIconFromDamage(int var1)
+    //{
+    //    return var1;
+    //}
 
-    public String getItemNameIS(ItemStack var1)
-    {
-        int var2 = var1.getItemDamage();
-        return var2 < this.ItemNames.length ? this.ItemNames[var2] : "EmbyoSyring";
-    }
+    //public String getItemNameIS(ItemStack var1)
+    //{
+    //    int var2 = var1.getItemDamage();
+    //    return var2 < this.ItemNames.length ? this.ItemNames[var2] : "EmbyoSyring";
+    //}
 
     public static EnumEmbyos GetEmbyo(int var0)
     {
@@ -106,11 +105,11 @@ public class ItemEmbryoSyringe extends ForgeItem
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
-    public void getSubItems(int var1, CreativeTabs var2, List var3)
-    {
-        for (int var4 = 0; var4 < EnumEmbyos.values().length; ++var4)
-        {
-            var3.add(new ItemStack(var1, 1, var4));
-        }
-    }
+    //public void getSubItems(int var1, CreativeTabs var2, List var3)
+    //{
+    //    for (int var4 = 0; var4 < EnumEmbyos.values().length; ++var4)
+    //    {
+    //        var3.add(new ItemStack(var1, 1, var4));
+    //    }
+    //}
 }

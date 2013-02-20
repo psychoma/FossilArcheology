@@ -228,6 +228,6 @@ public class WorldGenAcademy implements IWorldGenerator
     public ItemStack GetRandomContent(Random var1, boolean var2)
     {
         int var3 = var1.nextInt(1000);
-        return var2 ? new ItemStack(Item.itemsList[Item.record13.itemID + var1.nextInt(11)], 1) : (var3 < 10 ? new ItemStack(Fossil.ancientJavelin, var1.nextInt(4) + 1) : (var3 < 200 ? new ItemStack(Fossil.biofossil) : (var3 < 300 ? new ItemStack(Fossil.dna, var1.nextInt(2) + 1, var1.nextInt(EnumDinoType.values().length)) : (var3 < 400 ? new ItemStack(Item.potion, 1, 1 + var1.nextInt(19)) : null))));
+        return var2 ? new ItemStack(Item.itemsList[Item.record13.itemID + var1.nextInt(11)], 1) : (var3 < 10 ? new ItemStack(Fossil.ancientJavelin, var1.nextInt(4) + 1) : (var3 < 200 ? new ItemStack(Fossil.biofossil) : /*(var3 < 300 ? new ItemStack(Fossil.dna, var1.nextInt(2) + 1, var1.nextInt(EnumDinoType.values().length)) :*/ (var3 < 400 ? new ItemStack(Item.potion, 1, 1 + var1.nextInt(19)) : null)));
     }
 }

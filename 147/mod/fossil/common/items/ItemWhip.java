@@ -12,7 +12,7 @@ public class ItemWhip extends ItemCarrotOnAStick
     public ItemWhip(int var1)
     {
         super(var1);
-        this.setIconCoord(1, 4);
+        //this.setIconCoord(1, 4);
         this.setMaxStackSize(1);
         this.setMaxDamage(25);
     }

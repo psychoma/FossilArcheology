@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 
 public class ItemDinoMeat extends ForgeItemFood
 {
-    public static final int TypeCount = EnumDinoType.values().length;
+    //public static final int TypeCount = EnumDinoType.values().length;
 
     public ItemDinoMeat(int var1, int var2, float var3, boolean var4)
     {
@@ -27,7 +27,7 @@ public class ItemDinoMeat extends ForgeItemFood
         return 54;
     }
 
-    public String getItemNameIS(ItemStack var1)
+    /*public String getItemNameIS(ItemStack var1)
     {
         switch (ItemDinoMeat$1.$SwitchMap$mod$fossil$common$fossilEnums$EnumDinoType[this.GetTypeFromInt(var1.getItemDamage()).ordinal()])
         {
@@ -64,22 +64,22 @@ public class ItemDinoMeat extends ForgeItemFood
             default:
                 return "DinoMeat";
         }
-    }
+    }*/
 
-    private EnumDinoType GetTypeFromInt(int var1)
-    {
-        EnumDinoType[] var2 = EnumDinoType.values();
-        return var2[var1];
-    }
+    //private EnumDinoType GetTypeFromInt(int var1)
+    //{
+    //    EnumDinoType[] var2 = EnumDinoType.values();
+    //    return var2[var1];
+    //}
 
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
-    public void getSubItems(int var1, CreativeTabs var2, List var3)
+    /*public void getSubItems(int var1, CreativeTabs var2, List var3)
     {
         for (int var4 = 0; var4 < EnumDinoType.values().length; ++var4)
         {
             var3.add(new ItemStack(var1, 1, var4));
         }
-    }
+    }*/
 }

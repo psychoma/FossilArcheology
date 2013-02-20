@@ -291,7 +291,7 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
                 if (var2 > 80)
                 {
                     var3 = (new Random()).nextInt(EnumDinoType.values().length);
-                    var1 = new ItemStack(Fossil.dna, 1, var3);
+                    //var1 = new ItemStack(Fossil.dna, 1, var3);
                 }
             }
 
@@ -303,45 +303,45 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
                 }
                 else
                 {
-                    var1 = new ItemStack(Fossil.animalDNA, 1, 1);
+                    //var1 = new ItemStack(Fossil.animalDNA, 1, 1);
                 }
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Fossil.rawDinoMeat)
             {
-                var1 = new ItemStack(Fossil.dna, 4, this.analyzerItemStacks[this.RawIndex].getItemDamage());
+                //var1 = new ItemStack(Fossil.dna, 4, this.analyzerItemStacks[this.RawIndex].getItemDamage());
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.porkRaw)
             {
-                var1 = new ItemStack(Fossil.animalDNA, 2, 0);
+                //var1 = new ItemStack(Fossil.animalDNA, 2, 0);
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.beefRaw)
             {
-                var1 = new ItemStack(Fossil.animalDNA, 2, 2);
+                //var1 = new ItemStack(Fossil.animalDNA, 2, 2);
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.egg)
             {
-                var1 = new ItemStack(Fossil.animalDNA, 1, 3);
+                //var1 = new ItemStack(Fossil.animalDNA, 1, 3);
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.chickenRaw)
             {
-                var1 = new ItemStack(Fossil.animalDNA, 1, 3);
+                //var1 = new ItemStack(Fossil.animalDNA, 1, 3);
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Fossil.icedMeat)
             {
                 if (var2 <= 33)
                 {
-                    var1 = new ItemStack(Fossil.animalDNA, 1, 4);
+                    //var1 = new ItemStack(Fossil.animalDNA, 1, 4);
                 }
 
                 if (var2 > 33 && var2 < 66)
                 {
-                    var1 = new ItemStack(Fossil.animalDNA, 1, 5);
+                    //var1 = new ItemStack(Fossil.animalDNA, 1, 5);
                 }
 
                 if (var1 == null)

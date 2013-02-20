@@ -19,7 +19,7 @@ public class ItemMagicConch extends Item
     public ItemMagicConch(int var1)
     {
         super(var1);
-        this.setHasSubtypes(true);
+        //this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.maxStackSize = 1;
     }
@@ -37,12 +37,12 @@ public class ItemMagicConch extends Item
         return this.iconIndex;
     }
 
-    public String getItemNameIS(ItemStack var1)
-    {
-        String var2 = "MagicConch";
-        String var3 = EnumOrderType.values()[var1.getItemDamage()].toString();
-        return "MagicConch" + var3;
-    }
+    //public String getItemNameIS(ItemStack var1)
+    //{
+    //    String var2 = "MagicConch";
+    //    String var3 = EnumOrderType.values()[var1.getItemDamage()].toString();
+    //    return "MagicConch" + var3;
+    //}
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer

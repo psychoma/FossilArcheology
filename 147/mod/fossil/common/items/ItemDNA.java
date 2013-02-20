@@ -22,17 +22,17 @@ public class ItemDNA extends Item
     /**
      * Gets an icon index based on an item's damage value
      */
-    public int getIconFromDamage(int var1)
-    {
-        return var1 < TypeCount ? 6 + var1 : 0;
-    }
+    //public int getIconFromDamage(int var1)
+    //{
+    //    return var1 < TypeCount ? 6 + var1 : 0;
+    //}
 
     public String getTextureFile()
     {
         return "/mod/fossil/common/textures/Fos_items.png";
     }
 
-    public String getItemNameIS(ItemStack var1)
+    /*public String getItemNameIS(ItemStack var1)
     {
         switch (ItemDNA$1.$SwitchMap$mod_Fossil$EnumDinoType[this.GetTypeFromInt(var1.getItemDamage()).ordinal()])
         {
@@ -69,7 +69,7 @@ public class ItemDNA extends Item
             default:
                 return "DNA";
         }
-    }
+    }*/
 
     private EnumDinoType GetTypeFromInt(int var1)
     {
@@ -80,11 +80,11 @@ public class ItemDNA extends Item
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
-    public void getSubItems(int var1, CreativeTabs var2, List var3)
+    /*public void getSubItems(int var1, CreativeTabs var2, List var3)
     {
         for (int var4 = 0; var4 < EnumDinoType.values().length; ++var4)
         {
             var3.add(new ItemStack(var1, 1, var4));
         }
-    }
+    }*/
 }

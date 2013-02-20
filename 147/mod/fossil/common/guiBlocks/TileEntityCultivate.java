@@ -299,7 +299,7 @@ public class TileEntityCultivate extends TileEntity implements IInventory, ISide
         else
         {
             int var2 = var1.getItem().itemID;
-            return var2 == Fossil.biofossil.itemID ? 300 : (var2 == Fossil.chickenSoup.itemID ? 1000 : (var2 == Fossil.ancientegg.itemID ? 12000 : (var2 == Item.porkRaw.itemID ? 3000 : (var2 == Item.fishRaw.itemID ? 3000 : (var2 == Item.beefRaw.itemID ? 4000 : (var2 == Fossil.rawDinoMeat.itemID ? 4000 : (var2 == Item.chickenRaw.itemID ? 1500 : (var2 == Item.egg.itemID ? 1000 : (var2 == Item.slimeBall.itemID ? 800 : (var2 == Item.bucketMilk.itemID ? 6000 : 0))))))))));
+            return var2 == Fossil.biofossil.itemID ? 300 : (/*var2 == Fossil.chickenSoup.itemID ? 1000 : (var2 == Fossil.ancientegg.itemID ? 12000 : (*/var2 == Item.porkRaw.itemID ? 3000 : (var2 == Item.fishRaw.itemID ? 3000 : (var2 == Item.beefRaw.itemID ? 4000 : (var2 == Fossil.rawDinoMeat.itemID ? 4000 : (var2 == Item.chickenRaw.itemID ? 1500 : (var2 == Item.egg.itemID ? 1000 : (var2 == Item.slimeBall.itemID ? 800 : (var2 == Item.bucketMilk.itemID ? 6000 : 0))))))));
         }
     }
 
@@ -318,7 +318,7 @@ public class TileEntityCultivate extends TileEntity implements IInventory, ISide
 
     private ItemStack CheckSmelt(ItemStack var1)
     {
-        if (var1.itemID == Fossil.dna.itemID)
+       /* if (var1.itemID == Fossil.dna.itemID)
         {
             return new ItemStack(Fossil.ancientegg, 1, var1.getItemDamage());
         }
@@ -330,7 +330,8 @@ public class TileEntityCultivate extends TileEntity implements IInventory, ISide
         else
         {
             return null;
-        }
+        }*/
+    	return null;
     }
 
     public void openChest() {}

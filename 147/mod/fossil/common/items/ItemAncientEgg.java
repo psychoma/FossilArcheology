@@ -40,7 +40,7 @@ public class ItemAncientEgg extends Item
     /**
      * Gets an icon index based on an item's damage value
      */
-    public int getIconFromDamage(int var1)
+    /*public int getIconFromDamage(int var1)
     {
         return var1 < TypeCount ? 22 + var1 : 0;
     }
@@ -82,7 +82,7 @@ public class ItemAncientEgg extends Item
             default:
                 return "Ancient egg";
         }
-    }
+    }*/
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
@@ -201,11 +201,11 @@ public class ItemAncientEgg extends Item
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
      */
-    public void getSubItems(int var1, CreativeTabs var2, List var3)
+    /*public void getSubItems(int var1, CreativeTabs var2, List var3)
     {
         for (int var4 = 0; var4 < EnumDinoType.values().length; ++var4)
         {
             var3.add(new ItemStack(var1, 1, var4));
         }
-    }
+    }*/
 }
