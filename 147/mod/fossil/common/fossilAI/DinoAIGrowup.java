@@ -5,47 +5,28 @@ import mod.fossil.common.entity.mob.EntityDinosaurce;
 import mod.fossil.common.fossilEnums.EnumSituation;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 
 public class DinoAIGrowup extends EntityAIBase
 {
-    private static final int GROW_TIME_COUNT = 12000;
     protected EntityDinosaurce AITarget;
-    protected int ageLimit;
-    protected int healingOnGrowing;
 
-    public DinoAIGrowup(EntityDinosaurce var1, int var2)
+    public DinoAIGrowup(EntityDinosaurce var1)
     {
-        this.AITarget = null;
-        this.ageLimit = 0;
-        this.healingOnGrowing = 1;
         this.AITarget = var1;
-        this.ageLimit = var2;
-    }
-
-    public DinoAIGrowup(EntityDinosaurce var1, int var2, int var3)
-    {
-        this(var1, var2);
-        this.healingOnGrowing = var3;
     }
 
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
     public boolean shouldExecute()
-    {
-        if (!FossilOptions.DinoGrows)
-        {
-            return false;
-        }
-        else if (this.AITarget.getDinoAge() > this.ageLimit)
-        {
-            return false;
-        }
-        else
+    {  
+        if (FossilOptions.DinoGrows && this.AITarget.getDinoAge() < this.AITarget.MaxAge)
         {
             this.AITarget.increaseDinoAgeTick();
-            return this.AITarget.getDinoAgeTick() >= 12000;
+            return this.AITarget.getDinoAgeTick() >= this.AITarget.AgingTicks;
         }
+        return false;
     }
 
     /**
@@ -58,24 +39,24 @@ public class DinoAIGrowup extends EntityAIBase
         this.AITarget.CheckSkin();
 
         if (this.AITarget.getHealth() < this.AITarget.getMaxHealth())
-        {
-            this.AITarget.heal(this.healingOnGrowing);
+        {//the dino heals itself 5% when growing up
+            this.AITarget.heal(MathHelper.ceiling_double_int(this.AITarget.getMaxHealth()*0.05f));
         }
 
-        this.AITarget.updateSize(false);
+        this.AITarget.updateSize();
         this.AITarget.setPosition(this.AITarget.posX, this.AITarget.posY, this.AITarget.posZ);
 
         if (!this.AITarget.CheckSpace())
         {
-            this.AITarget.decreaseDinoAge();
+            this.AITarget.setDinoAge(this.AITarget.getDinoAge()-1);
             this.AITarget.CheckSkin();
 
-            if (this.AITarget.getHealth() > this.healingOnGrowing)
+            if (this.AITarget.getHealth() > MathHelper.ceiling_double_int(this.AITarget.getMaxHealth()*0.05f))
             {
-                this.AITarget.attackEntityFrom(DamageSource.generic, this.healingOnGrowing);
+                this.AITarget.attackEntityFrom(DamageSource.generic, MathHelper.ceiling_double_int(this.AITarget.getMaxHealth()*0.05f));
             }
 
-            this.AITarget.updateSize(false);
+            this.AITarget.updateSize();
             this.AITarget.setPosition(this.AITarget.posX, this.AITarget.posY, this.AITarget.posZ);
 
             if (this.AITarget.isTamed())

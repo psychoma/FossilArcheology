@@ -12,14 +12,14 @@ public class DinoAIEatFerns extends EntityAIBase
     protected EntityDinosaurce entityVar;
     protected World worldObj;
     int eatTick = 0;
-    final float HUNT_LIMIT;
+    //final float HUNT_LIMIT;
 
-    public DinoAIEatFerns(EntityDinosaurce var1, float var2)
+    public DinoAIEatFerns(EntityDinosaurce var1/*, float var2*/)
     {
         this.entityVar = var1;
         this.worldObj = var1.worldObj;
         this.setMutexBits(7);
-        this.HUNT_LIMIT = var2;
+        //this.HUNT_LIMIT = var2;
     }
 
     /**
@@ -27,7 +27,7 @@ public class DinoAIEatFerns extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        if ((float)this.entityVar.getHunger() >= this.HUNT_LIMIT)
+        if (this.entityVar.IsHungry()/*(float)this.entityVar.getHunger() >= this.HUNT_LIMIT*/)
         {
             return false;
         }
@@ -88,7 +88,7 @@ public class DinoAIEatFerns extends EntityAIBase
             {
                 this.worldObj.playAuxSFX(2001, var1, var2, var3, Block.tallGrass.blockID + 4096);
                 this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
-                this.entityVar.HandleEating(90);
+                this.entityVar.setHunger(this.entityVar.getHunger()+90);
             }
         }
     }

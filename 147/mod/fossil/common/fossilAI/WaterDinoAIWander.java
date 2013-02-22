@@ -34,7 +34,7 @@ public class WaterDinoAIWander extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        if (this.entity.getAge() >= 100)
+        if (this.entity.getDinoAge() >= 100)
         {
             return false;
         }

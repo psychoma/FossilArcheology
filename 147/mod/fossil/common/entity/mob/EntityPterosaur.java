@@ -6,9 +6,11 @@ import mod.fossil.common.Fossil;
 import mod.fossil.common.fossilAI.DinoAIFollowOwner;
 import mod.fossil.common.fossilAI.DinoAIGrowup;
 import mod.fossil.common.fossilAI.DinoAIPickItem;
+import mod.fossil.common.fossilAI.DinoAIPickItems;
 import mod.fossil.common.fossilAI.DinoAIStarvation;
 import mod.fossil.common.fossilAI.DinoAIUseFeeder;
 import mod.fossil.common.fossilEnums.EnumDinoEating;
+import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.fossilEnums.EnumSituation;
@@ -37,17 +39,17 @@ import net.minecraft.world.World;
 
 public class EntityPterosaur extends EntityDinosaurce
 {
-    protected final int AGE_LIMIT = 8;
-    public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
+    //protected final int AGE_LIMIT = 8;
+    //public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
     private boolean looksWithInterest;
-    private float field_25048_b;
+    /*private float field_25048_b;
     private float field_25054_c;
     private boolean isWolfShaking;
     private boolean field_25052_g;
-    public ItemStack ItemInMouth = null;
+    public ItemStack ItemInMouth = null;*/
     public int LearningChestTick = 900;
-    public int SubType = 0;
-    public int BreedTick = 3000;
+   // public int SubType = 0;
+    //public int BreedTick = 3000;
     public float AirSpeed = 0.0F;
     public float AirAngle = 0.0F;
     public float AirPitch = 0.0F;
@@ -61,20 +63,42 @@ public class EntityPterosaur extends EntityDinosaurce
         this.looksWithInterest = false;
         this.CheckSkin();
         this.setSize(0.8F, 0.8F);
-        this.moveSpeed = 2.0F;
+        //this.moveSpeed = 2.0F;
         this.health = 10;
+        
+        
+        //this.BaseattackStrength=;
+        //this.AttackStrengthIncrease=;
+        //this.BreedingTime=;
+        //this.BaseSpeed=;
+        //this.SpeedIncrease=;
+        this.MaxAge=9;
+        this.BaseHealth=21;
+        this.HealthIncrease=1;
+        //this.AdultAge=;
+        //this.AgingTicks=;
+        //this.MaxHunger=;
+        //this.Hungrylevel=;
+        this.ItemToControl=Item.arrow;
+        this.moveSpeed = this.getSpeed();//should work
+        
+        FoodItemList.addItem(EnumDinoFoodItem.FishRaw);
+        FoodItemList.addItem(EnumDinoFoodItem.FishCooked);
+        FoodItemList.addItem(EnumDinoFoodItem.Sjl);
+        
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(0, new DinoAIGrowup(this, 8));
-        this.tasks.addTask(0, new DinoAIStarvation(this));
+        //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
+        //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityTRex.class, 8.0F, 0.3F, 0.35F));
         this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityBrachiosaurus.class, 8.0F, 0.3F, 0.35F));
         this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24, this.HuntLimit, EnumDinoEating.Carnivorous));
-        this.tasks.addTask(6, new DinoAIPickItem(this, Item.fishRaw, this.moveSpeed, 24, this.HuntLimit));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
+        /*this.tasks.addTask(6, new DinoAIPickItem(this, Item.fishRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.fishCooked, this.moveSpeed, 24, this.HuntLimit));
-        this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.sjl, this.moveSpeed * 2.0F, 24, this.HuntLimit));
+        this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.sjl, this.moveSpeed * 2.0F, 24, this.HuntLimit));*/
+        this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
         this.tasks.addTask(7, new EntityAIWander(this, 0.3F));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
@@ -117,25 +141,17 @@ public class EntityPterosaur extends EntityDinosaurce
     {
         super.readEntityFromNBT(var1);
         this.setSelfAngry(var1.getBoolean("Angry"));
-        this.setSelfSitting(var1.getBoolean("Sitting"));
+        //this.setSelfSitting(var1.getBoolean("Sitting"));
 
-        if (var1.hasKey("SubType"))
+        /*if (var1.hasKey("SubType"))
         {
             this.SubType = var1.getInteger("SubType");
-        }
+        }*/
 
         this.InitSize();
         this.AirSpeed = var1.getFloat("Airspeed");
         this.AirAngle = var1.getFloat("AirAngle");
         this.AirPitch = var1.getFloat("AirPitch");
-    }
-
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
-    protected boolean canDespawn()
-    {
-        return false;
     }
 
     /**
@@ -186,7 +202,7 @@ public class EntityPterosaur extends EntityDinosaurce
     public void onUpdate()
     {
         super.onUpdate();
-        this.field_25054_c = this.field_25048_b;
+        /*this.field_25054_c = this.field_25048_b;
 
         if (this.looksWithInterest)
         {
@@ -195,7 +211,7 @@ public class EntityPterosaur extends EntityDinosaurce
         else
         {
             this.field_25048_b += (0.0F - this.field_25048_b) * 0.4F;
-        }
+        }*/
 
         if (this.looksWithInterest)
         {
@@ -214,7 +230,7 @@ public class EntityPterosaur extends EntityDinosaurce
      */
     public int getVerticalFaceSpeed()
     {
-        return this.isSelfSitting() ? 20 : super.getVerticalFaceSpeed();
+        return this.isSitting() ? 20 : super.getVerticalFaceSpeed();
     }
 
     /**
@@ -222,7 +238,7 @@ public class EntityPterosaur extends EntityDinosaurce
      */
     protected boolean isMovementCeased()
     {
-        return this.isSelfSitting() || this.field_25052_g;
+        return this.isSitting();// || this.field_25052_g;
     }
 
     /**
@@ -292,111 +308,8 @@ public class EntityPterosaur extends EntityDinosaurce
      */
     public boolean interact(EntityPlayer var1)
     {
-        if (this.isModelized())
-        {
-            return this.modelizedInteract(var1);
-        }
-        else
-        {
-            ItemStack var2 = var1.inventory.getCurrentItem();
-
-            if (FMLCommonHandler.instance().getSide().isClient() && var2 != null && var2.itemID == Fossil.dinoPedia.itemID)
-            {
-                EntityDinosaurce.pediaingDino = this;
-                var1.openGui(var1, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
-                return true;
-            }
-            else
-            {
-                if (this.isTamed())
-                {
-                    if (var2 != null)
-                    {
-                        if (var2.itemID == Item.arrow.itemID && var1.username.equalsIgnoreCase(this.getOwnerName()))
-                        {
-                            if (!this.worldObj.isRemote)
-                            {
-                                this.isJumping = false;
-                                this.setPathToEntity((PathEntity)null);
-                                this.OrderStatus = EnumOrderType.values()[(Fossil.EnumToInt(this.OrderStatus) + 1) % 3];
-                                this.SendOrderMessage(this.OrderStatus);
-
-                                switch (EntityPterosaur$1.$SwitchMap$mod_Fossil$EnumOrderType[this.OrderStatus.ordinal()])
-                                {
-                                    case 1:
-                                        this.setSelfSitting(true);
-                                        break;
-
-                                    case 2:
-                                        this.setSelfSitting(false);
-                                        break;
-
-                                    case 3:
-                                        this.setSelfSitting(false);
-                                }
-                            }
-
-                            return true;
-                        }
-
-                        if (this.EOCInteract(var2, var1))
-                        {
-                            return true;
-                        }
-
-                        if (var2 != null && (var2.itemID == Item.fishRaw.itemID || var2.itemID == Item.fishCooked.itemID || var2.itemID == Fossil.sjl.itemID))
-                        {
-                            if (this.HandleEating(30))
-                            {
-                                --var2.stackSize;
-
-                                if (var2.stackSize <= 0)
-                                {
-                                    var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-                                }
-
-                                this.heal(3);
-                            }
-
-                            return true;
-                        }
-
-                        return false;
-                    }
-
-                    if (this.ItemInMouth != null)
-                    {
-                        if (this.worldObj.isRemote)
-                        {
-                            return false;
-                        }
-
-                        int var3 = this.ItemInMouth.stackSize;
-
-                        if (var1.inventory.addItemStackToInventory(this.ItemInMouth))
-                        {
-                            ModLoader.onItemPickup(var1, this.ItemInMouth);
-                            this.worldObj.playSoundAtEntity(var1, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                            this.ItemInMouth = null;
-                            return true;
-                        }
-
-                        return false;
-                    }
-
-                    if (this.isTamed() && this.getDinoAge() > 4 && !this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == var1))
-                    {
-                        var1.rotationYaw = this.rotationYaw;
-                        var1.mountEntity(this);
-                        this.setPathToEntity((PathEntity)null);
-                        this.renderYawOffset = this.rotationYaw;
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        }
+    	//Add special item interaction code here
+        return super.interact(var1);
     }
 
     public void handleHealthUpdate(byte var1)
@@ -411,7 +324,7 @@ public class EntityPterosaur extends EntityDinosaurce
         }
         else if (var1 == 8)
         {
-            this.field_25052_g = true;
+            ;//this.field_25052_g = true;
         }
         else
         {
@@ -419,23 +332,15 @@ public class EntityPterosaur extends EntityDinosaurce
         }
     }
 
-    /**
-     * Will return how many at most can spawn in a chunk at once.
-     */
-    public int getMaxSpawnedInChunk()
-    {
-        return 100;
-    }
-
     public boolean isSelfAngry()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
     }
 
-    public boolean isSelfSitting()
+    /*public boolean isSelfSitting()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }
+    }*/
 
     public void setSelfAngry(boolean var1)
     {
@@ -452,7 +357,7 @@ public class EntityPterosaur extends EntityDinosaurce
         }
     }
 
-    public void setSelfSitting(boolean var1)
+    /*public void setSelfSitting(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
 
@@ -480,7 +385,7 @@ public class EntityPterosaur extends EntityDinosaurce
             this.SendStatusMessage(EnumSituation.Bytreate);
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -5)));
         }
-    }
+    }*/
 
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
@@ -512,7 +417,7 @@ public class EntityPterosaur extends EntityDinosaurce
     private void InitSize()
     {
         this.CheckSkin();
-        this.updateSize(false);
+        this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
     }
 
@@ -533,7 +438,7 @@ public class EntityPterosaur extends EntityDinosaurce
         return !this.isEntityInsideOpaqueBlock();
     }
 
-    public boolean HandleEating(int var1)
+    /*public boolean HandleEating(int var1)
     {
         if (this.getHunger() >= this.getHungerLimit())
         {
@@ -551,16 +456,16 @@ public class EntityPterosaur extends EntityDinosaurce
 
             return true;
         }
-    }
+    }*/
 
-    public void ChangeSubType(int var1)
+    /*public void ChangeSubType(int var1)
     {
         if (var1 <= 2 && var1 >= 0)
         {
             this.SubType = var1;
             this.CheckSkin();
         }
-    }
+    }*/
 
     public void ShowPedia(EntityPlayer var1)
     {
@@ -571,7 +476,7 @@ public class EntityPterosaur extends EntityDinosaurce
             Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
             Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
             Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.getHungerLimit(), var1);
+            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
 
             if (this.getDinoAge() >= 5)
             {
@@ -772,19 +677,9 @@ public class EntityPterosaur extends EntityDinosaurce
         }
     }
 
-    public void SetOrder(EnumOrderType var1)
-    {
-        this.OrderStatus = var1;
-    }
-
     public EntityPterosaur spawnBabyAnimal(EntityAgeable var1)
     {
         return new EntityPterosaur(this.worldObj);
-    }
-
-    public int getMaxHealth()
-    {
-        return 20;
     }
 
     public void HandleLanding()
@@ -802,35 +697,10 @@ public class EntityPterosaur extends EntityDinosaurce
         }
     }
 
-    public void updateSize(boolean var1)
+    public void updateSize()
     {
-        if (var1)
-        {
-            int var10000 = this.getDinoAge();
-            this.getClass();
-
-            if (var10000 < 8)
-            {
-                this.increaseDinoAge();
-            }
-        }
-
         this.setSize((float)(0.800000011920929D + 0.2D * (double)((float)this.getDinoAge())), (float)(0.800000011920929D + 0.2D * (double)((float)this.getDinoAge())));
     }
-
-    public EnumOrderType getOrderType()
-    {
-        return this.OrderStatus;
-    }
-
-    protected int foodValue(Item var1)
-    {
-        return 0;
-    }
-
-    public void HandleEating(Item var1) {}
-
-    public void HoldItem(Item var1) {}
 
     public float getGLX()
     {

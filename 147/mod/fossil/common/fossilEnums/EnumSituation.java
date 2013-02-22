@@ -4,8 +4,8 @@ public enum EnumSituation
 {
     Hungry,
     Starve,
-    LearingChest,
-    Bytreate,
+    LearningChest,
+    Betrayed,
     NoSpace,
     StarveEsc,
     SJLBite,

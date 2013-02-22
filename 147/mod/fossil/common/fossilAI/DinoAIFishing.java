@@ -13,16 +13,16 @@ import net.minecraft.util.MathHelper;
 public class DinoAIFishing extends EntityAIBase
 {
     private EntityDinosaurce theEntity;
-    private final float huntLimit;
+    //private final float huntLimit;
     private final int percentage;
 
-    public DinoAIFishing(EntityDinosaurce var1, float var2, int var3)
+    public DinoAIFishing(EntityDinosaurce var1/*, float var2*/, int var3)
     {
         this.theEntity = var1;
         this.setMutexBits(4);
         var1.getNavigator().setCanSwim(true);
         this.percentage = var3 > 100 ? 100 : (var3 < 0 ? 0 : var3);
-        this.huntLimit = var2;
+        //this.huntLimit = var2;
     }
 
     /**
@@ -30,7 +30,7 @@ public class DinoAIFishing extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        return !this.nearbyGotWater() ? false : (float)this.theEntity.getHunger() < this.huntLimit && this.theEntity.getRNG().nextInt(100) < this.percentage;
+        return !this.nearbyGotWater() ? false : this.theEntity.IsHungry()/*(float)this.theEntity.getHunger() < this.huntLimit*/ && this.theEntity.getRNG().nextInt(100) < this.percentage;
     }
 
     /**

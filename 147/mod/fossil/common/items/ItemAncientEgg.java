@@ -153,7 +153,7 @@ public class ItemAncientEgg extends Item
                             --var32;
                         }
 
-                        if (!spawnCreature(var2, this.GetTypeFromInt(var1.getItemDamage()), (double)((float)var34 + 0.5F), (double)((float)var32 + 1.0F), (double)((float)var33 + 0.5F)))
+                        if (!spawnCreature(var2, this.GetTypeFromInt(var1.getItem().getIconFromDamage(0)-22), (double)((float)var34 + 0.5F), (double)((float)var32 + 1.0F), (double)((float)var33 + 0.5F)))
                         {
                             return var1;
                         }

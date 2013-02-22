@@ -11,9 +11,9 @@ public class DinoAIUseFeederWithHeight extends DinoAIUseFeeder
 {
     private float ownerHeight;
 
-    public DinoAIUseFeederWithHeight(EntityDinosaurce var1, float var2, int var3, float var4)
+    public DinoAIUseFeederWithHeight(EntityDinosaurce var1, float var2, int var3)//, float var4)
     {
-        super(var1, var2, var3, var4, EnumDinoEating.Herbivorous);
+        super(var1, var2, var3,/* var4,*/ EnumDinoEating.Herbivorous);
     }
 
     /**

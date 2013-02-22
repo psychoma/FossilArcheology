@@ -19,6 +19,6 @@ public class DinoAIAvoidEntityWhenYoung extends EntityAIAvoidEntity
      */
     public boolean shouldExecute()
     {
-        return !this.dinoEntity.isYoung() ? false : super.shouldExecute();
+        return !this.dinoEntity.isBaby() ? false : super.shouldExecute();
     }
 }

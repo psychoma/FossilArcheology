@@ -40,10 +40,11 @@ import net.minecraft.world.World;
 public class EntityBrachiosaurus extends EntityDinosaurce
 {
     public boolean isTamed = false;
-    public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
-    public String OwnerName;
+    //public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
+    
+    //public String OwnerName;
     final float PUSHDOWN_HARDNESS = 5.0F;
-    protected final int AGE_LIMIT = 36;
+    //protected final int AGE_LIMIT = 36;
 
     public EntityBrachiosaurus(World var1)
     {
@@ -51,43 +52,49 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         this.texture = "/mod/fossil/common/textures/Brachiosaurus.png";
         this.SelfType = EnumDinoType.Brachiosaurus;
         this.setSize(1.5F, 1.5F);
-        this.moveSpeed = 0.3F;
         this.health = 8;
-        this.setHunger(this.getHungerLimit());
+        //this.BaseattackStrength=;
+        //this.AttackStrengthIncrease=;
+        //this.BreedingTime=;
+        //this.BaseSpeed=;
+        //this.SpeedIncrease=;
+        this.MaxAge=36;
+        //this.BaseHealth=;
+        this.HealthIncrease=10;
+        this.AdultAge=12;
+        //this.AgingTicks=;
+        this.MaxHunger=500;
+        //this.Hungrylevel=;
+        this.ItemToControl=Item.stick;
+        this.moveSpeed = this.getSpeed();//should work
+        
+        //this.setHunger(this.getHungerLimit());
         this.getNavigator().setAvoidsWater(true);
-        this.tasks.addTask(0, new DinoAIGrowup(this, 36));
-        this.tasks.addTask(0, new DinoAIStarvation(this));
+        //this.tasks.addTask(0, new DinoAIGrowup(this, 36));
+        //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this, 0.34F));
         this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(4, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIEatLeavesWithHeight(this, this.moveSpeed, 24, this.HuntLimit));
-        this.tasks.addTask(6, new DinoAIUseFeederWithHeight(this, this.moveSpeed, 24, this.HuntLimit));
+        this.tasks.addTask(6, new DinoAIEatLeavesWithHeight(this, this.moveSpeed, 24));//, this.HuntLimit));
+        this.tasks.addTask(6, new DinoAIUseFeederWithHeight(this, this.moveSpeed, 24));//, this.HuntLimit));
         this.tasks.addTask(7, new DinoAIWander(this, this.moveSpeed));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
     }
 
-    public int getHungerLimit()
+    /*public int getHungerLimit()
     {
         return 500;
-    }
+    }*/
 
     /**
-     * Returns true if the newer Entity AI code should be run
+     * Returns true if the Entity AI code should be run
      */
     public boolean isAIEnabled()
     {
         return !this.isModelized();
-    }
-
-    /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource var1, int var2)
-    {
-        return this.modelizedDrop() ? true : super.attackEntityFrom(var1, var2);
     }
 
     /**
@@ -114,7 +121,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         return "Brach_death";
     }
 
-    public String getOwnerName()
+    /*public String getOwnerName()
     {
         return this.OwnerName;
     }
@@ -132,14 +139,14 @@ public class EntityBrachiosaurus extends EntityDinosaurce
     public void setTamed(boolean var1)
     {
         this.isTamed = var1;
-    }
+    }*/
 
-    public void SetOrder(EnumOrderType var1)
+    /*public void SetOrder(EnumOrderType var1)
     {
         this.OrderStatus = var1;
-    }
+    }*/
 
-    public boolean HandleEating(int var1)
+    /*public boolean HandleEating(int var1)
     {
         return this.HandleEating(var1, false);
     }
@@ -175,7 +182,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         boolean var3 = false;
         var3 = var2 == Item.wheat || var2 == Item.melon;
         return var3;
-    }
+    }*/
 
     public void ShowPedia(EntityPlayer var1)
     {
@@ -186,7 +193,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
             Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
             Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
             Fossil.ShowMessage(HelthText + this.health + "/" + this.getMaxHealth(), var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.getHungerLimit(), var1);
+            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
         }
         else
         {
@@ -226,82 +233,8 @@ public class EntityBrachiosaurus extends EntityDinosaurce
      */
     public boolean interact(EntityPlayer var1)
     {
-        if (this.isModelized())
-        {
-            return this.modelizedInteract(var1);
-        }
-        else
-        {
-            ItemStack var2 = var1.inventory.getCurrentItem();
-
-            if (var2 != null && var2.itemID == Item.wheat.itemID)
-            {
-                if (this.CheckEatable(var2.itemID) && this.HandleEating(10))
-                {
-                    --var2.stackSize;
-
-                    if (var2.stackSize <= 0)
-                    {
-                        var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-                    }
-
-                    this.heal(3);
-                }
-
-                return true;
-            }
-            else if (FMLCommonHandler.instance().getSide().isClient() && var2 != null && var2.itemID == Fossil.dinoPedia.itemID)
-            {
-                EntityDinosaurce.pediaingDino = this;
-                var1.openGui(var1, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
-                return true;
-            }
-            else if (var2 != null && var2.itemID == Fossil.chickenEss.itemID)
-            {
-                if (this.getDinoAge() < 12 && this.getHunger() > 0)
-                {
-                    --var2.stackSize;
-
-                    if (var2.stackSize <= 0)
-                    {
-                        var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-                    }
-
-                    var1.inventory.addItemStackToInventory(new ItemStack(Item.glassBottle, 1));
-                    this.setDinoAgeTick(12000);
-                    this.setHunger(1 + (new Random()).nextInt(this.getHunger()));
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else if (var2 != null && var2.itemID == Item.stick.itemID && var1.username.equalsIgnoreCase(this.getOwnerName()))
-            {
-                if (!this.worldObj.isRemote)
-                {
-                    this.isJumping = false;
-                    this.setPathToEntity((PathEntity)null);
-                    this.OrderStatus = EnumOrderType.values()[(Fossil.EnumToInt(this.OrderStatus) + 1) % 3];
-                    this.SendOrderMessage(this.OrderStatus);
-                }
-
-                return true;
-            }
-            else if (this.isTamed() && this.getDinoAge() >= 2 && !this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == var1))
-            {
-                var1.rotationYaw = this.rotationYaw;
-                var1.mountEntity(this);
-                this.setPathToEntity((PathEntity)null);
-                this.renderYawOffset = this.rotationYaw;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+    	//Add special item interaction code here
+        return super.interact(var1);
     }
 
     public EntityBrachiosaurus spawnBabyAnimal(EntityAnimal var1)
@@ -309,10 +242,10 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         return null;
     }
 
-    public int getMaxHealth()
+    /*public int getMaxHealth()
     {
         return 20 + 10 * this.getDinoAge();
-    }
+    }*/
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
@@ -320,7 +253,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setByte("OrderStatus", (byte)Fossil.EnumToInt(this.OrderStatus));
+        //var1.setByte("OrderStatus", (byte)Fossil.EnumToInt(this.OrderStatus));//already done
     }
 
     /**
@@ -330,14 +263,14 @@ public class EntityBrachiosaurus extends EntityDinosaurce
     {
         super.readEntityFromNBT(var1);
         this.InitSize();
-        this.OrderStatus = EnumOrderType.values()[var1.getByte("OrderStatus")];
+        //this.OrderStatus = EnumOrderType.values()[var1.getByte("OrderStatus")];//already done
     }
 
     private void InitSize()
     {
-        this.updateSize(false);
+        this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
-        this.moveSpeed = 0.3F + (float)this.getDinoAge() * 0.05F;
+        this.moveSpeed = this.getSpeed();//0.3F + (float)this.getDinoAge() * 0.05F;//done centrally
     }
 
     /**
@@ -347,18 +280,10 @@ public class EntityBrachiosaurus extends EntityDinosaurce
     {
         super.onUpdate();
 
-        if (this.getDinoAge() >= 4)
+        if (!this.isBaby())//this.getDinoAge() >= 4)
         {
             this.BlockInteractive();
         }
-    }
-
-    /**
-     * Disables a mob's ability to move on its own while true.
-     */
-    protected boolean isMovementCeased()
-    {
-        return this.isSelfSitting();
     }
 
     /**
@@ -380,8 +305,8 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         }
     }
 
-    public void setSelfSitting(boolean var1)
-    {
+    /*public void setSelfSitting(boolean var1)
+    {//handled in dinosaurce
         if (var1)
         {
             this.OrderStatus = EnumOrderType.Stay;
@@ -395,7 +320,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
     public boolean isSelfSitting()
     {
         return this.OrderStatus == EnumOrderType.Stay;
-    }
+    }*/
 
     public float getEyeHeight()
     {
@@ -407,15 +332,15 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         return this.getEyeHeight() / 2.0F;
     }
 
-    /**
+    /*/** Should'nt bee needed as the speed itself is applied to tha age already
      * This method returns a value to be applied directly to entity speed, this factor is less than 1 when a slowdown
      * potion effect is applied, more than 1 when a haste potion effect is applied and 2 for fleeing entities.
-     */
+     *
     public float getSpeedModifier()
     {
         float var1 = 1.0F + (float)Math.floor((double)((float)this.getDinoAge() / 5.0F));
         return var1;
-    }
+    }*/
 
     public void BlockInteractive()
     {
@@ -558,40 +483,14 @@ public class EntityBrachiosaurus extends EntityDinosaurce
             {
                 this.rotationYaw -= 360.0F;
             }
-
             this.moveForward = ((EntityPlayerSP)this.riddenByEntity).movementInput.moveForward * this.moveSpeed;
         }
     }
 
-    public void updateSize(boolean var1)
+    public void updateSize()
     {
-        if (var1)
-        {
-            int var10000 = this.getDinoAge();
-            this.getClass();
-
-            if (var10000 < 36)
-            {
-                this.increaseDinoAge();
-            }
-        }
-
         this.setSize((float)(1.5D + 0.3D * (double)((float)this.getDinoAge())), (float)(1.5D + 0.3D * (double)((float)this.getDinoAge())));
     }
-
-    public EnumOrderType getOrderType()
-    {
-        return this.OrderStatus;
-    }
-
-    protected int foodValue(Item var1)
-    {
-        return 0;
-    }
-
-    public void HandleEating(Item var1) {}
-
-    public void HoldItem(Item var1) {}
 
     public float getGLX()
     {
@@ -603,14 +502,8 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         return (float)(1.5D + 0.3D * (double)((float)this.getDinoAge()));
     }
 
-    public EntityAgeable func_90011_a(EntityAgeable var1)
+    /*public EntityAgeable func_90011_a(EntityAgeable var1)
     {
         return null;
-    }
-
-	@Override
-	public EntityAgeable createChild(EntityAgeable var1) 
-	{
-		return null;
-	}
+    }*/
 }

@@ -45,11 +45,13 @@ import net.minecraft.world.World;
 public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
 {
     public final int Areas = 60;
-    public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
+    //public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
     private boolean looksWithInterest;
-    private float field_25048_b;
-    private float field_25054_c;
-    private boolean field_25052_g;
+    
+    /*private float field_25048_b;
+    private float field_25054_c;/7What are theese for?
+    private boolean field_25052_g;*/
+    
     public float TargetY = 0.0F;
 
     public EntityMosasaurus(World var1)
@@ -59,13 +61,28 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         this.looksWithInterest = false;
         this.texture = "/mod/fossil/common/textures/Mosasaurus.png";
         this.setSize(0.5F, 0.5F);
-        this.moveSpeed = 0.3F;
+        //this.moveSpeed = 0.3F;
         this.health = 10;
-        this.attackStrength = 4 + 2 * this.getDinoAge();
-        this.moveSpeed = 0.3F;
+        //this.attackStrength = 4 + 2 * this.getDinoAge();
+        
+        this.BaseattackStrength=4;
+        this.AttackStrengthIncrease=2;
+        //this.BreedingTime=;
+        this.BaseSpeed=0.5F;
+        this.SpeedIncrease=0.4F;
+        this.MaxAge=20;
+        this.BaseHealth=50;
+        this.HealthIncrease=10;
+        this.AdultAge=8;
+        //this.AgingTicks=;
+        this.MaxHunger=500;
+        //this.Hungrylevel=;
+        this.ItemToControl=null;
+        this.moveSpeed = this.getSpeed();//should work
+        
         this.getNavigator().setCanSwim(true);
-        this.tasks.addTask(0, new DinoAIGrowup(this, 8));
-        this.tasks.addTask(0, new DinoAIStarvation(this));
+        //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
+        //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, (new WaterDinoAISwimming(this, true, 0.09374999F, 0.018749999F)).setDiveAtNight());
         this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
         this.tasks.addTask(4, new WaterDinoAIWander(this, this.moveSpeed, 0.003F));
@@ -78,17 +95,12 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         this.targetTasks.addTask(5, new WaterDinoAINearestAttackableTarget(this, EntityPlayer.class, 16.0F, 0, false));
     }
 
-    public int getHungerLimit()
-    {
-        return 500;
-    }
-
     /**
-     * Returns true if the newer Entity AI code should be run
+     * Returns true if the Entity AI code should be run
      */
     public boolean isAIEnabled()
     {
-        return !this.isModelized() && this.riddenByEntity == null;
+        return true;
     }
 
     /**
@@ -128,14 +140,6 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
     }
 
     /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
-    protected boolean canDespawn()
-    {
-        return false;
-    }
-
-    /**
      * Returns the sound this mob makes while it's alive.
      */
     protected String getLivingSound()
@@ -161,10 +165,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
 
     protected void updateEntityActionState()
     {
-        if (this.riddenByEntity == null)
-        {
-            super.updateEntityActionState();
-        }
+    	super.updateEntityActionState();
     }
 
     /**
@@ -360,7 +361,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
      */
     public int getVerticalFaceSpeed()
     {
-        return this.isSelfSitting() ? 20 : super.getVerticalFaceSpeed();
+        return super.getVerticalFaceSpeed();
     }
 
     public void getPathOrWalkableBlock(Entity var1, float var2)
@@ -397,7 +398,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
      */
     protected boolean isMovementCeased()
     {
-        return this.isSelfSitting() || this.field_25052_g;
+        return false;//this.isSitting() || this.field_25052_g;
     }
 
     /**
@@ -425,7 +426,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         }
         else if ((double)var2 <= (double)this.width * 1.6D && var1.boundingBox.maxY > this.boundingBox.minY && var1.boundingBox.minY < this.boundingBox.maxY)
         {
-            var1.attackEntityFrom(DamageSource.causeMobDamage(this), this.attackStrength);
+            var1.attackEntityFrom(DamageSource.causeMobDamage(this), this.getAttackStrength());
         }
     }
 
@@ -438,32 +439,32 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
 
         if (var1 instanceof EntityPig)
         {
-            this.HandleEating(30);
+            this.increaseHunger(30);
         }
 
         if (var1 instanceof EntitySheep)
         {
-            this.HandleEating(35);
+            this.increaseHunger(35);
         }
 
         if (var1 instanceof EntityCow)
         {
-            this.HandleEating(50);
+            this.increaseHunger(50);
         }
 
         if (var1 instanceof EntityChicken)
         {
-            this.HandleEating(20);
+            this.increaseHunger(20);
         }
 
         if (var1 instanceof EntityMob)
         {
-            this.HandleEating(20);
+            this.increaseHunger(20);
         }
 
         if (var1 instanceof EntityNautilus)
         {
-            this.HandleEating(100);
+            this.increaseHunger(100);
         }
 
         this.heal(5);
@@ -474,59 +475,8 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
      */
     public boolean interact(EntityPlayer var1)
     {
-        ItemStack var2 = var1.inventory.getCurrentItem();
-
-        if (FMLCommonHandler.instance().getSide().isClient() && var2 != null && var2.itemID == Fossil.dinoPedia.itemID)
-        {
-            EntityDinosaurce.pediaingDino = this;
-            var1.openGui(var1, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
-            return true;
-        }
-        else if (var2 != null && var2.itemID == Fossil.chickenEss.itemID)
-        {
-            if (this.getDinoAge() < 8 && this.getHunger() > 0)
-            {
-                --var2.stackSize;
-
-                if (var2.stackSize <= 0)
-                {
-                    var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-                }
-
-                var1.inventory.addItemStackToInventory(new ItemStack(Item.glassBottle, 1));
-                this.setDinoAgeTick(12000);
-                this.setHunger(1 + (new Random()).nextInt(this.getHunger()));
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else if (!this.isTamed())
-        {
-            return false;
-        }
-        else if (!this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == var1))
-        {
-            var1.rotationYaw = this.rotationYaw;
-            var1.mountEntity(this);
-            this.setPathToEntity((PathEntity)null);
-            this.renderYawOffset = this.rotationYaw;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Will return how many at most can spawn in a chunk at once.
-     */
-    public int getMaxSpawnedInChunk()
-    {
-        return 200;
+    	//Add special item interaction code here
+        return super.interact(var1);
     }
 
     public boolean isSelfAngry()
@@ -534,10 +484,10 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
     }
 
-    public boolean isSelfSitting()
+    /*public boolean isSelfSitting()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }
+    }*/
 
     public void setSelfAngry(boolean var1)
     {
@@ -557,7 +507,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         }
     }
 
-    public void setSelfSitting(boolean var1)
+    /*public void setSelfSitting(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
 
@@ -569,14 +519,17 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -2)));
         }
-    }
+    }*/
 
     private void InitSize()
     {
-        this.setSize((float)(0.5D + 0.5125D * (double)((float)this.getDinoAge())), (float)(0.5D + 0.5125D * (double)((float)this.getDinoAge())));
+    	this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
-        this.attackStrength = 4 + 2 * this.getDinoAge();
-        this.moveSpeed = 0.5F + 0.4F * (float)this.getDinoAge();
+        this.moveSpeed = this.getSpeed();
+    }
+    public void updateSize()
+    {
+    	this.setSize((float)(0.5D + 0.5125D * (double)((float)this.getDinoAge())), (float)(0.5D + 0.5125D * (double)((float)this.getDinoAge())));
     }
 
     public boolean CheckSpace()
@@ -611,7 +564,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         }
     }
 
-    public boolean HandleEating(int var1)
+    /*public boolean HandleEating(int var1)
     {
         if (this.getHunger() >= this.getHungerLimit())
         {
@@ -637,7 +590,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         {
             this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getGLY() * 1.5D, this.posZ);
         }
-    }
+    }*/
 
     private void Flee(Entity var1, int var2)
     {
@@ -678,7 +631,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         }
 
         this.setTamed(false);
-        this.setSelfSitting(false);
+        //this.setSelfSitting(false);
         this.setPathToEntity(this.worldObj.getEntityPathToXYZ(this, var9, var6, var10, (float)var2, true, false, true, false));
     }
 
@@ -727,9 +680,9 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         this.isJumping = false;
     }
 
-    /**
+    /*/**
      * Heal living entity (param: amount of half-hearts)
-     */
+     *
     public void heal(int var1)
     {
         if (this.health > 0)
@@ -741,7 +694,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
                 this.health = 200;
             }
         }
-    }
+    }*/
 
     public void ShowPedia(EntityPlayer var1)
     {
@@ -752,7 +705,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
             Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
             Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
             Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.getHungerLimit(), var1);
+            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
         }
         else
         {
@@ -799,40 +752,11 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         }
     }
 
-    public void SetOrder(EnumOrderType var1)
-    {
-        this.OrderStatus = var1;
-    }
-
-    public boolean HandleEating(int var1, boolean var2)
-    {
-        return false;
-    }
-
     public EntityMosasaurus spawnBabyAnimal(EntityAgeable var1)
     {
         return new EntityMosasaurus(this.worldObj);
     }
-
-    public int getMaxHealth()
-    {
-        return 200;
-    }
-
-    public void updateSize(boolean var1) {}
-
-    public EnumOrderType getOrderType()
-    {
-        return this.OrderStatus;
-    }
-
-    protected int foodValue(Item var1)
-    {
-        return var1 == Fossil.sjl ? 50 : 0;
-    }
-
-    public void HoldItem(Item var1) {}
-
+    
     public float getGLX()
     {
         return (float)(0.5D + 0.5125D * (double)this.getDinoAge());

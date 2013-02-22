@@ -15,6 +15,7 @@ import mod.fossil.common.fossilAI.DinoAIUseFeeder;
 import mod.fossil.common.fossilEnums.EnumDinoEating;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
+import mod.fossil.common.fossilEnums.EnumSituation;
 import net.minecraft.block.Block;
 import net.minecraft.block.StepSound;
 import net.minecraft.entity.Entity;
@@ -40,50 +41,74 @@ import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.src.ModLoader;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class Entitydil extends EntityDinosaurce
 {
-    private boolean looksWithInterest;
-    public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
-    private float field_25048_b;
-    private float field_25054_c;
-    private boolean isWolfShaking;
-    private boolean field_25052_g;
-    private float timeWolfIsShaking;
-    private float prevTimeWolfIsShaking;
-    public ItemStack ItemInMouth = null;
+    private boolean looksWithInterest;//IS THAT WORKING?
+    
+    
+    //public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
+    //private float field_25048_b;
+    //private float field_25054_c;//HAS something todo with look with interest
+    //private boolean field_25052_g;
+    
+    /*private boolean isWolfShaking;
+    private float timeWolfIsShaking;//FIND OUT WHAT THIS IS FOR
+    private float prevTimeWolfIsShaking;*/
+    
+    //public ItemStack ItemInMouth = null;
     public int LearningChestTick = 900;
-    public int BreedTick = 3000;
+    //public int BreedTick = 3000;
+    
+    
     public boolean PreyChecked = false;
     public boolean SupportChecked = false;
-    public Vector MemberList = new Vector();
+    public Vector MemberList = new Vector();//ARE THEESE 5 DOING ANYTHING AND WORKING CORRECTLY?
     public float SwingAngle = -1000.0F;
     public int FleeingTick = 0;
 
     public Entitydil(World var1)
     {
         super(var1);
-        this.SelfType = EnumDinoType.dilphosaur;
-        this.SelfType = EnumDinoType.dilphosaur;
+        this.SelfType = EnumDinoType.Utahraptor;
         this.looksWithInterest = false;
         this.CheckSkin();
         this.setSize(0.3F, 0.3F);
-        this.moveSpeed = 0.3F;
         this.health = 10;
-        this.attackStrength = 2 + this.getDinoAge();
+        
+        //this.BaseattackStrength=;
+        //this.AttackStrengthIncrease=;
+        //this.BreedingTime=;
+        //this.BaseSpeed=;
+        //this.SpeedIncrease=;
+        this.MaxAge=9;
+        //this.BaseHealth=;
+        //this.HealthIncrease=;
+        //this.AdultAge=;
+        //this.AgingTicks=;
+        //this.MaxHunger=;
+        //this.Hungrylevel=;
+        this.ItemToControl=null;
+        this.moveSpeed = this.getSpeed();//should work
+        
+        
+        
+        //this.attackStrength = 2 + this.getDinoAge();
         this.getNavigator().setAvoidsWater(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(0, new DinoAIGrowup(this, 8));
-        this.tasks.addTask(0, new DinoAIStarvation(this));
+        //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
+        //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityTRex.class, 8.0F, 0.3F, 0.35F));
         this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24, this.HuntLimit, EnumDinoEating.Carnivorous));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24, /*this.HuntLimit,*/ EnumDinoEating.Carnivorous));
         this.tasks.addTask(7, new EntityAIWander(this, 0.3F));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
@@ -96,10 +121,9 @@ public class Entitydil extends EntityDinosaurce
     public boolean attackEntityAsMob(Entity var1)
     {
         if (this.rand.nextInt(16) < 4 && var1 instanceof EntityLiving)
-        {
+        {//Has chance to blind the prey, after that handle normal attacking 
             ((EntityLiving)var1).addPotionEffect(new PotionEffect(Potion.blindness.id, this.rand.nextInt(110) + 10, 0));
         }
-
         return super.attackEntityAsMob(var1);
     }
 
@@ -162,24 +186,17 @@ public class Entitydil extends EntityDinosaurce
     {
         super.readEntityFromNBT(var1);
         this.setSelfAngry(var1.getBoolean("Angry"));
-        this.setSelfSitting(var1.getBoolean("Sitting"));
+        this.LearningChestTick=var1.getInteger("LearningChestTick");
+        //this.setSelfSitting(var1.getBoolean("Sitting"));
         this.InitSize();
-        this.OrderStatus = EnumOrderType.values()[var1.getByte("OrderStatus")];
-        String var2 = var1.getString("Owner");
+        //this.OrderStatus = EnumOrderType.values()[var1.getByte("OrderStatus")];
+        /*String var2 = var1.getString("Owner");
 
         if (var2.length() > 0)
         {
             this.setOwner(var2);
             this.setTamed(true);
-        }
-    }
-
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
-    protected boolean canDespawn()
-    {
-        return false;
+        }*/
     }
 
     /**
@@ -215,7 +232,7 @@ public class Entitydil extends EntityDinosaurce
     }
 
     protected void updateEntityActionState()
-    {
+    {//TODO
         super.updateEntityActionState();
         EntityPlayer var1 = this.worldObj.getPlayerEntityByName(this.getOwnerName());
 
@@ -249,12 +266,12 @@ public class Entitydil extends EntityDinosaurce
             }
             else if (!this.isInWater())
             {
-                this.setSelfSitting(true);
+                this.setSitting(true);
             }
         }
         else if (this.isInWater())
         {
-            this.setSelfSitting(false);
+            this.setSitting(false);
         }
 
         if (!this.worldObj.isRemote)
@@ -263,14 +280,37 @@ public class Entitydil extends EntityDinosaurce
         }
     }
 
+    private boolean isNearbyChest()
+    {
+        TileEntity var5 = null;
+        for (int var6 = -10; var6 <= 10; ++var6)
+        {
+            for (int var7 = 0; var7 <= 3; ++var7)
+            {
+                for (int var8 = -10; var8 <= 10; ++var8)
+                {
+                    var5 = this.worldObj.getBlockTileEntity((int)(this.posX + (double)var6), (int)(this.posY + (double)var7), (int)(this.posZ + (double)var8));
+                    if (var5 instanceof TileEntityChest)
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
     /**
      * Called to update the entity's position/logic.
      */
     public void onUpdate()
     {
         super.onUpdate();
-        this.field_25054_c = this.field_25048_b;
-
+        if(this.LearningChestTick>0 && this.isNearbyChest() && !this.isBaby())
+        {
+        	this.LearningChestTick--;
+        	if(this.LearningChestTick==0)
+        		this.SendStatusMessage(EnumSituation.LearningChest, this.SelfType);
+        }
+        /*this.field_25054_c = this.field_25048_b;
+		//HAS something todo with look with interest
         if (this.looksWithInterest)
         {
             this.field_25048_b += (1.0F - this.field_25048_b) * 0.4F;
@@ -278,7 +318,7 @@ public class Entitydil extends EntityDinosaurce
         else
         {
             this.field_25048_b += (0.0F - this.field_25048_b) * 0.4F;
-        }
+        }*/
 
         if (this.looksWithInterest)
         {
@@ -291,9 +331,9 @@ public class Entitydil extends EntityDinosaurce
         return false;
     }
 
-    public float getShadingWhileShaking(float var1)
+    /*public float getShadingWhileShaking(float var1)
     {
-        return 0.75F + (this.prevTimeWolfIsShaking + (this.timeWolfIsShaking - this.prevTimeWolfIsShaking) * var1) / 2.0F * 0.25F;
+        //return 0.75F + (this.prevTimeWolfIsShaking + (this.timeWolfIsShaking - this.prevTimeWolfIsShaking) * var1) / 2.0F * 0.25F;
     }
 
     public float getShakeAngle(float var1, float var2)
@@ -310,7 +350,7 @@ public class Entitydil extends EntityDinosaurce
         }
 
         return MathHelper.sin(var3 * (float)Math.PI) * MathHelper.sin(var3 * (float)Math.PI * 11.0F) * 0.15F * (float)Math.PI;
-    }
+    }*/
 
     public float getEyeHeight()
     {
@@ -323,7 +363,7 @@ public class Entitydil extends EntityDinosaurce
      */
     public int getVerticalFaceSpeed()
     {
-        return this.isSelfSitting() ? 20 : super.getVerticalFaceSpeed();
+        return this.isSitting() ? 20 : super.getVerticalFaceSpeed();
     }
 
     /**
@@ -331,7 +371,7 @@ public class Entitydil extends EntityDinosaurce
      */
     protected boolean isMovementCeased()
     {
-        return this.isSelfSitting() || this.field_25052_g;
+        return this.isSitting();// || this.field_25052_g;
     }
 
     /**
@@ -341,7 +381,7 @@ public class Entitydil extends EntityDinosaurce
     {
         Entity var3 = var1.getEntity();
         boolean var4 = false;
-        this.setSelfSitting(false);
+        this.setSitting(false);
 
         if (var3 != null && !(var3 instanceof EntityPlayer) && !(var3 instanceof EntityArrow))
         {
@@ -352,8 +392,16 @@ public class Entitydil extends EntityDinosaurce
         {
             if (!this.isSelfAngry())
             {
-                if (var3 instanceof EntityPlayer)
+                if (var3 instanceof EntityArrow && ((EntityArrow)var3).shootingEntity != null)
                 {
+                    var3 = ((EntityArrow)var3).shootingEntity;
+                }
+                if (var3 instanceof EntityLiving)
+                {
+                    this.setTarget((EntityLiving)var3);
+                }
+                if (var3 instanceof EntityPlayer && this.isTamed() && ((EntityPlayer)var3).username.equalsIgnoreCase(this.getOwnerName()))
+                {//Hit by the owner->untame
                     this.setTamed(false);
                     this.setOwner("");
                     this.ItemInMouth = null;
@@ -361,16 +409,6 @@ public class Entitydil extends EntityDinosaurce
                     this.setTarget((EntityLiving)var3);
                     this.PreyChecked = true;
                     var4 = true;
-                }
-
-                if (var3 instanceof EntityArrow && ((EntityArrow)var3).shootingEntity != null)
-                {
-                    var3 = ((EntityArrow)var3).shootingEntity;
-                }
-
-                if (var3 instanceof EntityLiving)
-                {
-                    this.setTarget((EntityLiving)var3);
                 }
             }
             else if (var3 != this && var3 != null)
@@ -435,73 +473,8 @@ public class Entitydil extends EntityDinosaurce
      */
     public boolean interact(EntityPlayer var1)
     {
-        ItemStack var2 = var1.inventory.getCurrentItem();
-
-        if (var2 != null)
-        {
-            if (FMLCommonHandler.instance().getSide().isClient() && var2.itemID == Fossil.dinoPedia.itemID)
-            {
-                EntityDinosaurce.pediaingDino = this;
-                var1.openGui(var1, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
-                return true;
-            }
-
-            if (this.isTamed() && this.EOCInteract(var2, var1))
-            {
-                return true;
-            }
-        }
-        else
-        {
-            if (this.ItemInMouth != null)
-            {
-                if (this.worldObj.isRemote)
-                {
-                    return false;
-                }
-
-                int var3 = this.ItemInMouth.stackSize;
-
-                if (var1.inventory.addItemStackToInventory(this.ItemInMouth))
-                {
-                    ModLoader.onItemPickup(var1, this.ItemInMouth);
-                    this.worldObj.playSoundAtEntity(var1, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                    this.ItemInMouth = null;
-                    return true;
-                }
-
-                return false;
-            }
-
-            if (var1.username.equalsIgnoreCase(this.getOwnerName()))
-            {
-                if (!this.worldObj.isRemote)
-                {
-                    this.isJumping = false;
-                    this.setPathToEntity((PathEntity)null);
-                    this.SetOrder(EnumOrderType.values()[(Fossil.EnumToInt(this.OrderStatus) + 1) % 3]);
-                    this.SendOrderMessage(this.OrderStatus);
-
-                    switch (Entitydil$1.$SwitchMap$mod_Fossil$EnumOrderType[this.OrderStatus.ordinal()])
-                    {
-                        case 1:
-                            this.setSelfSitting(true);
-                            break;
-
-                        case 2:
-                            this.setSelfSitting(false);
-                            break;
-
-                        case 3:
-                            this.setSelfSitting(false);
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        return false;
+    	//Add special item interaction code here
+        return super.interact(var1);
     }
 
     public void handleHealthUpdate(byte var1)
@@ -516,9 +489,9 @@ public class Entitydil extends EntityDinosaurce
         }
         else if (var1 == 8)
         {
-            this.field_25052_g = true;
-            this.timeWolfIsShaking = 0.0F;
-            this.prevTimeWolfIsShaking = 0.0F;
+            //this.field_25052_g = true;
+            //this.timeWolfIsShaking = 0.0F;//WHAT is that doing????
+            //this.prevTimeWolfIsShaking = 0.0F;
         }
         else
         {
@@ -531,17 +504,12 @@ public class Entitydil extends EntityDinosaurce
      */
     public int getMaxSpawnedInChunk()
     {
-        return 100;
+        return 10;
     }
 
     public boolean isSelfAngry()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
-    }
-
-    public boolean isSelfSitting()
-    {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
     }
 
     public void setSelfAngry(boolean var1)
@@ -557,6 +525,11 @@ public class Entitydil extends EntityDinosaurce
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -3)));
         }
+    }
+    
+    /*public boolean isSelfSitting()
+    {
+        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
     }
 
     public void setSelfSitting(boolean var1)
@@ -586,7 +559,7 @@ public class Entitydil extends EntityDinosaurce
             this.ItemInMouth = null;
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -5)));
         }
-    }
+    }*/
 
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
@@ -602,7 +575,7 @@ public class Entitydil extends EntityDinosaurce
 
         if (var2 > 0)
         {
-            this.attackEntityFrom(DamageSource.fall, 0);
+            this.attackEntityFrom(DamageSource.fall, 0);//Like cats, they don't suffer fall damage
             int var3 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY - 0.20000000298023224D - (double)this.yOffset), MathHelper.floor_double(this.posZ));
 
             if (var3 > 0)
@@ -654,10 +627,14 @@ public class Entitydil extends EntityDinosaurce
     private void InitSize()
     {
         this.CheckSkin();
-        this.setSize((float)(0.30000001192092896D + 0.1D * (double)((float)this.getDinoAge())), (float)(0.30000001192092896D + 0.1D * (double)((float)this.getDinoAge())));
+        this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
+        this.moveSpeed = this.getSpeed();
     }
-
+    public void updateSize()
+    {
+    	this.setSize((float)(0.30000001192092896D + 0.1D * (double)((float)this.getDinoAge())), (float)(0.30000001192092896D + 0.1D * (double)((float)this.getDinoAge())));
+    }
     public void CheckSkin()
     {
         if (this.getEntityToAttack() != null)
@@ -675,7 +652,7 @@ public class Entitydil extends EntityDinosaurce
         return !this.isEntityInsideOpaqueBlock();
     }
 
-    public boolean HandleEating(int var1)
+    /*public boolean HandleEating(int var1)
     {
         if (this.getHunger() >= this.getHungerLimit())
         {
@@ -693,9 +670,9 @@ public class Entitydil extends EntityDinosaurce
 
             return true;
         }
-    }
+    }*/
 
-    public boolean isLeartChest()
+    public boolean isLearnedChest()
     {
         return this.LearningChestTick == 0;
     }
@@ -709,7 +686,7 @@ public class Entitydil extends EntityDinosaurce
             Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
             Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
             Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.getHungerLimit(), var1);
+            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
 
             if (this.LearningChestTick <= 0)
             {
@@ -749,19 +726,9 @@ public class Entitydil extends EntityDinosaurce
         return var1;
     }
 
-    public void SetOrder(EnumOrderType var1)
-    {
-        this.OrderStatus = var1;
-    }
-
     public Entitydil spawnBabyAnimal(EntityAgeable var1)
     {
         return new Entitydil(this.worldObj);
-    }
-
-    public int getMaxHealth()
-    {
-        return 20;
     }
 
     public boolean IsIdle()
@@ -778,21 +745,10 @@ public class Entitydil extends EntityDinosaurce
         this.CheckSkin();
     }
 
-    public void updateSize(boolean var1) {}
-
     public EnumOrderType getOrderType()
     {
         return this.OrderStatus;
     }
-
-    protected int foodValue(Item var1)
-    {
-        return 0;
-    }
-
-    public void HandleEating(Item var1) {}
-
-    public void HoldItem(Item var1) {}
 
     public float getGLX()
     {

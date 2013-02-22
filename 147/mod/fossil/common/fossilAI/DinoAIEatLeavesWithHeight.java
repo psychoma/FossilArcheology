@@ -14,17 +14,17 @@ public class DinoAIEatLeavesWithHeight extends EntityAIBase
     private double destZ;
     private float field_48317_e;
     protected final int SEARCH_RANGE;
-    private final float HUNT_LIMIT;
+    //private final float HUNT_LIMIT;
     private final int USE_RANGE = 3;
     protected float height;
 
-    public DinoAIEatLeavesWithHeight(EntityDinosaurce var1, float var2, int var3, float var4)
+    public DinoAIEatLeavesWithHeight(EntityDinosaurce var1, float var2, int var3)//, float var4)
     {
         this.entityVar = var1;
         this.field_48317_e = var2;
         this.setMutexBits(1);
         this.SEARCH_RANGE = var3;
-        this.HUNT_LIMIT = var4;
+        //this.HUNT_LIMIT = var4;
     }
 
     /**
@@ -34,11 +34,7 @@ public class DinoAIEatLeavesWithHeight extends EntityAIBase
     {
         this.height = this.entityVar.getEyeHeight();
 
-        if ((float)this.entityVar.getHunger() > this.HUNT_LIMIT)
-        {
-            return false;
-        }
-        else
+        if (this.entityVar.IsHungry())//(float)this.entityVar.getHunger() > this.HUNT_LIMIT)
         {
             Vec3 var1 = this.GetNearestLeave();
 
@@ -54,6 +50,7 @@ public class DinoAIEatLeavesWithHeight extends EntityAIBase
                 return true;
             }
         }
+        return false;
     }
 
     private Vec3 GetNearestLeave()
@@ -119,9 +116,9 @@ public class DinoAIEatLeavesWithHeight extends EntityAIBase
             {
                 var1.playAuxSFX(2001, (int)this.destX, (int)this.destY, (int)this.destZ, Block.leaves.blockID + 4096);
                 var1.setBlockWithNotify((int)this.destX, (int)this.destY, (int)this.destZ, 0);
-                this.entityVar.HandleEating(30);
+                this.entityVar.setHunger(this.entityVar.getHunger()+30);
 
-                if ((float)this.entityVar.getHunger() > this.HUNT_LIMIT)
+                if (!this.entityVar.IsHungry())//(float)this.entityVar.getHunger() > this.HUNT_LIMIT)
                 {
                     this.entityVar.getNavigator().clearPathEntity();
                 }

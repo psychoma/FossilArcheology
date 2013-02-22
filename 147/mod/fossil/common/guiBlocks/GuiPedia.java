@@ -41,7 +41,7 @@ public class GuiPedia extends GuiContainer
     {
         this.fontRenderer.drawString(this.dino.getDinoAge() + " days", 115, 31, 4210752);
         this.fontRenderer.drawString("" + this.dino.getHealth() + '/' + this.dino.getMaxHealth(), 115, 47, 4210752);
-        this.fontRenderer.drawString("" + this.dino.getHunger() + '/' + this.dino.getHungerLimit(), 115, 62, 4210752);
+        this.fontRenderer.drawString("" + this.dino.getHunger() + '/' + this.dino.MaxHunger, 115, 62, 4210752);
         String[] var3 = this.dino.additionalPediaMessage();
 
         if (var3 != null)

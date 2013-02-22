@@ -12,7 +12,7 @@ public enum EnumOrderType
 
     public final EnumOrderType Next()
     {
-        switch (EnumOrderType$1.$SwitchMap$mod_Fossil$EnumOrderType[this.ordinal()])
+        switch (this.ordinal())//(EnumOrderType$1.$SwitchMap$mod_Fossil$EnumOrderType[this.ordinal()])
         {
             case 1:
                 return Follow;
@@ -27,8 +27,7 @@ public enum EnumOrderType
                 return FreeMove;
         }
     }
-
-    public final int ToInt()
+    /*public final int ToInt()
     {
         switch (EnumOrderType$1.$SwitchMap$mod_Fossil$EnumOrderType[this.ordinal()])
         {
@@ -44,7 +43,7 @@ public enum EnumOrderType
             default:
                 return 0;
         }
-    }
+    }*/
 
     public final String GetOrderString()
     {

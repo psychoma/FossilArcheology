@@ -19,15 +19,12 @@ public class DinoAIStarvation extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        if (!FossilOptions.DinoHunger)
-        {
-            return false;
-        }
-        else
+        if (FossilOptions.DinoHunger)
         {
             this.mover.decreaseHungerTick();
             return this.mover.getHungerTick() <= 0 && this.mover.worldObj.difficultySetting > 0 && this.mover.worldObj.getClosestPlayerToEntity(this.mover, 24.0D) != null;
         }
+        return false;
     }
 
     /**
@@ -35,10 +32,28 @@ public class DinoAIStarvation extends EntityAIBase
      */
     public void startExecuting()
     {
-        EntityDinosaurce var10000 = this.mover;
         this.mover.getClass();
-        var10000.setHungerTick(300);
+        this.mover.setHungerTick(300);
         this.mover.decreaseHunger();
+        if(this.mover.ItemInMouth != null)//The Dino has something in its mouth and gets hungry
+        {
+        	if(this.mover.FoodItemList.CheckItemById(this.mover.ItemInMouth.itemID))
+        	{//its food
+        		if(this.mover.IsHungry() || this.mover.MaxHunger-this.mover.getHunger()>this.mover.FoodItemList.getItemFood(this.mover.ItemInMouth.itemID))
+            	{//it's hungry or there is enough place in the stomach free
+            		this.mover.setHunger(this.mover.getHunger()+this.mover.FoodItemList.getItemFood(this.mover.ItemInMouth.itemID));
+            		this.mover.ItemInMouth = null;
+            	}
+        	}
+        	else
+        	{//no food
+        		if(this.mover.IsHungry())
+        		{
+        			//The Dino gets hungry and because of that spits the object out of the mouth
+        			//TODO
+        		}
+        	}
+        }
 
         if (this.mover.getHunger() <= 0)
         {
@@ -48,6 +63,6 @@ public class DinoAIStarvation extends EntityAIBase
 
     private void handleStarvation()
     {
-        this.mover.attackEntityFrom(DamageSource.starve, 20);
+        this.mover.attackEntityFrom(DamageSource.starve, 5);
     }
 }

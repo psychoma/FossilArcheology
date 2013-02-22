@@ -313,7 +313,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
 
     public void Feed(EntityDinosaurce var1, EnumDinoEating var2)
     {
-        while (var1.HandleEating(1) && !this.CheckIsEmpty(var2))
+        while (var1.increaseHunger(1) && !this.CheckIsEmpty(var2))
         {
             if (var2 == EnumDinoEating.Herbivorous)
             {

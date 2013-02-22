@@ -419,22 +419,14 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         if (this.DinoInside == EnumDinoType.Mosasaurus)
         {
             if (this.inWater)
-            {
                 ++this.BirthTick;
-            }
             else
-            {
                 --this.BirthTick;
-            }
         }
         else if ((double)var2 >= 0.5D)
-        {
             ++this.BirthTick;
-        }
         else if (!this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)))
-        {
             --this.BirthTick;
-        }
 
         if (this.BirthTick <= -this.HatchingNeedTime)
         {
@@ -464,130 +456,38 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
 
                 BiomeGenBase var3 = this.worldObj.provider.worldChunkMgr.getBiomeGenAt((int)Math.floor(this.posX), (int)Math.floor(this.posZ));
                 Object var5 = null;
-
-                switch (EntityDinoEgg$1.$SwitchMap$mod_Fossil$EnumDinoType[this.DinoInside.ordinal()])
+                switch (this.DinoInside)
                 {
-                    case 1:
-                        var5 = new EntityTriceratops(this.worldObj);
-                        ((EntityTriceratops)var5).setSubSpecies(this.worldObj.rand.nextInt(3) + 1);
-
-                        if (var4 != null)
-                        {
-                            ((EntityDinosaurce)var5).setOwner(var4.username);
-                            ((EntityDinosaurce)var5).setTamed(true);
-                        }
-                        else
-                        {
-                            ((EntityDinosaurce)var5).OrderStatus = EnumOrderType.FreeMove;
-                        }
-
-                        break;
-
-                    case 2:
-                        var5 = new EntityRaptor(this.worldObj);
-
-                        if (var3 instanceof BiomeGenForest)
-                        {
-                            ((EntityRaptor)var5).ChangeSubType(2);
-                        }
-
-                        if (var3 instanceof BiomeGenSnow || var3 instanceof BiomeGenTaiga)
-                        {
-                            ((EntityRaptor)var5).ChangeSubType(1);
-                        }
-
-                        if (var4 != null)
-                        {
-                            ((EntityDinosaurce)var5).setOwner(var4.username);
-                            ((EntityDinosaurce)var5).setTamed(true);
-                        }
-                        else
-                        {
-                            ((EntityDinosaurce)var5).OrderStatus = EnumOrderType.FreeMove;
-                        }
-
-                        break;
-
-                    case 3:
-                        var5 = new EntityTRex(this.worldObj);
-                        ((EntityDinosaurce)var5).OrderStatus = EnumOrderType.FreeMove;
-                        break;
-
-                    case 4:
-                        var5 = new EntityPterosaur(this.worldObj);
-
-                        if (var4 != null)
-                        {
-                            ((EntityDinosaurce)var5).setOwner(var4.username);
-                            ((EntityDinosaurce)var5).setTamed(true);
-                        }
-                        else
-                        {
-                            ((EntityDinosaurce)var5).OrderStatus = EnumOrderType.FreeMove;
-                        }
-
-                        break;
-
-                    case 5:
-                        var5 = new EntityPlesiosaur(this.worldObj);
-
-                        if (var4 != null)
-                        {
-                            ((EntityDinosaurce)var5).setOwner(var4.username);
-                            ((EntityDinosaurce)var5).setTamed(true);
-                        }
-
-                        break;
-
-                    case 6:
-                        var5 = new EntityMosasaurus(this.worldObj);
-                        ((EntityDinosaurce)var5).OrderStatus = EnumOrderType.FreeMove;
-                        break;
-
-                    case 7:
-                        var5 = new EntityStegosaurus(this.worldObj);
-
-                        if (var4 != null)
-                        {
-                            ((EntityDinosaurce)var5).setOwner(var4.username);
-                            ((EntityDinosaurce)var5).setTamed(true);
-                        }
-                        else
-                        {
-                            ((EntityDinosaurce)var5).OrderStatus = EnumOrderType.FreeMove;
-                        }
-
-                        break;
-
-                    case 8:
-                        var5 = new Entitydil(this.worldObj);
-                        ((EntityDinosaurce)var5).OrderStatus = EnumOrderType.FreeMove;
-                        break;
-
-                    case 9:
-                        var5 = new EntityBrachiosaurus(this.worldObj);
-
-                        if (var4 != null)
-                        {
-                            ((EntityDinosaurce)var5).setOwner(var4.username);
-                            ((EntityDinosaurce)var5).setTamed(true);
-                        }
-                        else
-                        {
-                            ((EntityDinosaurce)var5).OrderStatus = EnumOrderType.FreeMove;
-                        }
-
-                        break;
+                    case Triceratops:var5 = new EntityTriceratops(this.worldObj);break;
+                    case Raptor:var5 = new EntityRaptor(this.worldObj);
+                        				if (var3 instanceof BiomeGenForest)
+                        					((EntityRaptor)var5).setSubSpecies(2);
+                        				else if (var3 instanceof BiomeGenSnow || var3 instanceof BiomeGenTaiga)
+                        					((EntityRaptor)var5).setSubSpecies(1);
+                        				else
+                        					((EntityRaptor)var5).setSubSpecies(3);break;
+                    case TRex:var5 = new EntityTRex(this.worldObj);break;
+                    case Pterosaur:var5 = new EntityPterosaur(this.worldObj);break;
+                    case Plesiosaur:var5 = new EntityPlesiosaur(this.worldObj);break;
+                    case Mosasaurus:var5 = new EntityMosasaurus(this.worldObj);break;
+                    case Stegosaurus:var5 = new EntityStegosaurus(this.worldObj);break;
+                    case Utahraptor:var5 = new Entitydil(this.worldObj);break;
+                    case Brachiosaurus:var5 = new EntityBrachiosaurus(this.worldObj);break;
 
                     default:
                         Fossil.ShowMessage("Bug:Impossible result.", var4);
                         this.setDead();
                         return;
                 }
+                if(((EntityDinosaurce)var5).SelfType.isTameable() && var4 != null)
+                {// Tameable and player next to it
+                        ((EntityDinosaurce)var5).setOwner(var4.username);
+                        ((EntityDinosaurce)var5).setTamed(true);
+                }
 
                 ((EntityLiving)var5).setLocationAndAngles((double)((int)Math.floor(this.posX)), (double)((int)Math.floor(this.posY) + 1), (double)((int)Math.floor(this.posZ)), this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
 
-                if (this.worldObj.checkIfAABBIsClear(((EntityLiving)var5).boundingBox) && this.worldObj.getCollidingBoundingBoxes((Entity)var5, ((EntityLiving)var5).boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(((EntityLiving)var5).boundingBox) ^ this.DinoInside == EnumDinoType.Mosasaurus)
+                if (this.worldObj.checkIfAABBIsClear(((EntityLiving)var5).boundingBox) && this.worldObj.getCollidingBoundingBoxes((Entity)var5, ((EntityLiving)var5).boundingBox).size() == 0 && (!this.worldObj.isAnyLiquid(((EntityLiving)var5).boundingBox) || this.DinoInside == EnumDinoType.Mosasaurus))
                 {
                     if (!this.worldObj.isRemote)
                     {
@@ -644,15 +544,10 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
 
             if (var1.inventory.addItemStackToInventory(var3))
             {
-                ModLoader.onItemPickup(var1, var3);
                 this.worldObj.playSoundAtEntity(var1, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 this.setDead();
-                return false;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
         else if (FMLCommonHandler.instance().getSide().isClient() && var2.getItem().itemID == Fossil.dinoPedia.itemID)
         {

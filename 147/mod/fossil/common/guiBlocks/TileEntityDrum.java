@@ -49,7 +49,7 @@ public class TileEntityDrum extends TileEntity
     public void writeToNBT(NBTTagCompound var1)
     {
         super.writeToNBT(var1);
-        var1.setByte("Order", (byte)Fossil.EnumToInt(this.Order));
+        var1.setByte("Order", (byte)this.Order.ordinal());//Fossil.EnumToInt(this.Order));
     }
 
     /**
@@ -100,7 +100,7 @@ public class TileEntityDrum extends TileEntity
     public void TriggerOrder(EntityPlayer var1)
     {
         this.Order = this.Order.Next();
-        this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "drum_single", 8.0F, (float)Math.pow(2.0D, (double)(this.Order.ToInt() - 1)));
+        this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "drum_single", 8.0F, (float)Math.pow(2.0D, (double)(this.Order.ordinal()/*.ToInt() - 1*/)));
         String var2 = Fossil.GetLangTextByKey("Drum.Order.Head");
         String var3 = this.GetOrderString();
         Fossil.ShowMessage(var2 + var3, var1);
@@ -114,7 +114,7 @@ public class TileEntityDrum extends TileEntity
         String var5 = Fossil.GetLangTextByKey("Drum.Msg.Head");
         String var6 = Fossil.GetLangTextByKey("Drum.Msg.Middle");
         String var7 = Fossil.GetLangTextByKey("Drum.Msg.Tail");
-        this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "drum_triple", 8.0F, (float)Math.pow(2.0D, (double)(this.Order.ToInt() - 1)));
+        this.worldObj.playSoundEffect((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, "drum_triple", 8.0F, (float)Math.pow(2.0D, (double)(this.Order.ordinal()/*ToInt() - 1*/)));
 
         if (var1 != Item.stick.itemID && var1 != Item.bone.itemID && var1 != Fossil.skullStick.itemID && var1 != Item.arrow.itemID)
         {
@@ -154,7 +154,7 @@ public class TileEntityDrum extends TileEntity
             }
             else
             {
-                String var8 = Fossil.GetLangTextByKey("Drum.Msg.TRex." + String.valueOf(this.Order.ToInt() + 1));
+                String var8 = Fossil.GetLangTextByKey("Drum.Msg.TRex." + String.valueOf(this.Order.ordinal()/*ToInt() + 1*/));
                 Fossil.ShowMessage(var8, var2);
                 return true;
             }

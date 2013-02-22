@@ -16,18 +16,18 @@ public class DinoAIUseFeeder extends EntityAIBase
     private double destZ;
     private float field_48317_e;
     protected final int SEARCH_RANGE;
-    private final float HUNT_LIMIT;
+    //private final float HUNT_LIMIT;
     private final int USE_RANGE = 3;
     protected TileEntityFeeder targetFeeder = null;
     protected EnumDinoEating eating;
 
-    public DinoAIUseFeeder(EntityDinosaurce var1, float var2, int var3, float var4, EnumDinoEating var5)
+    public DinoAIUseFeeder(EntityDinosaurce var1, float var2, int var3/*, float var4*/, EnumDinoEating var5)
     {
         this.entityVar = var1;
         this.field_48317_e = var2;
         this.setMutexBits(1);
         this.SEARCH_RANGE = var3;
-        this.HUNT_LIMIT = var4;
+        //this.HUNT_LIMIT = var4;
         this.eating = var5;
     }
 
@@ -36,19 +36,11 @@ public class DinoAIUseFeeder extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        if ((float)this.entityVar.getHunger() > this.HUNT_LIMIT)
-        {
-            return false;
-        }
-        else
+        if (this.entityVar.IsHungry())//(float)this.entityVar.getHunger() > this.HUNT_LIMIT)
         {
             Vec3 var1 = this.GetNearestFeeder();
 
-            if (var1 == null)
-            {
-                return false;
-            }
-            else
+            if (var1 != null)
             {
                 this.destX = var1.xCoord;
                 this.destY = var1.yCoord;
@@ -56,6 +48,7 @@ public class DinoAIUseFeeder extends EntityAIBase
                 return true;
             }
         }
+        return false;
     }
 
     protected Vec3 GetNearestFeeder()
@@ -118,7 +111,7 @@ public class DinoAIUseFeeder extends EntityAIBase
         {
             this.targetFeeder.Feed(this.entityVar, this.eating);
 
-            if ((float)this.entityVar.getHunger() > this.HUNT_LIMIT)
+            if (!this.entityVar.IsHungry())//(float)this.entityVar.getHunger() > this.HUNT_LIMIT)
             {
                 this.entityVar.getNavigator().clearPathEntity();
             }

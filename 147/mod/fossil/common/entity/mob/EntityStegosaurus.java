@@ -9,10 +9,12 @@ import mod.fossil.common.fossilAI.DinoAIEatFerns;
 import mod.fossil.common.fossilAI.DinoAIFollowOwner;
 import mod.fossil.common.fossilAI.DinoAIGrowup;
 import mod.fossil.common.fossilAI.DinoAIPickItem;
+import mod.fossil.common.fossilAI.DinoAIPickItems;
 import mod.fossil.common.fossilAI.DinoAIStarvation;
 import mod.fossil.common.fossilAI.DinoAIUseFeeder;
 import mod.fossil.common.fossilAI.DinoAIWander;
 import mod.fossil.common.fossilEnums.EnumDinoEating;
+import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.fossilEnums.EnumSituation;
@@ -41,7 +43,7 @@ import net.minecraft.world.World;
 public class EntityStegosaurus extends EntityDinosaurce
 {
     private boolean looksWithInterest;
-    public final float HuntLimit = (float)this.getHungerLimit() * 0.9F;
+    /*public final float HuntLimit = (float)this.getHungerLimit() * 0.9F;
     private float field_25048_b;
     private float field_25054_c;
     private boolean isWolfShaking;
@@ -49,9 +51,9 @@ public class EntityStegosaurus extends EntityDinosaurce
     private float timeWolfIsShaking;
     private float prevTimeWolfIsShaking;
     public int SubSpecies = 1;
-    public boolean isBaby = true;
+    public boolean isBaby = true;*/
     public int RushTick = 0;
-    public int BreedTick = 3000;
+    //public int BreedTick = 3000;
     public boolean Running = false;
 
     public EntityStegosaurus(World var1)
@@ -59,31 +61,47 @@ public class EntityStegosaurus extends EntityDinosaurce
         super(var1);
         this.SelfType = EnumDinoType.Stegosaurus;
         this.looksWithInterest = false;
-        this.SubSpecies = (new Random()).nextInt(3) + 1;
+        //this.SubSpecies = (new Random()).nextInt(3) + 1;
         this.texture = "/mod/fossil/common/textures/Stegosaurus_Baby.png";
         this.CheckSkin();
         this.setSize(1.0F, 1.0F);
-        this.moveSpeed = 0.3F;
+        //this.moveSpeed = 0.3F;
         this.health = 8;
+        
+        //this.BaseattackStrength=;
+        //this.AttackStrengthIncrease=;
+        //this.BreedingTime=;
+        //this.BaseSpeed=;
+        //this.SpeedIncrease=;
+        this.MaxAge=13;
+        this.BaseHealth=21;
+        this.HealthIncrease=1;
+        //this.AdultAge=;
+        //this.AgingTicks=;
+        this.MaxHunger=500;
+        this.Hungrylevel=0.9F;
+        this.ItemToControl=Item.stick;
+        this.moveSpeed = this.getSpeed();//should work
+        
+        this.setSubSpecies((new Random()).nextInt(3) + 1);
+        FoodItemList.addItem(EnumDinoFoodItem.Wheat);
+        FoodItemList.addItem(EnumDinoFoodItem.Melon);
+        
         this.getNavigator().setAvoidsWater(true);
-        this.tasks.addTask(0, new DinoAIStarvation(this));
-        this.tasks.addTask(0, new DinoAIGrowup(this, 12));
+        //this.tasks.addTask(0, new DinoAIStarvation(this));
+        //this.tasks.addTask(0, new DinoAIGrowup(this, 12));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
         this.tasks.addTask(4, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(5, new DinoAIEatFerns(this, this.HuntLimit));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24, this.HuntLimit, EnumDinoEating.Herbivorous));
-        this.tasks.addTask(6, new DinoAIPickItem(this, Item.wheat, this.moveSpeed, 24, this.HuntLimit));
-        this.tasks.addTask(6, new DinoAIPickItem(this, Item.appleRed, this.moveSpeed, 24, this.HuntLimit));
+        this.tasks.addTask(5, new DinoAIEatFerns(this/*, this.HuntLimit)*/));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24/*, this.HuntLimit*/, EnumDinoEating.Herbivorous));
+        //this.tasks.addTask(6, new DinoAIPickItem(this, Item.wheat, this.moveSpeed, 24, this.HuntLimit));
+        //this.tasks.addTask(6, new DinoAIPickItem(this, Item.appleRed, this.moveSpeed, 24, this.HuntLimit));
+        this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
         this.tasks.addTask(7, new DinoAIWander(this, this.moveSpeed));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
-    }
-
-    public int getHungerLimit()
-    {
-        return 500;
     }
 
     /**
@@ -91,7 +109,7 @@ public class EntityStegosaurus extends EntityDinosaurce
      */
     public boolean isAIEnabled()
     {
-        return !this.isModelized() && this.riddenByEntity == null;
+        return this.riddenByEntity == null;
     }
 
     /**
@@ -100,9 +118,9 @@ public class EntityStegosaurus extends EntityDinosaurce
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setInteger("SubSpecies", this.SubSpecies);
+        //var1.setInteger("SubSpecies", this.SubSpecies);
         var1.setBoolean("Angry", this.isSelfAngry());
-        var1.setBoolean("isBaby", this.isBaby);
+        //var1.setBoolean("isBaby", this.isBaby);
     }
 
     /**
@@ -111,20 +129,12 @@ public class EntityStegosaurus extends EntityDinosaurce
     public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
-        this.SubSpecies = var1.getInteger("SubSpecies");
-        this.isBaby = var1.getBoolean("isBaby");
+        //this.SubSpecies = var1.getInteger("SubSpecies");
+        //this.isBaby = var1.getBoolean("isBaby");
         this.CheckSkin();
         this.setSelfAngry(var1.getBoolean("Angry"));
-        this.setSelfSitting(var1.getBoolean("Sitting"));
+        //this.setSelfSitting(var1.getBoolean("Sitting"));
         this.InitSize();
-    }
-
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
-    protected boolean canDespawn()
-    {
-        return false;
     }
 
     /**
@@ -165,7 +175,7 @@ public class EntityStegosaurus extends EntityDinosaurce
     public void onUpdate()
     {
         super.onUpdate();
-        this.field_25054_c = this.field_25048_b;
+        /*this.field_25054_c = this.field_25048_b;
 
         if (this.looksWithInterest)
         {
@@ -174,7 +184,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         else
         {
             this.field_25048_b += (0.0F - this.field_25048_b) * 0.4F;
-        }
+        }*/
 
         if (this.looksWithInterest)
         {
@@ -182,7 +192,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
     }
 
-    public boolean getSelfShaking()
+    /*public boolean getSelfShaking()
     {
         return false;
     }
@@ -211,7 +221,7 @@ public class EntityStegosaurus extends EntityDinosaurce
     public float getInterestedAngle(float var1)
     {
         return (this.field_25054_c + (this.field_25048_b - this.field_25054_c) * var1) * 0.15F * (float)Math.PI;
-    }
+    }*/
 
     public float getEyeHeight()
     {
@@ -224,7 +234,7 @@ public class EntityStegosaurus extends EntityDinosaurce
      */
     public int getVerticalFaceSpeed()
     {
-        return this.isSelfSitting() ? 20 : super.getVerticalFaceSpeed();
+        return this.isSitting() ? 20 : super.getVerticalFaceSpeed();
     }
 
     /**
@@ -232,7 +242,7 @@ public class EntityStegosaurus extends EntityDinosaurce
      */
     protected boolean isMovementCeased()
     {
-        return this.isSelfSitting() || this.field_25052_g;
+        return this.isSitting();// || this.field_25052_g;
     }
 
     /**
@@ -241,7 +251,7 @@ public class EntityStegosaurus extends EntityDinosaurce
     public boolean attackEntityFrom(DamageSource var1, int var2)
     {
         Entity var3 = var1.getEntity();
-        this.setSelfSitting(false);
+        this.setSitting(false);
 
         if (var3 != null && !(var3 instanceof EntityPlayer) && !(var3 instanceof EntityArrow))
         {
@@ -300,64 +310,8 @@ public class EntityStegosaurus extends EntityDinosaurce
      */
     public boolean interact(EntityPlayer var1)
     {
-        ItemStack var2 = var1.inventory.getCurrentItem();
-
-        if (var2 != null && var2.itemID == Item.wheat.itemID)
-        {
-            if (this.CheckEatable(var2.itemID) && this.HandleEating(10))
-            {
-                --var2.stackSize;
-
-                if (var2.stackSize <= 0)
-                {
-                    var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-                }
-
-                this.heal(3);
-            }
-
-            return true;
-        }
-        else if (FMLCommonHandler.instance().getSide().isClient() && var2 != null && var2.itemID == Fossil.dinoPedia.itemID)
-        {
-            EntityDinosaurce.pediaingDino = this;
-            var1.openGui(var1, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
-            return true;
-        }
-        else if (this.EOCInteract(var2, var1))
-        {
-            return true;
-        }
-        else if (var2 != null && var2.itemID == Item.stick.itemID && var1.username.equalsIgnoreCase(this.getOwnerName()))
-        {
-            if (!this.worldObj.isRemote)
-            {
-                this.isJumping = false;
-                this.setPathToEntity((PathEntity)null);
-                this.OrderStatus = EnumOrderType.values()[(Fossil.EnumToInt(this.OrderStatus) + 1) % 3];
-                this.SendOrderMessage(this.OrderStatus);
-
-                switch (EntityStegosaurus$1.$SwitchMap$mod_Fossil$EnumOrderType[this.OrderStatus.ordinal()])
-                {
-                    case 1:
-                        this.setSelfSitting(true);
-                        break;
-
-                    case 2:
-                        this.setSelfSitting(false);
-                        break;
-
-                    case 3:
-                        this.setSelfSitting(false);
-                }
-            }
-
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+    	//Add special item interaction code here
+        return super.interact(var1);
     }
 
     public void handleHealthUpdate(byte var1)
@@ -372,9 +326,9 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
         else if (var1 == 8)
         {
-            this.field_25052_g = true;
-            this.timeWolfIsShaking = 0.0F;
-            this.prevTimeWolfIsShaking = 0.0F;
+            //this.field_25052_g = true;
+            //this.timeWolfIsShaking = 0.0F;
+            //this.prevTimeWolfIsShaking = 0.0F;
         }
         else
         {
@@ -382,23 +336,15 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
     }
 
-    /**
-     * Will return how many at most can spawn in a chunk at once.
-     */
-    public int getMaxSpawnedInChunk()
-    {
-        return 100;
-    }
-
     public boolean isSelfAngry()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
     }
 
-    public boolean isSelfSitting()
+    /*public boolean isSelfSitting()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }
+    }*/
 
     public void setSelfAngry(boolean var1)
     {
@@ -416,7 +362,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
     }
 
-    public void setSelfSitting(boolean var1)
+    /*public void setSelfSitting(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
 
@@ -442,7 +388,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -5)));
         }
-    }
+    }*/
 
     /**
      * Checks if the entity's current position is a valid location to spawn this entity.
@@ -454,30 +400,23 @@ public class EntityStegosaurus extends EntityDinosaurce
 
     private void InitSize()
     {
-        if (this.getDinoAge() > 4 && this.isBaby)
-        {
-            this.ChangeTexture();
-        }
-
-        this.setSize((float)(1.5D + 0.3D * (double)((float)this.getDinoAge())), (float)(1.5D + 0.3D * (double)((float)this.getDinoAge())));
+        this.CheckSkin();
+        this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
-        this.moveSpeed = 0.5F + (float)(this.getDinoAge() * 3);
+        this.moveSpeed = this.getSpeed();//0.5F + (float)(this.getDinoAge() * 3);
+    }
+    public void updateSize()
+    {
+    	this.setSize((float)(1.5D + 0.3D * (double)((float)this.getDinoAge())), (float)(1.5D + 0.3D * (double)((float)this.getDinoAge())));
     }
 
     public boolean CheckSpace()
     {
         return !this.isEntityInsideOpaqueBlock();
     }
-
-    private void ChangeTexture()
-    {
-        this.isBaby = false;
-        this.CheckSkin();
-    }
-
     public void CheckSkin()
     {
-        if (this.isBaby)
+        if (this.isBaby())
         {
             this.texture = "/mod/fossil/common/textures/Stegosaurus_Baby.png";
         }
@@ -487,15 +426,15 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
     }
 
-    public void updateRiderPosition()
+    /*public void updateRiderPosition()
     {
         if (this.riddenByEntity != null)
         {
             this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getGLY() * 0.65D + 0.07D * (double)(12 - this.getDinoAge()), this.posZ);
         }
-    }
+    }*/
 
-    public boolean HandleEating(int var1)
+    /*public boolean HandleEating(int var1)
     {
         return this.HandleEating(var1, false);
     }
@@ -523,9 +462,9 @@ public class EntityStegosaurus extends EntityDinosaurce
 
             return true;
         }
-    }
+    }*/
 
-    private boolean FindWheats(int var1)
+    /*private boolean FindWheats(int var1)
     {
         if (this.isSelfSitting())
         {
@@ -593,7 +532,7 @@ public class EntityStegosaurus extends EntityDinosaurce
                 return false;
             }
         }
-    }
+    }*/
 
     public void FaceToCoord(int var1, int var2, int var3)
     {
@@ -630,7 +569,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         return var1 + var4;
     }
 
-    private void HandleRiding()
+    /*private void HandleRiding()
     {
         if (this.RushTick > 0)
         {
@@ -698,7 +637,7 @@ public class EntityStegosaurus extends EntityDinosaurce
                 this.moveForward = ((EntityPlayerSP)this.riddenByEntity).movementInput.moveForward * this.moveSpeed;
             }
         }
-    }
+    }*/
 
     /**
      * Applies a velocity to each of the entities pushing them away from each other. Args: entity
@@ -764,7 +703,7 @@ public class EntityStegosaurus extends EntityDinosaurce
             Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
             Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
             Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.getHungerLimit(), var1);
+            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
         }
         else
         {
@@ -784,44 +723,19 @@ public class EntityStegosaurus extends EntityDinosaurce
         return var1;
     }
 
-    public void SetOrder(EnumOrderType var1)
-    {
-        this.OrderStatus = var1;
-    }
 
-    public boolean CheckEatable(int var1)
+    /*public boolean CheckEatable(int var1)
     {
         Item var2 = Item.itemsList[var1];
         boolean var3 = false;
         var3 = var2 == Item.wheat || var2 == Item.melon;
         return var3;
-    }
+    }*/
 
     public EntityStegosaurus spawnBabyAnimal(EntityAgeable var1)
     {
         return new EntityStegosaurus(this.worldObj);
     }
-
-    public int getMaxHealth()
-    {
-        return 20;
-    }
-
-    public void updateSize(boolean var1) {}
-
-    public EnumOrderType getOrderType()
-    {
-        return this.OrderStatus;
-    }
-
-    protected int foodValue(Item var1)
-    {
-        return 0;
-    }
-
-    public void HandleEating(Item var1) {}
-
-    public void HoldItem(Item var1) {}
 
     public float getGLX()
     {

@@ -95,7 +95,7 @@ public class DinoAIPickItem extends EntityAIBase
 
         if (var10000 < Math.pow(3.0D, 2.0D))
         {
-            this.entityVar.PickUpItem(this.targetItem.func_92014_d().getItem());
+            this.entityVar.PickUpItem(this.targetItem.func_92014_d());
             this.targetItem.setDead();
             this.entityVar.getNavigator().clearPathEntity();
         }

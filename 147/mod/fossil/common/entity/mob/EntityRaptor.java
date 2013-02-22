@@ -7,15 +7,15 @@ import java.util.Vector;
 import mod.fossil.common.Fossil;
 import mod.fossil.common.fossilAI.DinoAIFollowOwner;
 import mod.fossil.common.fossilAI.DinoAIGrowup;
-import mod.fossil.common.fossilAI.DinoAILearnChest;
 import mod.fossil.common.fossilAI.DinoAIPickItem;
+import mod.fossil.common.fossilAI.DinoAIPickItems;
 import mod.fossil.common.fossilAI.DinoAIStarvation;
 import mod.fossil.common.fossilAI.DinoAITargetNonTamedExceptSelfClass;
 import mod.fossil.common.fossilAI.DinoAIUseFeeder;
 import mod.fossil.common.fossilEnums.EnumDinoEating;
+import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
-import mod.fossil.common.fossilInterface.IHighIntellegent;
 import net.minecraft.block.Block;
 import net.minecraft.block.StepSound;
 import net.minecraft.entity.Entity;
@@ -46,10 +46,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
+public class EntityRaptor extends EntityDinosaurce
 {
     private boolean looksWithInterest;
-    public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
+    /*public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
     private float field_25048_b;
     private float field_25054_c;
     private boolean isWolfShaking;
@@ -57,13 +57,14 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
     private float timeWolfIsShaking;
     private float prevTimeWolfIsShaking;
     public ItemStack ItemInMouth = null;
-    public int BreedTick = 3000;
+    public int BreedTick = 3000;*/
+    public int LearningChestTick = 900;
     public boolean PreyChecked = false;
     public boolean SupportChecked = false;
     public Vector MemberList = new Vector();
     public float SwingAngle = -1000.0F;
     public int FleeingTick = 0;
-    public int DoorOpeningTick = 0;
+    //public int DoorOpeningTick = 0; SEEMS TO BE PLANNED
 
     public EntityRaptor(World var1)
     {
@@ -72,31 +73,64 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         this.looksWithInterest = false;
         this.CheckSkin();
         this.setSize(0.3F, 0.3F);
-        this.moveSpeed = 0.3F;
+        //this.moveSpeed = 0.3F;
         this.health = 10;
-        this.setHunger(this.getHungerLimit());
-        this.attackStrength = 2 + this.getDinoAge();
+        
+        //this.BaseattackStrength=;
+        //this.AttackStrengthIncrease=;
+        //this.BreedingTime=;
+        //this.BaseSpeed=;
+        //this.SpeedIncrease=;
+        this.MaxAge=9;
+        this.BaseHealth=21;
+        this.HealthIncrease=1;
+        //this.AdultAge=;
+        //this.AgingTicks=;
+        //this.MaxHunger=;
+        //this.Hungrylevel=;
+        this.ItemToControl=null;
+        this.moveSpeed = this.getSpeed();//should work
+        
+        FoodItemList.addItem(EnumDinoFoodItem.PorkRaw);
+        FoodItemList.addItem(EnumDinoFoodItem.PorkCooked);
+        FoodItemList.addItem(EnumDinoFoodItem.BeefRaw);
+        FoodItemList.addItem(EnumDinoFoodItem.BeefCooked);
+        FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
+        FoodItemList.addItem(EnumDinoFoodItem.ChickenCooked);
+        //FoodItemList.addItem(EnumDinoFoodItem.DinoMeatRaw);
+        FoodItemList.addItem(EnumDinoFoodItem.DinoMeatCooked);
+        FoodItemList.addItem(EnumDinoFoodItem.Triceratops);
+        FoodItemList.addItem(EnumDinoFoodItem.Stegosaur);
+        FoodItemList.addItem(EnumDinoFoodItem.Utahraptor);
+        FoodItemList.addItem(EnumDinoFoodItem.Plesiosaur);
+        FoodItemList.addItem(EnumDinoFoodItem.Pterosaur);
+        FoodItemList.addItem(EnumDinoFoodItem.Brachiosaur);
+        FoodItemList.addItem(EnumDinoFoodItem.TRex);
+        
+        //this.setHunger(this.getHungerLimit());
+        //this.attackStrength = 2 + this.getDinoAge();
         this.getNavigator().setAvoidsWater(true);
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(0, new DinoAIGrowup(this, 8));
-        this.tasks.addTask(0, new DinoAIStarvation(this));
+        //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
+        //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityTRex.class, 8.0F, 0.3F, 0.35F));
         this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityBrachiosaurus.class, 8.0F, 0.3F, 0.35F));
         this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24, this.HuntLimit, EnumDinoEating.Carnivorous));
-        this.tasks.addTask(6, new DinoAIPickItem(this, Item.porkRaw, this.moveSpeed, 24, this.HuntLimit));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
+        /*this.tasks.addTask(6, new DinoAIPickItem(this, Item.porkRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.beefRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.chickenRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.porkCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.beefCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.chickenCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.rawDinoMeat, this.moveSpeed, 24, this.HuntLimit));
-        this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.cookedDinoMeat, this.moveSpeed, 24, this.HuntLimit));
+        this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.cookedDinoMeat, this.moveSpeed, 24, this.HuntLimit));*/
+        this.tasks.addTask(6, new DinoAIPickItems(this,this.moveSpeed, 24));
         this.tasks.addTask(7, new EntityAIWander(this, 0.3F));
-        this.tasks.addTask(7, new DinoAILearnChest(this));
+        //this.tasks.addTask(7, new DinoAILearnChest(this));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
@@ -113,11 +147,11 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         return true;
     }
 
-    protected void entityInit()
+    /*protected void entityInit()
     {
         super.entityInit();
         this.dataWatcher.addObject(24, new Byte((byte)0));
-    }
+    }*/
 
     /**
      * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
@@ -137,7 +171,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         {
             return super.getTexture();
         }
-        else if (this.getAge() > 3)
+        else if (this.isBaby())
         {
             switch (this.getSubSpecies())
             {
@@ -146,9 +180,12 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
 
                 case 2:
                     return "/mod/fossil/common/textures/raptor_green_adult.png";
+                    
+                case 3:
+                    return "/mod/fossil/common/textures/raptor_brown_adult.png";
 
                 default:
-                    return "/mod/fossil/common/textures/Raptor_Adult.png";
+                	return "/mod/fossil/common/textures/raptor_brown_adult.png";
             }
         }
         else
@@ -160,9 +197,12 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
 
                 case 2:
                     return "/mod/fossil/common/textures/raptor_green_Baby.png";
+                
+                case 3:
+                    return "/mod/fossil/common/textures/raptor_brown_Baby.png";
 
                 default:
-                    return "/mod/fossil/common/textures/Raptor_Baby.png";
+                	return "/mod/fossil/common/textures/raptor_brown_Baby.png";
             }
         }
     }
@@ -191,7 +231,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
     {
         super.writeEntityToNBT(var1);
 
-        if (this.ItemInMouth != null)
+        /*if (this.ItemInMouth != null)
         {
             var1.setShort("Itemid", (short)this.ItemInMouth.itemID);
             var1.setByte("ItemCount", (byte)this.ItemInMouth.stackSize);
@@ -202,12 +242,11 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
             var1.setShort("Itemid", (short) - 1);
             var1.setByte("ItemCount", (byte)0);
             var1.setShort("ItemDamage", (short)0);
-        }
+        }*/
 
-        var1.setBoolean("LearntChest", this.isLeartChest());
         var1.setBoolean("Angry", this.isSelfAngry());
-        var1.setBoolean("Sitting", this.isSelfSitting());
-        var1.setInteger("SubType", this.getSubSpecies());
+        //var1.setBoolean("Sitting", this.isSelfSitting());
+        //var1.setInteger("SubType", this.getSubSpecies());
     }
 
     /**
@@ -216,7 +255,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
     public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
-        short var2 = var1.getShort("Itemid");
+        /*short var2 = var1.getShort("Itemid");
         byte var3 = var1.getByte("ItemCount");
         short var4 = var1.getShort("ItemDamage");
 
@@ -227,27 +266,17 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         else
         {
             this.ItemInMouth = null;
-        }
+        }*/
 
-        this.setHungerTick(var1.getInteger("HungerTick"));
-        this.setLearntChest(var1.getBoolean("LearntChest"));
         this.setSelfAngry(var1.getBoolean("Angry"));
-        this.setSelfSitting(var1.getBoolean("Sitting"));
+        //this.setSelfSitting(var1.getBoolean("Sitting"));
 
-        if (var1.hasKey("SubType"))
+        /*if (var1.hasKey("SubType"))
         {
             this.setSubSpecies(var1.getInteger("SubType"));
-        }
+        }*/
 
         this.InitSize();
-    }
-
-    /**
-     * Determines if an entity can be despawned, used on idle far away entities
-     */
-    protected boolean canDespawn()
-    {
-        return false;
     }
 
     /**
@@ -288,8 +317,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
     public void onUpdate()
     {
         super.onUpdate();
-        this.HandleBreed();
-        this.field_25054_c = this.field_25048_b;
+        /*this.field_25054_c = this.field_25048_b;
 
         if (this.looksWithInterest)
         {
@@ -303,10 +331,10 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         if (this.looksWithInterest)
         {
             this.numTicksToChaseTarget = 10;
-        }
+        }*/
     }
 
-    public boolean getSelfShaking()
+    /*public boolean getSelfShaking()
     {
         return false;
     }
@@ -330,7 +358,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         }
 
         return MathHelper.sin(var3 * (float)Math.PI) * MathHelper.sin(var3 * (float)Math.PI * 11.0F) * 0.15F * (float)Math.PI;
-    }
+    }*/
 
     public float getEyeHeight()
     {
@@ -343,7 +371,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
      */
     public int getVerticalFaceSpeed()
     {
-        return this.isSelfSitting() ? 20 : super.getVerticalFaceSpeed();
+        return this.isSitting() ? 20 : super.getVerticalFaceSpeed();
     }
 
     /**
@@ -351,7 +379,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
      */
     protected boolean isMovementCeased()
     {
-        return this.isSelfSitting() || this.field_25052_g;
+        return this.isSitting();// || this.field_25052_g;
     }
 
     /**
@@ -361,7 +389,6 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
     {
         Entity var3 = var1.getEntity();
         boolean var4 = false;
-        this.setSelfSitting(false);
 
         if (var3 != null && !(var3 instanceof EntityPlayer) && !(var3 instanceof EntityArrow))
         {
@@ -449,103 +476,14 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
     public boolean interact(EntityPlayer var1)
     {
         ItemStack var2 = var1.inventory.getCurrentItem();
-
         if (var2 != null)
         {
             if (var2.getItem().getItemUseAction(var2) == EnumAction.bow)
             {
                 return false;
             }
-
-            if (FMLCommonHandler.instance().getSide().isClient() && var2.itemID == Fossil.dinoPedia.itemID)
-            {
-                EntityDinosaurce.pediaingDino = this;
-                var1.openGui(var1, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
-                return true;
-            }
-
-            if (this.isTamed())
-            {
-                if (var2.itemID == Fossil.chickenEss.itemID)
-                {
-                    if (this.getDinoAge() < 8 && this.getHunger() > 0)
-                    {
-                        --var2.stackSize;
-
-                        if (var2.stackSize <= 0)
-                        {
-                            var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-                        }
-
-                        var1.inventory.addItemStackToInventory(new ItemStack(Item.glassBottle, 1));
-                        this.setDinoAgeTick(12000);
-                        this.setHunger(1 + (new Random()).nextInt(this.getHunger()));
-                        return true;
-                    }
-
-                    return false;
-                }
-
-                if (this.ItemInMouth == null)
-                {
-                    this.ItemInMouth = new ItemStack(var2.getItem(), 1, var2.getItemDamage());
-                    --var2.stackSize;
-
-                    if (var2.stackSize <= 0)
-                    {
-                        var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-                    }
-
-                    return true;
-                }
-            }
         }
-        else
-        {
-            if (this.ItemInMouth != null)
-            {
-                int var3 = this.ItemInMouth.stackSize;
-
-                if (var1.inventory.addItemStackToInventory(this.ItemInMouth))
-                {
-                    ModLoader.onItemPickup(var1, this.ItemInMouth);
-                    this.worldObj.playSoundAtEntity(var1, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                    this.ItemInMouth = null;
-                    return true;
-                }
-
-                return false;
-            }
-
-            if (var1.username.equalsIgnoreCase(this.getOwnerName()))
-            {
-                if (!this.worldObj.isRemote)
-                {
-                    this.isJumping = false;
-                    this.setPathToEntity((PathEntity)null);
-                    this.SetOrder(EnumOrderType.values()[(Fossil.EnumToInt(this.OrderStatus) + 1) % 3]);
-                    this.SendOrderMessage(this.OrderStatus);
-
-                    switch (EntityRaptor$1.$SwitchMap$mod_Fossil$EnumOrderType[this.OrderStatus.ordinal()])
-                    {
-                        case 1:
-                            this.setSelfSitting(true);
-                            break;
-
-                        case 2:
-                            this.setSelfSitting(false);
-                            break;
-
-                        case 3:
-                            this.setSelfSitting(false);
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        return false;
+        return super.interact(var1);
     }
 
     public void handleHealthUpdate(byte var1)
@@ -560,9 +498,9 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         }
         else if (var1 == 8)
         {
-            this.field_25052_g = true;
-            this.timeWolfIsShaking = 0.0F;
-            this.prevTimeWolfIsShaking = 0.0F;
+            //this.field_25052_g = true;
+            //this.timeWolfIsShaking = 0.0F;
+            //this.prevTimeWolfIsShaking = 0.0F;
         }
         else
         {
@@ -570,23 +508,15 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         }
     }
 
-    /**
-     * Will return how many at most can spawn in a chunk at once.
-     */
-    public int getMaxSpawnedInChunk()
-    {
-        return 100;
-    }
-
     public boolean isSelfAngry()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
     }
 
-    public boolean isSelfSitting()
+    /*public boolean isSelfSitting()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }
+    }*/
 
     public void setSelfAngry(boolean var1)
     {
@@ -602,7 +532,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         }
     }
 
-    public void setSelfSitting(boolean var1)
+    /*public void setSelfSitting(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
 
@@ -629,7 +559,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
             this.ItemInMouth = null;
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -5)));
         }
-    }
+    }*/
 
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
@@ -702,11 +632,16 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
     private void InitSize()
     {
         this.CheckSkin();
-        this.setSize((float)(0.30000001192092896D + 0.1D * (double)((float)this.getAge())), (float)(0.30000001192092896D + 0.1D * (double)((float)this.getAge())));
+        this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
     }
 
-    public boolean HandleEating(int var1)
+    public void updateSize()
+    {
+    	this.setSize((float)(0.30000001192092896D + 0.1D * (double)((float)this.getAge())), (float)(0.30000001192092896D + 0.1D * (double)((float)this.getAge())));
+    }
+    
+    /*public boolean HandleEating(int var1)
     {
         if (this.getHunger() >= this.getHungerLimit())
         {
@@ -729,16 +664,16 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
     public boolean isLeartChest()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 16) == 0;
-    }
+    }*/
 
-    public void ChangeSubType(int var1)
+    /*public void ChangeSubType(int var1)
     {
         if (var1 <= 2 && var1 >= 0)
         {
             this.setSubSpecies(var1);
             this.CheckSkin();
         }
-    }
+    }*/
 
     public void ShowPedia(EntityPlayer var1)
     {
@@ -749,12 +684,12 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
             Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
             Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
             Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.getHungerLimit(), var1);
+            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
 
-            if (this.isLeartChest())
+            /*if (this.isLeartChest())
             {
                 Fossil.ShowMessage(EnableChestText, var1);
-            }
+            }*/
         }
         else
         {
@@ -774,10 +709,10 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         {
             ArrayList var2 = new ArrayList();
 
-            if (this.isLeartChest())
+            /*if (this.isLeartChest())
             {
                 var2.add(EnableChestText);
-            }
+            }*/
 
             if (!var2.isEmpty())
             {
@@ -789,7 +724,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         return var1;
     }
 
-    public void SetOrder(EnumOrderType var1)
+    /*public void SetOrder(EnumOrderType var1)
     {
         this.OrderStatus = var1;
     }
@@ -812,16 +747,11 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
             var3 = var2 == Item.beefCooked || var2 == Item.beefRaw || var2 == Item.fishCooked || var2 == Item.fishRaw || var2 == Item.chickenCooked || var2 == Item.chickenRaw || var2 == Item.porkRaw || var2 == Item.porkCooked;
             return var3;
         }
-    }
+    }*/
 
     public EntityAnimal spawnBabyAnimal(EntityAnimal var1)
     {
         return new EntityRaptor(this.worldObj);
-    }
-
-    public int getMaxHealth()
-    {
-        return 20;
     }
 
     public boolean IsIdle()
@@ -829,23 +759,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         return this.motionX < 0.03125D && this.motionY < 0.03125D && this.motionZ < 0.03125D;
     }
 
-    public void updateSize(boolean var1) {}
-
-    public EnumOrderType getOrderType()
-    {
-        return this.OrderStatus;
-    }
-
-    protected int foodValue(Item var1)
-    {
-        return 0;
-    }
-
-    public void HandleEating(Item var1) {}
-
-    public void HoldItem(Item var1) {}
-
-    public void setLearntChest(boolean var1)
+    /*public void setLearntChest(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(24);
 
@@ -857,7 +771,7 @@ public class EntityRaptor extends EntityDinosaurce implements IHighIntellegent
         {
             this.dataWatcher.updateObject(24, Byte.valueOf((byte)(var2 | 16)));
         }
-    }
+    }*/
 
     public float getGLX()
     {

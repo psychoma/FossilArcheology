@@ -101,25 +101,25 @@ public class EntityPregnantPig extends EntityPig implements IViviparous, IEntity
         {
             Object var2;
 
-            switch (EntityPregnantPig$1.$SwitchMap$mod_Fossil$EnumEmbyos[this.Embyos.ordinal()])
+            switch (this.Embyos)//EntityPregnantPig$1.$SwitchMap$mod_Fossil$EnumEmbyos[this.Embyos.ordinal()])
             {
-                case 1:
+                case Pig:
                     var2 = new EntityPig(this.worldObj);
                     break;
 
-                case 2:
+                case Sheep:
                     var2 = new EntitySheep(this.worldObj);
                     break;
 
-                case 3:
+                case Cow:
                     var2 = new EntityCow(this.worldObj);
                     break;
 
-                case 4:
+                case SaberCat:
                     var2 = new EntitySaberCat(this.worldObj);
                     break;
 
-                case 5:
+                case Mammoth:
                     var2 = (new EntityMammoth(this.worldObj)).Imprinting(this.posX, this.posY, this.posZ);
                     break;
 
