@@ -694,7 +694,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
     }
 
-    public void ShowPedia(EntityPlayer var1)
+    /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);
 
@@ -709,9 +709,9 @@ public class EntityStegosaurus extends EntityDinosaurce
         {
             Fossil.ShowMessage(UntamedText, var1);
         }
-    }
+    }*/
 
-    public String[] additionalPediaMessage()
+    /*public String[] additionalPediaMessage()
     {
         String[] var1 = null;
 
@@ -721,7 +721,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
 
         return var1;
-    }
+    }*/
 
 
     /*public boolean CheckEatable(int var1)

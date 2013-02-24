@@ -469,9 +469,11 @@ public class EntityTRex extends EntityDinosaurce
         		else
                 {
                     if (!this.isWeak())
-                        this.SendStatusMessage(EnumSituation.GemErrorHealth, this.SelfType);
+                        //this.SendStatusMessage(EnumSituation.GemErrorHealth);//, this.SelfType);
+                    	Fossil.ShowMessage(Fossil.GetLangTextByKey("Status.GemErrorHealth"),var1);
                     if (this.isBaby())
-                        this.SendStatusMessage(EnumSituation.GemErrorYoung, this.SelfType);
+                        //this.SendStatusMessage(EnumSituation.GemErrorYoung);//, this.SelfType);
+                    	Fossil.ShowMessage(Fossil.GetLangTextByKey("Status.GemErrorYoung"),var1);
                     return false;
                 }
              }
@@ -551,7 +553,7 @@ public class EntityTRex extends EntityDinosaurce
         this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
 
-        if (this.getDinoAge() > 3 && !this.isTamed())
+        if (!this.isBaby() && !this.isTamed())
         {
             this.texture = "/mod/fossil/common/textures/TRex_Adult.png";
         }
@@ -562,7 +564,7 @@ public class EntityTRex extends EntityDinosaurce
     }
     public void updateSize()
     {
-    	this.setSize((float)(0.5D + 0.5125D * (double)((float)this.getDinoAge())), (float)(0.5D + 0.5125D * (double)((float)this.getDinoAge())));
+    	this.setSize((float)(0.5D + 0.2D * (double)((float)this.getDinoAge())), (float)(0.5D + 0.2D * (double)((float)this.getDinoAge())));
     }
 
     public boolean CheckSpace()
@@ -726,7 +728,7 @@ public class EntityTRex extends EntityDinosaurce
         }
     }
 
-    public void ShowPedia(EntityPlayer var1)
+    /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);
 
@@ -750,9 +752,9 @@ public class EntityTRex extends EntityDinosaurce
         {
             Fossil.ShowMessage(WeakText, var1);
         }
-    }
+    }*/
 
-    public String[] additionalPediaMessage()
+    /*public String[] additionalPediaMessage()
     {
         String[] var1 = null;
 
@@ -782,7 +784,7 @@ public class EntityTRex extends EntityDinosaurce
         }
 
         return var1;
-    }
+    }*/
 
     /*public boolean HandleEating(int var1, boolean var2)
     {

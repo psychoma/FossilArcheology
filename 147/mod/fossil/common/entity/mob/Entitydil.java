@@ -307,7 +307,7 @@ public class Entitydil extends EntityDinosaurce
         {
         	this.LearningChestTick--;
         	if(this.LearningChestTick==0)
-        		this.SendStatusMessage(EnumSituation.LearningChest, this.SelfType);
+        		this.SendStatusMessage(EnumSituation.LearningChest);//, this.SelfType);
         }
         /*this.field_25054_c = this.field_25048_b;
 		//HAS something todo with look with interest
@@ -677,7 +677,7 @@ public class Entitydil extends EntityDinosaurce
         return this.LearningChestTick == 0;
     }
 
-    public void ShowPedia(EntityPlayer var1)
+    /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);
 
@@ -697,9 +697,9 @@ public class Entitydil extends EntityDinosaurce
         {
             Fossil.ShowMessage(UntamedText, var1);
         }
-    }
+    }*/
 
-    public String[] additionalPediaMessage()
+    /*public String[] additionalPediaMessage()
     {
         String[] var1 = null;
 
@@ -724,7 +724,7 @@ public class Entitydil extends EntityDinosaurce
         }
 
         return var1;
-    }
+    }*/
 
     public Entitydil spawnBabyAnimal(EntityAgeable var1)
     {

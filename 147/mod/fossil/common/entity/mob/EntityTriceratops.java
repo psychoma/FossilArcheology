@@ -1,9 +1,11 @@
 package mod.fossil.common.entity.mob;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 import mod.fossil.common.Fossil;
 import mod.fossil.common.fossilAI.DinoAIControlledByPlayer;
@@ -19,7 +21,7 @@ import mod.fossil.common.fossilEnums.EnumDinoEating;
 import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
-import mod.fossil.common.fossilEnums.EnumSituation;
+import mod.fossil.common.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
@@ -185,7 +187,7 @@ public class EntityTriceratops extends EntityDinosaurce
      */
     protected String getHurtSound()
     {
-        return "mob.cowhurt";
+    	return "tri_death";
     }
 
     /**
@@ -564,7 +566,7 @@ public class EntityTriceratops extends EntityDinosaurce
         return var1 != null && var1.itemID == Item.carrot.itemID;
     }*/
 
-    public void ShowPedia(EntityPlayer var1)
+    /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);
 
@@ -584,8 +586,13 @@ public class EntityTriceratops extends EntityDinosaurce
         {
             Fossil.ShowMessage(UntamedText, var1);
         }
+    }*/
+    @SideOnly(Side.CLIENT)
+    public void ShowPedia(GuiPedia p0)
+    {
+    	super.ShowPedia(p0);
+    	p0.PrintItemXY(Fossil.dnaTriceratops, 120, 7);
     }
-
     public EntityTriceratops spawnBabyAnimal(EntityAgeable var1)
     {
         return new EntityTriceratops(this.worldObj);
@@ -682,7 +689,7 @@ public class EntityTriceratops extends EntityDinosaurce
         return (float)(1.5D + 0.3D * (double)((float)this.getDinoAge()));
     }
 
-    public String[] additionalPediaMessage()
+    /*public String[] additionalPediaMessage()
     {
         String[] var1 = null;
 
@@ -707,7 +714,7 @@ public class EntityTriceratops extends EntityDinosaurce
         }
 
         return var1;
-    }
+    }*/
 
     public EntityAgeable func_90011_a(EntityAgeable var1)
     {

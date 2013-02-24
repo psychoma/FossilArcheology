@@ -1,6 +1,9 @@
 package mod.fossil.common.entity.mob;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.ArrayList;
 import mod.fossil.common.Fossil;
 import mod.fossil.common.fossilAI.DinoAIFollowOwner;
@@ -14,6 +17,7 @@ import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.fossilEnums.EnumSituation;
+import mod.fossil.common.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
 import net.minecraft.block.StepSound;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -466,8 +470,15 @@ public class EntityPterosaur extends EntityDinosaurce
             this.CheckSkin();
         }
     }*/
+    
+    @SideOnly(Side.CLIENT)
+    public void ShowPedia(GuiPedia p0)
+    {
+    	super.ShowPedia(p0);
+    	p0.PrintItemXY(Fossil.dnaPterosaur, 120, 7);
+    }
 
-    public void ShowPedia(EntityPlayer var1)
+    /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);
 
@@ -492,9 +503,9 @@ public class EntityPterosaur extends EntityDinosaurce
         {
             Fossil.ShowMessage(UntamedText, var1);
         }
-    }
+    }*/
 
-    public String[] additionalPediaMessage()
+    /*public String[] additionalPediaMessage()
     {
         String[] var1 = null;
 
@@ -524,7 +535,7 @@ public class EntityPterosaur extends EntityDinosaurce
         }
 
         return var1;
-    }
+    }*/
 
     /**
      * Causes this entity to do an upwards motion (jumping).

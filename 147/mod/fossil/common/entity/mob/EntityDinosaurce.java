@@ -20,6 +20,7 @@ import mod.fossil.common.fossilAI.DinoAIStarvation;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.fossilEnums.EnumSituation;
+import mod.fossil.common.guiBlocks.GuiPedia;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityTameable;
@@ -43,7 +44,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     public static final int AGE_DATA_INDEX = 21;
     public static final int SUBSPECIES_INDEX = 22;
     public static final int MODELIZED_INDEX = 23;
-    public static String SelfName = "";
+    /*public static String SelfName = "";
     public static String OwnerText = "Owner:";
     public static String UntamedText = "Untamed";
     public static String EnableChestText = " * Chests";
@@ -53,7 +54,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     public static String CautionText = "Dangerous";
     public static String RidiableText = " * Rideable";
     public static String WeakText = "Dying";
-    public static String FlyText = " * Can Fly";
+    public static String FlyText = " * Can Fly";*/
     public EnumDinoType SelfType = null;
     
     //The attacking strength of the Dino when hatched
@@ -63,16 +64,16 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     public int AttackStrengthIncrease = 1;
     
     //The speed of the dino when hatched
-    public float BaseSpeed = 0.3F;
+    public float BaseSpeed = 0.15F;
     		
     //The speed increase when aging
-    public float SpeedIncrease = 0.05F;
+    public float SpeedIncrease = 0.02F;
     
     //Breed Tick at the moment, 0=breed, BreedingTime=timer just started
     public int BreedTick;
     
     //The Breeding time of the dinosaur, standard value 3000 ticks
-    public int BreedingTime = 30;
+    public int BreedingTime = 3000;
     
     //Age Limit of The Dino, standard is 12
     public int MaxAge = 12;
@@ -87,7 +88,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     public int AdultAge = 5;
     
     //Ticks the Dino needs for aging, standard 12000
-    public int AgingTicks = 120;
+    public int AgingTicks = 12000;
     
     //List of the eatable Items with the FoodValue and HealingValue belonging to
     public DinoFoodItemList FoodItemList;
@@ -110,7 +111,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     //The Item that is used to control the dino
     public Item ItemToControl = null;
     
-    public static EntityDinosaurce pediaingDino = null;
+    //public static EntityDinosaurce pediaingDino = null;
     protected DinoAIControlledByPlayer ridingHandler;
     public EnumOrderType OrderStatus;
     
@@ -126,13 +127,17 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
         this.BreedTick = this.BreedingTime;
         this.setHunger(this.MaxHunger);
     }
+    private void setPedia()
+    {
+    	Fossil.ToPedia = (Object)this;
+    }
     
     /**
      * Tells if the Dino is a Baby
      */
     public boolean isBaby()
     {
-        return this.getDinoAge() <= this.AdultAge;
+        return this.getDinoAge() < this.AdultAge;
     }
     
     /**
@@ -302,7 +307,24 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     }
 
     @SideOnly(Side.CLIENT)
-    public abstract void ShowPedia(EntityPlayer var1);
+    public void ShowPedia(GuiPedia p0)
+    {
+    	p0.PrintStringXY(Fossil.GetLangTextByKey("Dino."+this.SelfType.toString())/*"Triceratops"/*GetNameByEnum(this.SelfType, false)*/, 103, 25);
+    	p0.PrintPictXY("/mod/fossil/common/textures/PediaClock.png", 103, 40,8,8);
+    	p0.PrintPictXY("/mod/fossil/common/textures/PediaHeart.png", 103, 55,9,9);
+    	p0.PrintPictXY("/mod/fossil/common/textures/PediaFood.png", 103, 70,9,9);
+    	if(this.getDinoAge()==1)
+    		p0.PrintStringXY("" + this.getDinoAge() + Fossil.GetLangTextByKey("PediaText.Day"), 115, 40);
+    	else
+    		p0.PrintStringXY("" + this.getDinoAge() + Fossil.GetLangTextByKey("PediaText.Days"), 115, 40);
+    	p0.PrintStringXY("" + this.getHealth() + '/' + this.getMaxHealth(), 115, 55);
+    	p0.PrintStringXY("" + this.getHunger() + '/' + this.MaxHunger, 115, 70);
+    	
+    	if(this.SelfType.isRideable() && !this.isBaby())
+    		p0.PrintStringLR(Fossil.GetLangTextByKey("PediaText.Rideable"), true, 0);
+    	if(this.SelfType.isTameable() && this.isTamed())
+    		p0.PrintStringLR(this.getOwnerName(), true, 1);
+    }
     
     /**
      * retrieves the itemstack it can eat and returns the number of items not used
@@ -322,7 +344,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     		if(this.getHunger() > this.MaxHunger)
     		{
     			if(this.isTamed())
-    				this.SendStatusMessage(EnumSituation.Full, this.SelfType);
+    				this.SendStatusMessage(EnumSituation.Full);
     			this.setHunger(this.MaxHunger);
     		}
     	}
@@ -425,7 +447,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
                 {
                     EntityDinoEgg var5 = null;
                     var5 = new EntityDinoEgg(this.worldObj, this.SelfType);
-                    var5.setLocationAndAngles(this.posX + (double)((new Random()).nextInt(3) - 1), this.posY, this.posZ + (double)((new Random()).nextInt(3) - 1), this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+                    var5.setLocationAndAngles(this.posX + (double)((new Random()).nextInt(3) - 1), this.posY+1, this.posZ + (double)((new Random()).nextInt(3) - 1), this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
 
                     if (this.worldObj.checkIfAABBIsClear(var5.boundingBox) && this.worldObj.getCollidingBoundingBoxes(var5, var5.boundingBox).size() == 0)
                     {
@@ -451,65 +473,28 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
         this.setPathToEntity(var3);
     }
 
-    /**
-     * Sets the width and height of the entity. Args: width, height
-     */
-    /*public void setSize(float var1, float var2)
-    {
-        super.setSize(var1, var2);
-    }*/
-
     public void SendOrderMessage(EnumOrderType var1)
     {
-        String var2 = "";
-        String var3 = "Order.";
-        var2 = Fossil.GetLangTextByKey("Order.Head");
-        var2 = var2 + Fossil.GetLangTextByKey("Order." + var1.toString());
-        Fossil.ShowMessage(var2, (EntityPlayer)this.getOwner());
+
+        String S = Fossil.GetLangTextByKey("Order.Head")+ " " + Fossil.GetLangTextByKey("Order." + var1.toString());
+        Fossil.ShowMessage(S, (EntityPlayer)this.getOwner());
     }
 
-    public void SendStatusMessage(EnumSituation var1)
+    /*public void SendStatusMessage(EnumSituation var1)
     {
         this.SendStatusMessage(var1, this.SelfType);
-    }
+    }*/
 
-    public void SendStatusMessage(EnumSituation var1, EnumDinoType var2)
+    public void SendStatusMessage(EnumSituation var1)//, EnumDinoType var2)
     {
-        if (this.worldObj.getClosestPlayerToEntity(this, 25.0D) != null)
-        {
-            String var3 = GetNameByEnum(var2, true);
+        //if (this.worldObj.getClosestPlayerToEntity(this, 25.0D) != null)
+        //{
+            /*String var3 = GetNameByEnum(var2, true);
             String var4 = "";
             String var5 = "Status.";
             String var6 = "Head.";
             String var7 = "";
-
-            /*switch (EntityDinosaurce$1.$SwitchMap$mod_Fossil$EnumSituation[var1.ordinal()])
-            {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                    var7 = Fossil.GetLangTextByKey("Status.Head.SomeOf");
-                    break;
-
-                case 7:
-                case 8:
-                    var7 = Fossil.GetLangTextByKey("Status.Head.This");
-                    var3 = GetNameByEnum(var2, false);
-                    break;
-
-                case 9:
-                    var7 = Fossil.GetLangTextByKey("Status.Head.Nervous");
-                    var3 = GetNameByEnum(var2, false);
-                    break;
-
-                case 10:
-                case 11:
-                case 12:
-                    var3 = "";
-            }*/
+var1.
             switch (var1)
             {
                 case Hungry:
@@ -536,11 +521,18 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
                 case GemErrorYoung:
                 case GemErrorHealth:
                     var3 = "";
-            }
+            }*/
+    		if(this.getDistanceToEntity(this.getOwner())<25.0F);
+    		{
+    			String Status1=Fossil.GetLangTextByKey("Status." + var1.toString()+".Head")+" ";
+    			String Dino=this.SelfType.toString();
+    			String Status2=" "+Fossil.GetLangTextByKey("Status." + var1.toString());
+    			Fossil.ShowMessage(Status1+Dino+Status2,(EntityPlayer)this.getOwner());
+    		}
 
-            var4 = var7 + var3 + Fossil.GetLangTextByKey("Status." + var1.toString());
-            Fossil.ShowMessage(var4, (EntityPlayer)this.getOwner());
-        }
+            //var4 = var7 + var3 + Fossil.GetLangTextByKey("Status." + var1.toString());
+            //Fossil.ShowMessage(var4, (EntityPlayer)this.getOwner());
+        //}
     }
 
     /**
@@ -562,7 +554,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
         }
     }
 
-    public static String GetNameByEnum(EnumDinoType var0, boolean var1)
+    /*public static String GetNameByEnum(EnumDinoType var0, boolean var1)
     {
         String var2 = "Dino.";
         String var3 = ".Plural";
@@ -573,9 +565,9 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
             var5 = var4;
 
         return var1 ? var5 : var4;
-    }
+    }*/
 
-    public void PediaTextCorrection(EnumDinoType var1, EntityPlayer var2)
+    /*public void PediaTextCorrection(EnumDinoType var1, EntityPlayer var2)
     {
         SelfName = GetNameByEnum(var1, false);
         String var3 = "PediaText.";
@@ -590,7 +582,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
         RidiableText = Fossil.GetLangTextByKey("PediaText.Ridiable");
         WeakText = Fossil.GetLangTextByKey("PediaText.Weak");
         FlyText = Fossil.GetLangTextByKey("PediaText.Fly");
-    }
+    }*/
 
 
     public float GetDistanceWithXYZ(double var1, double var3, double var5)
@@ -737,7 +729,16 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
      */
     protected float getSoundVolume()
     {
-        return this.isModelized() ? 0.0F : 0.5F + 0.1F * (float)this.getDinoAge();
+    	float temp=this.isModelized() ? 0.0F : 0.2F + 0.5F * (float)this.getDinoAge()/(float)this.MaxAge+this.rand.nextFloat()*0.3F;
+        return temp;
+    }
+    
+    /**
+     * Gets the pitch of living sounds in living entities.
+     */
+    protected float getSoundPitch()
+    {
+        return 4.0F-3.0F * (float)this.getDinoAge()/(float)this.MaxAge+this.rand.nextFloat()*0.2F;
     }
 
     /**
@@ -894,7 +895,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
                 		if(this.getHunger() > this.MaxHunger)
                 		{
                 			if(this.isTamed())
-                				this.SendStatusMessage(EnumSituation.Full, this.SelfType);
+                				this.SendStatusMessage(EnumSituation.Full);
                 			this.setHunger(this.MaxHunger);
                 		}
                 		--var2.stackSize;
@@ -906,6 +907,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
 	                    {
 	                    	this.setTamed(true);
 	                    	this.setOwner(var1.username);
+	                    	showHeartsOrSmokeFX(true);
 	                    }
 	                    return true;
                 	}
@@ -941,8 +943,9 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
             	{
             		if (FMLCommonHandler.instance().getSide().isClient() && var2.itemID == Fossil.dinoPedia.itemID)
     	            {//DINOPEDIA
-    	                EntityDinosaurce.pediaingDino = this;
-    	                var1.openGui(var1, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
+    	                //EntityDinosaurce.pediaingDino = this;
+            			this.setPedia();
+    	                var1.openGui(Fossil.instance/*var1*/, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
     	                return true;
     	            }
             		if (var2.itemID == this.ItemToControl.itemID && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))

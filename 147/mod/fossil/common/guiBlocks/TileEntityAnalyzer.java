@@ -18,13 +18,17 @@ import net.minecraftforge.common.ISidedInventory;
 
 public class TileEntityAnalyzer extends TileEntity implements IInventory, ISidedInventory
 {
-    private ItemStack[] analyzerItemStacks = new ItemStack[13];
+    private ItemStack[] analyzerItemStacks;
     public int analyzerBurnTime = 0;
     public int currentItemBurnTime = 100;
     public int analyzerCookTime = 0;
     private int RawIndex = -1;
     private int SpaceIndex = -1;
 
+    public TileEntityAnalyzer ()
+    {
+     analyzerItemStacks = new ItemStack[13];
+    }
     /**
      * Returns the number of slots in the inventory.
      */
@@ -240,12 +244,79 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
             if (this.analyzerItemStacks[var1] != null)
             {
                 int var2 = this.analyzerItemStacks[var1].getItem().itemID;
-
-                if (var2 == Fossil.biofossil.itemID || var2 == Fossil.relic.itemID || var2 == Fossil.rawDinoMeat.itemID || var2 == Item.porkRaw.itemID || var2 == Item.beefRaw.itemID || var2 == Item.egg.itemID || var2 == Item.chickenRaw.itemID || var2 == Block.cloth.blockID || var2 == Fossil.icedMeat.itemID)
+                
+                if (var2 == Fossil.biofossil.itemID )
                 {
+                	
                     this.RawIndex = var1;
                     break;
+                    
                 }
+                
+                if (var2 == Fossil.relic.itemID /*|| (var2 == Fossil.rawDinoMeat.itemID) || (var2 == Item.porkRaw.itemID) || (var2 == Item.beefRaw.itemID) || (var2 == Item.egg.itemID) || (var2 == Item.chickenRaw.itemID) || (var2 == Block.cloth.blockID) || (var2 == Fossil.icedMeat.itemID*/)
+                {
+                	
+                    this.RawIndex = var1;
+                    break;
+                    
+                }
+                
+                if (var2 == Fossil.rawDinoMeat.itemID) //|| (var2 == Item.porkRaw.itemID) || (var2 == Item.beefRaw.itemID) || (var2 == Item.egg.itemID) || (var2 == Item.chickenRaw.itemID) || (var2 == Block.cloth.blockID) || */(var2 == Fossil.icedMeat.itemID)
+                {
+                	
+                    this.RawIndex = var1;
+                    break;
+                    
+                }
+                
+                if (var2 == Item.porkRaw.itemID) //|| (var2 == Item.beefRaw.itemID) || (var2 == Item.egg.itemID) || (var2 == Item.chickenRaw.itemID) || (var2 == Block.cloth.blockID) || */(var2 == Fossil.icedMeat.itemID)
+                {
+                	
+                    this.RawIndex = var1;
+                    break;
+                    
+                }
+                
+                if (var2 == Item.beefRaw.itemID) //|| (var2 == Item.egg.itemID) || (var2 == Item.chickenRaw.itemID) || (var2 == Block.cloth.blockID) || */(var2 == Fossil.icedMeat.itemID)
+                {
+                	
+                    this.RawIndex = var1;
+                    break;
+                    
+                }
+                
+                if (var2 == Item.egg.itemID) //|| (var2 == Item.chickenRaw.itemID) || (var2 == Block.cloth.blockID) || */(var2 == Fossil.icedMeat.itemID)
+                {
+                	
+                    this.RawIndex = var1;
+                    break;
+                    
+                }
+                
+                if (var2 == Item.chickenRaw.itemID) //|| (var2 == Block.cloth.blockID) || */(var2 == Fossil.icedMeat.itemID)
+                {
+                	
+                    this.RawIndex = var1;
+                    break;
+                    
+                }
+                
+                if (var2 == Block.cloth.blockID) //|| */(var2 == Fossil.icedMeat.itemID)
+                {
+                	
+                    this.RawIndex = var1;
+                    break;
+                    
+                }
+                
+                if (var2 == Fossil.icedMeat.itemID)
+                {
+                	
+                    this.RawIndex = var1;
+                    break;
+                    
+                }
+                
             }
         }
 
@@ -290,8 +361,8 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
 
                 if (var2 > 80)
                 {
-                    var3 = (new Random()).nextInt(EnumDinoType.values().length);
-                    //var1 = new ItemStack(Fossil.dna, 1, var3);
+                    var3 = (new Random()).nextInt(Fossil.dna.itemID);
+                    var1 = new ItemStack(Fossil.dna, 1);
                 }
             }
 
@@ -303,45 +374,45 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
                 }
                 else
                 {
-                    //var1 = new ItemStack(Fossil.animalDNA, 1, 1);
+                    var1 = new ItemStack(Fossil.animalDNA, 1, 1);
                 }
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Fossil.rawDinoMeat)
             {
-                //var1 = new ItemStack(Fossil.dna, 4, this.analyzerItemStacks[this.RawIndex].getItemDamage());
+                var1 = new ItemStack(Fossil.dna, 4, this.analyzerItemStacks[this.RawIndex].getItemDamage());
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.porkRaw)
             {
-                //var1 = new ItemStack(Fossil.animalDNA, 2, 0);
+                var1 = new ItemStack(Fossil.animalDNA, 2, 0);
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.beefRaw)
             {
-                //var1 = new ItemStack(Fossil.animalDNA, 2, 2);
+                var1 = new ItemStack(Fossil.animalDNA, 2, 2);
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.egg)
             {
-                //var1 = new ItemStack(Fossil.animalDNA, 1, 3);
+                var1 = new ItemStack(Fossil.animalDNA, 1, 3);
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.chickenRaw)
             {
-                //var1 = new ItemStack(Fossil.animalDNA, 1, 3);
+                var1 = new ItemStack(Fossil.animalDNA, 1, 3);
             }
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Fossil.icedMeat)
             {
                 if (var2 <= 33)
                 {
-                    //var1 = new ItemStack(Fossil.animalDNA, 1, 4);
+                    var1 = new ItemStack(Fossil.animalDNA, 1, 4);
                 }
 
                 if (var2 > 33 && var2 < 66)
                 {
-                    //var1 = new ItemStack(Fossil.animalDNA, 1, 5);
+                    var1 = new ItemStack(Fossil.animalDNA, 1, 5);
                 }
 
                 if (var1 == null)

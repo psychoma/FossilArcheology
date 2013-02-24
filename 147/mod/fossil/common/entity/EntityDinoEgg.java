@@ -21,11 +21,13 @@ import mod.fossil.common.entity.mob.EntityTriceratops;
 import mod.fossil.common.entity.mob.Entitydil;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
+import mod.fossil.common.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.src.ModLoader;
@@ -81,6 +83,10 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     {
         this(var1, (EnumDinoType)null);
     }
+    private void setPedia()
+    {
+    	Fossil.ToPedia = (Object)this;
+    }
 
     public EntityDinoEgg(World var1, EnumDinoType var2, EntityDinosaurce var3)
     {
@@ -101,7 +107,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     {
         if (Fossil.DebugMode)
         {
-            this.HatchTime = 1;
+            this.HatchTime = 100;
         }
         else
         {
@@ -434,15 +440,15 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
 
             if (this.DinoInside == EnumDinoType.Mosasaurus)
             {
-                var6 = Fossil.GetLangTextByKey("Dinoegg.dry.msgtail");
+                var6 = Fossil.GetLangTextByKey("Dinoegg.dry");
             }
             else
             {
-                var6 = Fossil.GetLangTextByKey("Dinoegg.cold.msgtail");
+                var6 = Fossil.GetLangTextByKey("Dinoegg.cold");
             }
 
-            String var1 = Fossil.GetLangTextByKey("Dinoegg.msghead");
-            Fossil.ShowMessage(var1 + EntityDinosaurce.GetNameByEnum(this.DinoInside, false) + var6, var4);
+            String var1 = Fossil.GetLangTextByKey("Dinoegg.Head");
+            Fossil.ShowMessage(var1 + Fossil.GetLangTextByKey("Dino"+this.DinoInside.toString())/*EntityDinosaurce.GetNameByEnum(this.DinoInside, false)*/ + var6, var4);
             this.setDead();
         }
         else
@@ -451,8 +457,11 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
             {
                 if (this.worldObj.isRemote)
                 {
+                	//System.err.println("EGGERROR1");
                     return;
                 }
+                else
+                	;//System.err.println("EGGERROR2");
 
                 BiomeGenBase var3 = this.worldObj.provider.worldChunkMgr.getBiomeGenAt((int)Math.floor(this.posX), (int)Math.floor(this.posZ));
                 Object var5 = null;
@@ -492,6 +501,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
                     if (!this.worldObj.isRemote)
                     {
                         this.worldObj.spawnEntityInWorld((Entity)var5);
+                        //System.err.println("EGG DID IT");
                     }
 
                     if (var4 != null)
@@ -503,6 +513,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
                 }
                 else
                 {
+                	//System.err.println("EGGERROR-NOPLACE");
                     Fossil.ShowMessage(Fossil.GetLangTextByKey("Dinoegg.NoSpace"), var4);
                     this.BirthTick -= 500;
                 }
@@ -551,7 +562,9 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         }
         else if (FMLCommonHandler.instance().getSide().isClient() && var2.getItem().itemID == Fossil.dinoPedia.itemID)
         {
-            this.showpedia(var1);
+            //this.showpedia(var1);
+        	this.setPedia();
+            var1.openGui(Fossil.instance/*var1*/, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
             return true;
         }
         else
@@ -565,9 +578,46 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         return this.DinoInside.ordinal();
     }
 
-    private void showpedia(EntityPlayer var1)
+    public void ShowPedia(GuiPedia p0)
     {
-        String var2 = "";
+    	Item it0;
+    	switch (this.DinoInside)
+        {
+            case Triceratops:it0=Fossil.eggTriceratops;break;
+            case Raptor:it0=Fossil.eggRaptor;break;
+            case TRex:it0=Fossil.eggTRex;break;
+            case Pterosaur:it0=Fossil.eggPterosaur;break;
+            case Plesiosaur:it0=Fossil.eggPlesiosaur;break;
+            case Mosasaurus:it0=Fossil.eggMosasaurus;break;
+            case Stegosaurus:it0=Fossil.eggStegosaurus;break;
+            case Utahraptor:it0=Fossil.eggUtahraptor;break;
+            case Brachiosaurus:it0=Fossil.eggBrachiosaurus;break;
+
+            default:it0=Fossil.eggTriceratops;
+        }
+    	p0.PrintItemXY(it0, 120, 7);
+    	p0.PrintStringLR(/*Fossil.GetLangTextByKey("PediaText.egg.Head")+ " "+*/Fossil.GetLangTextByKey("Dino."+this.DinoInside.toString()), false, 1);
+    	int quot = (int)Math.floor((double)((float)this.BirthTick / (float)this.HatchingNeedTime * 100.0F));
+    	String stat;
+    	if (this.DinoInside == EnumDinoType.Mosasaurus)
+        {
+            if (this.BirthTick >= 0)
+                stat = Fossil.GetLangTextByKey("PediaText.egg.wet");
+            else
+                stat = Fossil.GetLangTextByKey("PediaText.egg.dry");
+        }
+        else 
+        {
+        	if (this.BirthTick >= 0)
+	            stat = Fossil.GetLangTextByKey("PediaText.egg.warm");
+	        else
+	            stat = Fossil.GetLangTextByKey("PediaText.egg.cold");
+        }
+    	stat = Fossil.GetLangTextByKey("PediaText.egg.Status")+" "+stat;
+        String prog = Fossil.GetLangTextByKey("PediaText.egg.Progress") + " "+String.valueOf(quot) + "/100";
+        p0.PrintStringLR(stat, false, 2);
+        p0.PrintStringLR(prog, false, 3);
+        /*String var2 = "";
         String var3 = Fossil.GetLangTextByKey("PediaText.egg.selfHead") + EntityDinosaurce.GetNameByEnum(this.DinoInside, false) + Fossil.GetLangTextByKey("PediaText.egg.selfTail");
         int var4 = (int)Math.floor((double)((float)this.BirthTick / (float)this.HatchingNeedTime * 100.0F));
         Fossil.ShowMessage(var3, var1);
@@ -595,7 +645,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         String var5 = Fossil.GetLangTextByKey("PediaText.egg.Status");
         String var6 = Fossil.GetLangTextByKey("PediaText.egg.Progress");
         Fossil.ShowMessage(var5 + var2, var1);
-        Fossil.ShowMessage(var6 + var4 + "/100", var1);
+        Fossil.ShowMessage(var6 + var4 + "/100", var1);*/
     }
 
     public void writeSpawnData(ByteArrayDataOutput var1)

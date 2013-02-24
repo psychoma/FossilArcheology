@@ -59,7 +59,7 @@ public class FossilGuiHandler implements IGuiHandler
 		case 1: return new GuiCultivate(player.inventory, (TileEntityCultivate) tile_entity);
 		case 2: return new GuiFeeder(player.inventory, (TileEntityFeeder) tile_entity);
 		case 3: return new GuiWorktable(player.inventory, (TileEntityWorktable) tile_entity);
-		case 4: return new GuiPedia(player.inventory, EntityDinosaurce.pediaingDino, world);
+		case 4: return new GuiPedia(/*player.inventory/*, EntityDinosaurce.pediaingDino, world*/);
 		case 5: return new GuiTimeMachine(player.inventory, (TileEntityTimeMachine) tile_entity);
 		
 		}

@@ -12,7 +12,7 @@ public class RenderJavelin extends Render
 {
     public void renderJavelin(EntityJavelin var1, double var2, double var4, double var6, float var8, float var9)
     {
-        switch (RenderJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[var1.SelfMaterial.ordinal()])
+        switch (var1.SelfMaterial.ordinal())//RenderJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[var1.SelfMaterial.ordinal()])
         {
             case 1:
                 this.loadTexture("/mod/fossil/common/textures/StoneJavelin.png");

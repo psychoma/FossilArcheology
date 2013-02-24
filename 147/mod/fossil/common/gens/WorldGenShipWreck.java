@@ -49,8 +49,8 @@ public class WorldGenShipWreck implements IWorldGenerator
 
     public WorldGenShipWreck()
     {
-        String var1 = "FossilStructers/shipWrecks/";
-        String var2 = "/FossilStructers/shipWrecks/";
+        String var1 = "/mod/fossil/common/structers/shipWrecks/";
+        String var2 = "/mod/fossil/common/structers/shipWrecks/";
         String var3 = ".schematic";
 
         for (int var4 = 0; var4 < this.shipList.length; ++var4)
@@ -58,7 +58,7 @@ public class WorldGenShipWreck implements IWorldGenerator
             for (int var5 = 0; var5 < 360; var5 += 90)
             {
                 String var6 = var5 == 0 ? "" : "_" + String.valueOf(var5);
-                URL var7 = this.getClass().getResource("/FossilStructers/shipWrecks/" + this.shipList[var4] + var6 + ".schematic");
+                URL var7 = this.getClass().getResource("/mod/fossil/common/structers/shipWrecks/" + this.shipList[var4] + var6 + ".schematic");
 
                 if (var7 != null)
                 {
@@ -93,12 +93,22 @@ public class WorldGenShipWreck implements IWorldGenerator
             }
         }
     }
+    
+    @Override
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) 
+	{
+		switch (world.provider.dimensionId)
+		  {
+		   case -1: generateNether(world, random, chunkX*16, chunkZ*16);
+		   case 0: generateSurface(world, random, chunkX*16, chunkZ*16);
+		  }		
+	}
 
-    public void generate(Random var1, int var2, int var3, World var4, IChunkProvider var5, IChunkProvider var6)
+    private void generateSurface(World world, Random random, int blockX, int blockZ)
     {
         int var7 = 60;
-        var2 *= 16;
-        var3 *= 16;
+        blockX *= 16;
+        blockZ *= 16;
 
         if (this.loaded)
         {
@@ -106,7 +116,7 @@ public class WorldGenShipWreck implements IWorldGenerator
 
             if (!this.ModelTagList.isEmpty())
             {
-                CompoundTag var9 = (CompoundTag)this.ModelTagList.get(var1.nextInt(this.ModelTagList.size()));
+                CompoundTag var9 = (CompoundTag)this.ModelTagList.get(random.nextInt(this.ModelTagList.size()));
                 this.WidthX = ((ShortTag)((ShortTag)var9.getValue().get("Width"))).getValue().shortValue();
                 this.Layers = ((ShortTag)((ShortTag)var9.getValue().get("Height"))).getValue().shortValue();
                 int var10000 = this.Layers;
@@ -131,9 +141,9 @@ public class WorldGenShipWreck implements IWorldGenerator
                 {
                     this.ShipCount = 12500;
                     int var14 = 0;
-                    this.SelfType = EnumShipTypes.GetRandom(var1);
+                    this.SelfType = EnumShipTypes.GetRandom(random);
 
-                    for (this.Damages = new RelicHoleList(var1, this.WidthX, this.Layers, this.WidthZ, this.BlockArray, -1, -1); !var4.isBlockNormalCube(var2 + this.WidthX / 2, var7, var3 + this.WidthZ / 2); --var7)
+                    for (this.Damages = new RelicHoleList(random, this.WidthX, this.Layers, this.WidthZ, this.BlockArray, -1, -1); !world.isBlockNormalCube(blockX + this.WidthX / 2, var7, blockZ + this.WidthZ / 2); --var7)
                     {
                         ;
                     }
@@ -142,7 +152,7 @@ public class WorldGenShipWreck implements IWorldGenerator
 
                     for (var11 = 0; var11 < this.Layers - var8; ++var11)
                     {
-                        if (var4.getBlockMaterial(var2 - this.WidthX / 2, var7 + var11, var3 - this.WidthZ / 2) == Material.water)
+                        if (world.getBlockMaterial(blockX - this.WidthX / 2, var7 + var11, blockZ - this.WidthZ / 2) == Material.water)
                         {
                             ++var14;
 
@@ -189,28 +199,28 @@ public class WorldGenShipWreck implements IWorldGenerator
                                             var16 = this.SelfType.getMetaData();
                                         }
 
-                                        var4.setBlockAndMetadata(var2 - this.WidthX / 2 + var10, var7 + var11, var3 - this.WidthZ / 2 + var12, var15, var16);
+                                        world.setBlockAndMetadata(blockX - this.WidthX / 2 + var10, var7 + var11, blockZ - this.WidthZ / 2 + var12, var15, var16);
 
                                         if (Block.blocksList[var15].hasTileEntity(var16))
                                         {
-                                            this.SetupTileEntitys(var4, var1, var2 - this.WidthX / 2 + var10, var7 + var11, var3 - this.WidthZ / 2 + var12);
+                                            this.SetupTileEntitys(world, random, blockX - this.WidthX / 2 + var10, var7 + var11, blockZ - this.WidthZ / 2 + var12);
                                         }
                                     }
-                                    else if (var1.nextInt(10000) < 5)
+                                    else if (random.nextInt(10000) < 5)
                                     {
-                                        EntityBones var17 = new EntityBones(var4);
-                                        var17.setLocationAndAngles((double)(var2 - this.WidthX / 2 + var10), (double)(var7 + var11), (double)(var3 - this.WidthZ / 2 + var12), var1.nextFloat() * 360.0F, 0.0F);
+                                        EntityBones var17 = new EntityBones(world);
+                                        var17.setLocationAndAngles((double)(blockX - this.WidthX / 2 + var10), (double)(var7 + var11), (double)(blockZ - this.WidthZ / 2 + var12), random.nextFloat() * 360.0F, 0.0F);
 
-                                        if (var4.checkIfAABBIsClear(var17.boundingBox) && var4.getCollidingBoundingBoxes(var17, var17.boundingBox).size() == 0)
+                                        if (world.checkIfAABBIsClear(var17.boundingBox) && world.getCollidingBoundingBoxes(var17, var17.boundingBox).size() == 0)
                                         {
-                                            var4.spawnEntityInWorld(var17);
+                                            world.spawnEntityInWorld(var17);
                                         }
                                     }
                                 }
                             }
                         }
 
-                        Fossil.DebugMessage("Placing shipwreck of " + this.SelfType.toString() + " at " + var2 + ',' + var7 + ',' + var3);
+                        Fossil.DebugMessage("Placing shipwreck of " + this.SelfType.toString() + " at " + blockX + ',' + var7 + ',' + blockZ);
                     }
                 }
             }
@@ -440,4 +450,10 @@ public class WorldGenShipWreck implements IWorldGenerator
 
         return var2 == 900 ? new ItemStack(Item.compass) : null;
     }
+    
+    private void generateNether(World world, Random random, int blockX, int blockZ) 
+	{
+			  
+	}
+    
 }

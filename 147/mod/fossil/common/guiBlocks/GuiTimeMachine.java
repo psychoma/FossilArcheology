@@ -30,7 +30,7 @@ public class GuiTimeMachine extends GuiContainer
 
     protected void drawGuiContainerForegroundLayer()
     {
-        int var1 = 16711680;
+        //int var1 = 16711680;
         String var2 = this.timeMachineInstance.getChargeLevel() / 10 + "%";
         int var3 = (34 - this.fontRenderer.getStringWidth(var2)) / 2;
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);

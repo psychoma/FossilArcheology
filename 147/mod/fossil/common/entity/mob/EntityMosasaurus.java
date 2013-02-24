@@ -696,7 +696,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         }
     }*/
 
-    public void ShowPedia(EntityPlayer var1)
+    /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);
 
@@ -723,7 +723,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         }
 
         return var1;
-    }
+    }*/
 
     public void HandleBoatSinking()
     {

@@ -675,7 +675,7 @@ public class EntityRaptor extends EntityDinosaurce
         }
     }*/
 
-    public void ShowPedia(EntityPlayer var1)
+    /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);
 
@@ -689,15 +689,15 @@ public class EntityRaptor extends EntityDinosaurce
             /*if (this.isLeartChest())
             {
                 Fossil.ShowMessage(EnableChestText, var1);
-            }*/
+            }*
         }
         else
         {
             Fossil.ShowMessage(UntamedText, var1);
         }
-    }
+    }*/
 
-    public String[] additionalPediaMessage()
+    /*public String[] additionalPediaMessage()
     {
         String[] var1 = null;
 
@@ -712,7 +712,7 @@ public class EntityRaptor extends EntityDinosaurce
             /*if (this.isLeartChest())
             {
                 var2.add(EnableChestText);
-            }*/
+            }*
 
             if (!var2.isEmpty())
             {
@@ -722,7 +722,7 @@ public class EntityRaptor extends EntityDinosaurce
         }
 
         return var1;
-    }
+    }*/
 
     /*public void SetOrder(EnumOrderType var1)
     {

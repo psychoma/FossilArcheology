@@ -184,7 +184,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         return var3;
     }*/
 
-    public void ShowPedia(EntityPlayer var1)
+    /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);
 
@@ -199,9 +199,9 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         {
             Fossil.ShowMessage(UntamedText, var1);
         }
-    }
+    }*/
 
-    public String[] additionalPediaMessage()
+    /*public String[] additionalPediaMessage()
     {
         String[] var1 = null;
 
@@ -226,7 +226,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         }
 
         return var1;
-    }
+    }*/
 
     /**
      * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.

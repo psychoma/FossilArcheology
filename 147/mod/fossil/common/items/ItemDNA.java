@@ -32,50 +32,50 @@ public class ItemDNA extends Item
         return "/mod/fossil/common/textures/Fos_items.png";
     }
 
-    /*public String getItemNameIS(ItemStack var1)
+    /*public int getItemName(ItemStack var1)
     {
-        switch (ItemDNA$1.$SwitchMap$mod_Fossil$EnumDinoType[this.GetTypeFromInt(var1.getItemDamage()).ordinal()])
+        switch (itemID)
         {
             case 1:
-                return "DNAtriceratops";
+                return Fossil.dnaTriceratops.itemID;
 
             case 2:
-                return "DNARaptor";
+                return Fossil.dnaRaptor.itemID;
 
             case 3:
-                return "DNATRex";
+                return Fossil.dnaTRex.itemID;
 
             case 4:
-                return "DNAPterosaur";
+                return Fossil.dnaPterosaur.itemID;
 
             case 5:
-                return "DNANautilus";
+                return Fossil.dnaNautilus.itemID;
 
             case 6:
-                return "DNAPlesiosaur";
+                return Fossil.dnaPlesiosaur.itemID;
 
             case 7:
-                return "DNAMosasaurus";
+                return Fossil.dnaMosasaurus.itemID;
 
             case 8:
-                return "DNAStegosaurus";
+                return Fossil.dnaStegosaurus.itemID;
 
             case 9:
-                return "DNAUtahraptor";
+                return Fossil.dnaUtahraptor.itemID;
 
             case 10:
-                return "DNABrachiosaurus";
+                return Fossil.dnaBrachiosaurus.itemID;
 
             default:
-                return "DNA";
+                return Fossil.dna.itemID;
         }
     }*/
 
-    private EnumDinoType GetTypeFromInt(int var1)
+    /*private EnumDinoType GetTypeFromInt(int var1)
     {
         EnumDinoType[] var2 = EnumDinoType.values();
         return var2[var1];
-    }
+    }*/
 
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)

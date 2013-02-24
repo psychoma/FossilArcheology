@@ -39,6 +39,14 @@ public class EntityNautilus extends EntityWaterMob
     }
 
     /**
+     * Called to update the entity's position/logic.
+     */
+    public void onUpdate()
+    {
+        super.onUpdate();
+        HandleBreed();
+    }
+    /**
      * Returns the sound this mob makes while it's alive.
      */
     protected String getLivingSound()
@@ -253,14 +261,14 @@ public class EntityNautilus extends EntityWaterMob
                     {
                         ++var2;
 
-                        if (var2 > 50)
+                        if (var2 > 30)//too many, start damaging them
                         {
-                            var1 = true;
+                            var1 = true;//restart
                             var4 = 0;
                         }
                     }
                     else
-                    {
+                    {//damage them
                         EntityNautilus var5 = (EntityNautilus)((EntityNautilus)var3.get(var4));
                         var5.attackEntityFrom(DamageSource.starve, 100);
                     }
@@ -269,25 +277,26 @@ public class EntityNautilus extends EntityWaterMob
 
             if (!var1)
             {
-                if (var2 > 10)
+                if (var2 > 30)
                 {
-                    var2 = 10;
+                    ;//no more
                 }
-
-                EntityNautilus var6 = null;
-
-                if ((new Random()).nextInt(100) < var2)
+                else
                 {
-                    var6 = new EntityNautilus(this.worldObj);
-                    var6.setLocationAndAngles(this.posX + (double)((new Random()).nextInt(3) - 1), this.posY, this.posZ + (double)((new Random()).nextInt(3) - 1), this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+                	EntityNautilus var6 = null;
 
-                    if (this.worldObj.checkIfAABBIsClear(var6.boundingBox) && this.worldObj.getCollidingBoundingBoxes(var6, var6.boundingBox).size() == 0 && this.worldObj.isAnyLiquid(var6.boundingBox))
-                    {
-                        this.worldObj.spawnEntityInWorld(var6);
-                    }
+	                if ((new Random()).nextInt(100)+1 < var2)
+	                {
+	                    var6 = new EntityNautilus(this.worldObj);
+	                    var6.setLocationAndAngles(this.posX + (double)((new Random()).nextInt(3) - 1), this.posY, this.posZ + (double)((new Random()).nextInt(3) - 1), this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+	
+	                    if (this.worldObj.checkIfAABBIsClear(var6.boundingBox) && this.worldObj.getCollidingBoundingBoxes(var6, var6.boundingBox).size() == 0 && this.worldObj.isAnyLiquid(var6.boundingBox))
+	                    {
+	                        this.worldObj.spawnEntityInWorld(var6);
+	                    }
+	                }
                 }
             }
-
             this.BreedTick = 3000;
         }
     }

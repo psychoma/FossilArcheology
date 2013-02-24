@@ -419,7 +419,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
     {
         ItemStack var2;
 
-        switch (EntityJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[this.SelfMaterial.ordinal()])
+        switch (this.SelfMaterial.ordinal())//EntityJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[this.SelfMaterial.ordinal()])
         {
             case 1:
             default:
@@ -457,7 +457,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
 
     private Item GetJavelinByMaterial()
     {
-        switch (EntityJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[this.SelfMaterial.ordinal()])
+        switch (this.SelfMaterial.ordinal())//EntityJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[this.SelfMaterial.ordinal()])
         {
             case 1:
             default:

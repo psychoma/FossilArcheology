@@ -125,19 +125,19 @@ public class TileEntityDrum extends TileEntity
             if (var1 == Item.stick.itemID)
             {
                 this.OrderTri();
-                var3 = EntityDinosaurce.GetNameByEnum(EnumDinoType.Triceratops, true);
+                var3 = Fossil.GetLangTextByKey("Dino.Triceratops");
             }
 
             if (var1 == Item.bone.itemID)
             {
                 this.OrderRaptor();
-                var3 = EntityDinosaurce.GetNameByEnum(EnumDinoType.Raptor, true);
+                var3 = Fossil.GetLangTextByKey("Dino.Raptor");
             }
 
             if (var1 == Item.arrow.itemID)
             {
                 this.OrderPTS();
-                var3 = EntityDinosaurce.GetNameByEnum(EnumDinoType.Pterosaur, true);
+                var3 = Fossil.GetLangTextByKey("Dino.Pterosaur");
             }
 
             if (var1 == Fossil.skullStick.itemID)

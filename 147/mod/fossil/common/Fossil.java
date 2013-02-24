@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
@@ -12,7 +13,6 @@ import mod.fossil.client.FossilCfgLoader;
 import mod.fossil.client.FossilGuiHandler;
 import mod.fossil.client.FossilMessageHandler;
 import mod.fossil.client.FossilOptions;
-import mod.fossil.common.*;
 import mod.fossil.common.blocks.BlockFern;
 import mod.fossil.common.blocks.BlockFossil;
 import mod.fossil.common.blocks.BlockFossilSkull;
@@ -48,7 +48,9 @@ import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumEmbyos;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.gens.FossilGenerator;
+import mod.fossil.common.gens.WorldGenAcademy;
 import mod.fossil.common.gens.WorldGenShipWreck;
+import mod.fossil.common.gens.WorldGenWeaponShopA;
 import mod.fossil.common.guiBlocks.BlockAnalyzer;
 import mod.fossil.common.guiBlocks.BlockCultivate;
 import mod.fossil.common.guiBlocks.BlockDrum;
@@ -89,6 +91,7 @@ import mod.fossil.common.items.forgeItems.ForgeItemSpade;
 import mod.fossil.common.items.forgeItems.ForgeItemSword;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumToolMaterial;
@@ -138,11 +141,11 @@ public class Fossil
 	public static FossilGuiHandler GH = new FossilGuiHandler();
 	public static Properties LangProps = new Properties();
 	public static int blockRendererID = 0;
+	public static Object ToPedia;
 	
-	private static final File Langdir = new File("/Fossillang/");
-    public static final String DEFAULT_LANG = "en_US";
-    public static String LastLangSetting = "en_US";
-	private static File Langfile = new File(Langdir, LastLangSetting + ".lang");
+	//private static final File Langdir = new File("/lang");
+    //public static String LastLangSetting = "en_US";
+	//private static File Langfile = new File(Langdir, LastLangSetting + ".lang");
 	public static IChatListener messagerHandler = new FossilMessageHandler();
 	
 	/*
@@ -220,7 +223,7 @@ public class Fossil
     public static Item whip;
 	
 	//DNA
-	//public static Item dna;
+	public static Item dna;
 	public static Item dnaTriceratops;
 	public static Item dnaRaptor;
 	public static Item dnaTRex;
@@ -232,12 +235,13 @@ public class Fossil
 	public static Item dnaUtahraptor;
 	public static Item dnaBrachiosaurus;
 
-	//public static Item animalDNA;
+	public static Item animalDNA;
 	public static Item dnaPig;
 	public static Item dnaSheep;
 	public static Item dnaTCow;
 	public static Item dnaChicken;
 	public static Item dnaSaberCat;
+	public static Item dnaMammoth;
 	
 	//Ancient Egg
 	public static Item ancientegg;
@@ -345,6 +349,7 @@ public class Fossil
 	public static int dnaTCowID;
 	public static int dnaChickenID;
 	public static int dnaSaberCatID;
+	public static int dnaMammothID;
 	
 	//Ancient Egg
 	public static int ancienteggID;
@@ -389,6 +394,7 @@ public class Fossil
 	public void PreInit(FMLPreInitializationEvent event)
 	{
 		proxy.registerSounds();
+		UpdateLangProp();
 		
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
@@ -459,7 +465,8 @@ public class Fossil
 		dnaTCowID = config.getItem(Configuration.CATEGORY_ITEM, "dnaTCow", 12038).getInt(12038);
 		dnaChickenID = config.getItem(Configuration.CATEGORY_ITEM, "dnaChicken", 12039).getInt(12039);
 		dnaSaberCatID = config.getItem(Configuration.CATEGORY_ITEM, "dnaSaberCat", 12040).getInt(12040);
-	
+		dnaMammothID = config.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 12075).getInt(12075);
+		
 		//Ancient Egg
 		ancienteggID = config.getItem(Configuration.CATEGORY_ITEM, "ancientegg", 12041).getInt(12041);
 		eggTriceratopsID = config.getItem(Configuration.CATEGORY_ITEM, "eggTriceratops", 12042).getInt(12042);
@@ -571,7 +578,7 @@ public class Fossil
 		
 		//DNA
 		//public static Item dna;
-		//dna = new ItemDNA(12045).setIconIndex(0).setItemName("DNA").setCreativeTab(CreativeTabs.tabMaterials);
+		dna = new ItemDNA(12076);
 		dnaTriceratops = new ItemDNA(dnaTriceratopsID).setIconIndex(6).setItemName("dnaTriceratops").setCreativeTab(this.tabFMaterial);
 		dnaRaptor = new ItemDNA(dnaRaptorID).setIconIndex(7).setItemName("dnaRaptor").setCreativeTab(this.tabFMaterial);
 		dnaTRex = new ItemDNA(dnaTRexID).setIconIndex(8).setItemName("dnaTRex").setCreativeTab(this.tabFMaterial);
@@ -584,13 +591,14 @@ public class Fossil
 		dnaBrachiosaurus = new ItemDNA(dnaBrachiosaurusID).setIconIndex(15).setItemName("dnaBrachiosaurus").setCreativeTab(this.tabFMaterial);
 
 		//public static Item animalDNA;
-		//animalDNA = new ItemNonDinoDNA(12056).setIconIndex(0).setItemName("AnimalDNA").setCreativeTab(CreativeTabs.tabMisc);
+		animalDNA = new ItemNonDinoDNA(12077);
 		dnaPig = new ItemNonDinoDNA(dnaPigID).setIconIndex(70).setItemName("dnaPig").setCreativeTab(this.tabFMaterial);
 		dnaSheep = new ItemNonDinoDNA(dnaSheepID).setIconIndex(71).setItemName("dnaSheep").setCreativeTab(this.tabFMaterial);
 		dnaTCow = new ItemNonDinoDNA(dnaTCowID).setIconIndex(72).setItemName("dnaTCow").setCreativeTab(this.tabFMaterial);
 		dnaChicken = new ItemNonDinoDNA(dnaChickenID).setIconIndex(73).setItemName("dnaChicken").setCreativeTab(this.tabFMaterial);
 		dnaSaberCat = new ItemNonDinoDNA(dnaSaberCatID).setIconIndex(74).setItemName("dnaSaberCat").setCreativeTab(this.tabFMaterial);
-	
+		dnaMammoth = new ItemNonDinoDNA(dnaMammothID).setIconIndex(75).setItemName("dnaMammoth").setCreativeTab(this.tabFMaterial);
+		
 		//Ebryos
 		//embyoSyringe = new ItemEmbryoSyringe(embyoSyringeID).setIconIndex(0).setItemName("EmbryoSyringe").setCreativeTab(this.tabFItems);
 		embryoPig = new ItemEmbryoSyringe(embryoPigID).setIconIndex(0).setItemName("embryoPig").setCreativeTab(this.tabFItems);
@@ -600,7 +608,7 @@ public class Fossil
 		embryoMammoth = new ItemEmbryoSyringe(embryoMammothID).setIconIndex(4).setItemName("embryoMammoth").setCreativeTab(this.tabFItems);
 		
 		//Item Food
-		//rawDinoMeat = new ItemDinoMeat(12062, 3, 0.3F, true).setIconIndex(0).setItemName("DinoMeat").setCreativeTab(CreativeTabs.tabFood);
+		rawDinoMeat = new ItemDinoMeat(12078, 3, 0.3F, true);
 		rawTriceratops = new ItemDinoMeat(rawTriceratopsID, 3, 0.3F, true).setIconIndex(0).setItemName("Triceratops Meat").setCreativeTab(this.tabFFood);
 		rawRaptor = new ItemDinoMeat(rawRaptorID, 3, 0.3F, true).setIconIndex(0).setItemName("Raptor Meat").setCreativeTab(this.tabFFood);
 		rawTRex = new ItemDinoMeat(rawTRexID, 3, 0.3F, true).setIconIndex(0).setItemName("TRex Meat").setCreativeTab(this.tabFFood);
@@ -720,7 +728,8 @@ public class Fossil
 		LanguageRegistry.addName(dnaTCow, "DNA TCow");
 		LanguageRegistry.addName(dnaChicken, "DNA Chicken");
 		LanguageRegistry.addName(dnaSaberCat, "DNA SaberCat");
-        
+		LanguageRegistry.addName(dnaMammoth, "DNA Mammoth");
+		
 		//Embryo
 		LanguageRegistry.addName(embryoPig, "embryoPig");
 		LanguageRegistry.addName(embryoSheep, "embryoSheep");
@@ -815,8 +824,8 @@ public class Fossil
 		EntityRegistry.registerModEntity(EntityBrachiosaurus.class, "Brachiosaurus", 23, this, 250, 5, true);
 		EntityRegistry.registerModEntity(EntityMammoth.class, "Mammoth", 24, this, 250, 5, true);
 
-		//GameRegistry.registerWorldGenerator(new FossilGenerator());
-		//GameRegistry.registerWorldGenerator(new WorldGenAcademy());
+		GameRegistry.registerWorldGenerator(new FossilGenerator());
+		GameRegistry.registerWorldGenerator(new WorldGenAcademy());
 		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck());
 		//GameRegistry.registerWorldGenerator(new WorldGenWeaponShopA());
 
@@ -885,8 +894,10 @@ public class Fossil
 	
 	public static String GetLangTextByKey(String var0)
 	{
-			String var1 = LangProps.getProperty(var0, " ");
-			return var1;
+		String var1 = LangProps.getProperty(var0, "");
+		if(var1=="" && DebugMode)
+			System.err.println("Error finding language key entry: " + var0);
+		return var1;
 	}
 
 	public static void ShowMessage(String var0, EntityPlayer var1)
@@ -906,47 +917,76 @@ public class Fossil
 	}
 
 	/*public static int EnumToInt(EnumOrderType var0)
-	{// NOT NEEDED BY ANYONE
+	{// NOT NEEDED BY ANYONE==>USE .ordinal
 			return var0.ToInt();
 	}*/
 
-	public static void UpdateLangProp() throws IOException
+	public static void UpdateLangProp()
 	{
-			String var0 = LastLangSetting;
+    		//Langfile = new File(Fossil.class.getResource("/Fossillang/" + LastLangSetting + ".lang").getFile());
+				
+			//UTF8Reader(LangProps);
+			//System.out.println("LANGUAGE: "+Minecraft.getMinecraft().gameSettings.language);
+			String file="E:/Tims Büro/Programmieren/Java/MC/FA/forge/mcp/eclipse/Minecraft/bin/mod/fossil/common/Fossillang/en_US.lang";
+
+			try
+			{
+				//InputStream i0=Fossil.class.getResourceAsStream(file);
+				//BufferedReader var2 = new BufferedReader(new InputStreamReader(Fossil.class.getResourceAsStream(file), "UTF-8"));
+				BufferedReader var2 = new BufferedReader(new FileReader(file));
+				for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())//"/Fossillang/" + var1 + ".lang"
+				{
+		    		var3 = var3.trim();
+		
+		    		if (!var3.startsWith("#"))
+		    		{
+		        		String[] var4 = var3.split("=");
+		        		if (var4 != null && var4.length == 2)
+		        		{
+		        			LangProps.setProperty(var4[0], var4[1]);
+		        			if(Fossil.DebugMode)
+		        				System.out.println("SUCCESS: "+var4[0]+" added");
+		        		}
+		    		}
+				}
+			}
+			catch(IOException e)
+			{
+				System.err.println("Error loading language file: " + e.getMessage());
+			}
+	}
+
+	/*private static void UTF8Reader(Properties var0)
+	{
+		System.out.println("LANGUAGE: "+Minecraft.getMinecraft().gameSettings.language);
+		String file="E:/Tims Büro/Programmieren/Java/MC/FA/forge/mcp/eclipse/Minecraft/bin/mod/fossil/common/Fossillang/en_US.lang";
 
 		try
 		{
-    			Langfile = new File(Fossil.class.getResource("/Fossillang/" + LastLangSetting + ".lang").getFile());
+			//InputStream i0=Fossil.class.getResourceAsStream(file);
+			//BufferedReader var2 = new BufferedReader(new InputStreamReader(Fossil.class.getResourceAsStream(file), "UTF-8"));
+			BufferedReader var2 = new BufferedReader(new FileReader(file));
+			for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())//"/Fossillang/" + var1 + ".lang"
+			{
+	    		var3 = var3.trim();
+	
+	    		if (!var3.startsWith("#"))
+	    		{
+	        		String[] var4 = var3.split("=");
+	        		if (var4 != null && var4.length == 2)
+	        		{
+	        			var0.setProperty(var4[0], var4[1]);
+	        			if(Fossil.DebugMode)
+	        				System.out.println("SUCCESS: "+var4[0]+" added");
+	        		}
+	    		}
+			}
 		}
-		catch (Throwable var5)
+		catch(IOException e)
 		{
-    			var0 = "en_US";
-	 	}
-		finally
-		{
-    			UTF8Reader(LangProps, var0);
+			System.err.println("Error loading language file: " + e.getMessage());
 		}
-	}
-
-	private static void UTF8Reader(Properties var0, String var1) throws IOException
-	{
-		BufferedReader var2 = new BufferedReader(new InputStreamReader(Fossil.class.getResourceAsStream("/Fossillang/" + var1 + ".lang"), "UTF-8"));
-
-		for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())
-		{
-    			var3 = var3.trim();
-
-    			if (!var3.startsWith("#"))
-    		{
-        			String[] var4 = var3.split("=");
-
-        			if (var4 != null && var4.length == 2)
-        		{
-           	 var0.setProperty(var4[0], var4[1]);
-        		}
-    		}
-		}
-	}
+	}*/
 
 	private void SetupOptions()
 	{

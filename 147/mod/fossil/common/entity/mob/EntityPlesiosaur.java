@@ -858,7 +858,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         }
     }
 
-    public void ShowPedia(EntityPlayer var1)
+    /*public void ShowPedia(EntityPlayer var1)
     {
         if (this.isTamed())
         {
@@ -871,9 +871,9 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         {
             Fossil.ShowMessage(UntamedText, var1);
         }
-    }
+    }*/
 
-    public String[] additionalPediaMessage()
+    /*public String[] additionalPediaMessage()
     {
         String[] var1 = null;
 
@@ -898,7 +898,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         }
 
         return var1;
-    }
+    }*/
 
     /**
      * This method gets called when the entity kills another one.

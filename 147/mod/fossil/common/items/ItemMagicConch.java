@@ -54,7 +54,7 @@ public class ItemMagicConch extends Item
         String var6 = "Head";
         String var7 = "Middle";
         String var8 = "Tail";
-        String var9 = EntityDinosaurce.GetNameByEnum(EnumDinoType.Plesiosaur, true);
+        String var9 = Fossil.GetLangTextByKey("Dino.Plesiosaur");//EntityDinosaurce.GetNameByEnum(EnumDinoType.Plesiosaur, true);
         String var10 = Fossil.GetLangTextByKey("Drum.Msg.Head");
         String var11 = Fossil.GetLangTextByKey("Drum.Msg.Middle");
         String var12 = Fossil.GetLangTextByKey("Drum.Msg.Tail");
@@ -74,7 +74,7 @@ public class ItemMagicConch extends Item
             }
         }
 
-        var13 = EnumOrderType.values()[var1.getItemDamage()].GetOrderString();
+        var13 = Fossil.GetLangTextByKey("Order." +EnumOrderType.values()[var1.getItemDamage()].toString());
         Fossil.ShowMessage(var10 + var9 + var11 + " " + var13 + var12, var3);
         return var1;
     }

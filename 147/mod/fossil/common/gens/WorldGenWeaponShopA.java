@@ -40,7 +40,7 @@ public class WorldGenWeaponShopA implements IWorldGenerator
     public WorldGenWeaponShopA()
     {
         Class var1 = this.getClass();
-        URL var2 = var1.getResource("/FossilStructers/");
+        URL var2 = var1.getResource("/mod/fossil/common/structures/");
         String var3 = var2.getFile();
         File var4 = new File(var3);
         this.SchFile = new File(var4, "WeaponShopA.schematic");
@@ -64,16 +64,26 @@ public class WorldGenWeaponShopA implements IWorldGenerator
             Fossil.DebugMessage("WeaponShopA model loaded");
         }
     }
+    
+    @Override
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) 
+	{
+		switch (world.provider.dimensionId)
+		  {
+		   case -1: generateNether(world, random, chunkX*16, chunkZ*16);
+		   case 0: generateSurface(world, random, chunkX*16, chunkZ*16);
+		  }		
+	}
 
-    public void generate(Random var1, int var2, int var3, World var4, IChunkProvider var5, IChunkProvider var6)
+    private void generateSurface(World world, Random random, int blockX, int blockZ)
     {
-        var2 *= 16;
-        var3 *= 16;
+        blockX *= 16;
+        blockZ *= 16;
         byte var7 = 50;
 
         if (!this.ModelTagList.isEmpty())
         {
-            CompoundTag var8 = (CompoundTag)this.ModelTagList.get(var1.nextInt(this.ModelTagList.size()));
+            CompoundTag var8 = (CompoundTag)this.ModelTagList.get(random.nextInt(this.ModelTagList.size()));
             this.WidthX = ((ShortTag)((ShortTag)var8.getValue().get("Width"))).getValue().shortValue();
             this.Layers = ((ShortTag)((ShortTag)var8.getValue().get("Height"))).getValue().shortValue();
             this.WidthZ = ((ShortTag)((ShortTag)var8.getValue().get("Length"))).getValue().shortValue();
@@ -93,11 +103,11 @@ public class WorldGenWeaponShopA implements IWorldGenerator
                 byte var18 = 11;
                 boolean var19 = false;
 
-                for (int var20 = var2; var20 <= var2 + var17; ++var20)
+                for (int var20 = blockX; var20 <= blockX + var17; ++var20)
                 {
-                    for (int var21 = var3; var21 <= var3 + var18; ++var21)
+                    for (int var21 = blockZ; var21 <= blockZ + var18; ++var21)
                     {
-                        Material var22 = var4.getBlockMaterial(var20, var7, var21);
+                        Material var22 = world.getBlockMaterial(var20, var7, var21);
 
                         if (!var22.isSolid())
                         {
@@ -121,17 +131,17 @@ public class WorldGenWeaponShopA implements IWorldGenerator
                                 var14 = 0;
                             }
 
-                            var4.setBlockAndMetadata(var2 - var17 / 2 + var9, var7 + var10, var3 - var18 / 2 + var11, var14, var15);
+                            world.setBlockAndMetadata(blockX - var17 / 2 + var9, var7 + var10, blockZ - var18 / 2 + var11, var14, var15);
 
                             if (var14 == Block.chest.blockID)
                             {
-                                this.SetupTileEntitys(var4, var1, var2 - var17 / 2 + var9, var7 + var10, var3 - var18 / 2 + var11);
+                                this.SetupTileEntitys(world, random, blockX - var17 / 2 + var9, var7 + var10, blockZ - var18 / 2 + var11);
                             }
                         }
                     }
                 }
 
-                Fossil.DebugMessage("Placing Weapon Shop-A at " + var2 + ',' + var7 + ',' + var3);
+                Fossil.DebugMessage("Placing Weapon Shop-A at " + blockX + ',' + var7 + ',' + blockZ);
             }
         }
     }
@@ -169,4 +179,10 @@ public class WorldGenWeaponShopA implements IWorldGenerator
             }
         }
     }
+    
+    private void generateNether(World world, Random random, int blockX, int blockZ) 
+	{
+			  
+	}
+    
 }
