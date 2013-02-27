@@ -19,11 +19,17 @@ import mod.fossil.common.Fossil;
 @SideOnly(Side.CLIENT)
 public class GuiPedia extends GuiContainer
 {
+	int left;//counter for text added on the left side
+	int right;//same for the right side
+	int items;//counter for the minipics down
     public GuiPedia(/*InventoryPlayer var1*/)
     {
         super(new ContainerPedia());
         this.xSize = 178;
         this.ySize = 164;
+        left=0;
+        right=0;
+        items=0;
     }
 
     /**
@@ -33,22 +39,40 @@ public class GuiPedia extends GuiContainer
     {
         super.initGui();
     }
-
     /**
-     * Print a String to left or Right, starting with 0
+     * Resets the y-offset for left and right side
+     */
+    public void reset()
+    {
+    	this.left=0;
+    	this.right=0;
+    	this.items=0;
+    }
+    /**
+     * Print a String to left or Right, starting with line 0
      */
     public void PrintStringLR(String str0,boolean left0,int line)
     {
-    	//this.fontRenderer.drawString(str0, 20+(left0? 80 : 0), 15+(left0 ? left++*15 :right++*15), 4210752);//Doesn't work because can't reset left or right
-    	this.fontRenderer.drawString(str0, 18+(left0? 0 : 78), 15*(line+1), 4210752);
+    	this.fontRenderer.drawString(str0, 16+(left0? 0 : 81), 12*(line+1), 4210752);
     }
     public void PrintStringLR(String str0,boolean left0,int line,int r,int g,int b)
     {
-    	//this.fontRenderer.drawString(str0, 20+(left0? 80 : 0), 15+(left0 ? left++*15 :right++*15), 4210752);//Doesn't work because can't reset left or right
     	int col=(r << 16) | (g << 8) | b;
-    	this.fontRenderer.drawString(str0, 18+(left0? 0 : 78), 15*(line+1), col);
+    	this.fontRenderer.drawString(str0, 16+(left0? 0 : 81), 12*(line+1), col);
     }
     
+    /**
+     * Add a String to the left or right side, starting with 0
+     */
+    public void AddStringLR(String str0,boolean left0)
+    {
+    	this.fontRenderer.drawString(str0, 16+(left0? 0 : 81), 12*((left0?this.left++:this.right++)+1), 4210752);
+    }
+    public void AddStringLR(String str0,boolean left0,int r,int g,int b)
+    {
+    	int col=(r << 16) | (g << 8) | b;
+    	this.fontRenderer.drawString(str0, 16+(left0? 0 : 81), 12*((left0?this.left++:this.right++)+1), col);
+    }
     /**
      * Print a String to X,Y
      */
@@ -63,10 +87,18 @@ public class GuiPedia extends GuiContainer
     }
     
     /**
-     * Print a Symbol at X,Y
+     * Print a Symbol at X,Y with zoom factor zoom: x*16 pixels. 0 means 8,-1 means 4
      */
     public void PrintItemXY(Item it0,int x0,int y0)
     {
+    	this.PrintItemXY(it0, x0, y0,1);
+    }
+    public void PrintItemXY(Item it0,int x0,int y0, int zoom)
+    {
+    	int i=zoom*16;
+    	if(i<0)i=4;
+    	if(i==0)i=8;
+    	if(i>160)i=160;
     	double px=((double)(it0.getIconFromDamage(0)%16))/16D;
     	double py=((double)(it0.getIconFromDamage(0)/16))/16D;
     	
@@ -75,14 +107,20 @@ public class GuiPedia extends GuiContainer
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Tessellator var9 = Tessellator.instance;
         var9.startDrawingQuads();
-        var9.addVertexWithUV((double)x0			, (double)(y0 + 16)	, 0D, px		, py+0.0625D);//x,y,z to place at, the relative x,y of the whole texture
-        var9.addVertexWithUV((double)(x0 + 16)	, (double)(y0 + 16)	, 0D, px+0.0625D, py+0.0625D);
-        var9.addVertexWithUV((double)(x0 + 16)	, (double)y0		, 0D, px+0.0625D, py);
+        var9.addVertexWithUV((double)x0			, (double)(y0 + i)	, 0D, px		, py+0.0625D);//x,y,z to place at, the relative x,y of the whole texture
+        var9.addVertexWithUV((double)(x0 + i)	, (double)(y0 + i)	, 0D, px+0.0625D, py+0.0625D);
+        var9.addVertexWithUV((double)(x0 + i)	, (double)y0		, 0D, px+0.0625D, py);
         var9.addVertexWithUV((double)x0			, (double)y0		, 0D, px		, py);
         var9.draw();
     	int pos0=it0.getIconFromDamage(0);
         //this.drawTexturedModalRect(x0, y0, pos0 % 16 * 16, pos0 / 16 * 16, 16, 16);//Does this, too
     }
+    
+    /**
+     * Places a half-sized item at the bottom of dinopedia
+     */
+    public void AddMiniItem(Item it0)
+    {this.PrintItemXY(it0, 99+8*(items%8),100-8*(items/8),0);items++;}
     
     /**
      * Print a Picture at X,Y

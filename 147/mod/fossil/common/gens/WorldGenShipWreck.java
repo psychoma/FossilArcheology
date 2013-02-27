@@ -231,7 +231,7 @@ public class WorldGenShipWreck implements IWorldGenerator
     {
         int var2 = var1.nextInt(1000);
 
-        switch (WorldGenShipWreck$1.$SwitchMap$mod_Fossil$EnumShipTypes[this.SelfType.ordinal()])
+        switch (this.SelfType.ordinal())
         {
             case 1:
                 if (var2 < 10)
@@ -349,7 +349,7 @@ public class WorldGenShipWreck implements IWorldGenerator
     {
         int var2 = var1.nextInt(1000);
 
-        switch (WorldGenShipWreck$1.$SwitchMap$mod_Fossil$EnumShipTypes[this.SelfType.ordinal()])
+        switch (this.SelfType.ordinal())
         {
             case 1:
                 if (var2 < 100)

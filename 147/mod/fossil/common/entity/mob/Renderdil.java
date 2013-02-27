@@ -1,9 +1,14 @@
 package mod.fossil.common.entity.mob;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -129,7 +134,7 @@ public class Renderdil extends RenderLiving
                 GL11.glEnable(GL11.GL_ALPHA_TEST);
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
             }
-
+            this.renderEquippedItems(var1, var9);
             GL11.glDisable(GL12.GL_RESCALE_NORMAL);
         }
         catch (Exception var24)
@@ -145,6 +150,49 @@ public class Renderdil extends RenderLiving
     public void doRenderLiving(EntityLiving var1, double var2, double var4, double var6, float var8, float var9)
     {
         this.RenderDino((Entitydil)var1, var2, var4, var6, var8, var9);
+    }
+    
+    protected void renderEquippedItems(EntityLiving var1, float var2)
+    {
+        float var3 = 1.0F + 0.0F * (float)((EntityDinosaurce)var1).getDinoAge();
+        ItemStack var4 = ((EntityRaptor)var1).ItemInMouth;
+
+        if (var4 != null)
+        {
+            GL11.glPushMatrix();
+            ((ModelRaptor)this.mainModel).head3_up.postRender(0.01F);
+            float var5;
+
+            if (var4.itemID < 256 && RenderBlocks.renderItemIn3d(Block.blocksList[var4.itemID].getRenderType()))
+            {
+                var5 = 0.5F;
+                GL11.glTranslatef(0.0F, 0.4F, -0.75F);
+                var5 *= 0.75F;
+                GL11.glRotatef(20.0F, 1.0F, 0.0F, 0.0F);
+                GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+                GL11.glScalef(var5 * var3, -var5 * var3, var5 * var3);
+            }
+            else if (Item.itemsList[var4.itemID].isFull3D())
+            {
+                var5 = 0.625F;
+                GL11.glTranslatef(0.0F, 0.4F, -0.75F);
+                GL11.glScalef(var5 * var3, -var5 * var3, var5 * var3);
+                GL11.glRotatef(-100.0F, 1.0F, 0.0F, 0.0F);
+                GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+            }
+            else
+            {
+                var5 = 0.375F;
+                GL11.glTranslatef(0.0F, 0.4F, -0.75F);
+                GL11.glScalef(var5 * var3, var5 * var3, var5 * var3);
+                GL11.glRotatef(60.0F, 0.0F, 0.0F, 1.0F);
+                GL11.glRotatef(-90.0F, 1.0F, 0.0F, 0.0F);
+                GL11.glRotatef(20.0F, 0.0F, 0.0F, 1.0F);
+            }
+
+            this.renderManager.itemRenderer.renderItem(var1, var4, 1);
+            GL11.glPopMatrix();
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 package mod.fossil.common.items;
 
+import java.util.Random;
+
 import mod.fossil.common.blocks.BlockFern;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,6 +41,7 @@ public class ItemFernSeed extends Item
             if (var11 == Block.grass.blockID && var3.isAirBlock(var4, var5 + 1, var6) && BlockFern.CheckUnderTree(var3, var4, var5, var6))
             {
                 var3.setBlockWithNotify(var4, var5 + 1, var6, this.field_318_a);
+                var3.setBlockMetadataWithNotify(var4, var5 + 1, var6, (new Random()).nextInt(2)*8);
                 --var1.stackSize;
                 return true;
             }

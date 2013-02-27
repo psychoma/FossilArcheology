@@ -22,8 +22,8 @@ import net.minecraft.world.World;
 
 public class BlockCultivate extends BlockContainer
 {
-    private final String VAT = "Vat.";
-    private final String ERR_OUTBREAK = "Err.OutBreak";
+    //private final String VAT = "Vat.";
+    //private final String ERR_OUTBREAK = "Err.OutBreak";
     private Random furnaceRand = new Random();
     private final boolean isActive;
     private static boolean keepFurnaceInventory = false;
@@ -221,7 +221,7 @@ public class BlockCultivate extends BlockContainer
     public void onBlockRemovalLost(World var1, int var2, int var3, int var4, boolean var5)
     {
         keepFurnaceInventory = false;
-        String var6 = Fossil.GetLangTextByKey("Vat.Err.OutBreak");
+        String var6 = Fossil.GetLangTextByKey("Cultivate.OutBreak");
 
         for (int var7 = 0; var7 < var1.playerEntities.size(); ++var7)
         {

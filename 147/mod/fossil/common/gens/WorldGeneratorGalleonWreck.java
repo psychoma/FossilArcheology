@@ -11,7 +11,7 @@ public class WorldGeneratorGalleonWreck extends WorldGenerator
 	
 	public boolean generate(World world, Random rand, int i, int j, int k)
 	{
-		
+		System.out.println("Generating GalleonWreck");
 		world.setBlock(i + 0, j + 0, k + 0, Block.bedrock.blockID);
 		world.setBlock(i + 0, j + 0, k + 1, Block.bedrock.blockID);
 		world.setBlock(i + 0, j + 0, k + 2, Block.bedrock.blockID);

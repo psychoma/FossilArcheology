@@ -1,6 +1,9 @@
 package mod.fossil.common.entity.mob;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -18,6 +21,7 @@ import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.fossilEnums.EnumSituation;
+import mod.fossil.common.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
@@ -80,12 +84,15 @@ public class EntityStegosaurus extends EntityDinosaurce
         //this.AgingTicks=;
         this.MaxHunger=500;
         this.Hungrylevel=0.9F;
-        this.ItemToControl=Item.stick;
         this.moveSpeed = this.getSpeed();//should work
         
         this.setSubSpecies((new Random()).nextInt(3) + 1);
         FoodItemList.addItem(EnumDinoFoodItem.Wheat);
         FoodItemList.addItem(EnumDinoFoodItem.Melon);
+        FoodItemList.addItem(EnumDinoFoodItem.Carrot);
+        FoodItemList.addItem(EnumDinoFoodItem.Sugar);
+        FoodItemList.addItem(EnumDinoFoodItem.Cookie);
+        FoodItemList.addItem(EnumDinoFoodItem.Bread);
         
         this.getNavigator().setAvoidsWater(true);
         //this.tasks.addTask(0, new DinoAIStarvation(this));
@@ -119,7 +126,7 @@ public class EntityStegosaurus extends EntityDinosaurce
     {
         super.writeEntityToNBT(var1);
         //var1.setInteger("SubSpecies", this.SubSpecies);
-        var1.setBoolean("Angry", this.isSelfAngry());
+        //var1.setBoolean("Angry", this.isSelfAngry());
         //var1.setBoolean("isBaby", this.isBaby);
     }
 
@@ -132,7 +139,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         //this.SubSpecies = var1.getInteger("SubSpecies");
         //this.isBaby = var1.getBoolean("isBaby");
         this.CheckSkin();
-        this.setSelfAngry(var1.getBoolean("Angry"));
+        //this.setSelfAngry(var1.getBoolean("Angry"));
         //this.setSelfSitting(var1.getBoolean("Sitting"));
         this.InitSize();
     }
@@ -416,13 +423,13 @@ public class EntityStegosaurus extends EntityDinosaurce
     }
     public void CheckSkin()
     {
-        if (this.isBaby())
+        if (this.isAdult())
         {
-            this.texture = "/mod/fossil/common/textures/Stegosaurus_Baby.png";
+            this.texture = "/mod/fossil/common/textures/Stegosaurus_Adult.png";
         }
         else
         {
-            this.texture = "/mod/fossil/common/textures/Stegosaurus_Adult.png";
+            this.texture = "/mod/fossil/common/textures/Stegosaurus_Baby.png";
         }
     }
 
@@ -694,6 +701,13 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    public void ShowPedia(GuiPedia p0)
+    {
+    	super.ShowPedia(p0);
+    	p0.PrintItemXY(Fossil.dnaStegosaurus, 120, 7);
+    }
+    
     /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);

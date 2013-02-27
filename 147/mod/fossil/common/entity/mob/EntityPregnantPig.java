@@ -154,13 +154,13 @@ public class EntityPregnantPig extends EntityPig implements IViviparous, IEntity
     }
 
     public void showPedia(EntityPlayer var1)
-    {
+    {/*
         String var2 = "";
         this.UpdatePediaText();
         int var3 = (int)Math.floor((double)((float)this.EmbyoProgress / 3000.0F * 100.0F));
         Fossil.ShowMessage(this.InsideText + Fossil.GetEmbyoName(this.Embyos), var1);
         Fossil.ShowMessage(this.GrowingText + var3 + "%", var1);
-    }
+    */}
 
     public EntityAnimal spawnBabyAnimal(EntityAnimal var1)
     {

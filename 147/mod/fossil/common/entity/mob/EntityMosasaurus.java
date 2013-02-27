@@ -1,6 +1,8 @@
 package mod.fossil.common.entity.mob;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +17,7 @@ import mod.fossil.common.fossilAI.WaterDinoAIWander;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.fossilInterface.IWaterDino;
+import mod.fossil.common.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -77,7 +80,6 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         //this.AgingTicks=;
         this.MaxHunger=500;
         //this.Hungrylevel=;
-        this.ItemToControl=null;
         this.moveSpeed = this.getSpeed();//should work
         
         this.getNavigator().setCanSwim(true);
@@ -695,7 +697,12 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
             }
         }
     }*/
-
+    @SideOnly(Side.CLIENT)
+    public void ShowPedia(GuiPedia p0)
+    {
+    	super.ShowPedia(p0);
+    	p0.PrintItemXY(Fossil.dnaMosasaurus, 120, 7);
+    }
     /*public void ShowPedia(EntityPlayer var1)
     {
         this.PediaTextCorrection(this.SelfType, var1);

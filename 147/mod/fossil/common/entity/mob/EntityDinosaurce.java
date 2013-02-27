@@ -9,6 +9,8 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 import mod.fossil.common.Fossil;
@@ -87,6 +89,9 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     //Age When Dino gets adult, starts Breeding, is Ridable...
     public int AdultAge = 5;
     
+  //Age When Dino gets teen..
+    public int TeenAge = 3;
+    
     //Ticks the Dino needs for aging, standard 12000
     public int AgingTicks = 12000;
     
@@ -108,9 +113,6 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     //Variable for the thing the dino can hold in it's mouth
     public ItemStack ItemInMouth = null;
     
-    //The Item that is used to control the dino
-    public Item ItemToControl = null;
-    
     //public static EntityDinosaurce pediaingDino = null;
     protected DinoAIControlledByPlayer ridingHandler;
     public EnumOrderType OrderStatus;
@@ -128,18 +130,18 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
         this.setHunger(this.MaxHunger);
     }
     private void setPedia()
-    {
-    	Fossil.ToPedia = (Object)this;
-    }
+    {Fossil.ToPedia = (Object)this;}
     
     /**
      * Tells if the Dino is a Baby
      */
-    public boolean isBaby()
-    {
-        return this.getDinoAge() < this.AdultAge;
-    }
-    
+    public boolean isAdult()
+    {return this.getDinoAge() > this.AdultAge;}
+    /**
+     * Tells if the Dino is a Baby
+     */
+    public boolean isTeen()
+    {return this.getDinoAge() > this.TeenAge;}
     /**
      * Returns the MaxHealth of the Dino depending on the age
      */
@@ -309,21 +311,30 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
     {
-    	p0.PrintStringXY(Fossil.GetLangTextByKey("Dino."+this.SelfType.toString())/*"Triceratops"/*GetNameByEnum(this.SelfType, false)*/, 103, 25);
-    	p0.PrintPictXY("/mod/fossil/common/textures/PediaClock.png", 103, 40,8,8);
-    	p0.PrintPictXY("/mod/fossil/common/textures/PediaHeart.png", 103, 55,9,9);
-    	p0.PrintPictXY("/mod/fossil/common/textures/PediaFood.png", 103, 70,9,9);
+    	p0.reset();
+    	p0.PrintStringXY(Fossil.GetLangTextByKey("Dino."+this.SelfType.toString()), 97, 23,40,90,245);
+    	p0.PrintPictXY("/mod/fossil/common/textures/PediaClock.png", 97, 34,8,8);
+    	p0.PrintPictXY("/mod/fossil/common/textures/PediaHeart.png", 97, 46,9,9);
+    	p0.PrintPictXY("/mod/fossil/common/textures/PediaFood.png", 97, 58,9,9);
     	if(this.getDinoAge()==1)
-    		p0.PrintStringXY("" + this.getDinoAge() + Fossil.GetLangTextByKey("PediaText.Day"), 115, 40);
+    		p0.PrintStringXY("" + this.getDinoAge() +" "+ Fossil.GetLangTextByKey("PediaText.Day"), 109, 35);
     	else
-    		p0.PrintStringXY("" + this.getDinoAge() + Fossil.GetLangTextByKey("PediaText.Days"), 115, 40);
-    	p0.PrintStringXY("" + this.getHealth() + '/' + this.getMaxHealth(), 115, 55);
-    	p0.PrintStringXY("" + this.getHunger() + '/' + this.MaxHunger, 115, 70);
+    		p0.PrintStringXY("" + this.getDinoAge() +" "+ Fossil.GetLangTextByKey("PediaText.Days"), 109, 35);
+    	p0.PrintStringXY("" + this.getHealth() + '/' + this.getMaxHealth(), 109, 47);
+    	p0.PrintStringXY("" + this.getHunger() + '/' + this.MaxHunger, 109, 59);
     	
-    	if(this.SelfType.isRideable() && !this.isBaby())
-    		p0.PrintStringLR(Fossil.GetLangTextByKey("PediaText.Rideable"), true, 0);
+    	if(this.SelfType.isRideable() && this.isAdult())
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Rideable"), true);
     	if(this.SelfType.isTameable() && this.isTamed())
-    		p0.PrintStringLR(this.getOwnerName(), true, 1);
+    	{
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Owner"), true);
+    		p0.AddStringLR(this.getOwnerName(), true);
+    	}
+    	for(int i=0; i<this.FoodItemList.index;i++)
+    	{
+    		if(this.FoodItemList.getItem(i)!=null)
+    			p0.AddMiniItem(this.FoodItemList.getItem(i));
+    	}
     }
     
     /**
@@ -355,9 +366,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
      * The dino grabs an item from this stack with its monstrous teeth
      */
     public void HoldItem(ItemStack var1)
-    {
-    	this.ItemInMouth = new ItemStack(var1.getItem(), 1, var1.getItemDamage());
-    }
+    {this.ItemInMouth = new ItemStack(var1.getItem(), 1, var1.getItemDamage());}
     
     /**
      * Handles an Itemstack the dinos gets his fangs on
@@ -379,24 +388,18 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
      * Returns true if the Entity AI code should be run
      */
     public boolean isAIEnabled()
-    {
-        return false;
-    }
+    {return false;}
     
     /**
      * Tells if the dino is sitting
      */
     public boolean isSitting()
-    {
-        return this.OrderStatus == EnumOrderType.Stay;
-    }
+    {return this.OrderStatus == EnumOrderType.Stay;}
     /**
      * Disables a mob's ability to move on its own while true.
      */
     protected boolean isMovementCeased()
-    {
-        return this.OrderStatus == EnumOrderType.Stay;
-    }
+    {return this.OrderStatus == EnumOrderType.Stay;}
     
     public boolean attackEntityAsMob(Entity var1)
     {
@@ -417,7 +420,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
 
     public void HandleBreed()
     {
-        if (!this.isBaby())
+        if (this.isAdult())
         {
             --this.BreedTick;
 
@@ -432,7 +435,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
                     {
                         EntityDinosaurce var4 = (EntityDinosaurce)var2.get(var3);
 
-                        if (var4.SelfType == this.SelfType && !var4.isBaby())//only adults mate
+                        if (var4.SelfType == this.SelfType && var4.isAdult())//only adults mate
                             ++PartnerCount;
                     }
                 }
@@ -522,7 +525,7 @@ var1.
                 case GemErrorHealth:
                     var3 = "";
             }*/
-    		if(this.getDistanceToEntity(this.getOwner())<25.0F);
+    		if(this.getOwner()!=null && this.getDistanceToEntity(this.getOwner())<25.0F);
     		{
     			String Status1=Fossil.GetLangTextByKey("Status." + var1.toString()+".Head")+" ";
     			String Dino=this.SelfType.toString();
@@ -657,6 +660,38 @@ var1.
     	}
         //return this.isModelized() ? Item.bone.itemID : Fossil.rawDinoMeat.itemID;
     }
+    /**
+     * Drops the rare drops
+     */
+    protected int DropRareDrop()
+    {
+    	if(this.isModelized() || !this.isTeen())
+    		return 0;
+    	int j=(new Random()).nextInt(4);
+    	int var4 = this.isModelized() ? 0 : this.SelfType.ordinal();
+    	int id=0;
+    	switch(j)
+    	{
+    		case 0:id=Fossil.legBone.itemID;break;
+    		case 1:id=Fossil.claw.itemID;break;
+    		case 2:id=Fossil.foot.itemID;break;
+    		case 3:id=Fossil.skull.itemID;break;
+    	}
+    	this.entityDropItem(new ItemStack(id, 1, var4), 0.5F);
+    	if(!this.isAdult())
+    		return 0;
+    	j=(new Random()).nextInt(4);
+    	switch(j)
+    	{
+    		case 0:id=Fossil.legBone.itemID;break;
+    		case 1:id=Fossil.claw.itemID;break;
+    		case 2:id=Fossil.foot.itemID;break;
+    		case 3:id=Fossil.skull.itemID;break;
+    	}
+    	if((new Random()).nextInt(10000)<500)
+    		this.entityDropItem(new ItemStack(id, 1, var4), 0.5F);
+        return 0;
+    }
 
     /**
      * Drop 0-2 items of this living's type
@@ -665,21 +700,32 @@ var1.
     {
         int var3 = this.getDropItemId();
         int var4 = this.isModelized() ? 0 : this.SelfType.ordinal();
-
         if (var3 > 0)
         {
             int var5 = this.getDinoAge();
 
             for (int var6 = 0; var6 < var5; ++var6)
             {
-                this.entityDropItem(new ItemStack(var3, 1, var4), 0.0F);
+                this.entityDropItem(new ItemStack(var3, 1, var4), 0.5F);
             }
+            this.DropRareDrop();
         }
     }
 
     public abstract void updateSize();
 
+    public boolean isAngry()
+    {return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;}
+    
+    public void setAngry(boolean var1)
+    {
+        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
 
+        if (var1)
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 2)));
+        else
+            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -3)));
+    }
     /*public boolean isTamed()
     {//These functions are through Entitytameable already implemented
         return (this.dataWatcher.getWatchableObjectByte(16) & 4) != 0;
@@ -748,6 +794,7 @@ var1.
     {
         super.writeEntityToNBT(var1);
         var1.setBoolean("isModelized", this.isModelized());
+        var1.setBoolean("Angry", this.isAngry());
         var1.setInteger("Hunger", this.getHunger());
         var1.setInteger("HungerTick", this.getHungerTick());
         var1.setInteger("DinoAge", this.getDinoAge());
@@ -785,6 +832,7 @@ var1.
     {
         super.readEntityFromNBT(var1);
         this.setModelized(var1.getBoolean("isModelized"));
+        this.setAngry(var1.getBoolean("Angry"));
         this.setDinoAge(var1.getInteger("DinoAge"));
         this.setDinoAgeTick(var1.getInteger("AgeTick"));
         this.setHunger(var1.getInteger("Hunger"));
@@ -840,9 +888,7 @@ var1.
      * returns the dinos Order status
      */
     public EnumOrderType getOrderType()
-    {
-        return this.OrderStatus;
-    }
+    {return this.OrderStatus;}
 
 
     /**
@@ -948,7 +994,7 @@ var1.
     	                var1.openGui(Fossil.instance/*var1*/, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
     	                return true;
     	            }
-            		if (var2.itemID == this.ItemToControl.itemID && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))
+            		if (var2.itemID == this.SelfType.getOrderItem().itemID && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))
                 	{//THIS DINOS ITEM TO BE CONTROLLED WITH
     	                if (!this.worldObj.isRemote)
     	                {
@@ -956,6 +1002,8 @@ var1.
     	                    this.setPathToEntity((PathEntity)null);
     	                    this.OrderStatus = EnumOrderType.values()[(this.OrderStatus.ordinal()+1) % 3/*(Fossil.EnumToInt(this.OrderStatus) + 1) % 3*/];
     	                    this.SendOrderMessage(this.OrderStatus);
+    	                    if(this.OrderStatus==EnumOrderType.Stay)
+    	                    	this.setPathToEntity(null);
     	
     	                    /*switch (EntityTriceratops$1.$SwitchMap$mod_Fossil$EnumOrderType[this.OrderStatus.ordinal()])
     	                    {//This is not neccessary anymore because the sitting is handled directly through the orderstatus
@@ -988,10 +1036,7 @@ var1.
             else
             {// Klicked with bare hands
             	if(this.ItemInMouth != null && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))
-            	{//Give the Item to the Player, but only if it's the owners
-            		if (this.worldObj.isRemote)
-                        return false;
-            		
+            	{//Give the Item to the Player, but only if it's the owner           		
                     if (var1.inventory.addItemStackToInventory(this.ItemInMouth))
                     {
                         this.worldObj.playSoundAtEntity(var1, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
@@ -999,7 +1044,7 @@ var1.
                         return true;
                     }
             	}
-            	if(this.ItemToControl == null && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))
+            	if(this.SelfType.getOrderItem() == null && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))
             	{//This dino is controlled without a special item
             		if (!this.worldObj.isRemote)
 	                {
@@ -1037,7 +1082,7 @@ var1.
 	                }
 	                return true;
             	}
-            	if (this.isTamed() && this.SelfType.isRideable() && !this.isBaby() && !this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == var1))
+            	if (this.isTamed() && this.SelfType.isRideable() && this.isAdult() && !this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == var1))
 	            {
 	                var1.rotationYaw = this.rotationYaw;
 	                var1.mountEntity(this);
@@ -1082,10 +1127,10 @@ var1.
         return this.getGLX();
     }
 
-    public String[] additionalPediaMessage()
+    /*public String[] additionalPediaMessage()
     {
         return null;
-    }
+    }*/
     
     @Override
 	public EntityAgeable createChild(EntityAgeable var1) 

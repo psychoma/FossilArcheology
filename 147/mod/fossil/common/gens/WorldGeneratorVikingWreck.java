@@ -11,7 +11,7 @@ public class WorldGeneratorVikingWreck extends WorldGenerator
 	
 	public boolean generate(World world, Random rand, int i, int j, int k)
 	{
-		
+		System.out.println("Generating VikingWreck");
 		world.setBlockAndMetadata(i + 2, j + 11, k + 14, Block.planks.blockID, 1);
 		world.setBlockAndMetadata(i + 2, j + 12, k + 14, Block.planks.blockID, 1);
 		world.setBlockAndMetadata(i + 2, j + 13, k + 14, Block.planks.blockID, 1);

@@ -12,7 +12,7 @@ public class WorldGeneratorBigShip extends WorldGenerator
 	public boolean generate(World world, Random rand, int i, int j, int k) 
 	{
 		
-
+		System.out.println("Generating Big Ship");
 		world.setBlockAndMetadata(i + 4, j + 9, k + 22, Block.stoneSingleSlab.blockID, 2);
 		world.setBlockAndMetadata(i + 4, j + 9, k + 36, Block.stoneSingleSlab.blockID, 2);
 		world.setBlockAndMetadata(i + 5, j + 9, k + 22, Block.stoneSingleSlab.blockID, 2);

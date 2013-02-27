@@ -11,7 +11,7 @@ public class WorldGeneratorAcademy extends WorldGenerator
 	
 	public boolean generate(World var1, Random var2, int i, int j, int k)
 	{
-		
+		System.out.println("Generating Academy");
 		var1.setBlock(i + 0, j + 0, k + 0, Block.dirt.blockID);
 		var1.setBlock(i + 0, j + 0, k + 1, Block.dirt.blockID);
 		var1.setBlock(i + 0, j + 0, k + 2, Block.dirt.blockID);
