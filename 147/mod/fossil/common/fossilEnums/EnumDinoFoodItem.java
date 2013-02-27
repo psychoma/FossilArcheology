@@ -25,6 +25,7 @@ public enum EnumDinoFoodItem
 	PorkRaw(Item.porkRaw,30,2),
 	PorkCooked(Item.porkCooked,50,3),
 	Egg(Item.egg,10,2),
+	Bread(Item.bread,25,2),
 	
 	Sjl(Fossil.sjl,30,3),//SioChiuLe
 	Nautilus(Fossil.rawNautilus,20,2),
@@ -43,19 +44,19 @@ public enum EnumDinoFoodItem
 	DinoMeatCooked(Fossil.cookedDinoMeat,50,5),	
 	//DinoMeatRaw(Fossil.rawDinoMeat,30,3)
 	;
-    public int itemID;
+    public Item item;
     public int FoodValue;
     public int HealValue;
 
-    private EnumDinoFoodItem(EnumDinoFoodItem Item0)
+    /*private EnumDinoFoodItem(EnumDinoFoodItem Item0)
     {
-        itemID = Item0.itemID;
+        item = Item0;
         FoodValue = Item0.FoodValue;
         HealValue = Item0.HealValue;
-    }
-    private EnumDinoFoodItem(Item item, int Food, int Heal)
+    }*/
+    private EnumDinoFoodItem(Item item0, int Food, int Heal)
     {
-        itemID = item.itemID;
+        item = item0;
         FoodValue = Food;
         HealValue = Heal;
     }

@@ -1,5 +1,8 @@
 package mod.fossil.common.guiBlocks;
 
+import java.util.Random;
+
+import mod.fossil.common.Fossil;
 import mod.fossil.common.fossilEnums.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -18,6 +21,14 @@ public class BlockDrum extends BlockContainer
     public String getTextureFile()
     {
         return "/mod/fossil/common/textures/Fos_terrian.png";
+    }
+    
+    /**
+     * Returns the ID of the items to drop on destruction.
+     */
+    public int idDropped(int var1, Random var2, int var3)
+    {
+        return Fossil.drumID;
     }
 
     /**
@@ -46,12 +57,12 @@ public class BlockDrum extends BlockContainer
         }
     }
 
-    /**
+    /*
      * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are
      * their own) Args: x, y, z, neighbor blockID
      */
-    public void onNeighborBlockChange(World var1, int var2, int var3, int var4, int var5)
-    {
+    /*public void onNeighborBlockChange(World var1, int var2, int var3, int var4, int var5)
+    {//plays a sound when powered....what for, this does nothing.....but keep the code...
         if (var5 > 0 && Block.blocksList[var5].canProvidePower())
         {
             boolean var6 = var1.isBlockGettingPowered(var2, var3, var4);
@@ -67,25 +78,20 @@ public class BlockDrum extends BlockContainer
                 var7.previousRedstoneState = var6;
             }
         }
-    }
+    }*/
 
     /**
      * Called upon block activation (right click on the block.)
      */
     public boolean onBlockActivated(World var1, int var2, int var3, int var4, EntityPlayer var5, int var6, float var7, float var8, float var9)
     {
-        if (var1.isRemote)
-        {
-            return true;
-        }
-        else
+        if (!var1.isRemote)
         {
             TileEntityDrum var10 = (TileEntityDrum)var1.getBlockTileEntity(var2, var3, var4);
             var10.TriggerOrder(var5);
-            int var11 = var10.Order.ordinal();
-            var1.setBlockMetadataWithNotify(var2, var3, var4, var11);
-            return true;
+            var1.setBlockMetadataWithNotify(var2, var3, var4, var10.Order.ordinal());
         }
+        return true;
     }
 
     /**
@@ -96,11 +102,8 @@ public class BlockDrum extends BlockContainer
         if (!var1.isRemote)
         {
             TileEntityDrum var6 = (TileEntityDrum)var1.getBlockTileEntity(var2, var3, var4);
-
             if (var5.inventory.getCurrentItem() != null)
-            {
                 var6.SendOrder(var5.inventory.getCurrentItem().itemID, var5);
-            }
         }
     }
 

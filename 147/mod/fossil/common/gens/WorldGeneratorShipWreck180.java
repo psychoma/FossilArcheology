@@ -11,7 +11,7 @@ public class WorldGeneratorShipWreck180 extends WorldGenerator
 	
 	public boolean generate(World world, Random rand, int i, int j, int k)
 	{
-		
+		System.out.println("Generating ShipWreck180");
 		world.setBlockAndMetadata(i + 0, j + 8, k + 31, Block.stoneSingleSlab.blockID, 2);
 		world.setBlock(i + 0, j + 9, k + 43, Block.planks.blockID);
 		world.setBlock(i + 0, j + 9, k + 44, Block.planks.blockID);

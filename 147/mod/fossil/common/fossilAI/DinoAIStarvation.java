@@ -3,6 +3,7 @@ package mod.fossil.common.fossilAI;
 import mod.fossil.client.FossilOptions;
 import mod.fossil.common.entity.mob.EntityDinosaurce;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 
 public class DinoAIStarvation extends EntityAIBase
@@ -48,9 +49,9 @@ public class DinoAIStarvation extends EntityAIBase
         	else
         	{//no food
         		if(this.mover.IsHungry())
-        		{
-        			//The Dino gets hungry and because of that spits the object out of the mouth
-        			//TODO
+        		{//The Dino gets hungry and because of that spits the object out of the mouth
+        			this.mover.entityDropItem(new ItemStack(this.mover.ItemInMouth.itemID, 1, 0), 0.5F);
+        			this.mover.ItemInMouth=null;
         		}
         	}
         }

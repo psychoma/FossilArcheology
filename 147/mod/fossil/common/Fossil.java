@@ -8,16 +8,28 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import mod.fossil.client.FossilCfgLoader;
 import mod.fossil.client.FossilGuiHandler;
 import mod.fossil.client.FossilMessageHandler;
 import mod.fossil.client.FossilOptions;
+import mod.fossil.common.biomes.BiomeJungle1;
+import mod.fossil.common.biomes.BiomeJungle2;
+import mod.fossil.common.biomes.BiomeOcean1;
+import mod.fossil.common.biomes.BiomeOcean2;
+import mod.fossil.common.biomes.BiomeRiver1;
+import mod.fossil.common.biomes.BiomeRiver2;
+import mod.fossil.common.biomes.BiomeSwamp1;
+import mod.fossil.common.biomes.BiomeSwamp2;
 import mod.fossil.common.blocks.BlockFern;
 import mod.fossil.common.blocks.BlockFossil;
 import mod.fossil.common.blocks.BlockFossilSkull;
 import mod.fossil.common.blocks.BlockIcedStone;
 import mod.fossil.common.blocks.BlockPermafrost;
+import mod.fossil.common.blocks.BlockTar;
+import mod.fossil.common.blocks.BlockVolcanicAsh;
+import mod.fossil.common.blocks.BlockVolcanicRock;
 import mod.fossil.common.entity.EntityAncientJavelin;
 import mod.fossil.common.entity.EntityDinoEgg;
 import mod.fossil.common.entity.EntityJavelin;
@@ -48,8 +60,18 @@ import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumEmbyos;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.gens.FossilGenerator;
+import mod.fossil.common.gens.TarGenerator;
 import mod.fossil.common.gens.WorldGenAcademy;
+import mod.fossil.common.gens.WorldGenBigShip;
+import mod.fossil.common.gens.WorldGenCheheWreck;
+import mod.fossil.common.gens.WorldGenDukeWreck;
+import mod.fossil.common.gens.WorldGenGalleonWreck;
 import mod.fossil.common.gens.WorldGenShipWreck;
+import mod.fossil.common.gens.WorldGenShipWreck180;
+import mod.fossil.common.gens.WorldGenShipWreck270;
+import mod.fossil.common.gens.WorldGenShipWreck90;
+import mod.fossil.common.gens.WorldGenShortRangeWreck;
+import mod.fossil.common.gens.WorldGenVikingWreck;
 import mod.fossil.common.gens.WorldGenWeaponShopA;
 import mod.fossil.common.guiBlocks.BlockAnalyzer;
 import mod.fossil.common.guiBlocks.BlockCultivate;
@@ -69,16 +91,24 @@ import mod.fossil.common.items.ItemBioFossil;
 import mod.fossil.common.items.ItemBrokenHelmet;
 import mod.fossil.common.items.ItemBrokenSword;
 import mod.fossil.common.items.ItemChickenSoup;
+import mod.fossil.common.items.ItemClaw;
 import mod.fossil.common.items.ItemDNA;
 import mod.fossil.common.items.ItemDinoMeat;
 import mod.fossil.common.items.ItemEmbryoSyringe;
+import mod.fossil.common.items.ItemFeet;
+import mod.fossil.common.items.ItemFemurs;
 import mod.fossil.common.items.ItemFernSeed;
+import mod.fossil.common.items.ItemFoot;
 import mod.fossil.common.items.ItemGen;
 import mod.fossil.common.items.ItemIcedMeat;
 import mod.fossil.common.items.ItemJavelin;
+import mod.fossil.common.items.ItemLegBone;
 import mod.fossil.common.items.ItemMagicConch;
 import mod.fossil.common.items.ItemNonDinoDNA;
 import mod.fossil.common.items.ItemRelic;
+import mod.fossil.common.items.ItemRibCage;
+import mod.fossil.common.items.ItemSkull;
+import mod.fossil.common.items.ItemSkullHelmet;
 import mod.fossil.common.items.ItemStoneBoard;
 import mod.fossil.common.items.ItemWhip;
 import mod.fossil.common.items.forgeItems.ForgeItem;
@@ -89,6 +119,13 @@ import mod.fossil.common.items.forgeItems.ForgeItemHoe;
 import mod.fossil.common.items.forgeItems.ForgeItemPickaxe;
 import mod.fossil.common.items.forgeItems.ForgeItemSpade;
 import mod.fossil.common.items.forgeItems.ForgeItemSword;
+import mod.fossil.common.tabs.TabFArmor;
+import mod.fossil.common.tabs.TabFBlocks;
+import mod.fossil.common.tabs.TabFCombat;
+import mod.fossil.common.tabs.TabFFood;
+import mod.fossil.common.tabs.TabFItems;
+import mod.fossil.common.tabs.TabFMaterial;
+import mod.fossil.common.tabs.TabFTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -96,17 +133,21 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.StringTranslate;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.EnumHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
@@ -120,15 +161,8 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(
-        modid = "Fossil",
-        name = "Fossil/Archeology",
-        version = "v7.2.0a Unofficial"
-)
-@NetworkMod(
-        clientSideRequired = true,
-        serverSideRequired = false
-)
+@Mod(modid = "Fossil", name = "Fossil/Archeology", version = "Build 0001 Pre 13w09a")
+@NetworkMod(clientSideRequired = true, serverSideRequired = false)
 
 public class Fossil 
 {
@@ -152,7 +186,7 @@ public class Fossil
 	 * If DebugMode = true
 	 * HatchTime is set to 1
 	 */
-	public static boolean DebugMode = true;
+	public static boolean DebugMode = false;
 	public static final double MESSAGE_DISTANCE = 25.0D;
 	
     //private static int[] blockIDs = new int[] {1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1151, 1152, 1153};
@@ -168,9 +202,11 @@ public class Fossil
 	public static CreativeTabs tabFItems = new TabFItems(CreativeTabs.getNextID(), "Fossil Items");
 	public static CreativeTabs tabFFood = new TabFFood(CreativeTabs.getNextID(), "Fossil Food");
 	public static CreativeTabs tabFCombat = new TabFCombat(CreativeTabs.getNextID(), "Fossil Combat");
-	//public static CreativeTabs tabFArmor = new TabFArmor(CreativeTabs.getNextID(), "Fossil Armor");
+	public static CreativeTabs tabFArmor = new TabFArmor(CreativeTabs.getNextID(), "Fossil Armor");
 	public static CreativeTabs tabFTools = new TabFTools(CreativeTabs.getNextID(), "Fossil Deco");
 	public static CreativeTabs tabFMaterial = new TabFMaterial(CreativeTabs.getNextID(), "Fossil Material");
+	
+	//public static WorldType fossil = new WorldTypeFossil(3, "Dino Test");
 	
     public static Achievement pigbossOnEarth = (new Achievement(18000, "PigbossOnEarth", 0, 0, new ItemStack(Item.dyePowder, 1, 4), (Achievement)null)).registerAchievement();
     public static AchievementPage selfArcPage = new AchievementPage("FOSSIL / ARCHEOLOGY", new Achievement[] {pigbossOnEarth});
@@ -187,12 +223,31 @@ public class Fossil
 	public static Block blockworktableActive;
 	public static Block blockTimeMachine;
 	public static Block ferns;
-	public static Block fernUpper;
+	//public static Block fernUpper;
 	public static Block drum;
 	public static Block feederIdle;
 	public static Block feederActive;
 	public static Block blockPermafrost;
 	public static Block blockIcedStone;
+	public static Block volcanicAsh;
+	public static Block volcanicRock;
+	public static Block volcanicRockHot;
+	public static Block tar;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
+	//public static Block newBlock;
 	
     //Items
     public static Item biofossil;
@@ -221,6 +276,39 @@ public class Fossil
     public static Item diamondjavelin;
     public static Item ancientJavelin;
     public static Item whip;
+    public static Item legBone;
+	public static Item claw;
+	public static Item foot;
+	public static Item skull;
+	//public static Item newItem;
+    //public static Item newItem;
+	//public static Item newItem;
+	//public static Item newItem;
+	//public static Item newItem;
+	//public static Item newItem;
+    //public static Item newItem;
+	//public static Item newItem;
+	//public static Item newItem;
+	//public static Item newItem;
+	//public static Item newItem;
+    //public static Item newItem;
+	//public static Item newItem;
+	//public static Item newItem;
+	//public static Item newItem;
+	
+    //Armor
+    public static Item skullHelmet;
+	public static Item ribCage;
+	public static Item femurs;
+	public static Item feet;
+	//public static Item newArmor;
+	//public static Item newArmor;
+	//public static Item newArmor;
+	//public static Item newArmor;
+	//public static Item newArmor;
+	//public static Item newArmor;
+	//public static Item newArmor;
+	//public static Item newArmor;
 	
 	//DNA
 	public static Item dna;
@@ -234,7 +322,14 @@ public class Fossil
 	public static Item dnaStegosaurus;
 	public static Item dnaUtahraptor;
 	public static Item dnaBrachiosaurus;
+	//public static Item newDinoDNA;
+	//public static Item newDinoDNA;
+	//public static Item newDinoDNA;
+	//public static Item newDinoDNA;
+	//public static Item newDinoDNA;
+	//public static Item newDinoDNA;
 
+	//Animal Dna
 	public static Item animalDNA;
 	public static Item dnaPig;
 	public static Item dnaSheep;
@@ -242,6 +337,15 @@ public class Fossil
 	public static Item dnaChicken;
 	public static Item dnaSaberCat;
 	public static Item dnaMammoth;
+	
+	//Mob DNA
+	//public static Item mobDNA;
+	//public static Item dnaPigZombie;
+	//public static Item dnaZombie;
+	//public static Item dnaGhast;
+	//public static Item dnaWither;
+	//public static Item dnaSpider;
+	//public static Item dnaSkeleton;
 	
 	//Ancient Egg
 	public static Item ancientegg;
@@ -255,6 +359,12 @@ public class Fossil
 	public static Item eggStegosaurus;
 	public static Item eggUtahraptor;
 	public static Item eggBrachiosaurus;
+	//public static Item eggNew;
+	//public static Item eggNew;
+	//public static Item eggNew;
+	//public static Item eggNew;
+	//public static Item eggNew;
+	//public static Item eggNew;
 	
 	//Embryos
 	public static Item embyoSyringe;
@@ -263,6 +373,12 @@ public class Fossil
 	public static Item embryoCow;
 	public static Item embryoSaberCat;
 	public static Item embryoMammoth;
+	//public static Item embryoPigZombie;
+	//public static Item embryoZombie;
+	//public static Item embryoGhast;
+	//public static Item embryoWither;
+	//public static Item embryoSkeleton;
+	//public static Item embryoSpider;
 	
 	//Item Food
 	public static Item cookedChickenSoup;
@@ -282,6 +398,16 @@ public class Fossil
 	public static Item rawBrachiosaurus;
 	public static Item cookedDinoMeat;
 	
+	//Biomes
+	public static BiomeGenBase jungle1;
+	public static BiomeGenBase jungle2;
+	public static BiomeGenBase river1;
+	public static BiomeGenBase river2;
+	public static BiomeGenBase ocean1;
+	public static BiomeGenBase ocean2;
+	public static BiomeGenBase swamp1;
+	public static BiomeGenBase swamp2;
+	
 	//Config ID INTs
 	//Blocks
 	public static int blockFossilID;
@@ -295,12 +421,31 @@ public class Fossil
 	public static int blockworktableActiveID;
 	public static int blockTimeMachineID;
 	public static int fernsID;
-	public static int fernUpperID;
+	//public static int fernUpperID;
 	public static int drumID;
 	public static int feederIdleID;
 	public static int feederActiveID;
 	public static int blockPermafrostID;
 	public static int blockIcedStoneID;
+	public static int volcanicAshID;
+	public static int volcanicRockID;
+	public static int volcanicRockHotID;
+	public static int tarID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
+	//public static int newBlockID;
 	
     //Items
     public static int biofossilID;
@@ -329,9 +474,42 @@ public class Fossil
     public static int diamondjavelinID;
     public static int ancientJavelinID;
     public static int whipID;
+	public static int legBoneID;
+	public static int clawID;
+	public static int footID;
+	public static int skullID;
+	//public static int newItemID;
+    //public static int newItemID;
+	//public static int newItemID;
+	//public static int newItemID;
+	//public static int newItemID;
+	//public static int newItemID;
+    //public static int newItemID;
+	//public static int newItemID;
+	//public static int newItemID;
+	//public static int newItemID;
+	//public static int newItemID;
+    //public static int newItemID;
+	//public static int newItemID;
+	//public static int newItemID;
+	//public static int newItemID;
+	
+	//Armor
+	public static int skullHelmetID;
+	public static int ribCageID;
+	public static int femursID;
+	public static int feetID;
+	//public static int newArmorID;
+	//public static int newArmorID;
+	//public static int newArmorID;
+	//public static int newArmorID;
+	//public static int newArmorID;
+	//public static int newArmorID;
+	//public static int newArmorID;
+	//public static int newArmorID;
 	
 	//DNA
-	//public static int dnaID;
+	public static int dnaID;
 	public static int dnaTriceratopsID;
 	public static int dnaRaptorID;
 	public static int dnaTRexID;
@@ -342,14 +520,30 @@ public class Fossil
 	public static int dnaStegosaurusID;
 	public static int dnaUtahraptorID;
 	public static int dnaBrachiosaurusID;
+	//public static int newDinoDNAID;
+	//public static int newDinoDNAID;
+	//public static int newDinoDNAID;
+	//public static int newDinoDNAID;
+	//public static int newDinoDNAID;
+	//public static int newDinoDNAID;
 
-	//public static int animalDNAID;
+	//Animal DNA
+	public static int animalDNAID;
 	public static int dnaPigID;
 	public static int dnaSheepID;
 	public static int dnaTCowID;
 	public static int dnaChickenID;
 	public static int dnaSaberCatID;
 	public static int dnaMammothID;
+	
+	//Mob DNA
+	//public static int mobDNAID;
+	//public static int dnaPigZombieID;
+	//public static int dnaZombieID;
+	//public static int dnaGhastID;
+	//public static int dnaWitherID;
+	//public static int dnaSpiderID;
+	//public static int dnaSkeletonID;
 	
 	//Ancient Egg
 	public static int ancienteggID;
@@ -363,6 +557,12 @@ public class Fossil
 	public static int eggStegosaurusID;
 	public static int eggUtahraptorID;
 	public static int eggBrachiosaurusID;
+	//public static int eggNewID;
+	//public static int eggNewID;
+	//public static int eggNewID;
+	//public static int eggNewID;
+	//public static int eggNewID;
+	//public static int eggNewID;
 	
 	//Embryos
 	public static int embyoSyringeID;
@@ -371,6 +571,12 @@ public class Fossil
 	public static int embryoCowID;
 	public static int embryoSaberCatID;
 	public static int embryoMammothID;
+	//public static int embryoPigZombieID;
+	//public static int embryoZombieID;
+	//public static int embryoGhastID;
+	//public static int embryoWitherID;
+	//public static int embryoSkeletonID;
+	//public static int embryoSpiderID;
 	
 	//Food
 	public static int cookedChickenSoupID;
@@ -390,123 +596,217 @@ public class Fossil
 	public static int rawBrachiosaurusID;
 	public static int cookedDinoMeatID;
 	
+	static EnumArmorMaterial dinoBone = EnumHelper.addArmorMaterial("DinoBone", 35, new int[]{4,9,7,6}, 15);
+	
     @cpw.mods.fml.common.Mod.PreInit
 	public void PreInit(FMLPreInitializationEvent event)
 	{
 		proxy.registerSounds();
 		UpdateLangProp();
 		
-		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
-		config.load();
+		Configuration var2 = new Configuration(event.getSuggestedConfigurationFile());
+		try
+		{
+		
+			var2.load();
 		
 		//Blocks
-		blockFossilID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockFossil", 3000).getInt(3000);
-		blockSkullID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockSkull", 3001).getInt(3001);
-		skullLanternID = config.getBlock(Configuration.CATEGORY_BLOCK, "skullLantern", 3002).getInt(3002);
-		blockanalyzerIdleID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockanalyzerIdle", 3003).getInt(3003);
-		blockanalyzerActiveID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockanalyzerActive", 3004).getInt(3004);
-		blockcultivateIdleID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockcultivateIdle", 3005).getInt(3005);
-		blockcultivateActiveID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockcultivateActive", 3006).getInt(3006);
-		blockworktableIdleID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockworktableIdle", 3007).getInt(3007);
-		blockworktableActiveID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockworktableActive", 3008).getInt(3008);
-		blockTimeMachineID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockTimeMachine", 3009).getInt(3009);
-		fernsID = config.getBlock(Configuration.CATEGORY_BLOCK, "ferns", 3010).getInt(3010);
-		fernUpperID = config.getBlock(Configuration.CATEGORY_BLOCK, "fernUpper", 3011).getInt(3011);
-		drumID = config.getBlock(Configuration.CATEGORY_BLOCK, "drum", 3012).getInt(3012);
-		feederIdleID = config.getBlock(Configuration.CATEGORY_BLOCK, "feederIdle", 3013).getInt(3013);
-		feederActiveID = config.getBlock(Configuration.CATEGORY_BLOCK, "feederActive", 3014).getInt(3014);
-		blockPermafrostID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockPermafrost", 3015).getInt(3015);
-		blockIcedStoneID = config.getBlock(Configuration.CATEGORY_BLOCK, "blockIcedStone", 3016).getInt(3016);
+		blockFossilID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockFossil", 3000).getInt(3000);
+		blockSkullID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockSkull", 3001).getInt(3001);
+		skullLanternID = var2.getBlock(Configuration.CATEGORY_BLOCK, "skullLantern", 3002).getInt(3002);
+		blockanalyzerIdleID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockanalyzerIdle", 3003).getInt(3003);
+		blockanalyzerActiveID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockanalyzerActive", 3004).getInt(3004);
+		blockcultivateIdleID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockcultivateIdle", 3005).getInt(3005);
+		blockcultivateActiveID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockcultivateActive", 3006).getInt(3006);
+		blockworktableIdleID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockworktableIdle", 3007).getInt(3007);
+		blockworktableActiveID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockworktableActive", 3008).getInt(3008);
+		blockTimeMachineID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockTimeMachine", 3009).getInt(3009);
+		fernsID = var2.getBlock(Configuration.CATEGORY_BLOCK, "ferns", 3010).getInt(3010);
+		//fernUpperID = var2.getBlock(Configuration.CATEGORY_BLOCK, "fernUpper", 3011).getInt(3011);
+		drumID = var2.getBlock(Configuration.CATEGORY_BLOCK, "drum", 3012).getInt(3012);
+		feederIdleID = var2.getBlock(Configuration.CATEGORY_BLOCK, "feederIdle", 3013).getInt(3013);
+		feederActiveID = var2.getBlock(Configuration.CATEGORY_BLOCK, "feederActive", 3014).getInt(3014);
+		blockPermafrostID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockPermafrost", 3015).getInt(3015);
+		blockIcedStoneID = var2.getBlock(Configuration.CATEGORY_BLOCK, "blockIcedStone", 3016).getInt(3016);
+		volcanicAshID = var2.getBlock(Configuration.CATEGORY_BLOCK, "volcanicAsh", 3017).getInt(3017);
+		volcanicRockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "volcanicRock", 3018).getInt(3018);
+		volcanicRockHotID = var2.getBlock(Configuration.CATEGORY_BLOCK, "volcanicRockHot", 3019).getInt(3019);
+		tarID = var2.getBlock(Configuration.CATEGORY_BLOCK, "tar", 3020).getInt(3020);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3021).getInt(3021);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3022).getInt(3022);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3023).getInt(3023);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3023).getInt(3023);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3024).getInt(3024);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3025).getInt(3025);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3026).getInt(3026);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3027).getInt(3027);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3028).getInt(3028);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3029).getInt(3029);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3030).getInt(3030);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3031).getInt(3031);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3032).getInt(3032);
+		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3033).getInt(3033);
 	
 		//Items
-		biofossilID = config.getItem(Configuration.CATEGORY_ITEM, "biofossil", 12000).getInt(12000);
-		relicID = config.getItem(Configuration.CATEGORY_ITEM, "relic", 12001).getInt(12001);
-		stoneboardID = config.getItem(Configuration.CATEGORY_ITEM, "stoneboard", 12002).getInt(12002);
-		ancientSwordID = config.getItem(Configuration.CATEGORY_ITEM, "ancientSword", 12003).getInt(12003);
-		brokenSwordID = config.getItem(Configuration.CATEGORY_ITEM, "brokenSword", 12004).getInt(12004);
-		fernSeedID = config.getItem(Configuration.CATEGORY_ITEM, "fernSeed", 12005).getInt(12005);
-		ancienthelmetID = config.getItem(Configuration.CATEGORY_ITEM, "ancienthelmet", 12006).getInt(12006);
-		brokenhelmetID = config.getItem(Configuration.CATEGORY_ITEM, "brokenhelmet", 12007).getInt(12007);
-		skullStickID = config.getItem(Configuration.CATEGORY_ITEM, "skullStick", 12008).getInt(12008);
-		genID = config.getItem(Configuration.CATEGORY_ITEM, "gen", 12009).getInt(12009);
-		genAxeID = config.getItem(Configuration.CATEGORY_ITEM, "genAxe", 12010).getInt(12010);
-		genPickaxeID = config.getItem(Configuration.CATEGORY_ITEM, "genPickaxe", 12011).getInt(12011);
-		genSwordID = config.getItem(Configuration.CATEGORY_ITEM, "genSword", 12012).getInt(12012);
-		genHoeID = config.getItem(Configuration.CATEGORY_ITEM, "genHoe", 12013).getInt(12013);
-		genShovelID = config.getItem(Configuration.CATEGORY_ITEM, "genShovel", 12014).getInt(12014);
-		dinoPediaID = config.getItem(Configuration.CATEGORY_ITEM, "dinoPedia", 12015).getInt(12015);
-		emptyShellID = config.getItem(Configuration.CATEGORY_ITEM, "emptyShell", 12016).getInt(12016);
-		magicConchID = config.getItem(Configuration.CATEGORY_ITEM, "magicConch", 12017).getInt(12017);
-		icedMeatID = config.getItem(Configuration.CATEGORY_ITEM, "icedMeat", 12018).getInt(12018);
-		woodjavelinID = config.getItem(Configuration.CATEGORY_ITEM, "woodjavelin", 12019).getInt(12019);
-		stonejavelinID = config.getItem(Configuration.CATEGORY_ITEM, "stonejavelin", 12020).getInt(12020);
-		ironjavelinID = config.getItem(Configuration.CATEGORY_ITEM, "ironjavelin", 12021).getInt(12021);
-		goldjavelinID = config.getItem(Configuration.CATEGORY_ITEM, "goldjavelin", 12022).getInt(12022);
-		diamondjavelinID = config.getItem(Configuration.CATEGORY_ITEM, "diamondjavelin", 12023).getInt(12023);
-		ancientJavelinID = config.getItem(Configuration.CATEGORY_ITEM, "ancientJavelin", 12024).getInt(12024);
-		whipID = config.getItem(Configuration.CATEGORY_ITEM, "whip", 12025).getInt(12025);
+		biofossilID = var2.getItem(Configuration.CATEGORY_ITEM, "biofossil", 10000).getInt(10000);
+		relicID = var2.getItem(Configuration.CATEGORY_ITEM, "relic", 10001).getInt(10001);
+		stoneboardID = var2.getItem(Configuration.CATEGORY_ITEM, "stoneboard", 10002).getInt(10002);
+		ancientSwordID = var2.getItem(Configuration.CATEGORY_ITEM, "ancientSword", 10003).getInt(10003);
+		brokenSwordID = var2.getItem(Configuration.CATEGORY_ITEM, "brokenSword", 10004).getInt(10004);
+		fernSeedID = var2.getItem(Configuration.CATEGORY_ITEM, "fernSeed", 10005).getInt(10005);
+		ancienthelmetID = var2.getItem(Configuration.CATEGORY_ITEM, "ancienthelmet", 10006).getInt(10006);
+		brokenhelmetID = var2.getItem(Configuration.CATEGORY_ITEM, "brokenhelmet", 10007).getInt(10007);
+		skullStickID = var2.getItem(Configuration.CATEGORY_ITEM, "skullStick", 10008).getInt(10008);
+		genID = var2.getItem(Configuration.CATEGORY_ITEM, "gen", 10009).getInt(10009);
+		genAxeID = var2.getItem(Configuration.CATEGORY_ITEM, "genAxe", 10010).getInt(10010);
+		genPickaxeID = var2.getItem(Configuration.CATEGORY_ITEM, "genPickaxe", 10011).getInt(10011);
+		genSwordID = var2.getItem(Configuration.CATEGORY_ITEM, "genSword", 10012).getInt(10012);
+		genHoeID = var2.getItem(Configuration.CATEGORY_ITEM, "genHoe", 10013).getInt(10013);
+		genShovelID = var2.getItem(Configuration.CATEGORY_ITEM, "genShovel", 10014).getInt(10014);
+		dinoPediaID = var2.getItem(Configuration.CATEGORY_ITEM, "dinoPedia", 10015).getInt(10015);
+		emptyShellID = var2.getItem(Configuration.CATEGORY_ITEM, "emptyShell", 10016).getInt(10016);
+		magicConchID = var2.getItem(Configuration.CATEGORY_ITEM, "magicConch", 10017).getInt(10017);
+		icedMeatID = var2.getItem(Configuration.CATEGORY_ITEM, "icedMeat", 10018).getInt(10018);
+		woodjavelinID = var2.getItem(Configuration.CATEGORY_ITEM, "woodjavelin", 10019).getInt(10019);
+		stonejavelinID = var2.getItem(Configuration.CATEGORY_ITEM, "stonejavelin", 10020).getInt(10020);
+		ironjavelinID = var2.getItem(Configuration.CATEGORY_ITEM, "ironjavelin", 10021).getInt(10021);
+		goldjavelinID = var2.getItem(Configuration.CATEGORY_ITEM, "goldjavelin", 10022).getInt(10022);
+		diamondjavelinID = var2.getItem(Configuration.CATEGORY_ITEM, "diamondjavelin", 10023).getInt(10023);
+		ancientJavelinID = var2.getItem(Configuration.CATEGORY_ITEM, "ancientJavelin", 10024).getInt(10024);
+		whipID = var2.getItem(Configuration.CATEGORY_ITEM, "whip", 10025).getInt(10025);
+		legBoneID = var2.getItem(Configuration.CATEGORY_ITEM, "legBone", 10026).getInt(10026);
+		clawID = var2.getItem(Configuration.CATEGORY_ITEM, "claw", 10027).getInt(10027);
+		footID = var2.getItem(Configuration.CATEGORY_ITEM, "foot", 10028).getInt(10028);
+		skullID = var2.getItem(Configuration.CATEGORY_ITEM, "skull", 10029).getInt(10029);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10030).getInt(10030);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10031).getInt(10031);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10032).getInt(10032);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10033).getInt(10033);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10034).getInt(10034);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10035).getInt(10035);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10036).getInt(10036);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10037).getInt(10037);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10038).getInt(10038);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10039).getInt(10039);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10040).getInt(10040);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10041).getInt(10041);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10042).getInt(10042);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10043).getInt(10043);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10044).getInt(10044);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10045).getInt(10045);
+		//newItemID = var2.getItem(Configuration.CATEGORY_ITEM, "newItem", 10046).getInt(10046);
+		
+		//Armor
+		skullHelmetID = var2.getItem(Configuration.CATEGORY_ITEM, "skullHelmet", 10047).getInt(10047);
+		ribCageID = var2.getItem(Configuration.CATEGORY_ITEM, "ribCage", 10048).getInt(10048);
+		femursID = var2.getItem(Configuration.CATEGORY_ITEM, "femurs", 10049).getInt(10049);
+		feetID = var2.getItem(Configuration.CATEGORY_ITEM, "feet", 10050).getInt(10050);
+		//newArmorID = var2.getItem(Configuration.CATEGORY_ITEM, "newArmor", 10051).getInt(10051);
+		//newArmorID = var2.getItem(Configuration.CATEGORY_ITEM, "newArmor", 10052).getInt(10052);
+		//newArmorID = var2.getItem(Configuration.CATEGORY_ITEM, "newArmor", 10053).getInt(10053);
+		//newArmorID = var2.getItem(Configuration.CATEGORY_ITEM, "newArmor", 10054).getInt(10054);
+		//newArmorID = var2.getItem(Configuration.CATEGORY_ITEM, "newArmor", 10055).getInt(10055);
+		//newArmorID = var2.getItem(Configuration.CATEGORY_ITEM, "newArmor", 10056).getInt(10056);
+		//newArmorID = var2.getItem(Configuration.CATEGORY_ITEM, "newArmor", 10057).getInt(10057);
+		//newArmorID = var2.getItem(Configuration.CATEGORY_ITEM, "newArmor", 10058).getInt(10058);
 	
 		//DNA
-		//public static int dnaID;
-		dnaTriceratopsID = config.getItem(Configuration.CATEGORY_ITEM, "dnaTriceratops", 12026).getInt(12026);
-		dnaRaptorID = config.getItem(Configuration.CATEGORY_ITEM, "dnaRaptor", 12027).getInt(12027);
-		dnaTRexID = config.getItem(Configuration.CATEGORY_ITEM, "dnaTRex", 12028).getInt(12028);
-		dnaPterosaurID = config.getItem(Configuration.CATEGORY_ITEM, "dnaPterosaur", 12029).getInt(12029);
-		dnaNautilusID = config.getItem(Configuration.CATEGORY_ITEM, "dnaNautilus", 12030).getInt(12030);
-		dnaPlesiosaurID = config.getItem(Configuration.CATEGORY_ITEM, "dnaPlesiosaur", 12031).getInt(12031);
-		dnaMosasaurusID = config.getItem(Configuration.CATEGORY_ITEM, "dnaMosasaurus", 12032).getInt(12032);
-		dnaStegosaurusID = config.getItem(Configuration.CATEGORY_ITEM, "dnaStegosaurus", 12033).getInt(12033);
-		dnaUtahraptorID = config.getItem(Configuration.CATEGORY_ITEM, "dnaUtahraptor", 12034).getInt(12034);
-		dnaBrachiosaurusID = config.getItem(Configuration.CATEGORY_ITEM, "dnaBrachiosaurus", 12035).getInt(12035);
+		dnaID = var2.getItem(Configuration.CATEGORY_ITEM, "dna", 10059).getInt(10059);
+		dnaTriceratopsID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaTriceratops", 10060).getInt(10060);
+		dnaRaptorID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaRaptor", 10061).getInt(10061);
+		dnaTRexID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaTRex", 10062).getInt(10062);
+		dnaPterosaurID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaPterosaur", 10063).getInt(10063);
+		dnaNautilusID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaNautilus", 10064).getInt(10064);
+		dnaPlesiosaurID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaPlesiosaur", 10065).getInt(10065);
+		dnaMosasaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMosasaurus", 10066).getInt(10066);
+		dnaStegosaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaStegosaurus", 10067).getInt(10067);
+		dnaUtahraptorID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaUtahraptor", 10068).getInt(10068);
+		dnaBrachiosaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaBrachiosaurus", 10069).getInt(10069);
+		//newDinoDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "newDinoDNA", 10070).getInt(10070);
+		//newDinoDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "newDinoDNA", 10071).getInt(10071);
+		//newDinoDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "newDinoDNA", 10072).getInt(10072);
+		//newDinoDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "newDinoDNA", 10073).getInt(10073);
+		//newDinoDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "newDinoDNA", 10074).getInt(10074);
+		//newDinoDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "newDinoDNA", 10075).getInt(10075);
 
-		//public static int animalDNAID;
-		dnaPigID = config.getItem(Configuration.CATEGORY_ITEM, "dnaPig", 12036).getInt(12036);
-		dnaSheepID = config.getItem(Configuration.CATEGORY_ITEM, "dnaSheep", 12037).getInt(12037);
-		dnaTCowID = config.getItem(Configuration.CATEGORY_ITEM, "dnaTCow", 12038).getInt(12038);
-		dnaChickenID = config.getItem(Configuration.CATEGORY_ITEM, "dnaChicken", 12039).getInt(12039);
-		dnaSaberCatID = config.getItem(Configuration.CATEGORY_ITEM, "dnaSaberCat", 12040).getInt(12040);
-		dnaMammothID = config.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 12075).getInt(12075);
+		//Animal DNA
+		animalDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "animalDNA", 10076).getInt(10076);
+		dnaPigID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaPig", 10077).getInt(10077);
+		dnaSheepID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaSheep", 10078).getInt(10078);
+		dnaTCowID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaTCow", 10079).getInt(10079);
+		dnaChickenID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaChicken", 10080).getInt(10080);
+		dnaSaberCatID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaSaberCat", 10081).getInt(10081);
+		dnaMammothID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 10082).getInt(10082);
 		
+		//MobDNA
+		//mobDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 10083).getInt(10083);
+		//dnaPigZombieID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 10084).getInt(10084);
+		//dnaZombieID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 10085).getInt(10085);
+		//dnaGhastID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 10086).getInt(10086);
+		//dnaWitherID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 10087).getInt(10087);
+		//dnaSpiderID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 10088).getInt(10088);
+		//dnaSkeletonID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 10089).getInt(10089);
+
 		//Ancient Egg
-		ancienteggID = config.getItem(Configuration.CATEGORY_ITEM, "ancientegg", 12041).getInt(12041);
-		eggTriceratopsID = config.getItem(Configuration.CATEGORY_ITEM, "eggTriceratops", 12042).getInt(12042);
-		eggRaptorID = config.getItem(Configuration.CATEGORY_ITEM, "eggRaptor", 12043).getInt(12043);
-		eggTRexID = config.getItem(Configuration.CATEGORY_ITEM, "eggTRex", 12044).getInt(12044);
-		eggPterosaurID = config.getItem(Configuration.CATEGORY_ITEM, "eggPterosaur", 12045).getInt(12045);
-		shellNautilusID = config.getItem(Configuration.CATEGORY_ITEM, "shellNautilus", 12047).getInt(12047);
-		eggPlesiosaurID = config.getItem(Configuration.CATEGORY_ITEM, "eggPlesiosaur", 12048).getInt(12048);
-		eggMosasaurusID = config.getItem(Configuration.CATEGORY_ITEM, "eggMosasaurus", 12049).getInt(12049);
-		eggStegosaurusID = config.getItem(Configuration.CATEGORY_ITEM, "eggStegosaurus", 12050).getInt(12050);
-		eggUtahraptorID = config.getItem(Configuration.CATEGORY_ITEM, "eggUtahraptor", 12051).getInt(12051);
-		eggBrachiosaurusID = config.getItem(Configuration.CATEGORY_ITEM, "eggBrachiosaurus", 12052).getInt(12052);
+		ancienteggID = var2.getItem(Configuration.CATEGORY_ITEM, "ancientegg", 10090).getInt(10090);
+		eggTriceratopsID = var2.getItem(Configuration.CATEGORY_ITEM, "eggTriceratops", 10091).getInt(10091);
+		eggRaptorID = var2.getItem(Configuration.CATEGORY_ITEM, "eggRaptor", 10092).getInt(10092);
+		eggTRexID = var2.getItem(Configuration.CATEGORY_ITEM, "eggTRex", 10093).getInt(10093);
+		eggPterosaurID = var2.getItem(Configuration.CATEGORY_ITEM, "eggPterosaur", 10094).getInt(10094);
+		shellNautilusID = var2.getItem(Configuration.CATEGORY_ITEM, "shellNautilus", 10095).getInt(10095);
+		eggPlesiosaurID = var2.getItem(Configuration.CATEGORY_ITEM, "eggPlesiosaur", 10096).getInt(10096);
+		eggMosasaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "eggMosasaurus", 10097).getInt(10097);
+		eggStegosaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "eggStegosaurus", 10098).getInt(10098);
+		eggUtahraptorID = var2.getItem(Configuration.CATEGORY_ITEM, "eggUtahraptor", 10099).getInt(10099);
+		eggBrachiosaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "eggBrachiosaurus", 10100).getInt(10100);
+		//eggNewID = var2.getItem(Configuration.CATEGORY_ITEM, "eggNew", 10101).getInt(10101);
+		//eggNewID = var2.getItem(Configuration.CATEGORY_ITEM, "eggNew", 10102).getInt(10102);
+		//eggNewID = var2.getItem(Configuration.CATEGORY_ITEM, "eggNew", 10103).getInt(10103);
+		//eggNewID = var2.getItem(Configuration.CATEGORY_ITEM, "eggNew", 10104).getInt(10104);
+		//eggNewID = var2.getItem(Configuration.CATEGORY_ITEM, "eggNew", 10105).getInt(10105);
+		//eggNewID = var2.getItem(Configuration.CATEGORY_ITEM, "eggNew", 10106).getInt(10106);
 	
 		//Embryos
-		embyoSyringeID = config.getItem(Configuration.CATEGORY_ITEM, "embyoSyringe", 12053).getInt(12053);
-		embryoPigID = config.getItem(Configuration.CATEGORY_ITEM, "embryoPig", 12054).getInt(12054);
-		embryoSheepID = config.getItem(Configuration.CATEGORY_ITEM, "embryoSheep", 12055).getInt(12055);
-		embryoCowID = config.getItem(Configuration.CATEGORY_ITEM, "embryoCow", 12056).getInt(12056);
-		embryoSaberCatID = config.getItem(Configuration.CATEGORY_ITEM, "embryoSaberCat", 12057).getInt(12057);
-		embryoMammothID = config.getItem(Configuration.CATEGORY_ITEM, "embryoMammoth", 12058).getInt(12058);
-	
+		embyoSyringeID = var2.getItem(Configuration.CATEGORY_ITEM, "embyoSyringe", 10107).getInt(10107);
+		embryoPigID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoPig", 10108).getInt(10108);
+		embryoSheepID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoSheep", 10109).getInt(10109);
+		embryoCowID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoCow", 10110).getInt(10110);
+		embryoSaberCatID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoSaberCat", 10111).getInt(10111);
+		embryoMammothID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoMammoth", 10112).getInt(10112);
+		//embryoPigZombieID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoPigZombie", 10113).getInt(10113);
+		//embryoZombieID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoZombie", 10114).getInt(10114);
+		//embryoGhastID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoGhast", 10115).getInt(10115);
+		//embryoWitherID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoWither", 10116).getInt(10116);
+		//embryoSkeletonID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoSkeleton", 10117).getInt(10117);
+		//embryoSpiderID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoSpider", 10118).getInt(10118);
+		
 		//Food
-		cookedChickenSoupID = config.getItem(Configuration.CATEGORY_ITEM, "cookedChickenSoup", 12059).getInt(12059);
-		rawChickenSoupID = config.getItem(Configuration.CATEGORY_ITEM, "rawChickenSoup", 12060).getInt(12060);
-		chickenEssID = config.getItem(Configuration.CATEGORY_ITEM, "chickenEss", 12061).getInt(12061);
-		sjlID = config.getItem(Configuration.CATEGORY_ITEM, "sjl", 12062).getInt(12062);
-		rawDinoMeatID = config.getItem(Configuration.CATEGORY_ITEM, "rawDinoMeat", 12063).getInt(12063);
-		rawTriceratopsID = config.getItem(Configuration.CATEGORY_ITEM, "rawTriceratops", 12064).getInt(12064);
-		rawRaptorID = config.getItem(Configuration.CATEGORY_ITEM, "rawRaptor", 12065).getInt(12065);
-		rawTRexID = config.getItem(Configuration.CATEGORY_ITEM, "rawTRex", 12066).getInt(12066);
-		rawPterosaurID = config.getItem(Configuration.CATEGORY_ITEM, "rawPterosaur", 12067).getInt(12067);
-		rawNautilusID = config.getItem(Configuration.CATEGORY_ITEM, "rawNautilus", 12068).getInt(12068);
-		rawPlesiosaurID = config.getItem(Configuration.CATEGORY_ITEM, "rawPlesiosaur", 12069).getInt(12069);
-		rawMosasaurusID = config.getItem(Configuration.CATEGORY_ITEM, "rawMosasaurus", 12070).getInt(12070);
-		rawStegosaurusID = config.getItem(Configuration.CATEGORY_ITEM, "rawStegosaurus", 12071).getInt(12071);
-		rawUtahraptorID = config.getItem(Configuration.CATEGORY_ITEM, "rawUtahraptor", 12072).getInt(12072);
-		rawBrachiosaurusID = config.getItem(Configuration.CATEGORY_ITEM, "rawBrachiosaurus", 12073).getInt(12073);
-		cookedDinoMeatID = config.getItem(Configuration.CATEGORY_ITEM, "cookedDinoMeat", 12074).getInt(12074);
+		cookedChickenSoupID = var2.getItem(Configuration.CATEGORY_ITEM, "cookedChickenSoup", 10119).getInt(10119);
+		rawChickenSoupID = var2.getItem(Configuration.CATEGORY_ITEM, "rawChickenSoup", 10120).getInt(10120);
+		chickenEssID = var2.getItem(Configuration.CATEGORY_ITEM, "chickenEss", 10121).getInt(10121);
+		sjlID = var2.getItem(Configuration.CATEGORY_ITEM, "sjl", 10122).getInt(10122);
+		rawDinoMeatID = var2.getItem(Configuration.CATEGORY_ITEM, "rawDinoMeat", 10123).getInt(10123);
+		rawTriceratopsID = var2.getItem(Configuration.CATEGORY_ITEM, "rawTriceratops", 10124).getInt(10124);
+		rawRaptorID = var2.getItem(Configuration.CATEGORY_ITEM, "rawRaptor", 10125).getInt(10125);
+		rawTRexID = var2.getItem(Configuration.CATEGORY_ITEM, "rawTRex", 10126).getInt(10126);
+		rawPterosaurID = var2.getItem(Configuration.CATEGORY_ITEM, "rawPterosaur", 10127).getInt(10127);
+		rawNautilusID = var2.getItem(Configuration.CATEGORY_ITEM, "rawNautilus", 10128).getInt(10128);
+		rawPlesiosaurID = var2.getItem(Configuration.CATEGORY_ITEM, "rawPlesiosaur", 10129).getInt(10129);
+		rawMosasaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "rawMosasaurus", 10130).getInt(10130);
+		rawStegosaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "rawStegosaurus", 10131).getInt(10131);
+		rawUtahraptorID = var2.getItem(Configuration.CATEGORY_ITEM, "rawUtahraptor", 10132).getInt(10132);
+		rawBrachiosaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "rawBrachiosaurus", 10133).getInt(10133);
+		cookedDinoMeatID = var2.getItem(Configuration.CATEGORY_ITEM, "cookedDinoMeat", 10135).getInt(10135);
 	
-		config.save();
+		}
+        catch (Exception var7)
+        {
+            FMLLog.log(Level.SEVERE, var7, "Fossil Mod Not loading configuration", new Object[0]);
+        }
+        finally
+        {
+            var2.save();
+        }
 		
 	}
 	
@@ -527,13 +827,17 @@ public class Fossil
         feederIdle = new BlockFeeder(feederIdleID, false).setHardness(3.5F).setStepSound(Block.soundStoneFootstep).setBlockName("Feeder").setRequiresSelfNotify().setCreativeTab(this.tabFBlocks);
         feederActive = new BlockFeeder(feederActiveID, false).setHardness(3.5F).setStepSound(Block.soundStoneFootstep).setBlockName("Feeder").setRequiresSelfNotify();
         blockTimeMachine = new BlockTimeMachine(blockTimeMachineID, 0, Material.glass).setLightValue(0.9375F).setHardness(0.3F).setStepSound(Block.soundGlassFootstep).setBlockName("BlockTimeMachine").setCreativeTab(this.tabFBlocks);
-        ferns = new BlockFern(fernsID, 0, false).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setRequiresSelfNotify().setCreativeTab((CreativeTabs)null);
-        fernUpper = new BlockFern(fernUpperID, 0, true).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setRequiresSelfNotify().setCreativeTab((CreativeTabs)null);
+        /*, false*/ferns = new BlockFern(fernsID, 0).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setRequiresSelfNotify().setCreativeTab((CreativeTabs)null);
+        //fernUpper = new BlockFern(fernUpperID, 0, true).setHardness(0.0F).setStepSound(Block.soundGrassFootstep).setRequiresSelfNotify().setCreativeTab((CreativeTabs)null);
         drum = new BlockDrum(drumID).setHardness(0.8F).setBlockName("drum").setRequiresSelfNotify().setCreativeTab(this.tabFBlocks);
         blockPermafrost = new BlockPermafrost(blockPermafrostID, 5).setHardness(0.5F).setLightOpacity(3).setStepSound(Block.soundGrassFootstep).setBlockName("Permafrost").setRequiresSelfNotify().setCreativeTab(this.tabFBlocks);
         blockIcedStone = new BlockIcedStone(blockIcedStoneID, 6).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundStoneFootstep).setBlockName("IcedStone").setRequiresSelfNotify().setCreativeTab(this.tabFBlocks);
         blockFossil = new BlockFossil(blockFossilID, 1).setHardness(3.0F).setResistance(5.0F).setStepSound(Block.soundStoneFootstep).setBlockName("fossil").setCreativeTab(this.tabFBlocks);
         blockSkull = new BlockFossilSkull(blockSkullID, 0, false).setHardness(1.0F).setStepSound(Block.soundStoneFootstep).setBlockName("Skull").setCreativeTab(this.tabFBlocks);
+        
+        //volcanicAsh = new BlockVolcanicAsh(volcanicAshID, 1).setHardness(0.5F).setStepSound(Block.soundGrassFootstep).setBlockName("VolcanicAsh").setCreativeTab(this.tabFBlocks);
+		//volcanicRock = new BlockVolcanicRock(volcanicRockID, 1).setHardness(3.0F).setResistance(5.0F).setStepSound(Block.soundStoneFootstep).setBlockName("VolcanicRock").setCreativeTab(this.tabFBlocks);
+		tar = new BlockTar(tarID, 22).setHardness(100.0F).setBlockName("Tar");
         
         //Items
 		biofossil = new ItemBioFossil(biofossilID).setIconIndex(38).setItemName("biofossil").setCreativeTab(this.tabFItems);
@@ -561,10 +865,20 @@ public class Fossil
 		goldjavelin = new ItemJavelin(goldjavelinID, EnumToolMaterial.GOLD).setIconIndex(0).setItemName("GoldJavelin").setCreativeTab(this.tabFCombat);
 		diamondjavelin = new ItemJavelin(diamondjavelinID, EnumToolMaterial.EMERALD).setIconIndex(0).setItemName("DiamondJavelin").setCreativeTab(this.tabFCombat);
 		ancientJavelin = new ItemJavelin(ancientJavelinID, EnumToolMaterial.IRON).setItemName("AncientJavelin").setCreativeTab(this.tabFCombat);
-		whip = new ItemWhip(whipID).setIconIndex(64).setItemName("FossilWhip").setCreativeTab(this.tabFTools);
-        
+		whip = new ItemWhip(whipID).setIconIndex(65).setItemName("FossilWhip").setCreativeTab(this.tabFTools);
+        legBone = new ItemLegBone(legBoneID).setIconIndex(80).setItemName("LegBone").setCreativeTab(this.tabFItems);
+		claw = new ItemClaw(clawID).setIconIndex(81).setItemName("Claw").setCreativeTab(this.tabFItems);
+		foot = new ItemFoot(footID).setIconIndex(82).setItemName("Foot").setCreativeTab(this.tabFItems);
+		skull = new ItemSkull(skullID).setIconIndex(83).setItemName("Skull").setCreativeTab(this.tabFItems);
+		
+		//BoneArmor
+		skullHelmet = new ItemSkullHelmet(skullHelmetID, dinoBone, 3, 0).setIconIndex(66).setItemName("SkullHelmet");
+		ribCage = new ItemRibCage(ribCageID, dinoBone, 3, 1).setIconIndex(67).setItemName("RibCage");
+		femurs = new ItemFemurs(femursID, dinoBone, 3, 2).setIconIndex(68).setItemName("ShinGuard");
+		feet = new ItemFeet(feetID, dinoBone, 3, 3).setIconIndex(69).setItemName("Feet").setCreativeTab(Fossil.tabFArmor);
+		
 		//Ancient Egg
-		//ancientegg = new ItemAncientEgg(ancienteggID).setIconIndex(0).setItemName("TriceratopsEgg").setCreativeTab(CreativeTabs.tabMaterials);
+		ancientegg = new ItemAncientEgg(ancienteggID);
 		eggTriceratops = new ItemAncientEgg(eggTriceratopsID).setIconIndex(22).setItemName("eggTriceratops").setCreativeTab(this.tabFMaterial);
 		eggRaptor = new ItemAncientEgg(eggRaptorID).setIconIndex(23).setItemName("eggRaptor").setCreativeTab(this.tabFMaterial);
 		eggTRex = new ItemAncientEgg(eggTRexID).setIconIndex(24).setItemName("eggTRex").setCreativeTab(this.tabFMaterial);
@@ -577,8 +891,7 @@ public class Fossil
 		eggBrachiosaurus = new ItemAncientEgg(eggBrachiosaurusID).setIconIndex(31).setItemName("eggBrachiosaurus").setCreativeTab(this.tabFMaterial);
 		
 		//DNA
-		//public static Item dna;
-		dna = new ItemDNA(12076);
+		dna = new ItemDNA(dnaID);
 		dnaTriceratops = new ItemDNA(dnaTriceratopsID).setIconIndex(6).setItemName("dnaTriceratops").setCreativeTab(this.tabFMaterial);
 		dnaRaptor = new ItemDNA(dnaRaptorID).setIconIndex(7).setItemName("dnaRaptor").setCreativeTab(this.tabFMaterial);
 		dnaTRex = new ItemDNA(dnaTRexID).setIconIndex(8).setItemName("dnaTRex").setCreativeTab(this.tabFMaterial);
@@ -590,8 +903,8 @@ public class Fossil
 		dnaUtahraptor = new ItemDNA(dnaUtahraptorID).setIconIndex(14).setItemName("dnaUtahraptor").setCreativeTab(this.tabFMaterial);
 		dnaBrachiosaurus = new ItemDNA(dnaBrachiosaurusID).setIconIndex(15).setItemName("dnaBrachiosaurus").setCreativeTab(this.tabFMaterial);
 
-		//public static Item animalDNA;
-		animalDNA = new ItemNonDinoDNA(12077);
+		//animalDNA
+		animalDNA = new ItemNonDinoDNA(animalDNAID);
 		dnaPig = new ItemNonDinoDNA(dnaPigID).setIconIndex(70).setItemName("dnaPig").setCreativeTab(this.tabFMaterial);
 		dnaSheep = new ItemNonDinoDNA(dnaSheepID).setIconIndex(71).setItemName("dnaSheep").setCreativeTab(this.tabFMaterial);
 		dnaTCow = new ItemNonDinoDNA(dnaTCowID).setIconIndex(72).setItemName("dnaTCow").setCreativeTab(this.tabFMaterial);
@@ -600,7 +913,7 @@ public class Fossil
 		dnaMammoth = new ItemNonDinoDNA(dnaMammothID).setIconIndex(75).setItemName("dnaMammoth").setCreativeTab(this.tabFMaterial);
 		
 		//Ebryos
-		//embyoSyringe = new ItemEmbryoSyringe(embyoSyringeID).setIconIndex(0).setItemName("EmbryoSyringe").setCreativeTab(this.tabFItems);
+		embyoSyringe = new ItemEmbryoSyringe(embyoSyringeID);
 		embryoPig = new ItemEmbryoSyringe(embryoPigID).setIconIndex(0).setItemName("embryoPig").setCreativeTab(this.tabFItems);
 		embryoSheep = new ItemEmbryoSyringe(embryoSheepID).setIconIndex(1).setItemName("embryoSheep").setCreativeTab(this.tabFItems);
 		embryoCow = new ItemEmbryoSyringe(embryoCowID).setIconIndex(2).setItemName("embryoCow").setCreativeTab(this.tabFItems);
@@ -625,6 +938,22 @@ public class Fossil
 		chickenEss = new ForgeItemFood(chickenEssID, 10, 0.0F, false).setIconIndex(59).setItemName("ChickenEss").setContainerItem(Item.glassBottle).setCreativeTab(this.tabFFood);
 		sjl = new ForgeItemFood(sjlID, 8, 2.0F, false).setIconIndex(43).setItemName("SioChiuLe").setCreativeTab(this.tabFFood);
         
+		//Biomes
+		jungle1 = new BiomeJungle1(30);
+		jungle2 = new BiomeJungle2(31);
+		river1 = new BiomeRiver1(32);
+		river2 = new BiomeRiver2(33);
+		ocean1 = new BiomeOcean1(34);
+		ocean2 = new BiomeOcean2(35);
+		swamp1 = new BiomeSwamp1(36);
+		swamp2 = new BiomeSwamp2(37);
+				
+		//HarvestLevel
+		MinecraftForge.setBlockHarvestLevel(blockFossil, 0, "pickaxe", 2);
+		MinecraftForge.setBlockHarvestLevel(blockPermafrost, 0, "shovel", 2);
+		MinecraftForge.setBlockHarvestLevel(blockIcedStone, 0, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(blockIcedStone, 1, "pickaxe", 1);
+		
 		//Block Registry
 		GameRegistry.registerBlock(blockFossil, "fossil_blockFossil");
 		GameRegistry.registerBlock(blockSkull, "fossil_blockSkull");
@@ -636,7 +965,7 @@ public class Fossil
 		GameRegistry.registerBlock(blockworktableIdle, "fossil_blockworktableIdle");
 		GameRegistry.registerBlock(blockworktableActive, "fossil_blockworktableActive");
 		GameRegistry.registerBlock(ferns, "fossil_Ferns");
-		GameRegistry.registerBlock(fernUpper, "fossil_FernUpper");
+		//GameRegistry.registerBlock(fernUpper, "fossil_FernUpper");
 		GameRegistry.registerBlock(drum, "fossil_Dump");
 		GameRegistry.registerBlock(feederIdle, "fossil_FeederIdle");
 		GameRegistry.registerBlock(feederActive, "fossil_FeederActive");
@@ -644,6 +973,10 @@ public class Fossil
 		GameRegistry.registerBlock(blockIcedStone, "fossil_blockIcedStone");
 		GameRegistry.registerBlock(blockTimeMachine, "blockTimeMachine");
 
+		//GameRegistry.registerBlock(volcanicAsh, "VolcanicAsh");
+		//GameRegistry.registerBlock(volcanicRock, "VolcanicRock");
+		GameRegistry.registerBlock(tar, "Tar");
+		
 		//Items & Block Names
         LanguageRegistry.addName(blockFossil, "Block Fossil");
         LanguageRegistry.addName(blockSkull, "Block Skull");
@@ -671,7 +1004,17 @@ public class Fossil
         LanguageRegistry.addName(dinoPedia, "Dino Pedia");
         LanguageRegistry.addName(emptyShell, "Empty Shell");
         LanguageRegistry.addName(magicConch, "Magic Conch");
-        
+        //LanguageRegistry.addName(volcanicAsh, "Volcanic Ash");
+		//LanguageRegistry.addName(volcanicRock, "Volcanic Rock");
+		LanguageRegistry.addName(tar, "Tar");
+		LanguageRegistry.addName(legBone, "Leg Bone");
+		LanguageRegistry.addName(claw, "Claw");
+		LanguageRegistry.addName(foot, "Foot");
+		LanguageRegistry.addName(skull, "Skull");
+		LanguageRegistry.addName(skullHelmet, "Skull Helmet");
+		LanguageRegistry.addName(ribCage, "Rib Cage");
+		LanguageRegistry.addName(femurs, "Shin Guards");
+		LanguageRegistry.addName(feet, "Feet");
         LanguageRegistry.addName(blockPermafrost, "blockPermafrost");
         LanguageRegistry.addName(blockIcedStone, "blockIcedStone");
         LanguageRegistry.addName(icedMeat, "icedMeat");
@@ -743,14 +1086,14 @@ public class Fossil
 		GameRegistry.addRecipe(new ItemStack(blockcultivateIdle, 1), new Object[] {"XYX", "XWX", "ZZZ", 'X', Block.glass, 'Y', new ItemStack(Item.dyePowder, 1, 2), 'W', Item.bucketWater, 'Z', Item.ingotIron});
 		GameRegistry.addRecipe(new ItemStack(blockanalyzerIdle, 1), new Object[] {"XYX", "XWX", 'X', Item.ingotIron, 'Y', relic, 'W', biofossil});
 		GameRegistry.addRecipe(new ItemStack(blockworktableIdle, 1), new Object[] {"X", "Y", 'X', Item.paper, 'Y', Block.workbench});
-		/*GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', new ItemStack(ancientegg, 1, 0)});
-		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', new ItemStack(ancientegg, 1, 1)});
-		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', new ItemStack(ancientegg, 1, 2)});
-		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', new ItemStack(ancientegg, 1, 3)});
-		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', new ItemStack(ancientegg, 1, 5)});
-		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', new ItemStack(ancientegg, 1, 6)});
-		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', new ItemStack(ancientegg, 1, 7)});
-		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', new ItemStack(ancientegg, 1, 8)});*/
+		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', this.eggTriceratops});
+		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', this.eggRaptor});
+		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', this.eggTRex});
+		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', this.eggPterosaur});
+		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', this.shellNautilus});
+		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', this.eggPlesiosaur});
+		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', this.eggMosasaurus});
+		GameRegistry.addRecipe(new ItemStack(Item.cake, 1), new Object[] {"AAA", "BEB", "CCC", 'A', Item.bucketMilk, 'B', Item.sugar, 'C', Item.wheat, 'E', this.eggStegosaurus});
 		GameRegistry.addRecipe(new ItemStack(skullStick, 1), new Object[] {"X", "Y", 'X', blockSkull, 'Y', Item.stick});
 		GameRegistry.addRecipe(new ItemStack(drum, 1), new Object[] {"ZZZ", "XYX", "XXX", 'X', Block.planks, 'Y', Item.redstone, 'Z', Item.leather});
 		GameRegistry.addRecipe(new ItemStack(feederIdle, 1), new Object[] {"XYX", "ZAB", "BBB", 'X', Item.ingotIron, 'Y', Block.glass, 'Z', Block.stoneButton, 'A', Item.bucketEmpty, 'B', Block.stone});
@@ -779,23 +1122,24 @@ public class Fossil
 		GameRegistry.addShapelessRecipe(new ItemStack(genShovel), new Object[] {Item.shovelSteel, gen});
 		GameRegistry.addShapelessRecipe(new ItemStack(genShovel), new Object[] {Item.shovelGold, gen});
 		GameRegistry.addShapelessRecipe(new ItemStack(genShovel), new Object[] {Item.shovelDiamond, gen});
-		//GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 0)});
-		/*GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 1)});
+		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 0)});
+		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 1)});
 		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 2)});
 		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 3)});
 		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 4)});
 		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 5)});
 		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 6)});
 		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 7)});
-		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 8)});*/
-		//GameRegistry.addShapelessRecipe(new ItemStack(chickenSoup, 1, 0), new Object[] {Item.bucketEmpty, Item.chickenRaw});
+		GameRegistry.addShapelessRecipe(new ItemStack(dinoPedia), new Object[] {Item.book, new ItemStack(dna, 1, 8)});
+		GameRegistry.addShapelessRecipe(new ItemStack(rawChickenSoup, 1, 0), new Object[] {Item.bucketEmpty, Item.chickenRaw});
 		//GameRegistry.addShapelessRecipe(new ItemStack(magicConch, 1, 1), new Object[] {new ItemStack(magicConch, 1, 0)});
 		//GameRegistry.addShapelessRecipe(new ItemStack(magicConch, 1, 2), new Object[] {new ItemStack(magicConch, 1, 1)});
 		//GameRegistry.addShapelessRecipe(new ItemStack(magicConch, 1, 0), new Object[] {new ItemStack(magicConch, 1, 2)});
 		GameRegistry.addRecipe(new ItemStack(chickenEss, 8), new Object[] {"XXX", "XYX", "XXX", 'X', Item.glassBottle, 'Y', new ItemStack(rawChickenSoup, 1, 1)});
+		GameRegistry.addRecipe(new ItemStack(whip, 1), new Object[] {"XXS", "XTS", "TXS", 'T', Item.stick, 'S', Item.silk});
 		
-        //GameRegistry.addSmelting(chickenSoup.itemID, new ItemStack(chickenSoup, 1, 1), 3.0F);
-        //GameRegistry.addSmelting(rawDinoMeat.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawChickenSoup.itemID, new ItemStack(cookedChickenSoup), 3.0F);
+        GameRegistry.addSmelting(rawDinoMeat.itemID, new ItemStack(cookedDinoMeat), 3.0F);
         GameRegistry.addSmelting(icedMeat.itemID, new ItemStack(Item.beefCooked), 3.0F);
 		
 		EntityRegistry.registerModEntity(EntityStoneboard.class, "StoneBoard", 1, this, 250, 5, false);
@@ -825,7 +1169,17 @@ public class Fossil
 		EntityRegistry.registerModEntity(EntityMammoth.class, "Mammoth", 24, this, 250, 5, true);
 
 		GameRegistry.registerWorldGenerator(new FossilGenerator());
+		GameRegistry.registerWorldGenerator(new TarGenerator());
 		GameRegistry.registerWorldGenerator(new WorldGenAcademy());
+		GameRegistry.registerWorldGenerator(new WorldGenBigShip());
+		GameRegistry.registerWorldGenerator(new WorldGenCheheWreck());
+		GameRegistry.registerWorldGenerator(new WorldGenVikingWreck());
+		GameRegistry.registerWorldGenerator(new WorldGenShortRangeWreck());
+		GameRegistry.registerWorldGenerator(new WorldGenShipWreck180());
+		GameRegistry.registerWorldGenerator(new WorldGenShipWreck270());
+		GameRegistry.registerWorldGenerator(new WorldGenShipWreck90());
+		GameRegistry.registerWorldGenerator(new WorldGenGalleonWreck());
+		GameRegistry.registerWorldGenerator(new WorldGenDukeWreck());
 		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck());
 		//GameRegistry.registerWorldGenerator(new WorldGenWeaponShopA());
 
@@ -922,37 +1276,26 @@ public class Fossil
 	}*/
 
 	public static void UpdateLangProp()
-	{
-    		//Langfile = new File(Fossil.class.getResource("/Fossillang/" + LastLangSetting + ".lang").getFile());
-				
-			//UTF8Reader(LangProps);
-			//System.out.println("LANGUAGE: "+Minecraft.getMinecraft().gameSettings.language);
-			String file="E:/Tims Büro/Programmieren/Java/MC/FA/forge/mcp/eclipse/Minecraft/bin/mod/fossil/common/Fossillang/en_US.lang";
-
+	{//Fossil.class.getResource("Fossillang").getPath()+Minecraft.getMinecraft().gameSettings.language+".lang";
+			//String file="E:/Tims Büro/Programmieren/Java/MC/FA/forge/mcp/eclipse/Minecraft/bin/mod/fossil/common/Fossillang/en_US.lang";
+			//File folder =new File(Minecraft.getMinecraft().mcDataDir, "resources/mod/fossil/Fossillang");
+			//String file=/*folder.getAbsolutePath()*/Minecraft.getMinecraft().mcDataDir.getPath()+"/resources/mod/fossil/Fossillang/"+Minecraft.getMinecraft().gameSettings.language+".lang";
 			try
 			{
-				//InputStream i0=Fossil.class.getResourceAsStream(file);
-				//BufferedReader var2 = new BufferedReader(new InputStreamReader(Fossil.class.getResourceAsStream(file), "UTF-8"));
-				BufferedReader var2 = new BufferedReader(new FileReader(file));
-				for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())//"/Fossillang/" + var1 + ".lang"
+				BufferedReader var2 = new BufferedReader(new FileReader(new File(Minecraft.getMinecraft().mcDataDir, "resources/mods/fossil/Fossillang/"+Minecraft.getMinecraft().gameSettings.language+".lang")));
+				for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())
 				{
-		    		var3 = var3.trim();
-		
 		    		if (!var3.startsWith("#"))
 		    		{
 		        		String[] var4 = var3.split("=");
 		        		if (var4 != null && var4.length == 2)
-		        		{
-		        			LangProps.setProperty(var4[0], var4[1]);
-		        			if(Fossil.DebugMode)
-		        				System.out.println("SUCCESS: "+var4[0]+" added");
-		        		}
+		        			LangProps.setProperty(var4[0].trim(), var4[1].trim());
 		    		}
 				}
 			}
 			catch(IOException e)
 			{
-				System.err.println("Error loading language file: " + e.getMessage());
+				System.err.println("Error loading language file: " + e.getMessage());//+ file);
 			}
 	}
 
@@ -1099,7 +1442,7 @@ public class Fossil
 		}
 	}
 
-	public static String GetEmbyoName(EnumEmbyos var0)
+	/*public static String GetEmbyoName(EnumEmbyos var0)
 	{
 		String var1 = "";
 
@@ -1116,7 +1459,7 @@ public class Fossil
 		}
 
 		return var1;
-	}
+	}*/
 	
 	@cpw.mods.fml.common.Mod.PostInit
 	public void PostInit(FMLPostInitializationEvent event)

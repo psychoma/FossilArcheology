@@ -6,7 +6,7 @@ public class DinoFoodBlockList {
 	
 	EnumDinoFoodBlock [] Blocks;
 	
-	int index;	
+	public int index;	
 	
 	public DinoFoodBlockList()
 	{

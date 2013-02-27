@@ -1,6 +1,8 @@
 package mod.fossil.common.entity.mob;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.fossilInterface.IWaterDino;
+import mod.fossil.common.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -88,12 +91,12 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         //this.AgingTicks=;
         this.MaxHunger=500;
         //this.Hungrylevel=;
-        this.ItemToControl=Fossil.emptyShell;
         this.moveSpeed = this.getSpeed();//should work
         
         FoodItemList.addItem(EnumDinoFoodItem.FishRaw);
         FoodItemList.addItem(EnumDinoFoodItem.FishCooked);
         FoodItemList.addItem(EnumDinoFoodItem.Sjl);
+        FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
         
         this.getNavigator().setCanSwim(true);
         //this.tasks.addTask(0, new DinoAIGrowup(this, 12));
@@ -858,6 +861,13 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    public void ShowPedia(GuiPedia p0)
+    {
+    	super.ShowPedia(p0);
+    	p0.PrintItemXY(Fossil.dnaPlesiosaur, 120, 7);
+    }
+    
     /*public void ShowPedia(EntityPlayer var1)
     {
         if (this.isTamed())

@@ -12,6 +12,7 @@ import mod.fossil.common.fossilAI.DinoAIPickItem;
 import mod.fossil.common.fossilAI.DinoAIPickItems;
 import mod.fossil.common.fossilAI.DinoAIStarvation;
 import mod.fossil.common.fossilAI.DinoAIUseFeeder;
+import mod.fossil.common.fossilAI.DinoAIWander;
 import mod.fossil.common.fossilEnums.EnumDinoEating;
 import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
@@ -37,6 +38,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.src.ModLoader;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -83,14 +86,15 @@ public class EntityPterosaur extends EntityDinosaurce
         //this.AgingTicks=;
         //this.MaxHunger=;
         //this.Hungrylevel=;
-        this.ItemToControl=Item.arrow;
         this.moveSpeed = this.getSpeed();//should work
         
         FoodItemList.addItem(EnumDinoFoodItem.FishRaw);
         FoodItemList.addItem(EnumDinoFoodItem.FishCooked);
         FoodItemList.addItem(EnumDinoFoodItem.Sjl);
+        FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
         
         this.tasks.addTask(0, new EntityAISwimming(this));
+        this.texture = "/mod/fossil/common/textures/Pterosaur.png";
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
@@ -103,7 +107,7 @@ public class EntityPterosaur extends EntityDinosaurce
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.fishCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.sjl, this.moveSpeed * 2.0F, 24, this.HuntLimit));*/
         this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
-        this.tasks.addTask(7, new EntityAIWander(this, 0.3F));
+        this.tasks.addTask(7, new DinoAIWander(this, this.moveSpeed));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
@@ -132,7 +136,8 @@ public class EntityPterosaur extends EntityDinosaurce
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setBoolean("Angry", this.isSelfAngry());
+        var1.setInteger("LearningChestTick", this.LearningChestTick);
+        //var1.setBoolean("Angry", this.isSelfAngry());
         var1.setFloat("Airspeed", this.AirSpeed);
         var1.setFloat("AirAngle", this.AirAngle);
         var1.setFloat("AirPitch", this.AirPitch);
@@ -144,7 +149,7 @@ public class EntityPterosaur extends EntityDinosaurce
     public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
-        this.setSelfAngry(var1.getBoolean("Angry"));
+        //this.setSelfAngry(var1.getBoolean("Angry"));
         //this.setSelfSitting(var1.getBoolean("Sitting"));
 
         /*if (var1.hasKey("SubType"))
@@ -206,6 +211,12 @@ public class EntityPterosaur extends EntityDinosaurce
     public void onUpdate()
     {
         super.onUpdate();
+        if(this.LearningChestTick>0 && this.isNearbyChest() && this.isAdult())
+        {
+        	this.LearningChestTick--;
+        	if(this.LearningChestTick==0)
+        		this.SendStatusMessage(EnumSituation.LearningChest);//, this.SelfType);
+        }
         /*this.field_25054_c = this.field_25048_b;
 
         if (this.looksWithInterest)
@@ -221,6 +232,27 @@ public class EntityPterosaur extends EntityDinosaurce
         {
             this.numTicksToChaseTarget = 10;
         }
+    }
+    public boolean isLearnedChest()
+    {
+        return this.LearningChestTick == 0;
+    }
+    private boolean isNearbyChest()
+    {
+        TileEntity var5 = null;
+        for (int var6 = -10; var6 <= 10; ++var6)
+        {
+            for (int var7 = 0; var7 <= 3; ++var7)
+            {
+                for (int var8 = -10; var8 <= 10; ++var8)
+                {
+                    var5 = this.worldObj.getBlockTileEntity((int)(this.posX + (double)var6), (int)(this.posY + (double)var7), (int)(this.posZ + (double)var8));
+                    if (var5 instanceof TileEntityChest)
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 
     public float getEyeHeight()
@@ -251,7 +283,7 @@ public class EntityPterosaur extends EntityDinosaurce
      */
     protected Entity findPlayerToAttack()
     {
-        return this.isSelfAngry() ? this.worldObj.getClosestPlayerToEntity(this, 16.0D) : null;
+        return this.isAngry() ? this.worldObj.getClosestPlayerToEntity(this, 16.0D) : null;
     }
 
     /**
@@ -336,7 +368,7 @@ public class EntityPterosaur extends EntityDinosaurce
         }
     }
 
-    public boolean isSelfAngry()
+   /* public boolean isSelfAngry()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
     }
@@ -346,7 +378,7 @@ public class EntityPterosaur extends EntityDinosaurce
         return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
     }*/
 
-    public void setSelfAngry(boolean var1)
+    /*public void setSelfAngry(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
 
@@ -359,7 +391,7 @@ public class EntityPterosaur extends EntityDinosaurce
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -3)));
         }
-    }
+    }*/
 
     /*public void setSelfSitting(boolean var1)
     {
@@ -425,7 +457,7 @@ public class EntityPterosaur extends EntityDinosaurce
         this.setPosition(this.posX, this.posY, this.posZ);
     }
 
-    public void CheckSkin()
+    /*public void CheckSkin()
     {
         if (!this.isModelized())
         {
@@ -435,7 +467,7 @@ public class EntityPterosaur extends EntityDinosaurce
         {
             this.texture = this.getModelTexture();
         }
-    }
+    }*/
 
     public boolean CheckSpace()
     {
@@ -476,6 +508,10 @@ public class EntityPterosaur extends EntityDinosaurce
     {
     	super.ShowPedia(p0);
     	p0.PrintItemXY(Fossil.dnaPterosaur, 120, 7);
+    	if(this.LearningChestTick==0)
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Chest"), true);
+    	if(this.isAdult())
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Fly"), true);
     }
 
     /*public void ShowPedia(EntityPlayer var1)

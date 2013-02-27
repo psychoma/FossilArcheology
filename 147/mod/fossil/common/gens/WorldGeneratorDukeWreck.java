@@ -11,7 +11,7 @@ public class WorldGeneratorDukeWreck extends WorldGenerator
 	
 	public boolean generate(World world, Random rand, int i, int j, int k)
 	{
-		
+		System.out.println("Generating DukeWreck");
 		world.setBlockAndMetadata(i + 0, j + 22, k + 11, Block.wood.blockID, 1);
 		world.setBlockAndMetadata(i + 1, j + 22, k + 11, Block.wood.blockID, 1);
 		world.setBlockAndMetadata(i + 2, j + 22, k + 11, Block.wood.blockID, 1);

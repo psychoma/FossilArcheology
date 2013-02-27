@@ -1,5 +1,6 @@
 package mod.fossil.common.entity.mob;
 
+import net.minecraft.item.Item;
 import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 
 public class DinoFoodItemList {
@@ -22,7 +23,7 @@ public class DinoFoodItemList {
 	{
 		for (int i=0;i<index;i++)
 		{
-			if (Items[i].itemID == ID)
+			if (Items[i].item.itemID == ID)
 				return true;
 		}
 		return false;
@@ -31,7 +32,7 @@ public class DinoFoodItemList {
 	{
 		for (int i=0;i<index;i++)
 		{
-			if (Items[i].itemID == ID)
+			if (Items[i].item.itemID == ID)
 				return Items[i].FoodValue;
 		}
 		return 0;	
@@ -40,10 +41,16 @@ public class DinoFoodItemList {
 	{
 		for (int i=0;i<index;i++)
 		{
-			if (Items[i].itemID == ID)
+			if (Items[i].item.itemID == ID)
 				return Items[i].HealValue;
 		}
 		return 0;	
+	}
+	public Item getItem(int ID)
+	{
+		if (ID>=0 && ID<index)
+			return Items[ID].item;
+		return null;	
 	}
 	public boolean IsEmpty()
 	{

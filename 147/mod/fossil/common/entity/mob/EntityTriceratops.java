@@ -73,11 +73,13 @@ public class EntityTriceratops extends EntityDinosaurce
         //this.AgingTicks=;
         this.MaxHunger=500;
         //this.Hungrylevel=;
-        this.ItemToControl=Item.stick;
         this.moveSpeed = this.getSpeed();//should work
         
         this.FoodItemList.addItem(EnumDinoFoodItem.Wheat);
         this.FoodItemList.addItem(EnumDinoFoodItem.Melon);
+        this.FoodItemList.addItem(EnumDinoFoodItem.Apple);
+        this.FoodItemList.addItem(EnumDinoFoodItem.Bread);
+        this.FoodItemList.addItem(EnumDinoFoodItem.Potato);
         
         this.setSubSpecies((new Random()).nextInt(3) + 1);
         this.getNavigator().setAvoidsWater(true);
@@ -116,22 +118,42 @@ public class EntityTriceratops extends EntityDinosaurce
         {
             return super.getTexture();
         }
-        else if(this.isBaby())
+        else if(!this.isAdult())
         {
-            switch (this.getSubSpecies())
-            {
-                case 1:
-                    return "/mod/fossil/common/textures/Triceratops_Baby_1.png";
+        	if(this.getDinoAge()>2)
+        	{
+	            switch (this.getSubSpecies())
+                {
+                    case 1:
+                        return "/mod/fossil/common/textures/Triceratops_Teen_1.png";
 
-                case 2:
-                    return "/mod/fossil/common/textures/Triceratops_Baby_2.png";
+                    case 2:
+                        return "/mod/fossil/common/textures/Triceratops_Teen_2.png";
 
-                case 3:
-                    return "/mod/fossil/common/textures/Triceratops_Baby_3.png";
+                    case 3:
+                        return "/mod/fossil/common/textures/Triceratops_Teen_3.png";
 
-                default:
-                    return "/mod/fossil/common/textures/Triceratops_Baby_1.png";
-            }
+                    default:
+                        return "/mod/fossil/common/textures/Triceratops_Teen_1.png";
+                }
+        	}
+        	else
+        	{
+        		switch (this.getSubSpecies())
+	            {
+	                case 1:
+	                    return "/mod/fossil/common/textures/Triceratops_Baby_1.png";
+	
+	                case 2:
+	                    return "/mod/fossil/common/textures/Triceratops_Baby_2.png";
+	
+	                case 3:
+	                    return "/mod/fossil/common/textures/Triceratops_Baby_3.png";
+	
+	                default:
+	                    return "/mod/fossil/common/textures/Triceratops_Baby_1.png";
+	            }
+        	}
         }
         else
         {
@@ -396,10 +418,10 @@ public class EntityTriceratops extends EntityDinosaurce
         this.moveSpeed = this.getSpeed();//0.5F + (float)(this.getDinoAge() * 3);
     }
 
-    private void ChangeTexture()
+    /*private void ChangeTexture()
     {
         this.CheckSkin();
-    }
+    }*/
 
     public void updateRiderPosition()
     {
@@ -587,12 +609,14 @@ public class EntityTriceratops extends EntityDinosaurce
             Fossil.ShowMessage(UntamedText, var1);
         }
     }*/
+    
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
     {
     	super.ShowPedia(p0);
     	p0.PrintItemXY(Fossil.dnaTriceratops, 120, 7);
     }
+    
     public EntityTriceratops spawnBabyAnimal(EntityAgeable var1)
     {
         return new EntityTriceratops(this.worldObj);
@@ -647,7 +671,7 @@ public class EntityTriceratops extends EntityDinosaurce
                         this.worldObj.playAuxSFX(2001, (int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4), (int)Math.round(this.posZ + (double)var5 + (double)var7), Block.tallGrass.blockID);
                         this.worldObj.setBlockWithNotify((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4), (int)Math.round(this.posZ + (double)var5 + (double)var7), 0);
 
-                        if (this.worldObj.getBlockId((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4) + 1, (int)Math.round(this.posZ + (double)var5 + (double)var7)) == Fossil.fernUpper.blockID)
+                        if (this.worldObj.getBlockId((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4) + 1, (int)Math.round(this.posZ + (double)var5 + (double)var7)) == Fossil.ferns.blockID)//fernUpper
                         {
                             this.worldObj.setBlockWithNotify((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4) + 1, (int)Math.round(this.posZ + (double)var5 + (double)var7), 0);
                         }

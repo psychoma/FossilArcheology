@@ -9,13 +9,10 @@ import net.minecraft.world.World;
 
 public class BlockFern extends BlockFlower
 {
-    boolean lv2;
 
-    protected BlockFern(int var1, int var2)
+    public BlockFern(int var1, int var2)
     {
         super(var1, var2);
-        this.lv2 = false;
-        this.blockIndexInTexture = Fossil.fernPics[0];
         this.setTickRandomly(true);
         float var3 = 0.5F;
         this.setBlockBounds(0.5F - var3, 0.0F, 0.5F - var3, 0.5F + var3, 0.25F, 0.5F + var3);
@@ -23,11 +20,10 @@ public class BlockFern extends BlockFlower
         this.setRequiresSelfNotify();
     }
 
-    public BlockFern(int var1, int var2, boolean var3)
+    /*public BlockFern(int var1, int var2, boolean lev0)
     {
         this(var1, var2);
-        this.lv2 = var3;
-    }
+    }*/
 
     public String getTextureFile()
     {
@@ -50,40 +46,43 @@ public class BlockFern extends BlockFlower
     {
         super.updateTick(var1, var2, var3, var4, var5);
         int var6 = var1.getBlockMetadata(var2, var3, var4);
-
-        if (CheckUnderTree(var1, var2, var3, var4) && (this.CheckSubType(var6) == 0 && var6 < 5 || this.CheckSubType(var6) == 1 && var6 % 7 < 3))
-        {
+        if (CheckUnderTree(var1, var2, var3, var4) && this.Cangrow(var6))
+        {// only the low ones grow and update the upper ones!
             if (var5.nextInt(10) > 1)
             {
-                ++var6;
-
-                if (!this.lv2 && var6 % 7 > 3)
+                ++var6;//let it grow
+                if(this.GetLv2(var6))//gets level 2
                 {
-                    if (var1.isAirBlock(var2, var3 + 1, var4))
-                    {
-                        var1.setBlockWithNotify(var2, var3 + 1, var4, Fossil.fernUpper.blockID);
-                        var1.setBlockMetadataWithNotify(var2, var3 + 1, var4, 5 + 7 * this.CheckSubType(var6));
-                    }
-                    else if (var1.getBlockId(var2, var3 + 1, var4) != Fossil.fernUpper.blockID && var1.getBlockId(var2, var3 - 1, var4) != Fossil.ferns.blockID)
-                    {
+                	if (!var1.isAirBlock(var2, var3 + 1, var4))//not possible!
                         --var6;
-                    }
+                	else//create new top block
+                	{
+                		var1.setBlockWithNotify(var2, var3 + 1, var4, Fossil.ferns.blockID);//fernUpper
+                        var1.setBlockMetadataWithNotify(var2, var3 + 1, var4, this.CheckSubType(var6)==0?var6+2:var6+1);
+                	}
+                	
                 }
-
-                if (var6 == 1 && (new Random()).nextInt(10) < 5)
+                else if (this.HasLv2(var6))
+                {
+                    if (var1.getBlockId(var2, var3 + 1, var4) == Fossil.ferns.blockID)//fernUpper
+                        var1.setBlockMetadataWithNotify(var2, var3 + 1, var4, this.CheckSubType(var6)==0?var6+2:var6+1);//update top block meta data
+                    else
+                    	var6=this.CheckSubType(var6)==0?3:10;//reset to last block one stage high
+                }
+                /*if (var6 == 1 && (new Random()).nextInt(10) < 5)
                 {
                     var6 += 7;
-                }
-
-                var1.setBlockMetadataWithNotify(var2, var3, var4, var6);
+                }*/
+                System.out.println(String.valueOf(var6));
+                var1.setBlockMetadataWithNotify(var2, var3, var4, var6); 
             }
-            else if (!this.lv2 && var5.nextInt(100) < 5)
+            /*else if (!this.lv2 && var5.nextInt(100) < 5)
             {
                 this.breakBlock(var1, var2, var3, var4, this.blockID, var6);
-            }
+            }*/
         }
 
-        var1.getBlockId(var2, var3, var4);
+        //var1.getBlockId(var2, var3, var4);
 
         if (var6 % 7 >= 3)
         {
@@ -93,10 +92,10 @@ public class BlockFern extends BlockFlower
                 {
                     for (int var10 = -1; var10 <= 1; ++var10)
                     {
-                        if ((var8 != 0 || var10 != 0 || var9 != 0) && var1.getBlockId(var2 + var8, var9 + var3, var4 + var10) != this.blockID && var1.getBlockId(var2 + var8, var9 + var3 - 1, var4 + var10) == Block.grass.blockID && (var1.isAirBlock(var2 + var8, var9 + var3, var4 + var10) || var1.getBlockId(var2 + var8, var9 + var3, var4 + var10) == Block.tallGrass.blockID) && CheckUnderTree(var1, var2 + var8, var9 + var3, var4 + var10) && (new Random()).nextInt(10) <= 5)
+                        if ((var8 != 0 || var10 != 0 || var9 != 0) && var1.getBlockId(var2 + var8, var9 + var3 - 1, var4 + var10) == Block.grass.blockID && (var1.isAirBlock(var2 + var8, var9 + var3, var4 + var10) || var1.getBlockId(var2 + var8, var9 + var3, var4 + var10) == Block.tallGrass.blockID) && CheckUnderTree(var1, var2 + var8, var9 + var3, var4 + var10) && (new Random()).nextInt(10) <= 9)
                         {
-                            var1.setBlockWithNotify(var2 + var8, var9 + var3, var4 + var10, this.blockID);
-                            var1.setBlockMetadataWithNotify(var2 + var8, var9 + var3, var4 + var10, 0 + 7 * (new Random()).nextInt(1));
+                            var1.setBlockWithNotify(var2 + var8, var9 + var3, var4 + var10, Fossil.ferns.blockID);
+                            var1.setBlockMetadataWithNotify(var2 + var8, var9 + var3, var4 + var10, 0+8*this.CheckSubType(var6));
                         }
                     }
                 }
@@ -104,7 +103,7 @@ public class BlockFern extends BlockFlower
         }
     }
 
-    public void fertilize(World var1, int var2, int var3, int var4)
+    public void fertilize(World var1, int var2, int var3, int var4)//?????
     {
         var1.setBlockMetadataWithNotify(var2, var3, var4, 5 + 7 * (new Random()).nextInt(1));
     }
@@ -163,12 +162,9 @@ public class BlockFern extends BlockFlower
      */
     public int getBlockTextureFromSideAndMetadata(int var1, int var2)
     {
-        if (var2 < 0)
-        {
-            var2 = 0;
-        }
-
-        return var2 % 7 == 0 ? Fossil.fernPics[0] : (!this.lv2 ? Fossil.fernPics[var2] : Fossil.fernPics[var2 + 2]);
+       if (var2 < 0 || var2>=Fossil.fernPics.length)
+        {var2 = 0;}
+        return Fossil.fernPics[var2];
     }
 
     /**
@@ -208,11 +204,8 @@ public class BlockFern extends BlockFlower
         for (int var4 = var2; var4 <= 128; ++var4)
         {
             if (var0.getBlockId(var1, var4, var3) == Block.leaves.blockID)
-            {
                 return true;
-            }
         }
-
         return false;
     }
 
@@ -222,21 +215,13 @@ public class BlockFern extends BlockFlower
     public boolean canBlockStay(World var1, int var2, int var3, int var4)
     {
         boolean var5 = true;
-
-        if (this.lv2)
-        {
-            return var1.getBlockId(var2, var3 - 1, var4) == Fossil.ferns.blockID;
-        }
+        if (this.CheckLevel(var1.getBlockMetadata(var2, var3, var4)))
+            return var1.getBlockId(var2, var3 - 1, var4) == Fossil.ferns.blockID;//fernblock below
         else
         {
-            int var6 = var1.getBlockMetadata(var2, var3, var4);
-            var5 = var1.getBlockId(var2, var3 - 1, var4) == Block.grass.blockID && CheckUnderTree(var1, var2, var3, var4);
-
-            if (var6 % 7 > 3)
-            {
-                var5 &= var1.getBlockId(var2, var3 + 1, var4) == Fossil.fernUpper.blockID;
-            }
-
+            var5 = var1.getBlockId(var2, var3 - 1, var4) == Block.grass.blockID && CheckUnderTree(var1, var2, var3, var4);//on grass, under tree
+            if (this.HasLv2(var1.getBlockMetadata(var2, var3, var4)))
+                var5 &= var1.getBlockId(var2, var3 + 1, var4) == Fossil.ferns.blockID;//and has the upper block it needs//fernUpper            	
             return var5;
         }
     }
@@ -245,7 +230,22 @@ public class BlockFern extends BlockFlower
     {
         return var1 > 7 ? 1 : 0;
     }
-
+    public boolean CheckLevel(int var1)//false==down, true= up
+    {
+        return (var1>=6 && var1<=7) || var1==12;
+    }
+    public boolean Cangrow(int var1)// only the low ones grow and update the upper ones!
+    {
+    	return (var1>=0 && var1<5) || (var1>=8 && var1<11);
+    }
+    public boolean HasLv2(int var1)
+    {
+    	return (var1>=4 && var1<=5) || (var1>=11 && var1<=11);
+    }
+    public boolean GetLv2(int var1)//the stages where it gets a second level
+    {
+    	return (var1==4) || (var1==11);
+    }
     /**
      * only called by clickMiddleMouseButton , and passed to inventory.setCurrentItem (along with isCreative)
      */

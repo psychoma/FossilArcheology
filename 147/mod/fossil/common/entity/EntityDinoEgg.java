@@ -448,7 +448,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
             }
 
             String var1 = Fossil.GetLangTextByKey("Dinoegg.Head");
-            Fossil.ShowMessage(var1 + Fossil.GetLangTextByKey("Dino"+this.DinoInside.toString())/*EntityDinosaurce.GetNameByEnum(this.DinoInside, false)*/ + var6, var4);
+            Fossil.ShowMessage(var1 +" "+ Fossil.GetLangTextByKey("Dino."+this.DinoInside.toString())/*EntityDinosaurce.GetNameByEnum(this.DinoInside, false)*/ +" "+ var6, var4);
             this.setDead();
         }
         else
@@ -595,8 +595,9 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
 
             default:it0=Fossil.eggTriceratops;
         }
+    	p0.reset();
     	p0.PrintItemXY(it0, 120, 7);
-    	p0.PrintStringLR(/*Fossil.GetLangTextByKey("PediaText.egg.Head")+ " "+*/Fossil.GetLangTextByKey("Dino."+this.DinoInside.toString()), false, 1);
+    	p0.PrintStringLR(/*Fossil.GetLangTextByKey("PediaText.egg.Head")+ " "+*/Fossil.GetLangTextByKey("Dino."+this.DinoInside.toString()), false, 1,40,90,245);
     	int quot = (int)Math.floor((double)((float)this.BirthTick / (float)this.HatchingNeedTime * 100.0F));
     	String stat;
     	if (this.DinoInside == EnumDinoType.Mosasaurus)
@@ -613,10 +614,10 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
 	        else
 	            stat = Fossil.GetLangTextByKey("PediaText.egg.cold");
         }
-    	stat = Fossil.GetLangTextByKey("PediaText.egg.Status")+" "+stat;
-        String prog = Fossil.GetLangTextByKey("PediaText.egg.Progress") + " "+String.valueOf(quot) + "/100";
-        p0.PrintStringLR(stat, false, 2);
-        p0.PrintStringLR(prog, false, 3);
+        p0.PrintStringLR(Fossil.GetLangTextByKey("PediaText.egg.Status"), false, 2,40,90,245);
+        p0.PrintStringLR(stat, false, 3);
+        p0.PrintStringLR(Fossil.GetLangTextByKey("PediaText.egg.Progress"), false, 4,40,90,245);
+        p0.PrintStringLR(String.valueOf(quot) + "/100", false, 5);
         /*String var2 = "";
         String var3 = Fossil.GetLangTextByKey("PediaText.egg.selfHead") + EntityDinosaurce.GetNameByEnum(this.DinoInside, false) + Fossil.GetLangTextByKey("PediaText.egg.selfTail");
         int var4 = (int)Math.floor((double)((float)this.BirthTick / (float)this.HatchingNeedTime * 100.0F));

@@ -1,6 +1,8 @@
 package mod.fossil.common.entity.mob;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
 import java.util.ArrayList;
@@ -9,13 +11,17 @@ import java.util.Vector;
 import mod.fossil.common.Fossil;
 import mod.fossil.common.fossilAI.DinoAIFollowOwner;
 import mod.fossil.common.fossilAI.DinoAIGrowup;
+import mod.fossil.common.fossilAI.DinoAIPickItems;
 import mod.fossil.common.fossilAI.DinoAIStarvation;
 import mod.fossil.common.fossilAI.DinoAITargetNonTamedExceptSelfClass;
 import mod.fossil.common.fossilAI.DinoAIUseFeeder;
+import mod.fossil.common.fossilAI.DinoAIWander;
 import mod.fossil.common.fossilEnums.EnumDinoEating;
+import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.fossilEnums.EnumSituation;
+import mod.fossil.common.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
 import net.minecraft.block.StepSound;
 import net.minecraft.entity.Entity;
@@ -93,10 +99,15 @@ public class Entitydil extends EntityDinosaurce
         //this.AgingTicks=;
         //this.MaxHunger=;
         //this.Hungrylevel=;
-        this.ItemToControl=null;
         this.moveSpeed = this.getSpeed();//should work
         
-        
+        FoodItemList.addItem(EnumDinoFoodItem.PorkRaw);
+        FoodItemList.addItem(EnumDinoFoodItem.PorkCooked);
+        FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
+        FoodItemList.addItem(EnumDinoFoodItem.ChickenCooked);
+        FoodItemList.addItem(EnumDinoFoodItem.DinoMeatCooked);
+        FoodItemList.addItem(EnumDinoFoodItem.Pterosaur);
+        FoodItemList.addItem(EnumDinoFoodItem.Egg);
         
         //this.attackStrength = 2 + this.getDinoAge();
         this.getNavigator().setAvoidsWater(true);
@@ -109,7 +120,8 @@ public class Entitydil extends EntityDinosaurce
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
         this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24, /*this.HuntLimit,*/ EnumDinoEating.Carnivorous));
-        this.tasks.addTask(7, new EntityAIWander(this, 0.3F));
+        this.tasks.addTask(7, new DinoAIWander(this, this.moveSpeed));
+        this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
@@ -176,7 +188,7 @@ public class Entitydil extends EntityDinosaurce
     {
         super.writeEntityToNBT(var1);
         var1.setInteger("LearningChestTick", this.LearningChestTick);
-        var1.setBoolean("Angry", this.isSelfAngry());
+        //var1.setBoolean("Angry", this.isSelfAngry());
     }
 
     /**
@@ -185,7 +197,7 @@ public class Entitydil extends EntityDinosaurce
     public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
-        this.setSelfAngry(var1.getBoolean("Angry"));
+        //this.setSelfAngry(var1.getBoolean("Angry"));
         this.LearningChestTick=var1.getInteger("LearningChestTick");
         //this.setSelfSitting(var1.getBoolean("Sitting"));
         this.InitSize();
@@ -251,7 +263,7 @@ public class Entitydil extends EntityDinosaurce
                         this.getPathOrWalkableBlock(var1, var2);
                     }
 
-                    if (!this.isSelfAngry())
+                    if (!this.isAngry())
                     {
                         if (var2 < 5.0F)
                         {
@@ -303,7 +315,7 @@ public class Entitydil extends EntityDinosaurce
     public void onUpdate()
     {
         super.onUpdate();
-        if(this.LearningChestTick>0 && this.isNearbyChest() && !this.isBaby())
+        if(this.LearningChestTick>0 && this.isNearbyChest() && this.isAdult())
         {
         	this.LearningChestTick--;
         	if(this.LearningChestTick==0)
@@ -390,7 +402,7 @@ public class Entitydil extends EntityDinosaurce
 
         if (super.attackEntityFrom(var1, var2))
         {
-            if (!this.isSelfAngry())
+            if (!this.isAngry())
             {
                 if (var3 instanceof EntityArrow && ((EntityArrow)var3).shootingEntity != null)
                 {
@@ -404,8 +416,9 @@ public class Entitydil extends EntityDinosaurce
                 {//Hit by the owner->untame
                     this.setTamed(false);
                     this.setOwner("");
+                    this.SendStatusMessage(EnumSituation.Betrayed);
                     this.ItemInMouth = null;
-                    this.setSelfAngry(true);
+                    this.setAngry(true);
                     this.setTarget((EntityLiving)var3);
                     this.PreyChecked = true;
                     var4 = true;
@@ -430,7 +443,7 @@ public class Entitydil extends EntityDinosaurce
      */
     protected Entity findPlayerToAttack()
     {
-        return this.isSelfAngry() ? this.worldObj.getClosestPlayerToEntity(this, 16.0D) : null;
+        return this.isAngry() ? this.worldObj.getClosestPlayerToEntity(this, 16.0D) : null;
     }
 
     /**
@@ -507,12 +520,12 @@ public class Entitydil extends EntityDinosaurce
         return 10;
     }
 
-    public boolean isSelfAngry()
+    /*public boolean isSelfAngry()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
-    }
+    }*/
 
-    public void setSelfAngry(boolean var1)
+    /*public void setSelfAngry(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
 
@@ -525,7 +538,7 @@ public class Entitydil extends EntityDinosaurce
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -3)));
         }
-    }
+    }*/
     
     /*public boolean isSelfSitting()
     {
@@ -672,9 +685,17 @@ public class Entitydil extends EntityDinosaurce
         }
     }*/
 
-    public boolean isLearnedChest()
+    /*public boolean isLearnedChest()
     {
         return this.LearningChestTick == 0;
+    }*/
+    @SideOnly(Side.CLIENT)
+    public void ShowPedia(GuiPedia p0)
+    {
+    	super.ShowPedia(p0);
+    	p0.PrintItemXY(Fossil.dnaUtahraptor, 120, 7);
+    	if(this.LearningChestTick==0)
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Chest"), true);
     }
 
     /*public void ShowPedia(EntityPlayer var1)

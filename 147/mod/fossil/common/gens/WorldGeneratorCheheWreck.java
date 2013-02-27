@@ -11,7 +11,7 @@ public class WorldGeneratorCheheWreck extends WorldGenerator
 	
 	public boolean generate(World world, Random random, int i, int j, int k)
 	{
-		
+		System.out.println("Generating CheheWreck");
 		world.setBlockAndMetadata(i + 0, j + 8, k + 44, Block.dispenser.blockID, 4);
 		world.setBlockAndMetadata(i + 0, j + 8, k + 53, Block.dispenser.blockID, 4);
 		world.setBlockAndMetadata(i + 0, j + 8, k + 62, Block.dispenser.blockID, 4);

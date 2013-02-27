@@ -20,6 +20,7 @@ import mod.fossil.common.fossilEnums.EnumDinoFoodItem;
 import mod.fossil.common.fossilEnums.EnumDinoType;
 import mod.fossil.common.fossilEnums.EnumOrderType;
 import mod.fossil.common.fossilEnums.EnumSituation;
+import mod.fossil.common.guiBlocks.GuiPedia;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
@@ -53,7 +54,7 @@ public class EntityTRex extends EntityDinosaurce
     private boolean field_25052_g;*/
     public boolean Screaming = false;
     public int SkillTick = 0;
-    public int WeakToDeath = 0;
+    //public int WeakToDeath = 0;
     public int TooNearMessageTick = 0;
     public boolean SneakScream = false;
     private final BlockBreakingRule blockBreakingBehavior;
@@ -64,7 +65,7 @@ public class EntityTRex extends EntityDinosaurce
         this.blockBreakingBehavior = new BlockBreakingRule(this.worldObj, this, 3, 5.0F);
         this.SelfType = EnumDinoType.TRex;
         this.looksWithInterest = false;
-        this.texture = "/mod/fossil/common/textures/TRex.png";
+        //this.texture = "/mod/fossil/common/textures/TRex.png";
         this.setSize(2.5F, 2.5F);
         //this.moveSpeed = 0.3F;
         this.health = 10;
@@ -81,17 +82,12 @@ public class EntityTRex extends EntityDinosaurce
         //this.AgingTicks=;
         this.MaxHunger=500;
         //this.Hungrylevel=;
-        this.ItemToControl=Fossil.skullStick;
         this.moveSpeed = this.getSpeed();//should work
         
         FoodItemList.addItem(EnumDinoFoodItem.PorkRaw);
-        FoodItemList.addItem(EnumDinoFoodItem.PorkCooked);
         FoodItemList.addItem(EnumDinoFoodItem.BeefRaw);
-        FoodItemList.addItem(EnumDinoFoodItem.BeefCooked);
         FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
-        FoodItemList.addItem(EnumDinoFoodItem.ChickenCooked);
         //FoodItemList.addItem(EnumDinoFoodItem.DinoMeatRaw);
-        FoodItemList.addItem(EnumDinoFoodItem.DinoMeatCooked);
         FoodItemList.addItem(EnumDinoFoodItem.Triceratops);
         FoodItemList.addItem(EnumDinoFoodItem.Stegosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Utahraptor);
@@ -147,9 +143,9 @@ public class EntityTRex extends EntityDinosaurce
     public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
-        var1.setBoolean("Angry", this.isSelfAngry());
+        //var1.setBoolean("Angry", this.isSelfAngry());
         //var1.setBoolean("Sitting", this.isSelfSitting());
-        var1.setInteger("WeakToDeath", this.WeakToDeath);
+        //var1.setInteger("WeakToDeath", this.WeakToDeath);
     }
 
     /**
@@ -158,10 +154,10 @@ public class EntityTRex extends EntityDinosaurce
     public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
-        this.setSelfAngry(var1.getBoolean("Angry"));
+        //this.setSelfAngry(var1.getBoolean("Angry"));
         //this.setSelfSitting(var1.getBoolean("Sitting"));
         this.InitSize();
-        this.WeakToDeath = var1.getInteger("WeakToDeath");
+        //this.WeakToDeath = var1.getInteger("WeakToDeath");
     }
 
     /**
@@ -169,7 +165,7 @@ public class EntityTRex extends EntityDinosaurce
      */
     protected String getLivingSound()
     {
-        return this.worldObj.getClosestPlayerToEntity(this, 8.0D) != null ? "Trex_Living" : null;
+        return this.worldObj.getClosestPlayerToEntity(this, 8.0D) != null ? "TRex_Living" : null;
     }
 
     /**
@@ -185,7 +181,7 @@ public class EntityTRex extends EntityDinosaurce
      */
     protected String getDeathSound()
     {
-        return "Trex_Death";
+        return "TRex_Death";
     }
 
     protected void updateEntityActionState() {}
@@ -345,13 +341,17 @@ public class EntityTRex extends EntityDinosaurce
         this.health -= var2;
     }
 
+    public boolean isAngry()
+    {
+    	return true;
+    }
     /**
      * Finds the closest player within 16 blocks to attack, or null if this Entity isn't interested in attacking
      * (Animals, Spiders at day, peaceful PigZombies).
      */
     protected Entity findPlayerToAttack()
     {
-        return this.isSelfAngry() ? this.worldObj.getClosestPlayerToEntity(this, 16.0D) : null;
+        return this.isAngry() ? this.worldObj.getClosestPlayerToEntity(this, 16.0D) : null;
     }
 
     /**
@@ -452,11 +452,11 @@ public class EntityTRex extends EntityDinosaurce
         {
         	if (var2.itemID == Fossil.gen.itemID)
             {
-        		if (this.isWeak() && !this.isTamed() && this.isBaby())
+        		if (this.isWeak() && !this.isTamed() && this.isAdult())
                 {
                     this.heal(200);
                     this.increaseHunger(500);
-                    this.WeakToDeath = 0;
+                    //this.WeakToDeath = 0;
                     this.setTamed(true);
                     this.setOwner(var1.username);
                     --var2.stackSize;
@@ -471,16 +471,18 @@ public class EntityTRex extends EntityDinosaurce
                     if (!this.isWeak())
                         //this.SendStatusMessage(EnumSituation.GemErrorHealth);//, this.SelfType);
                     	Fossil.ShowMessage(Fossil.GetLangTextByKey("Status.GemErrorHealth"),var1);
-                    if (this.isBaby())
+                    if (!this.isAdult())
                         //this.SendStatusMessage(EnumSituation.GemErrorYoung);//, this.SelfType);
                     	Fossil.ShowMessage(Fossil.GetLangTextByKey("Status.GemErrorYoung"),var1);
                     return false;
                 }
              }
+        	if(var2.itemID == Fossil.chickenEss.itemID)
+        		return false;
          }
         else 
         {
-        	if (!this.worldObj.isRemote && !this.isBaby() && var1.username.equalsIgnoreCase(this.getOwnerName()) && (this.riddenByEntity == null || this.riddenByEntity == var1))
+        	if (!this.worldObj.isRemote && this.isTamed() && this.isAdult() && var1.username.equalsIgnoreCase(this.getOwnerName()) && (this.riddenByEntity == null || this.riddenByEntity == var1))
 	        {
 	            var1.rotationYaw = this.rotationYaw;
 	            var1.mountEntity(this);
@@ -492,17 +494,17 @@ public class EntityTRex extends EntityDinosaurce
         return super.interact(var1);
     }
 
-    public boolean isSelfAngry()
+    /*public boolean isAngry()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
-    }
+    }*/
 
     /*public boolean isSelfSitting()
     {
         return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
     }*/
 
-    public void setSelfAngry(boolean var1)
+    /*public void setSelfAngry(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
 
@@ -517,7 +519,7 @@ public class EntityTRex extends EntityDinosaurce
                 this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -3)));
             }
         }
-    }
+    }*/
 
     /*public void setSelfSitting(boolean var1)
     {
@@ -553,14 +555,14 @@ public class EntityTRex extends EntityDinosaurce
         this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
 
-        if (!this.isBaby() && !this.isTamed())
+        /*if (this.isAdult() && !this.isTamed())
         {
             this.texture = "/mod/fossil/common/textures/TRex_Adult.png";
         }
         else
         {
             this.texture = "/mod/fossil/common/textures/TRex.png";
-        }
+        }*/
     }
     public void updateSize()
     {
@@ -658,14 +660,7 @@ public class EntityTRex extends EntityDinosaurce
     public void onLivingUpdate()
     {
         if (!this.isWeak())
-        {
             this.handleScream();
-        }
-        else
-        {
-            this.HandleWeak();
-        }
-
         super.onLivingUpdate();
     }
 
@@ -674,7 +669,13 @@ public class EntityTRex extends EntityDinosaurce
      */
     public String getTexture()
     {
-        return this.isModelized() ? super.getTexture() : (!this.isBaby() && !this.isTamed() ? "/mod/fossil/common/textures/TRex_Adult.png" : "/mod/fossil/common/textures/TRex.png");
+        if(this.isModelized())
+        	return super.getTexture();
+        if (this.isWeak())
+            return "/mod/fossil/common/textures/TRexWeak.png";
+        if (this.isAdult() && !this.isTamed()) 
+        	return "/mod/fossil/common/textures/TRex_Adult.png";
+        return "/mod/fossil/common/textures/TRex.png";
     }
 
     /**
@@ -701,10 +702,10 @@ public class EntityTRex extends EntityDinosaurce
 
     public boolean isWeak()
     {
-        return this.getHunger() < 5 && this.getHealth() <= 20 && this.getDinoAge() > 3 && !this.isTamed();
+        return this.getHealth() < 8 && this.getDinoAge()>8 && !this.isTamed();
     }
 
-    private void HandleWeak()
+    /*private void HandleWeak()
     {
         if (!this.worldObj.isRemote)
         {
@@ -723,9 +724,19 @@ public class EntityTRex extends EntityDinosaurce
             {
                 this.setTarget((Entity)null);
                 this.setPathToEntity((PathEntity)null);
-                this.setSelfAngry(false);
+                this.setAngry(false);
             }
         }
+    }*/
+    public void ShowPedia(GuiPedia p0)
+    {
+    	super.ShowPedia(p0);
+    	p0.PrintItemXY(Fossil.dnaTRex, 120, 7);
+    	if(this.isWeak())
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Weak"), true, 255, 40, 90);
+    	if (!this.isWeak() && !this.isTamed()  && this.isAdult())
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Caution"), true, 255, 40, 90);
+    		
     }
 
     /*public void ShowPedia(EntityPlayer var1)
