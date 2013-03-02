@@ -1,0 +1,152 @@
+block.Fossil.Name=Фосил
+block.Skull.Name=Череп
+block.SkullLantern.Name=Череп-фенер
+block.Analyzer.Name=Анализатор
+block.CultureVat.Name=Фреонна камера
+block.workbench.Name=Археологическа работна маса
+block.Drum.Name=Команден тъпан
+block.Feeder.Name=Машина за хранене
+block.Permafrost.Name=Заледена земя
+block.IcedStone.Name=Заледен камък
+block.TimeMachine.Name=Машина на времето
+#
+Item.BioFossil.Name=Биологически фосил
+Item.Relic.Name=Артифакти
+Item.Tablet.Name=Каменна плоча
+Item.BrokenSword.Name=Щчупена антична сабя
+Item.AncientSword.Name=Антична сабя
+Item.FernSeeds.Name=Папратови спори
+Item.BrokenHelmet.Name=Щчупен античен шлем
+Item.AncientHelmet.Name=Античен шлем
+Item.SkullStick.Name=Череп на пръчка
+Item.LivingNautilus.Name=Жив наутилус
+Item.Gem.Name=Камъка на скарабея
+Item.ScarabAxe.Name=Брадвата на скарабея
+Item.ScarabPickAxe.Name=Кирката на скарабея
+Item.ScarabSword.Name=Меча на скарабея
+Item.ScarabHoe.Name=Мотиката на скарабея
+Item.ScarabShovel.Name=Лопатката на скарабея
+Item.DinoPedia.Name=Динозавърска енциклопедиа
+Item.Tooth.Name=Зъбът на Т-рекса
+Item.Dagger.Name=Кинжал от зъби
+Item.RawChickenSoup.Name=Сурова пилешка супа
+Item.CookedChickenSoup.Name=Пилешка супа
+Item.EOC.Name=Пилешки аромат
+Item.Shell.Name=Празна черупка
+Item.SJL.Name=Сио-чуи-ле
+Item.DinoSteak.Name=Динозавърска пържола
+Item.IcedMeat.Name=Замразено месо
+Item.WoodJavelin.Name=Дървено копие
+Item.StoneJavelin.Name=Каменно копие
+Item.IronJavelin.Name=Желязно копие
+Item.GoldJavelin.Name=Златно копие
+Item.DiamondJavelin.Name=Диамантено копие
+Item.AncientJavelin.Name=Антично копие
+Item.Whip.Name=Камшик
+#
+DNAName.Head=ДНК на 
+DNAName.Tail=
+#
+EmbyoName.Head=Ембрион на
+EmbyoName.Tail=
+#
+MeatName.Head=Несо от 
+MeatName.Tail=
+#
+MGCName.Head=Магическа раковина:
+MGCName.Tail=
+#
+DEggName.Head=Яйце от
+DEggName.Tail=
+#
+Achieve.PigBossOnEarth.Name=Наруши правилото!!
+Achieve.PigBossOnEarth.Desc=Да призовеш Ану на земята.
+##########Order.Head Order.x
+Order.Head=Заповед:
+Order.Stay=Стой
+Order.Follow=Преследвай
+Order.FreeMove=Движи се свободно
+##########Status.x.Head DinoName Status.x
+Status.Hungry.Head=Този
+Status.Hungry=е гладен.
+Status.Starve.Head=Един
+Status.Starve=умря от глад.
+Status.LearningChest=се научи как да отваря сандъци.
+Status.Betrayed=няма да вярва на човечеството повече.
+Status.NoSpace=няма място да расте.
+Status.StarveEsc=Избяга от глад.
+Status.SJLBite=отхапа Сио-чуи-ле и избяга.
+Status.ChewTime= му трябва време да сдъвчи.
+Status.Full=нахранен е.
+Status.Nervous.Head=Направи малкото
+Status.Nervous=тжърде нервен да живее.
+Status.GemErrorYoung=Т-рекса е твърде млад.
+Status.GemErrorHealth=Този камък на скарабея не може да си позволи такава жизнена енергия.
+########## Name of the dino, only 11 digits
+Dino.Triceratops=Трисератопс
+Dino.Raptor=Велосираптор
+Dino.TRex=Т-рекс
+Dino.Pterosaur=Птерозавър
+Dino.Plesiosaur=Плесиозавър
+Dino.Mosasaurus=Мозазавър
+Dino.Stegosaurus=Стегозавър
+Dino.Utahraptor=Дилофозавър
+Dino.Brachiosaurus=Брахиозавър
+Dino.Nautilus=Наутилус
+#
+AnimalType.SaberCat=Съблезъба котка
+AnimalType.Mammoth=Мамут
+########## Only 11 Digits
+PediaText.Owner=Притежател:
+PediaText.Chest=* Сандъци
+PediaText.Caution=!!!Опасен!!!
+PediaText.Rideable=* Може да се язде
+PediaText.Weak=Почти мъртъв
+PediaText.Fly=* Може да лети
+#
+PediaText.egg.Head=Яйце от 
+PediaText.egg.wet=Мокро
+PediaText.egg.dry=Сухо
+PediaText.egg.warm=Топло
+PediaText.egg.cold=Студено
+PediaText.egg.Status=Състояние:
+PediaText.egg.Progress=Излюпване:
+PediaText.vivi.inside=Ембрион вътре:
+PediaText.vivi.growing=Прогрес на растежа:
+PediaText.Day=Ден
+PediaText.Days=Дни
+#
+AnuSpeaker.self=Ану:
+AnuSpeaker.Hello=Knees down,Resistance is futile.
+AnuSpeaker.BareHand=Bare hands...Brave
+AnuSpeaker.Draw=DRAW YOUR SWORD,Kid.
+AnuSpeaker.Coward=Bow-using coward!Stop hiding!
+AnuSpeaker.LeartHere=Look what I learnt from here!
+AnuSpeaker.LeartThere=Look what I learnt from there!
+AnuSpeaker.UnknownRanged=So is that your weapon
+AnuSpeaker.UnknownMelee=Ha!Stop Playing!
+AnuSpeaker.summon=Work for me,my servants.
+AnuSpeaker.Trans=Brutes,wake up your wisdom.
+AnuSpeaker.Qi=Qi-shock!
+AnuSpeaker.FireRain=Let's rain some fire!
+#
+FPZSpeaker.self=Зомби прасета:
+FPZSpeaker.SelfKill=Не можем да живеем без водач!
+FPZSpeaker.LifeFor.head=Живота ми за 
+FPZSpeaker.LifeFor.tail=!!
+FPZSpeaker.AnuSommon=Всички се поклонете на Ану!!
+########## Dinoegg.Head Dinoname(automatically) Dinoegg.x
+Dinoegg.Head=Яйце на 
+Dinoegg.dry= изсъхна.
+Dinoegg.cold= замръзна.
+########## Dinoegg.x
+Dinoegg.Hatched=Яйце се излюпи!
+Dinoegg.NoSpace=Яйцето не може да се излюпи тук.
+#
+Cultivate.OutBreak=Опасност! Процеса на съживяване беше неуспешен!
+#
+Drum.Trigger=Drum Order:
+Drum.Ordering=Ordering 
+Drum.TRex1=Нареждане на всички Т-рексове да дойдат за закуска.
+Drum.TRex2=Нареждане на всички Т-рексове да дойдат за обяд.
+Drum.TRex3=Нареждане на всички Т-рексове да дойдат за вечеря.
