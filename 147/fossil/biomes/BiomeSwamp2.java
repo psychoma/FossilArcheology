@@ -16,6 +16,7 @@ public class BiomeSwamp2 extends BiomeGenBase
     public BiomeSwamp2(int par1)
     {
         super(par1);
+        this.setBiomeName("Swamp 2");
         this.theBiomeDecorator.treesPerChunk = 2;
         this.theBiomeDecorator.flowersPerChunk = -999;
         this.theBiomeDecorator.deadBushPerChunk = 1;

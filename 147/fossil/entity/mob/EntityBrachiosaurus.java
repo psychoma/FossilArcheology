@@ -503,7 +503,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
 
     public void updateSize()
     {
-        this.setSize((float)(1.5D + 0.3D * (double)((float)this.getDinoAge())), (float)(1.5D + 0.3D * (double)((float)this.getDinoAge())));
+        this.setSize((float)(1.5D + 0.15D * (double)((float)this.getDinoAge())), (float)(1.5D + 0.15D * (double)((float)this.getDinoAge())));
     }
 
     public float getGLX()

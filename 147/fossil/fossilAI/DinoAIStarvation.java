@@ -23,7 +23,7 @@ public class DinoAIStarvation extends EntityAIBase
         if (FossilOptions.DinoHunger)
         {
             this.mover.decreaseHungerTick();
-            return this.mover.getHungerTick() <= 0 && this.mover.worldObj.difficultySetting > 0 && this.mover.worldObj.getClosestPlayerToEntity(this.mover, 24.0D) != null;
+            return this.mover.getHungerTick() <= 0 && this.mover.worldObj.difficultySetting > 0;
         }
         return false;
     }

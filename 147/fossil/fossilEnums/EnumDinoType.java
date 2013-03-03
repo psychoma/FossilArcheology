@@ -41,7 +41,7 @@ public enum EnumDinoType
 
 
     Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick,			Fossil.rawTriceratops, 	Fossil.dnaTriceratops, 	Fossil.eggTriceratops),
-    Velociraptor(EntityVelociraptor.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone,			Fossil.rawVelociraptor, 		Fossil.dnaVelociraptor, 		Fossil.eggVelociraptor),
+    Velociraptor(EntityVelociraptor.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone,			Fossil.rawVelociraptor, Fossil.dnaVelociraptor, Fossil.eggVelociraptor),
     TRex(EntityTRex.class, 					C.NO_MODEL,	C.NO_TAME,	C.RIDE,		C.NO_CARRY,		Fossil.skullStick,	Fossil.rawTRex, 		Fossil.dnaTRex, 		Fossil.eggTRex),
     Pterosaur(EntityPterosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.arrow,			Fossil.rawPterosaur, 	Fossil.dnaPterosaur, 	Fossil.eggPterosaur),
     Nautilus(EntityNautilus.class, 			C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY,		null,				Fossil.rawNautilus, 	Fossil.dnaNautilus, 	Fossil.shellNautilus),//I think not really neccessary...
@@ -73,18 +73,18 @@ public enum EnumDinoType
         this.carryitems = carry0;
         this.OrderItem = i0;
     }*/
-    private EnumDinoType(Class class0, boolean model0,boolean tame0,boolean ride0,boolean carry0,Item i0,Item drop0,Item dna0,Item egg0)
+    private EnumDinoType(Class clas, boolean model,boolean tame,boolean ride,boolean carry,Item i,Item drop,Item dna,Item egg)
     {
-        this.dinoClass = class0;
-        this.DropItem = drop0;
-        this.DNAItem = dna0;
-        this.EggItem = egg0;
-        this.modelable = model0;
-        this.tameable = tame0;
-        this.rideable = ride0;
-        this.carryitems = carry0;
-        this.OrderItem = i0;
-        //System.out.println(String.valueOf(Fossil.eggTriceratops!=null));
+        this.dinoClass = clas;
+        this.DropItem = drop;
+        this.DNAItem = dna;
+        this.EggItem = egg;
+        this.modelable = model;
+        this.tameable = tame;
+        this.rideable = ride;
+        this.carryitems = carry;
+        this.OrderItem = i;
+        //System.out.println(String.valueOf(Fossil.dnaPterosaur!=null));
     }
     public boolean isDinoDNA(Item i0)
     {

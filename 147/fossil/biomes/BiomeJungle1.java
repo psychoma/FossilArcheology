@@ -20,6 +20,7 @@ public class BiomeJungle1 extends BiomeGenBase
     public BiomeJungle1(int par1)
     {
         super(par1);
+        this.setBiomeName("Jungle 1");
         this.theBiomeDecorator.treesPerChunk = 50;
         this.theBiomeDecorator.grassPerChunk = 25;
         this.theBiomeDecorator.flowersPerChunk = 4;

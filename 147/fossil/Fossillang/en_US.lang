@@ -84,7 +84,7 @@ Status.GemErrorYoung=TRex is still too young.
 Status.GemErrorHealth=The scrab cannot afford such strong life-energy.
 ########## Name of the dino, only 11 digits
 Dino.Triceratops=Triceratops
-Dino.Raptor=Velociraptor
+Dino.Velociraptor=Velociraptor
 Dino.TRex=T-Rex
 Dino.Pterosaur=Pterosaur
 Dino.Plesiosaur=Plesiosaur
@@ -110,7 +110,8 @@ PediaText.egg.dry=Dry
 PediaText.egg.warm=Warm
 PediaText.egg.cold=Cold
 PediaText.egg.Status=Status:
-PediaText.egg.Progress=Hatch:
+PediaText.egg.Progress=Hatching:
+
 PediaText.vivi.inside=Embryo inside:
 PediaText.vivi.growing=Growing progress:
 PediaText.Day=Day

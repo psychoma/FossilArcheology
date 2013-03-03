@@ -24,6 +24,7 @@ import fossil.fossilEnums.EnumOrderType;
 import fossil.guiBlocks.GuiPedia;
 import fossil.items.ItemAncientEgg;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityBoat;
@@ -432,9 +433,14 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         }
         else if ((double)var2 >= 0.5D)
             ++this.BirthTick;
-        else if (!this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)))
+        else 
+        {
+        	BiomeGenBase var5 = this.worldObj.getBiomeGenForCoords((int)this.posX, (int)this.posZ);
+            float var6 = var5.getFloatTemperature();
+        	//if (!this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)))
+            if(var6<=0.15F && var2 < 0.5)
             --this.BirthTick;
-
+        }
         if (this.BirthTick <= -this.HatchingNeedTime)
         {
             String var6;
@@ -491,8 +497,8 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
                 }
                 if(((EntityDinosaurce)var5).SelfType.isTameable() && var4 != null)
                 {// Tameable and player next to it
-                        ((EntityDinosaurce)var5).setOwner(var4.username);
-                        ((EntityDinosaurce)var5).setTamed(true);
+                	((EntityDinosaurce)var5).setOwner(var4.username);
+                    ((EntityDinosaurce)var5).setTamed(true);
                 }
 
                 ((EntityLiving)var5).setLocationAndAngles((double)((int)Math.floor(this.posX)), (double)((int)Math.floor(this.posY) + 1), (double)((int)Math.floor(this.posZ)), this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
@@ -502,14 +508,10 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
                     if (!this.worldObj.isRemote)
                     {
                         this.worldObj.spawnEntityInWorld((Entity)var5);
+                        if (var4 != null)
+                            Fossil.ShowMessage(Fossil.GetLangTextByKey("Dinoegg.Hatched"), var4);
                         //System.err.println("EGG DID IT");
                     }
-
-                    if (var4 != null)
-                    {
-                        Fossil.ShowMessage(Fossil.GetLangTextByKey("Dinoegg.Hatched"), var4);
-                    }
-
                     this.setDead();
                 }
                 else
@@ -651,8 +653,11 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         }
         p0.PrintStringLR(Fossil.GetLangTextByKey("PediaText.egg.Status"), false, 2,40,90,245);
         p0.PrintStringLR(stat, false, 3);
-        p0.PrintStringLR(Fossil.GetLangTextByKey("PediaText.egg.Progress"), false, 4,40,90,245);
-        p0.PrintStringLR(String.valueOf(quot) + "/100", false, 5);
+        if (this.BirthTick >= 0)
+        {
+        	p0.PrintStringLR(Fossil.GetLangTextByKey("PediaText.egg.Progress"), false, 4,40,90,245);
+        	p0.PrintStringLR(String.valueOf(quot) + "/100", false, 5);
+        }
         /*String var2 = "";
         String var3 = Fossil.GetLangTextByKey("PediaText.egg.selfHead") + EntityDinosaurce.GetNameByEnum(this.DinoInside, false) + Fossil.GetLangTextByKey("PediaText.egg.selfTail");
         int var4 = (int)Math.floor((double)((float)this.BirthTick / (float)this.HatchingNeedTime * 100.0F));
