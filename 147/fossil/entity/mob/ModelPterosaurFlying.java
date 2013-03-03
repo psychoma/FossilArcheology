@@ -150,7 +150,7 @@ public class ModelPterosaurFlying extends ModelPterosaurGround
 
     protected void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, boolean var7)
     {
-        if (!var7)
+        if (var7==false)
         {
             this.Left_wing_1.rotateAngleX = -((float)Math.PI / 2F) + this.AirPitch;
             this.Left_wing_2.rotateAngleX = ((float)Math.PI / 2F) + this.AirPitch;

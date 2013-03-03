@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -65,17 +66,18 @@ import fossil.fossilEnums.EnumOrderType;
 import fossil.gens.FossilGenerator;
 import fossil.gens.TarGenerator;
 import fossil.gens.WorldGenAcademy;
-import fossil.gens.WorldGenBigShip;
+/*import fossil.gens.WorldGenBigShip;
 import fossil.gens.WorldGenCheheWreck;
 import fossil.gens.WorldGenDukeWreck;
-import fossil.gens.WorldGenGalleonWreck;
+import fossil.gens.WorldGenGalleonWreck;*/
 import fossil.gens.WorldGenPalaeoraphe;
 import fossil.gens.WorldGenShipWreck;
-import fossil.gens.WorldGenShipWreck180;
+/*import fossil.gens.WorldGenShipWreck180;
 import fossil.gens.WorldGenShipWreck270;
 import fossil.gens.WorldGenShipWreck90;
 import fossil.gens.WorldGenShortRangeWreck;
-import fossil.gens.WorldGenVikingWreck;
+import fossil.gens.WorldGenVikingWreck;*/
+import fossil.gens.WorldGenShips;
 import fossil.gens.WorldGenWeaponShopA;
 import fossil.gens.WorldGeneratorPalaeoraphe;
 import fossil.guiBlocks.BlockAnalyzer;
@@ -170,7 +172,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = "Fossil", name = "Fossil/Archeology", version = "1.47 0001")
+@Mod(modid = "Fossil", name = "Fossil/Archeology", version = "1.47 0002")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 
 public class Fossil 
@@ -195,7 +197,7 @@ public class Fossil
 	 * If DebugMode = true
 	 * HatchTime is set to 1
 	 */
-	public static boolean DebugMode = true;
+	public static boolean DebugMode = false;
 	public static final double MESSAGE_DISTANCE = 25.0D;
 	
     //private static int[] blockIDs = new int[] {1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1151, 1152, 1153};
@@ -605,20 +607,16 @@ public class Fossil
 	public static int rawBrachiosaurusID;
 	public static int cookedDinoMeatID;
 	
-	public static boolean Gen_Palaeoraphe;
+	public static boolean Option_Gen_Palaeoraphe;
+	public static boolean Option_Gen_Academy;
+	public static boolean Option_Gen_Ships;
+	public static String Option_Lang_Server;
 	
 	static EnumArmorMaterial dinoBone = EnumHelper.addArmorMaterial("DinoBone", 35, new int[]{4,9,7,6}, 15);
 	
     @cpw.mods.fml.common.Mod.PreInit
 	public void PreInit(FMLPreInitializationEvent event)
 	{
-    	
-    	if (event.getSide() == Side.CLIENT)
-    	{
-    		proxy.registerSounds();
-    		UpdateLangProp();
-    	}
-		
 		Configuration var2 = new Configuration(event.getSuggestedConfigurationFile());
 		try
 		{
@@ -812,7 +810,10 @@ public class Fossil
 		rawBrachiosaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "rawBrachiosaurus", 10133).getInt(10133);
 		cookedDinoMeatID = var2.getItem(Configuration.CATEGORY_ITEM, "cookedDinoMeat", 10135).getInt(10135);
 		
-		Gen_Palaeoraphe = var2.get("world", "Palaeoraphe", false).getBoolean(false);
+		Option_Gen_Palaeoraphe = var2.get("option", "Palaeoraphe", false).getBoolean(false);
+		Option_Gen_Academy = var2.get("option", "Academy", false).getBoolean(false);
+		Option_Gen_Ships = var2.get("option", "Ships", false).getBoolean(false);
+		Option_Lang_Server = var2.get("option", "Serverlanguage", "language file for servers (absolute path)").value;
 	
 		}
         catch (Exception var7)
@@ -823,7 +824,15 @@ public class Fossil
         {
             var2.save();
         }
-		
+		if (event.getSide() == Side.CLIENT)
+    		proxy.registerSounds();
+    	UpdateLangProp(event.getSide() == Side.CLIENT);
+    	/*else
+    	{
+    		String path="mods/Fossil-Archeology/fossil/Fossillang/";
+    		System.out.println(Minecraft.getMinecraft().mcDataDir.getAbsolutePath());
+    		System.out.println(path+Minecraft.getMinecraft().gameSettings.language+".lang");
+    	}*/		
 	}
 	
 	@cpw.mods.fml.common.Mod.Init
@@ -1196,21 +1205,25 @@ public class Fossil
 		EntityRegistry.registerModEntity(EntityBrachiosaurus.class, "Brachiosaurus", 23, this, 250, 5, true);
 		EntityRegistry.registerModEntity(EntityMammoth.class, "Mammoth", 24, this, 250, 5, true);
 
+		
 		GameRegistry.registerWorldGenerator(new FossilGenerator());
 		GameRegistry.registerWorldGenerator(new TarGenerator());
 		//GameRegistry.registerWorldGenerator(new WorldGenPalaeoraphe());//not needed?
-		GameRegistry.registerWorldGenerator(new WorldGenAcademy());
-		GameRegistry.registerWorldGenerator(new WorldGenBigShip());
-		GameRegistry.registerWorldGenerator(new WorldGenCheheWreck());
-		GameRegistry.registerWorldGenerator(new WorldGenVikingWreck());
-		GameRegistry.registerWorldGenerator(new WorldGenShortRangeWreck());
-		GameRegistry.registerWorldGenerator(new WorldGenShipWreck180());
-		GameRegistry.registerWorldGenerator(new WorldGenShipWreck270());
-		GameRegistry.registerWorldGenerator(new WorldGenShipWreck90());
-		GameRegistry.registerWorldGenerator(new WorldGenGalleonWreck());
-		if(Fossil.Gen_Palaeoraphe==true)//Nur dann Spawnen die
+		if(Fossil.Option_Gen_Ships==true)
+			GameRegistry.registerWorldGenerator(new WorldGenShips());
+		if(Fossil.Option_Gen_Academy==true)
+			GameRegistry.registerWorldGenerator(new WorldGenAcademy());
+		//GameRegistry.registerWorldGenerator(new WorldGenBigShip());
+		//GameRegistry.registerWorldGenerator(new WorldGenCheheWreck());
+		//GameRegistry.registerWorldGenerator(new WorldGenVikingWreck());
+		//GameRegistry.registerWorldGenerator(new WorldGenShortRangeWreck());
+		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck180());
+		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck270());
+		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck90());
+		//GameRegistry.registerWorldGenerator(new WorldGenGalleonWreck());
+		if(Fossil.Option_Gen_Palaeoraphe==true)//Nur dann Spawnen die
 			GameRegistry.registerWorldGenerator(new WorldGeneratorPalaeoraphe());
-		GameRegistry.registerWorldGenerator(new WorldGenDukeWreck());
+		//GameRegistry.registerWorldGenerator(new WorldGenDukeWreck());
 		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck());
 		//GameRegistry.registerWorldGenerator(new WorldGenWeaponShopA());
 
@@ -1306,7 +1319,7 @@ public class Fossil
 			return var0.ToInt();
 	}*/
 
-	public static void UpdateLangProp()
+	public static void UpdateLangProp(boolean opt)//true=client, false=server
 	{
 			try
 			{
@@ -1314,11 +1327,13 @@ public class Fossil
 				if(DebugMode)
 					path="resources/Fossillang/";
 				else
-					path="mods/Fossil-Archeology/fossil/Fossillang/";//fossil/
-				//System.out.println("MC DATADIR:" + Minecraft.getMinecraft().mcDataDir.getAbsolutePath());
-				//System.out.println("LANG FILE:" + path+Minecraft.getMinecraft().gameSettings.language+".lang");
-				BufferedReader var2 = new BufferedReader(new FileReader(new File(Minecraft.getMinecraft().mcDataDir, path+Minecraft.getMinecraft().gameSettings.language+".lang")));
-				for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())
+					path="mods/Fossil-Archeology/fossil/Fossillang/";
+				BufferedReader var2;
+				if(opt)//client
+					var2 = new BufferedReader(new FileReader(new File(Minecraft.getMinecraft().mcDataDir, path+Minecraft.getMinecraft().gameSettings.language+".lang")));
+				else//server
+					var2 = new BufferedReader(new FileReader(new File(Fossil.Option_Lang_Server)));
+				for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())//
 				{
 		    		if (!var3.startsWith("#"))
 		    		{
@@ -1328,7 +1343,15 @@ public class Fossil
 		    		}
 				}
 			}
-			catch(IOException e)
+			catch(FileNotFoundException e)
+			{
+				System.err.println("Error loading language file: " + e.getMessage());//+ file);
+			}
+			catch(IOException e)//IOException e)
+			{
+				System.err.println("Error loading language file: " + e.getMessage());//+ file);
+			}
+			catch(NullPointerException e)//IOException e)
 			{
 				System.err.println("Error loading language file: " + e.getMessage());//+ file);
 			}

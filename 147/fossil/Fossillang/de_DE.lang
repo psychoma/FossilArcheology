@@ -83,7 +83,7 @@ Status.GemErrorYoung= ist noch zu jung.
 Status.GemErrorHealth=Der Skarabäus ist nicht in der Lage so viel Lebenskraft zu bändigen.
 ########## Name of the dino, only 11 digits
 Dino.Triceratops=Triceratops
-Dino.Raptor=Velociraptor
+Dino.Velociraptor=Velociraptor
 Dino.TRex=Tyrannosaurus
 Dino.Pterosaur=Pteranodon
 Dino.Plesiosaur=Plesiosaurus

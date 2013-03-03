@@ -84,7 +84,7 @@ Status.GemErrorYoung=Т-рекса е твърде млад.
 Status.GemErrorHealth=Този камък на скарабея не може да си позволи такава жизнена енергия.
 ########## Name of the dino, only 11 digits
 Dino.Triceratops=Трисератопс
-Dino.Raptor=Велосираптор
+Dino.Velociraptor=Велосираптор
 Dino.TRex=Т-рекс
 Dino.Pterosaur=Птерозавър
 Dino.Plesiosaur=Плесиозавър

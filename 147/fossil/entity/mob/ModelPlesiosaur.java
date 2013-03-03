@@ -569,7 +569,7 @@ public class ModelPlesiosaur extends ModelDinosaurs
 
     protected void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, boolean var7)
     {
-        if (!var7)
+        if (var7==false)
         {
             this.right_arm.rotateAngleY = (float)((double)MathHelper.cos(var1 / 0.95955384F) * (Math.PI / 4D) * (double)var2 + -2.35619449019234D);
             this.right_leg.rotateAngleY = (float)((double)MathHelper.cos(var1 / 0.95955384F) * (Math.PI / 4D) * (double)var2 + -2.0943951023932D);
