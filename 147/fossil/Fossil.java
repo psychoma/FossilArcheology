@@ -1,20 +1,43 @@
 package fossil;
 
 import java.io.BufferedReader;
-
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import fossil.client.FossilCfgLoader;
-import fossil.client.FossilGuiHandler;
-import fossil.client.FossilMessageHandler;
-import fossil.client.FossilOptions;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumArmorMaterial;
+import net.minecraft.item.EnumToolMaterial;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.AchievementPage;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.EnumHelper;
+import net.minecraftforge.common.MinecraftForge;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.IChatListener;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
 import fossil.biomes.BiomeJungle1;
 import fossil.biomes.BiomeJungle2;
 import fossil.biomes.BiomeOcean1;
@@ -32,8 +55,10 @@ import fossil.blocks.BlockPalmLog;
 import fossil.blocks.BlockPalmSapling;
 import fossil.blocks.BlockPermafrost;
 import fossil.blocks.BlockTar;
-import fossil.blocks.BlockVolcanicAsh;
-import fossil.blocks.BlockVolcanicRock;
+import fossil.client.FossilCfgLoader;
+import fossil.client.FossilGuiHandler;
+import fossil.client.FossilMessageHandler;
+import fossil.client.FossilOptions;
 import fossil.entity.EntityAncientJavelin;
 import fossil.entity.EntityDinoEgg;
 import fossil.entity.EntityJavelin;
@@ -41,7 +66,6 @@ import fossil.entity.EntityMLighting;
 import fossil.entity.EntityStoneboard;
 import fossil.entity.mob.EntityBones;
 import fossil.entity.mob.EntityBrachiosaurus;
-import fossil.entity.mob.EntityDinosaurce;
 import fossil.entity.mob.EntityFailuresaurus;
 import fossil.entity.mob.EntityFriendlyPigZombie;
 import fossil.entity.mob.EntityMammoth;
@@ -53,39 +77,24 @@ import fossil.entity.mob.EntityPregnantCow;
 import fossil.entity.mob.EntityPregnantPig;
 import fossil.entity.mob.EntityPregnantSheep;
 import fossil.entity.mob.EntityPterosaur;
-import fossil.entity.mob.EntityVelociraptor;
 import fossil.entity.mob.EntitySaberCat;
 import fossil.entity.mob.EntityStegosaurus;
 import fossil.entity.mob.EntityTRex;
 import fossil.entity.mob.EntityTriceratops;
 import fossil.entity.mob.EntityUtahraptor;
-import fossil.fossilEnums.EnumAnimalType;
-import fossil.fossilEnums.EnumDinoType;
-import fossil.fossilEnums.EnumEmbyos;
-import fossil.fossilEnums.EnumOrderType;
+import fossil.entity.mob.EntityVelociraptor;
 import fossil.gens.FossilGenerator;
 import fossil.gens.TarGenerator;
 import fossil.gens.WorldGenAcademy;
-/*import fossil.gens.WorldGenBigShip;
-import fossil.gens.WorldGenCheheWreck;
-import fossil.gens.WorldGenDukeWreck;
-import fossil.gens.WorldGenGalleonWreck;*/
-import fossil.gens.WorldGenPalaeoraphe;
-import fossil.gens.WorldGenShipWreck;
-/*import fossil.gens.WorldGenShipWreck180;
-import fossil.gens.WorldGenShipWreck270;
-import fossil.gens.WorldGenShipWreck90;
-import fossil.gens.WorldGenShortRangeWreck;
-import fossil.gens.WorldGenVikingWreck;*/
 import fossil.gens.WorldGenShips;
-import fossil.gens.WorldGenWeaponShopA;
+import fossil.gens.WorldGenWeaponShop;
 import fossil.gens.WorldGeneratorPalaeoraphe;
 import fossil.guiBlocks.BlockAnalyzer;
 import fossil.guiBlocks.BlockCultivate;
 import fossil.guiBlocks.BlockDrum;
 import fossil.guiBlocks.BlockFeeder;
-import fossil.guiBlocks.BlockWorktable;
 import fossil.guiBlocks.BlockTimeMachine;
+import fossil.guiBlocks.BlockWorktable;
 import fossil.guiBlocks.TileEntityAnalyzer;
 import fossil.guiBlocks.TileEntityCultivate;
 import fossil.guiBlocks.TileEntityDrum;
@@ -120,8 +129,8 @@ import fossil.items.ItemSkullHelmet;
 import fossil.items.ItemStoneBoard;
 import fossil.items.ItemWhip;
 import fossil.items.forgeItems.ForgeItem;
-import fossil.items.forgeItems.ForgeItemAxe;
 import fossil.items.forgeItems.ForgeItemArmor;
+import fossil.items.forgeItems.ForgeItemAxe;
 import fossil.items.forgeItems.ForgeItemFood;
 import fossil.items.forgeItems.ForgeItemHoe;
 import fossil.items.forgeItems.ForgeItemPickaxe;
@@ -134,45 +143,8 @@ import fossil.tabs.TabFFood;
 import fossil.tabs.TabFItems;
 import fossil.tabs.TabFMaterial;
 import fossil.tabs.TabFTools;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.EnumArmorMaterial;
-import net.minecraft.item.EnumToolMaterial;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.src.ModLoader;
-import net.minecraft.stats.Achievement;
-import net.minecraft.util.StringTranslate;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.AchievementPage;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.EnumHelper;
-import net.minecraftforge.event.ForgeSubscribe;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.IChatListener;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = "Fossil", name = "Fossil/Archeology", version = "1.47 0002")
+@Mod(modid = "Fossil", name = "Fossil/Archeology", version = "1.47 0001")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 
 public class Fossil 
@@ -197,7 +169,7 @@ public class Fossil
 	 * If DebugMode = true
 	 * HatchTime is set to 1
 	 */
-	public static boolean DebugMode = false;
+	public static boolean DebugMode = true;
 	public static final double MESSAGE_DISTANCE = 25.0D;
 	
     //private static int[] blockIDs = new int[] {1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1151, 1152, 1153};
@@ -217,7 +189,7 @@ public class Fossil
 	public static CreativeTabs tabFTools = new TabFTools(CreativeTabs.getNextID(), "Fossil Deco");
 	public static CreativeTabs tabFMaterial = new TabFMaterial(CreativeTabs.getNextID(), "Fossil Material");
 	
-	//public static WorldType fossil = new WorldTypeFossil(3, "Dino Test");
+	public static WorldType fossil = new WorldTypeFossil(3, "Dino Test");
 	
     public static Achievement pigbossOnEarth = (new Achievement(18000, "PigbossOnEarth", 0, 0, new ItemStack(Item.dyePowder, 1, 4), (Achievement)null)).registerAchievement();
     public static AchievementPage selfArcPage = new AchievementPage("FOSSIL / ARCHEOLOGY", new Achievement[] {pigbossOnEarth});
@@ -247,7 +219,7 @@ public class Fossil
 	public static Block palmLog;
 	public static Block palmLeaves;
 	public static Block palmSap;
-	//public static Block newBlock;
+	public static Block palaePlanks;
 	//public static Block newBlock;
 	//public static Block newBlock;
 	//public static Block newBlock;
@@ -445,7 +417,7 @@ public class Fossil
 	public static int palmLogID;
 	public static int palmLeavesID;
 	public static int palmSapID;
-	//public static int newBlockID;
+	public static int palaePlanksID;
 	//public static int newBlockID;
 	//public static int newBlockID;
 	//public static int newBlockID;
@@ -607,16 +579,20 @@ public class Fossil
 	public static int rawBrachiosaurusID;
 	public static int cookedDinoMeatID;
 	
-	public static boolean Option_Gen_Palaeoraphe;
-	public static boolean Option_Gen_Academy;
-	public static boolean Option_Gen_Ships;
-	public static String Option_Lang_Server;
+	public static boolean Gen_Palaeoraphe;
 	
 	static EnumArmorMaterial dinoBone = EnumHelper.addArmorMaterial("DinoBone", 35, new int[]{4,9,7,6}, 15);
 	
     @cpw.mods.fml.common.Mod.PreInit
 	public void PreInit(FMLPreInitializationEvent event)
 	{
+    	
+    	if (event.getSide() == Side.CLIENT)
+    	{
+    		proxy.registerSounds();
+    		UpdateLangProp();
+    	}
+		
 		Configuration var2 = new Configuration(event.getSuggestedConfigurationFile());
 		try
 		{
@@ -647,7 +623,7 @@ public class Fossil
 		palmLogID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palmLog", 3021).getInt(3021);
 		palmLeavesID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palmLeaves", 3022).getInt(3022);
 		palmSapID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palmSap", 3023).getInt(3023);
-		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3023).getInt(3023);
+		palaePlanksID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palaePlanks", 3024).getInt(3024);
 		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3024).getInt(3024);
 		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3025).getInt(3025);
 		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3026).getInt(3026);
@@ -810,10 +786,7 @@ public class Fossil
 		rawBrachiosaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "rawBrachiosaurus", 10133).getInt(10133);
 		cookedDinoMeatID = var2.getItem(Configuration.CATEGORY_ITEM, "cookedDinoMeat", 10135).getInt(10135);
 		
-		Option_Gen_Palaeoraphe = var2.get("option", "Palaeoraphe", false).getBoolean(false);
-		Option_Gen_Academy = var2.get("option", "Academy", false).getBoolean(false);
-		Option_Gen_Ships = var2.get("option", "Ships", false).getBoolean(false);
-		Option_Lang_Server = var2.get("option", "Serverlanguage", "language file for servers (absolute path)").value;
+		Gen_Palaeoraphe = var2.get("world", "Palaeoraphe", false).getBoolean(false);
 	
 		}
         catch (Exception var7)
@@ -824,15 +797,7 @@ public class Fossil
         {
             var2.save();
         }
-		if (event.getSide() == Side.CLIENT)
-    		proxy.registerSounds();
-    	UpdateLangProp(event.getSide() == Side.CLIENT);
-    	/*else
-    	{
-    		String path="mods/Fossil-Archeology/fossil/Fossillang/";
-    		System.out.println(Minecraft.getMinecraft().mcDataDir.getAbsolutePath());
-    		System.out.println(path+Minecraft.getMinecraft().gameSettings.language+".lang");
-    	}*/		
+		
 	}
 	
 	@cpw.mods.fml.common.Mod.Init
@@ -861,7 +826,7 @@ public class Fossil
         palmLog = new BlockPalmLog(palmLogID).setStepSound(Block.soundWoodFootstep).setHardness(3F).setResistance(1.0F).setBlockName("Palm Log").setRequiresSelfNotify();
         palmLeaves = new BlockPalmLeaves(palmLeavesID, 53).setStepSound(Block.soundGrassFootstep).setHardness(0.2F).setResistance(1F).setBlockName("Palm Leaves").setRequiresSelfNotify();
         palmSap = new BlockPalmSapling(palmSapID, 62).setStepSound(Block.soundGrassFootstep).setHardness(0.2F).setResistance(1F).setBlockName("Palm Sapling").setRequiresSelfNotify();
-        
+        palaePlanks = new BlockPalaePlanks(palaePlanksID, 80).setHardness(2.0F).setResistance(5.0F).setStepSound(Block.soundWoodFootstep).setBlockName("palaePlanks").setRequiresSelfNotify();
         //volcanicAsh = new BlockVolcanicAsh(volcanicAshID, 1).setHardness(0.5F).setStepSound(Block.soundGrassFootstep).setBlockName("VolcanicAsh").setCreativeTab(this.tabFBlocks);
 		//volcanicRock = new BlockVolcanicRock(volcanicRockID, 1).setHardness(3.0F).setResistance(5.0F).setStepSound(Block.soundStoneFootstep).setBlockName("VolcanicRock").setCreativeTab(this.tabFBlocks);
 		tar = new BlockTar(tarID, 22).setHardness(100.0F).setBlockName("Tar");
@@ -1003,6 +968,7 @@ public class Fossil
 		GameRegistry.registerBlock(palmLog, "palmLog");
 		GameRegistry.registerBlock(palmLeaves, "palmLeaves");
 		GameRegistry.registerBlock(palmSap, "palmSap");
+		GameRegistry.registerBlock(palaePlanks, "palaePlanks");
 
 		//GameRegistry.registerBlock(volcanicAsh, "VolcanicAsh");
 		//GameRegistry.registerBlock(volcanicRock, "VolcanicRock");
@@ -1077,6 +1043,7 @@ public class Fossil
 		LanguageRegistry.addName(palmLog, "Palaeoraphe Log");
         LanguageRegistry.addName(palmLeaves, "Palaeoraphe Leaves");
 		LanguageRegistry.addName(palmSap, "Palaeoraphe Sapling");
+		LanguageRegistry.addName(palaePlanks, "palaePlanks");
 		
 		//Ancient Egg
 		LanguageRegistry.addName(eggTriceratops, "Egg Triceratops");
@@ -1174,6 +1141,7 @@ public class Fossil
 		//GameRegistry.addShapelessRecipe(new ItemStack(magicConch, 1, 0), new Object[] {new ItemStack(magicConch, 1, 2)});
 		GameRegistry.addRecipe(new ItemStack(chickenEss, 8), new Object[] {"XXX", "XYX", "XXX", 'X', Item.glassBottle, 'Y', new ItemStack(rawChickenSoup, 1, 1)});
 		GameRegistry.addRecipe(new ItemStack(whip, 1), new Object[] {"XXS", "XTS", "TXS", 'T', Item.stick, 'S', Item.silk});
+		GameRegistry.addRecipe(new ItemStack(palaePlanks, 4), new Object[] {"P", 'P', this.palmLog});
 		
         GameRegistry.addSmelting(rawChickenSoup.itemID, new ItemStack(cookedChickenSoup), 3.0F);
         GameRegistry.addSmelting(rawDinoMeat.itemID, new ItemStack(cookedDinoMeat), 3.0F);
@@ -1205,27 +1173,13 @@ public class Fossil
 		EntityRegistry.registerModEntity(EntityBrachiosaurus.class, "Brachiosaurus", 23, this, 250, 5, true);
 		EntityRegistry.registerModEntity(EntityMammoth.class, "Mammoth", 24, this, 250, 5, true);
 
-		
 		GameRegistry.registerWorldGenerator(new FossilGenerator());
 		GameRegistry.registerWorldGenerator(new TarGenerator());
-		//GameRegistry.registerWorldGenerator(new WorldGenPalaeoraphe());//not needed?
-		if(Fossil.Option_Gen_Ships==true)
-			GameRegistry.registerWorldGenerator(new WorldGenShips());
-		if(Fossil.Option_Gen_Academy==true)
-			GameRegistry.registerWorldGenerator(new WorldGenAcademy());
-		//GameRegistry.registerWorldGenerator(new WorldGenBigShip());
-		//GameRegistry.registerWorldGenerator(new WorldGenCheheWreck());
-		//GameRegistry.registerWorldGenerator(new WorldGenVikingWreck());
-		//GameRegistry.registerWorldGenerator(new WorldGenShortRangeWreck());
-		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck180());
-		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck270());
-		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck90());
-		//GameRegistry.registerWorldGenerator(new WorldGenGalleonWreck());
-		if(Fossil.Option_Gen_Palaeoraphe==true)//Nur dann Spawnen die
+		GameRegistry.registerWorldGenerator(new WorldGenAcademy());
+		GameRegistry.registerWorldGenerator(new WorldGenShips());
+		if(Fossil.Gen_Palaeoraphe==true)//Nur dann Spawnen die
 			GameRegistry.registerWorldGenerator(new WorldGeneratorPalaeoraphe());
-		//GameRegistry.registerWorldGenerator(new WorldGenDukeWreck());
-		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck());
-		//GameRegistry.registerWorldGenerator(new WorldGenWeaponShopA());
+		GameRegistry.registerWorldGenerator(new WorldGenWeaponShop());
 
 		NetworkRegistry.instance().registerChatListener(messagerHandler);
 		NetworkRegistry.instance().registerGuiHandler(this, GH);
@@ -1319,7 +1273,7 @@ public class Fossil
 			return var0.ToInt();
 	}*/
 
-	public static void UpdateLangProp(boolean opt)//true=client, false=server
+	public static void UpdateLangProp()
 	{
 			try
 			{
@@ -1327,13 +1281,11 @@ public class Fossil
 				if(DebugMode)
 					path="resources/Fossillang/";
 				else
-					path="mods/Fossil-Archeology/fossil/Fossillang/";
-				BufferedReader var2;
-				if(opt)//client
-					var2 = new BufferedReader(new FileReader(new File(Minecraft.getMinecraft().mcDataDir, path+Minecraft.getMinecraft().gameSettings.language+".lang")));
-				else//server
-					var2 = new BufferedReader(new FileReader(new File(Fossil.Option_Lang_Server)));
-				for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())//
+					path="mods/Fossil-Archeology/fossil/Fossillang/";//fossil/
+				//System.out.println("MC DATADIR:" + Minecraft.getMinecraft().mcDataDir.getAbsolutePath());
+				//System.out.println("LANG FILE:" + path+Minecraft.getMinecraft().gameSettings.language+".lang");
+				BufferedReader var2 = new BufferedReader(new FileReader(new File(Minecraft.getMinecraft().mcDataDir, path+Minecraft.getMinecraft().gameSettings.language+".lang")));
+				for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())
 				{
 		    		if (!var3.startsWith("#"))
 		    		{
@@ -1343,15 +1295,7 @@ public class Fossil
 		    		}
 				}
 			}
-			catch(FileNotFoundException e)
-			{
-				System.err.println("Error loading language file: " + e.getMessage());//+ file);
-			}
-			catch(IOException e)//IOException e)
-			{
-				System.err.println("Error loading language file: " + e.getMessage());//+ file);
-			}
-			catch(NullPointerException e)//IOException e)
+			catch(IOException e)
 			{
 				System.err.println("Error loading language file: " + e.getMessage());//+ file);
 			}
