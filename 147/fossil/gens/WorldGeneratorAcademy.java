@@ -2,178 +2,80 @@ package fossil.gens;
 
 import java.util.Random;
 
+import fossil.Fossil;
+
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGeneratorAcademy extends WorldGenerator
 {
-	
-	public boolean generate(World var1, Random var2, int i, int j, int k)
+	protected int[] GetValidSpawnBlocks() 
 	{
+		return new int[] 
+		{
+			Block.grass.blockID,
+			Block.dirt.blockID,
+			Block.sand.blockID
+		};
+	}
+
+	public boolean LocationIsValidSpawn(World world, int i, int j, int k)
+	{
+		int distanceToAir = 0;
+		int checkID = world.getBlockId(i, j, k);
+
+		while (checkID != 0)
+		{
+			distanceToAir++;
+			checkID = world.getBlockId(i, j + distanceToAir, k);
+		}
+
+		if (distanceToAir > 3)
+		{
+			return false;
+		}
+		j += distanceToAir - 1;
+
+		int blockID = world.getBlockId(i, j, k);
+		int blockIDAbove = world.getBlockId(i, j+1, k);
+		int blockIDBelow = world.getBlockId(i, j-1, k);
+		for (int x : GetValidSpawnBlocks())
+		{
+			if (blockIDAbove != 0)
+			{
+				return false;
+			}
+			if (blockID == x)
+			{
+				return true;
+			}else if (blockID == Block.snow.blockID && blockIDBelow == x)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public WorldGeneratorAcademy() { }
+
+	public boolean generate(World var1, Random var2, int i, int j, int k) 
+	{
+		//check that each corner is one of the valid spawn blocks
+		if(!LocationIsValidSpawn(var1, i, j, k) || !LocationIsValidSpawn(var1, i + 23, j, k) || !LocationIsValidSpawn(var1, i + 23, j, k + 26) || !LocationIsValidSpawn(var1, i, j, k + 26))
+		{
+			return false;
+		}
 		System.out.println("Generating Academy");
-		/*var1.setBlock(i + 0, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 0, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 4, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 5, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 6, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 7, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 8, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 9, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 10, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 11, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 12, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 13, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 14, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 15, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 16, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 17, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 18, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 19, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 20, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 21, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 22, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 23, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 24, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 25, Block.grass.blockID);
-		var1.setBlock(i + 0, j + 2, k + 26, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 2, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 2, k + 6, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 7, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 8, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 9, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 10, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 11, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 12, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 13, Block.grass.blockID);*/
+		
 		var1.setBlock(i + 1, j + 2, k + 14, Block.brick.blockID);
 		var1.setBlock(i + 1, j + 2, k + 15, Block.brick.blockID);
-		/*var1.setBlock(i + 1, j + 2, k + 16, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 17, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 18, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 2, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 1, j + 2, k + 21, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 22, Block.grass.blockID);
-		var1.setBlock(i + 1, j + 2, k + 23, Block.grass.blockID);*/
 		var1.setBlock(i + 1, j + 2, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 1, j + 2, k + 25, Block.brick.blockID);
-		//var1.setBlock(i + 1, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 1, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 1, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 1, j + 3, k + 14, Block.brick.blockID);
@@ -343,65 +245,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 1, j + 16, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 1, j + 16, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 1, j + 16, k + 25, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 2, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 2, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 2, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 2, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 2, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 2, j + 2, k + 4, Block.dirt.blockID);*/
 		var1.setBlock(i + 2, j + 2, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 2, j + 2, k + 6, Block.stoneBrick.blockID);
 		var1.setBlock(i + 2, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -423,7 +266,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 2, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 2, j + 2, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 2, j + 2, k + 25, Block.brick.blockID);
-		//var1.setBlock(i + 2, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 2, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 2, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlockAndMetadata(i + 2, j + 3, k + 6, Block.stoneBrick.blockID, 1);
@@ -738,65 +580,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 2, j + 19, k + 19, Block.stoneBrick.blockID);
 		var1.setBlock(i + 2, j + 19, k + 20, Block.stoneBrick.blockID);
 		var1.setBlock(i + 2, j + 19, k + 21, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 3, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 3, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 3, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 3, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 3, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 3, j + 2, k + 4, Block.grass.blockID);*/
 		var1.setBlock(i + 3, j + 2, k + 5, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 3, j + 2, k + 6, Block.stoneBrick.blockID, 1);
 		var1.setBlock(i + 3, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -818,7 +601,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlockAndMetadata(i + 3, j + 2, k + 23, Block.stoneBrick.blockID, 1);
 		var1.setBlock(i + 3, j + 2, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 3, j + 2, k + 25, Block.brick.blockID);
-		//var1.setBlock(i + 3, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlockAndMetadata(i + 3, j + 3, k + 5, Block.stoneBrick.blockID, 1);
 		var1.setBlockAndMetadata(i + 3, j + 3, k + 15, Block.stoneSingleSlab.blockID, 5);
 		var1.setBlock(i + 3, j + 3, k + 16, Block.stoneBrick.blockID);
@@ -827,6 +609,21 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 3, j + 3, k + 19, Block.stoneBrick.blockID);
 		var1.setBlock(i + 3, j + 3, k + 20, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 3, j + 3, k + 21, Block.chest.blockID, 5);
+		TileEntityChest var9 = (TileEntityChest)var1.getBlockTileEntity(i + 3, j + 3, k + 21);
+        int var10;
+
+        if (var9 != null)
+        {
+            for (var10 = 0; var10 < 8; ++var10)
+            {
+                ItemStack var11 = this.pickCheckLootItem(var2);
+
+                if (var11 != null)
+                {
+                    var9.setInventorySlotContents(var2.nextInt(var9.getSizeInventory()), var11);
+                }
+            }
+        }
 		var1.setBlockAndMetadata(i + 3, j + 3, k + 23, Block.chest.blockID, 5);
 		var1.setBlock(i + 3, j + 3, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 3, j + 3, k + 25, Block.brick.blockID);
@@ -837,6 +634,21 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 3, j + 4, k + 20, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 3, j + 4, k + 21, Block.chest.blockID, 5);
 		var1.setBlockAndMetadata(i + 3, j + 4, k + 23, Block.chest.blockID, 5);
+		TileEntityChest var12 = (TileEntityChest)var1.getBlockTileEntity(i + 3, j + 4, k + 23);
+        int var13;
+
+        if (var12 != null)
+        {
+            for (var13 = 0; var13 < 8; ++var13)
+            {
+                ItemStack var11 = this.pickCheckLootItem(var2);
+
+                if (var11 != null)
+                {
+                    var12.setInventorySlotContents(var2.nextInt(var12.getSizeInventory()), var11);
+                }
+            }
+        }
 		var1.setBlock(i + 3, j + 4, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 3, j + 4, k + 25, Block.brick.blockID);
 		var1.setBlock(i + 3, j + 5, k + 5, Block.stoneBrick.blockID);
@@ -993,65 +805,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 3, j + 19, k + 19, Block.stoneBrick.blockID);
 		var1.setBlock(i + 3, j + 19, k + 20, Block.stoneBrick.blockID);
 		var1.setBlock(i + 3, j + 19, k + 21, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 4, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 4, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 4, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 4, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 4, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 4, j + 2, k + 4, Block.grass.blockID);*/
 		var1.setBlock(i + 4, j + 2, k + 5, Block.stoneBrick.blockID);
 		var1.setBlock(i + 4, j + 2, k + 6, Block.stoneBrick.blockID);
 		var1.setBlock(i + 4, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -1072,8 +825,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 4, j + 2, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 4, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 4, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 4, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 4, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 4, j + 3, k + 5, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 4, j + 3, k + 15, Block.stoneSingleSlab.blockID, 5);
 		var1.setBlock(i + 4, j + 3, k + 16, Block.stoneBrick.blockID);
@@ -1228,65 +979,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 4, j + 19, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 4, j + 19, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 4, j + 19, k + 25, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 5, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 5, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 5, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 5, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 5, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 5, j + 2, k + 4, Block.dirt.blockID);*/
 		var1.setBlock(i + 5, j + 2, k + 5, Block.stoneBrick.blockID);
 		var1.setBlock(i + 5, j + 2, k + 6, Block.stoneBrick.blockID);
 		var1.setBlock(i + 5, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -1307,8 +999,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 5, j + 2, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 5, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 5, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 5, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 5, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 5, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 5, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 5, j + 3, k + 6, Block.brick.blockID);
@@ -1480,71 +1170,13 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 5, j + 19, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 5, j + 19, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 5, j + 19, k + 25, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 6, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 4, Block.dirt.blockID);*/
 
 		generate2(var1, var2, i, j, k);
 		return true;
 	}
 
-	public boolean generate2(World var1, Random rand, int i, int j, int k) {
-		/*var1.setBlock(i + 6, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 6, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 6, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 6, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 6, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 6, j + 2, k + 4, Block.dirt.blockID);*/
+	public boolean generate2(World var1, Random var2, int i, int j, int k) 
+	{
 		var1.setBlock(i + 6, j + 2, k + 5, Block.stoneBrick.blockID);
 		var1.setBlock(i + 6, j + 2, k + 6, Block.stoneBrick.blockID);
 		var1.setBlock(i + 6, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -1565,8 +1197,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlockAndMetadata(i + 6, j + 2, k + 22, Block.stoneBrick.blockID, 2);
 		var1.setBlock(i + 6, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 6, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 6, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 6, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 6, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 6, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 6, j + 3, k + 6, Block.brick.blockID);
@@ -1746,65 +1376,7 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 6, j + 20, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 6, j + 20, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 6, j + 20, k + 25, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 7, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 9, Block.dirt.blockID);*/
 		var1.setBlock(i + 7, j + 1, k + 10, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 7, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 7, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 7, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 7, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 7, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 7, j + 2, k + 4, Block.grass.blockID);*/
 		var1.setBlock(i + 7, j + 2, k + 5, Block.stoneBrick.blockID);
 		var1.setBlock(i + 7, j + 2, k + 6, Block.stoneBrick.blockID);
 		var1.setBlock(i + 7, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -1897,6 +1469,21 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 7, j + 9, k + 25, Block.brick.blockID);
 		var1.setBlock(i + 7, j + 10, k + 5, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 7, j + 10, k + 8, Block.chest.blockID, 2);
+		TileEntityChest var14 = (TileEntityChest)var1.getBlockTileEntity(i + 7, j + 10, k + 8);
+        int var15;
+
+        if (var14 != null)
+        {
+            for (var15 = 0; var15 < 8; ++var15)
+            {
+                ItemStack var11 = this.pickCheckLootItem(var2);
+
+                if (var11 != null)
+                {
+                    var14.setInventorySlotContents(var2.nextInt(var14.getSizeInventory()), var11);
+                }
+            }
+        }
 		var1.setBlockAndMetadata(i + 7, j + 10, k + 11, Block.chest.blockID, 2);
 		var1.setBlock(i + 7, j + 10, k + 16, Block.stoneBrick.blockID);
 		var1.setBlock(i + 7, j + 10, k + 17, Block.thinGlass.blockID);
@@ -2022,65 +1609,12 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 7, j + 21, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 7, j + 21, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 7, j + 21, k + 25, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 8, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 9, Block.dirt.blockID);*/
 		var1.setBlock(i + 8, j + 0, k + 10, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 8, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 8, Block.dirt.blockID);*/
 		var1.setBlock(i + 8, j + 1, k + 9, Block.stoneBrick.blockID);
 		var1.setBlock(i + 8, j + 1, k + 10, Block.glowStone.blockID);
 		var1.setBlock(i + 8, j + 1, k + 11, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 8, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 14, Block.dirt.blockID);*/
 		var1.setBlock(i + 8, j + 1, k + 15, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 8, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 18, Block.dirt.blockID);*/
 		var1.setBlock(i + 8, j + 1, k + 19, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 8, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 8, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 8, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 8, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 8, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 8, j + 2, k + 4, Block.grass.blockID);*/
 		var1.setBlock(i + 8, j + 2, k + 5, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 8, j + 2, k + 6, Block.stoneBrick.blockID, 2);
 		var1.setBlock(i + 8, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -2265,64 +1799,16 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 8, j + 22, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 8, j + 22, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 8, j + 22, k + 24, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 9, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 14, Block.dirt.blockID);*/
 		var1.setBlock(i + 9, j + 0, k + 15, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 9, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 9, Block.dirt.blockID);*/
 		var1.setBlock(i + 9, j + 1, k + 10, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 9, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 13, Block.dirt.blockID);*/
 		var1.setBlock(i + 9, j + 1, k + 14, Block.stoneBrick.blockID);
 		var1.setBlock(i + 9, j + 1, k + 15, Block.glowStone.blockID);
 		var1.setBlock(i + 9, j + 1, k + 16, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 9, j + 1, k + 17, Block.dirt.blockID);
 		var1.setBlock(i + 9, j + 1, k + 18, Block.stoneBrick.blockID);
 		var1.setBlock(i + 9, j + 1, k + 19, Block.glowStone.blockID);
 		var1.setBlock(i + 9, j + 1, k + 20, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 9, j + 1, k + 21, Block.dirt.blockID);
 		var1.setBlock(i + 9, j + 1, k + 22, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 9, j + 1, k + 23, Block.dirt.blockID);
 		var1.setBlock(i + 9, j + 1, k + 24, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 9, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 9, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 9, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 9, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 9, j + 2, k + 3, Block.grass.blockID);*/
 		var1.setBlock(i + 9, j + 2, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 9, j + 2, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 9, j + 2, k + 6, Block.brick.blockID);
@@ -2344,8 +1830,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 9, j + 2, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 9, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 9, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 9, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 9, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 9, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 9, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 9, j + 3, k + 6, Block.brick.blockID);
@@ -2493,63 +1977,8 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 9, j + 23, k + 21, Block.stoneBrick.blockID);
 		var1.setBlock(i + 9, j + 23, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 9, j + 23, k + 23, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 10, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 14, Block.dirt.blockID);*/
 		var1.setBlock(i + 10, j + 1, k + 15, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 10, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 22, Block.dirt.blockID);*/
 		var1.setBlock(i + 10, j + 1, k + 23, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 10, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 10, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 10, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 10, j + 2, k + 2, Block.dirt.blockID);*/
 		var1.setBlock(i + 10, j + 2, k + 3, Block.stoneBrick.blockID);
 		var1.setBlock(i + 10, j + 2, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 10, j + 2, k + 5, Block.brick.blockID);
@@ -2572,8 +2001,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 10, j + 2, k + 22, Block.stoneDoubleSlab.blockID);
 		var1.setBlock(i + 10, j + 2, k + 23, Block.stoneDoubleSlab.blockID);
 		var1.setBlock(i + 10, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 10, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 10, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 10, j + 3, k + 2, Block.stoneBrick.blockID);
 		var1.setBlock(i + 10, j + 3, k + 3, Block.stoneBrick.blockID);
 		var1.setBlock(i + 10, j + 3, k + 4, Block.brick.blockID);
@@ -2749,57 +2176,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 10, j + 24, k + 21, Block.stoneBrick.blockID);
 		var1.setBlock(i + 10, j + 24, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 10, j + 24, k + 23, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 11, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 11, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 11, j + 1, k + 26, Block.dirt.blockID);*/
 		var1.setBlock(i + 11, j + 2, k + 0, Block.stoneBrick.blockID);
 		var1.setBlock(i + 11, j + 2, k + 1, Block.stoneBrick.blockID);
 		var1.setBlock(i + 11, j + 2, k + 2, Block.stoneBrick.blockID);
@@ -2866,6 +2242,21 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 11, j + 10, k + 5, Block.stoneBrick.blockID);
 		var1.setBlock(i + 11, j + 10, k + 8, Block.workbench.blockID);
 		var1.setBlockAndMetadata(i + 11, j + 10, k + 11, Block.chest.blockID, 2);
+		TileEntityChest var16 = (TileEntityChest)var1.getBlockTileEntity(i + 7, j + 10, k + 8);
+        int var17;
+
+        if (var16 != null)
+        {
+            for (var17 = 0; var17 < 8; ++var17)
+            {
+                ItemStack var11 = this.pickCheckLootItem(var2);
+
+                if (var11 != null)
+                {
+                    var16.setInventorySlotContents(var2.nextInt(var16.getSizeInventory()), var11);
+                }
+            }
+        }
 		var1.setBlock(i + 11, j + 10, k + 14, Block.fence.blockID);
 		var1.setBlock(i + 11, j + 10, k + 18, Block.fence.blockID);
 		var1.setBlock(i + 11, j + 10, k + 19, Block.fence.blockID);
@@ -2976,65 +2367,13 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 11, j + 25, k + 20, Block.stoneBrick.blockID);
 		var1.setBlock(i + 11, j + 25, k + 21, Block.stoneBrick.blockID);
 		var1.setBlock(i + 11, j + 25, k + 22, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 12, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 12, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 15, Block.dirt.blockID);*/
-
-		generate3(var1, rand, i, j, k);
+		
+		generate3(var1, var2, i, j, k);
 		return true;
 	}
 
-	public boolean generate3(World var1, Random rand, int i, int j, int k) {
-		/*var1.setBlock(i + 12, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 12, j + 1, k + 26, Block.dirt.blockID);*/
+	public boolean generate3(World var1, Random var2, int i, int j, int k) 
+	{
 		var1.setBlock(i + 12, j + 2, k + 0, Block.stoneBrick.blockID);
 		var1.setBlock(i + 12, j + 2, k + 1, Block.stoneBrick.blockID);
 		var1.setBlock(i + 12, j + 2, k + 2, Block.stoneBrick.blockID);
@@ -3060,8 +2399,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 12, j + 2, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 12, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 12, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 12, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 12, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 12, j + 3, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 12, j + 4, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 12, j + 5, k + 4, Block.web.blockID);
@@ -3210,60 +2547,9 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 12, j + 25, k + 20, Block.stoneBrick.blockID);
 		var1.setBlock(i + 12, j + 25, k + 21, Block.stoneBrick.blockID);
 		var1.setBlock(i + 12, j + 25, k + 22, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 13, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 13, j + 0, k + 4, Block.grass.blockID);
-		var1.setBlock(i + 13, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 14, Block.dirt.blockID);*/
 		var1.setBlock(i + 13, j + 1, k + 15, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 13, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 18, Block.dirt.blockID);*/
 		var1.setBlock(i + 13, j + 1, k + 19, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 13, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 22, Block.dirt.blockID);*/
 		var1.setBlock(i + 13, j + 1, k + 23, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 13, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 13, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 13, j + 2, k + 1, Block.grass.blockID);*/
 		var1.setBlock(i + 13, j + 2, k + 2, Block.stoneBrick.blockID);
 		var1.setBlock(i + 13, j + 2, k + 3, Block.stoneBrick.blockID);
 		var1.setBlock(i + 13, j + 2, k + 5, Block.brick.blockID);
@@ -3286,8 +2572,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 13, j + 2, k + 22, Block.stoneDoubleSlab.blockID);
 		var1.setBlock(i + 13, j + 2, k + 23, Block.stoneDoubleSlab.blockID);
 		var1.setBlock(i + 13, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 13, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 13, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 13, j + 3, k + 2, Block.stoneBrick.blockID);
 		var1.setBlock(i + 13, j + 3, k + 3, Block.stoneBrick.blockID);
 		var1.setBlock(i + 13, j + 3, k + 4, Block.brick.blockID);
@@ -3463,65 +2747,16 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 13, j + 24, k + 21, Block.stoneBrick.blockID);
 		var1.setBlock(i + 13, j + 24, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 13, j + 24, k + 23, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 14, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 14, Block.dirt.blockID);*/
 		var1.setBlock(i + 14, j + 0, k + 15, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 14, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 9, Block.dirt.blockID);*/
 		var1.setBlock(i + 14, j + 1, k + 10, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 14, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 13, Block.dirt.blockID);*/
 		var1.setBlock(i + 14, j + 1, k + 14, Block.stoneBrick.blockID);
 		var1.setBlock(i + 14, j + 1, k + 15, Block.glowStone.blockID);
 		var1.setBlock(i + 14, j + 1, k + 16, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 14, j + 1, k + 17, Block.dirt.blockID);
 		var1.setBlock(i + 14, j + 1, k + 18, Block.stoneBrick.blockID);
 		var1.setBlock(i + 14, j + 1, k + 19, Block.glowStone.blockID);
 		var1.setBlock(i + 14, j + 1, k + 20, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 14, j + 1, k + 21, Block.dirt.blockID);
 		var1.setBlock(i + 14, j + 1, k + 22, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 14, j + 1, k + 23, Block.dirt.blockID);
 		var1.setBlock(i + 14, j + 1, k + 24, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 14, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 14, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 14, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 14, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 14, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 14, j + 2, k + 4, Block.dirt.blockID);*/
 		var1.setBlock(i + 14, j + 2, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 14, j + 2, k + 6, Block.brick.blockID);
 		var1.setBlock(i + 14, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -3542,8 +2777,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 14, j + 2, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 14, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 14, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 14, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 14, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 14, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 14, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 14, j + 3, k + 6, Block.brick.blockID);
@@ -3692,65 +2925,12 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 14, j + 23, k + 21, Block.stoneBrick.blockID);
 		var1.setBlock(i + 14, j + 23, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 14, j + 23, k + 23, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 15, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 9, Block.dirt.blockID);*/
 		var1.setBlock(i + 15, j + 0, k + 10, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 15, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 8, Block.dirt.blockID);*/
 		var1.setBlock(i + 15, j + 1, k + 9, Block.stoneBrick.blockID);
 		var1.setBlock(i + 15, j + 1, k + 10, Block.glowStone.blockID);
 		var1.setBlock(i + 15, j + 1, k + 11, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 15, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 14, Block.dirt.blockID);*/
 		var1.setBlock(i + 15, j + 1, k + 15, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 15, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 18, Block.dirt.blockID);*/
 		var1.setBlock(i + 15, j + 1, k + 19, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 15, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 15, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 15, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 15, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 15, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 15, j + 2, k + 4, Block.grass.blockID);*/
 		var1.setBlock(i + 15, j + 2, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 15, j + 2, k + 6, Block.stoneBrick.blockID);
 		var1.setBlock(i + 15, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -3772,7 +2952,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 15, j + 2, k + 23, Block.brick.blockID);
 		var1.setBlock(i + 15, j + 2, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 15, j + 2, k + 25, Block.brick.blockID);
-		//var1.setBlock(i + 15, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 15, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 15, j + 3, k + 11, Block.stoneDoubleSlab.blockID);
 		var1.setBlockAndMetadata(i + 15, j + 3, k + 19, Block.stoneDoubleSlab.blockID, 3);
@@ -3820,6 +2999,21 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 15, j + 10, k + 5, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 15, j + 10, k + 8, Block.chest.blockID, 2);
 		var1.setBlockAndMetadata(i + 15, j + 10, k + 11, Block.chest.blockID, 2);
+		TileEntityChest var18 = (TileEntityChest)var1.getBlockTileEntity(i + 15, j + 10, k + 11);
+        int var19;
+
+        if (var18 != null)
+        {
+            for (var19 = 0; var19 < 8; ++var19)
+            {
+                ItemStack var11 = this.pickCheckLootItem(var2);
+
+                if (var11 != null)
+                {
+                    var18.setInventorySlotContents(var2.nextInt(var18.getSizeInventory()), var11);
+                }
+            }
+        }
 		var1.setBlock(i + 15, j + 10, k + 15, Block.fence.blockID);
 		var1.setBlock(i + 15, j + 10, k + 16, Block.fence.blockID);
 		var1.setBlock(i + 15, j + 10, k + 23, Block.brick.blockID);
@@ -3935,65 +3129,7 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 15, j + 22, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 15, j + 22, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 15, j + 22, k + 24, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 16, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 9, Block.dirt.blockID);*/
 		var1.setBlock(i + 16, j + 1, k + 10, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 16, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 16, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 16, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 16, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 16, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 16, j + 2, k + 4, Block.grass.blockID);*/
 		var1.setBlock(i + 16, j + 2, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 16, j + 2, k + 6, Block.stoneBrick.blockID);
 		var1.setBlock(i + 16, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -4015,7 +3151,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 16, j + 2, k + 23, Block.brick.blockID);
 		var1.setBlock(i + 16, j + 2, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 16, j + 2, k + 25, Block.brick.blockID);
-		//var1.setBlock(i + 16, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 16, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 16, j + 3, k + 11, Block.stoneDoubleSlab.blockID);
 		var1.setBlock(i + 16, j + 3, k + 14, Block.blockGold.blockID);
@@ -4205,64 +3340,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 16, j + 21, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 16, j + 21, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 16, j + 21, k + 25, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 17, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 17, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 17, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 17, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 17, j + 2, k + 3, Block.grass.blockID);*/
 		var1.setBlock(i + 17, j + 2, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 17, j + 2, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 17, j + 2, k + 6, Block.brick.blockID);
@@ -4284,8 +3361,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 17, j + 2, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 17, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 17, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 17, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 17, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 17, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 17, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 17, j + 3, k + 6, Block.brick.blockID);
@@ -4294,6 +3369,21 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 17, j + 3, k + 19, Block.brick.blockID);
 		var1.setBlock(i + 17, j + 3, k + 20, Block.brick.blockID);
 		var1.setBlockAndMetadata(i + 17, j + 3, k + 23, Block.chest.blockID, 2);
+		TileEntityChest var20 = (TileEntityChest)var1.getBlockTileEntity(i + 17, j + 3, k + 23);
+        int var21;
+
+        if (var20 != null)
+        {
+            for (var21 = 0; var21 < 8; ++var21)
+            {
+                ItemStack var11 = this.pickCheckLootItem(var2);
+
+                if (var11 != null)
+                {
+                    var20.setInventorySlotContents(var2.nextInt(var20.getSizeInventory()), var11);
+                }
+            }
+        }
 		var1.setBlock(i + 17, j + 3, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 17, j + 4, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 17, j + 4, k + 5, Block.brick.blockID);
@@ -4463,73 +3553,16 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 17, j + 20, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 17, j + 20, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 17, j + 20, k + 25, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 18, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 18, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 18, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 18, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 18, j + 2, k + 3, Block.grass.blockID);*/
 		var1.setBlock(i + 18, j + 2, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 18, j + 2, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 18, j + 2, k + 6, Block.brick.blockID);
 
-		generate4(var1, rand, i, j, k);
+		generate4(var1, var2, i, j, k);
 		return true;
 	}
 
-	public boolean generate4(World var1, Random rand, int i, int j, int k) {
+	public boolean generate4(World var1, Random var2, int i, int j, int k) 
+	{
 		var1.setBlock(i + 18, j + 2, k + 7, Block.stoneBrick.blockID);
 		var1.setBlock(i + 18, j + 2, k + 8, Block.stoneDoubleSlab.blockID);
 		var1.setBlock(i + 18, j + 2, k + 9, Block.stoneDoubleSlab.blockID);
@@ -4548,8 +3581,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 18, j + 2, k + 22, Block.stoneBrick.blockID);
 		var1.setBlock(i + 18, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 18, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 18, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 18, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 18, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 18, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 18, j + 3, k + 6, Block.brick.blockID);
@@ -4561,6 +3592,21 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 18, j + 3, k + 19, Block.brick.blockID);
 		var1.setBlock(i + 18, j + 3, k + 20, Block.brick.blockID);
 		var1.setBlockAndMetadata(i + 18, j + 3, k + 23, Block.chest.blockID, 2);
+		TileEntityChest var22 = (TileEntityChest)var1.getBlockTileEntity(i + 18, j + 3, k + 23);
+        int var23;
+
+        if (var22 != null)
+        {
+            for (var23 = 0; var23 < 8; ++var23)
+            {
+                ItemStack var11 = this.pickCheckLootItem(var2);
+
+                if (var11 != null)
+                {
+                    var22.setInventorySlotContents(var2.nextInt(var22.getSizeInventory()), var11);
+                }
+            }
+        }
 		var1.setBlock(i + 18, j + 3, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 18, j + 4, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 18, j + 4, k + 5, Block.brick.blockID);
@@ -4724,65 +3770,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 18, j + 19, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 18, j + 19, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 18, j + 19, k + 25, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 19, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 19, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 19, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 19, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 19, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 19, j + 2, k + 4, Block.grass.blockID);*/
 		var1.setBlock(i + 19, j + 2, k + 5, Block.stoneBrick.blockID);
 		var1.setBlock(i + 19, j + 2, k + 6, Block.stoneBrick.blockID);
 		var1.setBlock(i + 19, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -4803,8 +3790,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 19, j + 2, k + 22, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 19, j + 2, k + 23, Block.stoneBrick.blockID, 1);
 		var1.setBlock(i + 19, j + 2, k + 24, Block.stoneBrick.blockID);
-		//var1.setBlock(i + 19, j + 2, k + 25, Block.grass.blockID);
-		//var1.setBlock(i + 19, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 19, j + 3, k + 5, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 19, j + 3, k + 15, Block.stoneSingleSlab.blockID, 5);
 		var1.setBlock(i + 19, j + 3, k + 16, Block.stoneBrick.blockID);
@@ -4959,65 +3944,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 19, j + 19, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 19, j + 19, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 19, j + 19, k + 25, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 20, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 20, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 20, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 20, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 20, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 20, j + 2, k + 4, Block.grass.blockID);*/
 		var1.setBlock(i + 20, j + 2, k + 5, Block.stoneBrick.blockID);
 		var1.setBlock(i + 20, j + 2, k + 6, Block.stoneBrick.blockID);
 		var1.setBlock(i + 20, j + 2, k + 7, Block.stoneBrick.blockID);
@@ -5039,7 +3965,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 20, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 20, j + 2, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 20, j + 2, k + 25, Block.brick.blockID);
-		//var1.setBlock(i + 20, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 20, j + 3, k + 5, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 20, j + 3, k + 15, Block.stoneSingleSlab.blockID, 5);
 		var1.setBlock(i + 20, j + 3, k + 16, Block.stoneBrick.blockID);
@@ -5212,64 +4137,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 20, j + 19, k + 19, Block.stoneBrick.blockID);
 		var1.setBlock(i + 20, j + 19, k + 20, Block.stoneBrick.blockID);
 		var1.setBlock(i + 20, j + 19, k + 21, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 21, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 21, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 21, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 21, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 21, j + 2, k + 3, Block.grass.blockID);*/
 		var1.setBlock(i + 21, j + 2, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 21, j + 2, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 21, j + 2, k + 6, Block.stoneBrick.blockID);
@@ -5292,7 +4159,6 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 21, j + 2, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 21, j + 2, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 21, j + 2, k + 25, Block.brick.blockID);
-		//var1.setBlock(i + 21, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 21, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 21, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 21, j + 3, k + 6, Block.stoneBrick.blockID);
@@ -5607,87 +4473,14 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 21, j + 19, k + 19, Block.stoneBrick.blockID);
 		var1.setBlock(i + 21, j + 19, k + 20, Block.stoneBrick.blockID);
 		var1.setBlock(i + 21, j + 19, k + 21, Block.stoneBrick.blockID);
-		/*var1.setBlock(i + 22, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 22, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 3, Block.grass.blockID);*/
 		var1.setBlock(i + 22, j + 2, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 22, j + 2, k + 5, Block.brick.blockID);
-		/*var1.setBlock(i + 22, j + 2, k + 6, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 7, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 8, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 9, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 10, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 11, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 12, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 13, Block.grass.blockID);*/
 		var1.setBlock(i + 22, j + 2, k + 14, Block.brick.blockID);
 		var1.setBlock(i + 22, j + 2, k + 15, Block.brick.blockID);
-		/*var1.setBlock(i + 22, j + 2, k + 16, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 17, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 18, Block.grass.blockID);*/
 		var1.setBlock(i + 22, j + 2, k + 19, Block.brick.blockID);
 		var1.setBlock(i + 22, j + 2, k + 20, Block.brick.blockID);
-		/*var1.setBlock(i + 22, j + 2, k + 21, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 22, Block.grass.blockID);
-		var1.setBlock(i + 22, j + 2, k + 23, Block.grass.blockID);*/
 		var1.setBlock(i + 22, j + 2, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 22, j + 2, k + 25, Block.brick.blockID);
-		//var1.setBlock(i + 22, j + 2, k + 26, Block.grass.blockID);
 		var1.setBlock(i + 22, j + 3, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 22, j + 3, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 22, j + 3, k + 14, Block.brick.blockID);
@@ -5858,167 +4651,12 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 22, j + 16, k + 23, Block.stoneBrick.blockID);
 		var1.setBlock(i + 22, j + 16, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 22, j + 16, k + 25, Block.brick.blockID);
-		/*var1.setBlock(i + 23, j + 0, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 0, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 0, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 1, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 2, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 3, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 4, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 5, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 6, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 7, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 8, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 9, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 10, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 11, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 12, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 13, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 14, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 15, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 16, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 17, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 18, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 19, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 20, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 21, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 22, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 23, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 24, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 25, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 1, k + 26, Block.dirt.blockID);
-		var1.setBlock(i + 23, j + 2, k + 0, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 1, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 2, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 3, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 4, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 5, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 6, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 7, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 8, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 9, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 10, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 11, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 12, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 13, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 14, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 15, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 16, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 17, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 18, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 19, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 20, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 21, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 22, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 23, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 24, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 25, Block.grass.blockID);
-		var1.setBlock(i + 23, j + 2, k + 26, Block.grass.blockID);*/
-		/*var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 4, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 6, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 7, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 8, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 9, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 10, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 11, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 12, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 14, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 15, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 16, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 17, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 18, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 19, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 20, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 21, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 22, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 23, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 25, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 0, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 6, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 7, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 8, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 9, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 10, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 1, j + 3, k + 11, Block.mushroomBrown.blockID);
-		//var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 12, Block.tallGrass.blockID, 1);
-		var1.setBlockWithNotify(i + 1, j + 3, k + 13, Block.mushroomBrown.blockID);
-		/*var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 16, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 17, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 18, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 21, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 22, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 23, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 1, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 2, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 2, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 2, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 2, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 3, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 3, j + 3, k + 1, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 3, j + 3, k + 4, Block.mushroomBrown.blockID);
-		var1.setBlockWithNotify(i + 3, j + 3, k + 6, Block.mushroomBrown.blockID);
-		//var1.setBlockAndMetadataWithNotify(i + 3, j + 3, k + 26, Block.tallGrass.blockID, 1);
 		var1.setBlockAndMetadataWithNotify(i + 3, j + 10, k + 15, Block.doorWood.blockID, 3);
 		var1.setBlockAndMetadataWithNotify(i + 3, j + 11, k + 15, Block.doorWood.blockID, 11);
-		/*var1.setBlockAndMetadataWithNotify(i + 4, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 4, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 4, j + 3, k + 25, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 4, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 5, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 5, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 5, j + 3, k + 3, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 5, j + 3, k + 25, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 5, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 6, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 6, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 6, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 6, j + 3, k + 3, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 6, j + 3, k + 25, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 6, j + 3, k + 26, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 7, j + 3, k + 1, Block.plantYellow.blockID);
-		/*var1.setBlockAndMetadataWithNotify(i + 7, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 7, j + 3, k + 3, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 7, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 8, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 8, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 8, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 9, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 9, j + 3, k + 25, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 10, j + 3, k + 26, Block.plantYellow.blockID);
 		var1.setBlockWithNotify(i + 11, j + 1, k + 2, Block.redstoneWire.blockID);
 		var1.setBlockWithNotify(i + 11, j + 1, k + 3, Block.redstoneWire.blockID);
 		var1.setBlockAndMetadataWithNotify(i + 11, j + 1, k + 5, Block.torchRedstoneActive.blockID, 3);
 		var1.setBlockAndMetadataWithNotify(i + 11, j + 3, k + 5, Block.doorSteel.blockID, 4);
-		//var1.setBlockAndMetadataWithNotify(i + 11, j + 3, k + 25, Block.tallGrass.blockID, 1);
-		//var1.setBlockAndMetadataWithNotify(i + 11, j + 3, k + 26, Block.tallGrass.blockID, 1);
 		var1.setBlockAndMetadataWithNotify(i + 11, j + 4, k + 5, Block.doorSteel.blockID, 12);
 		var1.setBlockAndMetadataWithNotify(i + 11, j + 16, k + 13, Block.doorWood.blockID, 4);
 		var1.setBlockAndMetadataWithNotify(i + 11, j + 16, k + 21, Block.doorWood.blockID, 3);
@@ -6028,14 +4666,13 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlockWithNotify(i + 12, j + 3, k + 4, Block.pressurePlateStone.blockID);
 		var1.setBlockAndMetadataWithNotify(i + 12, j + 3, k + 5, Block.doorSteel.blockID, 1);
 		var1.setBlockWithNotify(i + 12, j + 3, k + 6, Block.pressurePlateStone.blockID);
-		//var1.setBlockAndMetadataWithNotify(i + 12, j + 3, k + 25, Block.tallGrass.blockID, 1);
 		var1.setBlockAndMetadataWithNotify(i + 12, j + 4, k + 5, Block.doorSteel.blockID, 9);
 
-		generate5(var1, rand, i, j, k);
+		generate5(var1, var2, i, j, k);
 		return true;
 	}
 
-	public boolean generate5(World var1, Random rand, int i, int j, int k) {
+	public boolean generate5(World var1, Random var2, int i, int j, int k) {
 		var1.setBlockAndMetadataWithNotify(i + 12, j + 16, k + 13, Block.doorWood.blockID, 1);
 		var1.setBlockAndMetadataWithNotify(i + 12, j + 16, k + 21, Block.doorWood.blockID, 6);
 		var1.setBlockAndMetadataWithNotify(i + 12, j + 17, k + 13, Block.doorWood.blockID, 9);
@@ -6043,92 +4680,24 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlockAndMetadataWithNotify(i + 13, j + 1, k + 3, Block.redstoneWire.blockID, 14);
 		var1.setBlockAndMetadataWithNotify(i + 13, j + 1, k + 4, Block.redstoneWire.blockID, 15);
 		var1.setBlockAndMetadataWithNotify(i + 13, j + 2, k + 4, Block.torchRedstoneActive.blockID, 1);
-		/*var1.setBlockAndMetadataWithNotify(i + 13, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 13, j + 3, k + 25, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 14, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 14, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 14, j + 3, k + 2, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 14, j + 3, k + 25, Block.mushroomBrown.blockID);
-		//var1.setBlockAndMetadataWithNotify(i + 14, j + 3, k + 26, Block.tallGrass.blockID, 1);
 		var1.setBlockAndMetadataWithNotify(i + 14, j + 16, k + 15, Block.ladder.blockID, 3);
 		var1.setBlockAndMetadataWithNotify(i + 14, j + 17, k + 15, Block.ladder.blockID, 3);
 		var1.setBlockAndMetadataWithNotify(i + 14, j + 18, k + 15, Block.ladder.blockID, 3);
 		var1.setBlockAndMetadataWithNotify(i + 14, j + 19, k + 15, Block.ladder.blockID, 3);
 		var1.setBlockAndMetadataWithNotify(i + 14, j + 20, k + 15, Block.ladder.blockID, 3);
 		var1.setBlockAndMetadataWithNotify(i + 14, j + 21, k + 15, Block.trapdoor.blockID, 2);
-		//var1.setBlockAndMetadataWithNotify(i + 15, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockWithNotify(i + 15, j + 3, k + 1, Block.plantYellow.blockID);
-		/*var1.setBlockAndMetadataWithNotify(i + 15, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 15, j + 3, k + 3, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 15, j + 3, k + 4, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 15, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 16, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 16, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 16, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 16, j + 3, k + 3, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 16, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 17, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 17, j + 3, k + 2, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 17, j + 3, k + 25, Block.plantYellow.blockID);
-		/*var1.setBlockAndMetadataWithNotify(i + 18, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 18, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 18, j + 3, k + 3, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 18, j + 3, k + 25, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 19, j + 3, k + 1, Block.plantYellow.blockID);
-		/*var1.setBlockAndMetadataWithNotify(i + 19, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 19, j + 3, k + 3, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 19, j + 3, k + 4, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 19, j + 3, k + 25, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 19, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 20, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 20, j + 3, k + 1, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 20, j + 3, k + 2, Block.plantRed.blockID);
-		var1.setBlockWithNotify(i + 20, j + 3, k + 3, Block.plantYellow.blockID);
-		//var1.setBlockAndMetadataWithNotify(i + 20, j + 3, k + 26, Block.tallGrass.blockID, 1);
 		var1.setBlockAndMetadataWithNotify(i + 20, j + 10, k + 15, Block.doorWood.blockID, 6);
 		var1.setBlockAndMetadataWithNotify(i + 20, j + 11, k + 15, Block.doorWood.blockID, 14);
-		/*var1.setBlockAndMetadataWithNotify(i + 21, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 21, j + 3, k + 2, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 21, j + 3, k + 3, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 1, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 3, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 6, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 7, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 8, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 9, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 11, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 12, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 13, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 16, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 17, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 18, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 21, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 22, j + 3, k + 22, Block.mushroomBrown.blockID);
-		/*var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 23, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 22, j + 3, k + 26, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 0, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 2, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 23, j + 3, k + 5, Block.plantYellow.blockID);
-		var1.setBlockWithNotify(i + 23, j + 3, k + 6, Block.plantYellow.blockID);
-		/*var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 7, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 8, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 9, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 23, j + 3, k + 10, Block.plantYellow.blockID);
-		var1.setBlockWithNotify(i + 23, j + 3, k + 11, Block.plantYellow.blockID);
-		/*var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 12, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 13, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 15, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 16, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 17, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 18, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 19, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 21, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 22, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 23, Block.tallGrass.blockID, 1);
-		var1.setBlockAndMetadataWithNotify(i + 23, j + 3, k + 25, Block.tallGrass.blockID, 1);*/
-		var1.setBlockWithNotify(i + 23, j + 3, k + 26, Block.plantYellow.blockID);
-
+		
 		return true;
 	}
+	
+	private ItemStack pickCheckLootItem(Random var1)
+    {
+        int var2 = var1.nextInt(11);
+        return var2 == 0 ? new ItemStack(Item.bone, var1.nextInt(5) + 1) : (var2 == 1 && var1.nextInt(3) == 0 ? new ItemStack(Item.boat) : (var2 == 2 && var1.nextInt(3) == 0 ? new ItemStack(Item.bow) : (var2 == 3 ? new ItemStack(Item.fishRaw, var1.nextInt(6) + 1) : (var2 == 4 ? new ItemStack(Item.arrow, var1.nextInt(8) + 1) : (var2 == 5 ? new ItemStack(Item.redstone, var1.nextInt(15) + 1) : (var2 == 6 && var1.nextInt(2) == 0 ? new ItemStack(Item.expBottle, var1.nextInt(7) + 1) : (var2 == 7 && var1.nextInt(2) == 0 ? new ItemStack(Item.ingotIron, var1.nextInt(4) + 1) : (var2 == 8 ? new ItemStack(Item.bread, var1.nextInt(3) + 1) : (var2 == 9 && var1.nextInt(25) == 0 ? new ItemStack(Item.appleGold, var1.nextInt(3) + 1, 1) : (var2 == 10 && var1.nextInt(4) == 0 ? new ItemStack(Item.swordGold) : null))))))))));
+    }
+	
+	
 }
+
