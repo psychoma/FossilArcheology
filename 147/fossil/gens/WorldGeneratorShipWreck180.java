@@ -3,6 +3,9 @@ package fossil.gens;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -432,6 +435,21 @@ public class WorldGeneratorShipWreck180 extends WorldGenerator
 		world.setBlock(i + 2, j + 7, k + 7, Block.planks.blockID);
 		world.setBlockAndMetadata(i + 2, j + 7, k + 8, Block.chest.blockID, 5);
 		world.setBlockAndMetadata(i + 2, j + 7, k + 9, Block.chest.blockID, 5);
+		TileEntityChest var9 = (TileEntityChest)world.getBlockTileEntity(i + 2, j + 7, k + 9);
+        int var10;
+
+        if (var9 != null)
+        {
+            for (var10 = 0; var10 < 8; ++var10)
+            {
+                ItemStack var11 = this.pickCheckLootItem(rand);
+
+                if (var11 != null)
+                {
+                    var9.setInventorySlotContents(rand.nextInt(var9.getSizeInventory()), var11);
+                }
+            }
+        }
 		world.setBlockAndMetadata(i + 2, j + 7, k + 10, Block.chest.blockID, 5);
 		world.setBlockAndMetadata(i + 2, j + 7, k + 11, Block.chest.blockID, 5);
 		world.setBlock(i + 2, j + 7, k + 12, Block.planks.blockID);
@@ -913,6 +931,21 @@ public class WorldGeneratorShipWreck180 extends WorldGenerator
 		world.setBlock(i + 4, j + 6, k + 6, Block.planks.blockID);
 		world.setBlock(i + 4, j + 6, k + 7, Block.planks.blockID);
 		world.setBlockAndMetadata(i + 4, j + 6, k + 8, Block.chest.blockID, 5);
+		TileEntityChest var12 = (TileEntityChest)world.getBlockTileEntity(i + 4, j + 6, k + 8);
+        int var13;
+
+        if (var12 != null)
+        {
+            for (var13 = 0; var13 < 8; ++var13)
+            {
+                ItemStack var11 = this.pickCheckLootItem(rand);
+
+                if (var11 != null)
+                {
+                    var12.setInventorySlotContents(rand.nextInt(var12.getSizeInventory()), var11);
+                }
+            }
+        }
 		world.setBlock(i + 4, j + 6, k + 12, Block.planks.blockID);
 		world.setBlock(i + 4, j + 6, k + 33, Block.cloth.blockID);
 		world.setBlock(i + 4, j + 6, k + 34, Block.cloth.blockID);
@@ -1173,6 +1206,21 @@ public class WorldGeneratorShipWreck180 extends WorldGenerator
 		world.setBlockAndMetadata(i + 5, j + 6, k + 20, Block.chest.blockID, 2);
 		world.setBlockAndMetadata(i + 5, j + 6, k + 22, Block.chest.blockID, 2);
 		world.setBlockAndMetadata(i + 5, j + 6, k + 24, Block.chest.blockID, 2);
+		TileEntityChest var14 = (TileEntityChest)world.getBlockTileEntity(i + 5, j + 6, k + 24);
+        int var15;
+
+        if (var14 != null)
+        {
+            for (var15 = 0; var15 < 8; ++var15)
+            {
+                ItemStack var11 = this.pickCheckLootItem(rand);
+
+                if (var11 != null)
+                {
+                    var14.setInventorySlotContents(rand.nextInt(var14.getSizeInventory()), var11);
+                }
+            }
+        }
 		world.setBlockAndMetadata(i + 5, j + 6, k + 27, Block.stairCompactPlanks.blockID, 3);
 		world.setBlockAndMetadata(i + 5, j + 6, k + 30, Block.chest.blockID, 2);
 		world.setBlock(i + 5, j + 6, k + 33, Block.cloth.blockID);
@@ -2629,5 +2677,11 @@ public class WorldGeneratorShipWreck180 extends WorldGenerator
 		return true;
 		
 	}
+	
+	private ItemStack pickCheckLootItem(Random var1)
+    {
+        int var2 = var1.nextInt(11);
+        return var2 == 0 ? new ItemStack(Item.bone, var1.nextInt(5) + 1) : (var2 == 1 && var1.nextInt(3) == 0 ? new ItemStack(Item.boat) : (var2 == 2 && var1.nextInt(3) == 0 ? new ItemStack(Item.bow) : (var2 == 3 ? new ItemStack(Item.fishRaw, var1.nextInt(6) + 1) : (var2 == 4 ? new ItemStack(Item.arrow, var1.nextInt(8) + 1) : (var2 == 5 ? new ItemStack(Item.redstone, var1.nextInt(15) + 1) : (var2 == 6 && var1.nextInt(2) == 0 ? new ItemStack(Item.expBottle, var1.nextInt(7) + 1) : (var2 == 7 && var1.nextInt(2) == 0 ? new ItemStack(Item.ingotIron, var1.nextInt(4) + 1) : (var2 == 8 ? new ItemStack(Item.bread, var1.nextInt(3) + 1) : (var2 == 9 && var1.nextInt(25) == 0 ? new ItemStack(Item.appleGold, var1.nextInt(3) + 1, 1) : (var2 == 10 && var1.nextInt(4) == 0 ? new ItemStack(Item.swordGold) : null))))))))));
+    }
 	
 }

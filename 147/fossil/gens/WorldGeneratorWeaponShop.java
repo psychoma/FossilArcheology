@@ -2,16 +2,22 @@ package fossil.gens;
 
 import java.util.Random;
 
+import fossil.Fossil;
+
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGeneratorWeaponShop extends WorldGenerator
 {
 	
-	public boolean generate(World world, Random var2, int i, int j, int k)
+	public boolean generate(World world, Random rand, int i, int j, int k)
 	{
 		
+		System.out.println("Generating shop");
 		world.setBlock(i + 0, j + 0, k + 0, Block.stone.blockID);
 		world.setBlock(i + 0, j + 0, k + 1, Block.stone.blockID);
 		world.setBlock(i + 0, j + 0, k + 2, Block.stone.blockID);
@@ -157,6 +163,21 @@ public class WorldGeneratorWeaponShop extends WorldGenerator
 		world.setBlock(i + 2, j + 1, k + 0, Block.stone.blockID);
 		world.setBlock(i + 2, j + 1, k + 1, Block.planks.blockID);
 		world.setBlockAndMetadata(i + 2, j + 1, k + 2, Block.chest.blockID, 5);
+		TileEntityChest var9 = (TileEntityChest)world.getBlockTileEntity(i + 2, j + 1, k + 2);
+        int var10;
+
+        if (var9 != null)
+        {
+            for (var10 = 0; var10 < 8; ++var10)
+            {
+                ItemStack var11 = this.pickCheckLootItem(rand);
+
+                if (var11 != null)
+                {
+                    var9.setInventorySlotContents(rand.nextInt(var9.getSizeInventory()), var11);
+                }
+            }
+        }
 		world.setBlock(i + 2, j + 1, k + 9, Block.stairCompactPlanks.blockID);
 		world.setBlock(i + 2, j + 1, k + 10, Block.cobblestone.blockID);
 		world.setBlock(i + 2, j + 2, k + 0, Block.stone.blockID);
@@ -403,6 +424,21 @@ public class WorldGeneratorWeaponShop extends WorldGenerator
 		world.setBlock(i + 8, j + 1, k + 0, Block.cobblestoneMossy.blockID);
 		world.setBlockAndMetadata(i + 8, j + 1, k + 5, Block.fenceGate.blockID, 2);
 		world.setBlockAndMetadata(i + 8, j + 1, k + 8, Block.chest.blockID, 2);
+		TileEntityChest var12 = (TileEntityChest)world.getBlockTileEntity(i + 8, j + 1, k + 8);
+        int var13;
+
+        if (var12 != null)
+        {
+            for (var13 = 0; var13 < 8; ++var13)
+            {
+                ItemStack var11 = this.pickCheckLootItem(rand);
+
+                if (var11 != null)
+                {
+                    var12.setInventorySlotContents(rand.nextInt(var12.getSizeInventory()), var11);
+                }
+            }
+        }
 		world.setBlock(i + 8, j + 1, k + 9, Block.planks.blockID);
 		world.setBlock(i + 8, j + 1, k + 10, Block.stone.blockID);
 		world.setBlock(i + 8, j + 2, k + 0, Block.cobblestone.blockID);
@@ -638,4 +674,10 @@ public class WorldGeneratorWeaponShop extends WorldGenerator
 
 		return true;
 	}
+	private ItemStack pickCheckLootItem(Random var1)
+    {
+        int var2 = var1.nextInt(11);
+        return var2 == 0 ? new ItemStack(Item.swordDiamond, var1.nextInt(5) + 1) : (var2 == 1 && var1.nextInt(3) == 0 ? new ItemStack(Fossil.diamondjavelin) : (var2 == 2 && var1.nextInt(3) == 0 ? new ItemStack(Item.swordGold) : (var2 == 3 ? new ItemStack(Fossil.goldjavelin, var1.nextInt(6) + 1) : (var2 == 4 ? new ItemStack(Item.swordSteel, var1.nextInt(8) + 1) : (var2 == 5 ? new ItemStack(Fossil.ironjavelin, var1.nextInt(15) + 1) : (var2 == 6 && var1.nextInt(2) == 0 ? new ItemStack(Item.swordStone, var1.nextInt(7) + 1) : (var2 == 7 && var1.nextInt(2) == 0 ? new ItemStack(Fossil.stonejavelin, var1.nextInt(4) + 1) : (var2 == 8 ? new ItemStack(Item.swordWood, var1.nextInt(3) + 1) : (var2 == 9 && var1.nextInt(25) == 0 ? new ItemStack(Fossil.woodjavelin, var1.nextInt(3) + 1, 1) : (var2 == 10 && var1.nextInt(4) == 0 ? new ItemStack(Item.bow) : null))))))))));
+        
+    }
 }
