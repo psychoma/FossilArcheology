@@ -305,7 +305,7 @@ public class TileEntityWorktable extends TileEntity implements IInventory, ISide
 
     private ItemStack CheckSmelt(int var1)
     {
-        return var1 == Fossil.brokenSword.itemID ? new ItemStack(Fossil.ancientSword) : (var1 == Fossil.brokenhelmet.itemID ? new ItemStack(Fossil.ancienthelmet) : (var1 == Fossil.genAxe.itemID ? new ItemStack(Fossil.genAxe) : (var1 == Fossil.genPickaxe.itemID ? new ItemStack(Fossil.genPickaxe) : (var1 == Fossil.genSword.itemID ? new ItemStack(Fossil.genSword) : (var1 == Fossil.genHoe.itemID ? new ItemStack(Fossil.genHoe) : (var1 == Fossil.genShovel.itemID ? new ItemStack(Fossil.genShovel) : null))))));
+        return var1 == Fossil.brokenSword.itemID ? new ItemStack(Fossil.ancientSword) : (var1 == Fossil.brokenhelmet.itemID ? new ItemStack(Fossil.ancienthelmet) : (var1 == Fossil.gemAxe.itemID ? new ItemStack(Fossil.gemAxe) : (var1 == Fossil.gemPickaxe.itemID ? new ItemStack(Fossil.gemPickaxe) : (var1 == Fossil.gemSword.itemID ? new ItemStack(Fossil.gemSword) : (var1 == Fossil.gemHoe.itemID ? new ItemStack(Fossil.gemHoe) : (var1 == Fossil.gemShovel.itemID ? new ItemStack(Fossil.gemShovel) : null))))));
     }
 
     public void openChest() {}

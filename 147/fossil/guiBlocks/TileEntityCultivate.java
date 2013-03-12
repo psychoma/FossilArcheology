@@ -241,7 +241,7 @@ public class TileEntityCultivate extends TileEntity implements IInventory, ISide
             this.onInventoryChanged();
         }
 
-        if (this.furnaceCookTime == 3001 && (new Random()).nextInt(100) <= 30)
+        if (this.furnaceCookTime == 3001 && (new Random()).nextInt(100) < 20)
         {
             ((BlockCultivate)Fossil.blockcultivateIdle).onBlockRemovalLost(this.worldObj, this.xCoord, this.yCoord, this.zCoord, true);
         }
@@ -336,17 +336,23 @@ public class TileEntityCultivate extends TileEntity implements IInventory, ISide
         {
             return null;
         }*/
-    	if(var1.itemID==Fossil.dnaTriceratops.itemID)return new ItemStack(Fossil.eggTriceratops, 1, 1);
-    	if(var1.itemID==Fossil.dnaBrachiosaurus.itemID)return new ItemStack(Fossil.eggBrachiosaurus, 1, 1);
-    	if(var1.itemID==Fossil.dnaPlesiosaur.itemID)return new ItemStack(Fossil.eggPlesiosaur, 1, 1);
-    	if(var1.itemID==Fossil.dnaVelociraptor.itemID)return new ItemStack(Fossil.eggVelociraptor, 1, 1);
-    	if(var1.itemID==Fossil.dnaTRex.itemID)return new ItemStack(Fossil.eggTRex, 1, 1);
-    	if(var1.itemID==Fossil.dnaUtahraptor.itemID)return new ItemStack(Fossil.eggUtahraptor, 1, 1);
-    	if(var1.itemID==Fossil.dnaMosasaurus.itemID)return new ItemStack(Fossil.eggMosasaurus, 1, 1);
-    	if(var1.itemID==Fossil.dnaPterosaur.itemID)return new ItemStack(Fossil.eggPterosaur, 1, 1);
-    	if(var1.itemID==Fossil.dnaStegosaurus.itemID)return new ItemStack(Fossil.eggStegosaurus, 1, 1);
-    	if(var1.itemID==Fossil.dnaNautilus.itemID)return new ItemStack(Fossil.shellNautilus, 1, 1);
-    	if(var1.itemID==Fossil.brokenSapling.itemID)return new ItemStack(Fossil.palmSap, 1, 1);
+    	if(var1.itemID==Fossil.dnaTriceratops.itemID)return new ItemStack(Fossil.eggTriceratops, 1);
+    	if(var1.itemID==Fossil.dnaBrachiosaurus.itemID)return new ItemStack(Fossil.eggBrachiosaurus, 1);
+    	if(var1.itemID==Fossil.dnaPlesiosaur.itemID)return new ItemStack(Fossil.eggPlesiosaur, 1);
+    	if(var1.itemID==Fossil.dnaVelociraptor.itemID)return new ItemStack(Fossil.eggVelociraptor, 1);
+    	if(var1.itemID==Fossil.dnaTRex.itemID)return new ItemStack(Fossil.eggTRex, 1);
+    	if(var1.itemID==Fossil.dnaDilophosaurus.itemID)return new ItemStack(Fossil.eggDilophosaurus, 1);
+    	if(var1.itemID==Fossil.dnaMosasaurus.itemID)return new ItemStack(Fossil.eggMosasaurus, 1);
+    	if(var1.itemID==Fossil.dnaPterosaur.itemID)return new ItemStack(Fossil.eggPterosaur, 1);
+    	if(var1.itemID==Fossil.dnaStegosaurus.itemID)return new ItemStack(Fossil.eggStegosaurus, 1);
+    	if(var1.itemID==Fossil.dnaNautilus.itemID)return new ItemStack(Fossil.shellNautilus, 1);
+    	if(var1.itemID==Fossil.brokenSapling.itemID)return new ItemStack(Fossil.palmSap, 1);
+    	if(var1.itemID==Fossil.dnaSheep.itemID)return new ItemStack(Fossil.embryoSheep, 1);
+    	if(var1.itemID==Fossil.dnaCow.itemID)return new ItemStack(Fossil.embryoCow, 1);
+    	if(var1.itemID==Fossil.dnaChicken.itemID)return new ItemStack(Fossil.embryoChicken, 1);
+    	if(var1.itemID==Fossil.dnaPig.itemID)return new ItemStack(Fossil.embryoPig, 1);
+    	if(var1.itemID==Fossil.dnaSaberCat.itemID)return new ItemStack(Fossil.embryoSaberCat, 1);
+    	if(var1.itemID==Fossil.dnaMammoth.itemID)return new ItemStack(Fossil.embryoMammoth, 1);
     	return null;
     }
 

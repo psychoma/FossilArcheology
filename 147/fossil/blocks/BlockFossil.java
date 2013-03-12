@@ -26,7 +26,7 @@ public class BlockFossil extends BlockStone
     public int idDropped(int var1, Random var2, int var3)
     {
         int i = (new Random()).nextInt(1000);
-        if(i < 1)		return Fossil.gen.itemID;
+        if(i < 1)		return Fossil.gem.itemID;
         if(i < 6)	return Fossil.brokenSword.itemID;
         if(i < 11)	return Fossil.brokenhelmet.itemID;
         if(i < 13) 	return Fossil.legBone.itemID;

@@ -1,15 +1,29 @@
-block.Fossil.Name=Fossil
-block.Skull.Name=Skull
-block.SkullLantern.Name=SkullLantern
-block.Analyzer.Name=Analyzer
-block.CultureVat.Name=Culture Vat
-block.workbench.Name=Archeology workbench
-block.Drum.Name=Order Drum
-block.Feeder.Name=Feeder
-block.Permafrost.Name=Permafrost
-block.IcedStone.Name=IcedStone
-block.TimeMachine.Name=Time Machine
-#
+##########Names of the Tabs
+Tab.Armor.Name=Ancient Armor
+Tab.Blocks.Name=Ancient Blocks
+Tab.Combat.Name=Ancient Weapons
+Tab.Food.Name=Ancient Foods
+Tab.Items.Name=Ancient Items
+Tab.Material.Name=Ancient Materials
+Tab.Tools.Name=Ancient Tools
+##########Names of all new Blocks
+Block.Fossil.Name=Fossil
+Block.Skull.Name=Skull
+Block.SkullLantern.Name=SkullLantern
+Block.Analyzer.Name=Analyzer
+Block.CultureVat.Name=Culture Vat
+Block.Workbench.Name=Archeology workbench
+Block.Drum.Name=Order Drum
+Block.Feeder.Name=Feeder
+Block.Permafrost.Name=Permafrost
+Block.IcedStone.Name=IcedStone
+Block.TimeMachine.Name=Time Machine
+Block.Tar.Name=Tar
+Block.PalLog.Name=Palaeoraphe Log
+Block.PalLeaves.Name=Palaeoraphe Leaves
+Block.PalSap.Name=Palaeoraphe Sapling
+Block.PalPlank.Name=Palaeoraphe Planks
+##########Names of all new Items
 Item.BioFossil.Name=Bio-Fossil
 Item.Relic.Name=Relic Scrap
 Item.Tablet.Name=Stone Tablet
@@ -34,7 +48,6 @@ Item.CookedChickenSoup.Name=Cooked Chicken Soup
 Item.EOC.Name=Essence of Chicken
 Item.Shell.Name=Empty Shell
 Item.SJL.Name=Sio-Chiu-Le
-Item.DinoSteak.Name=Dino Steak
 Item.IcedMeat.Name=Frozen Meat
 Item.WoodJavelin.Name=Wooden Javelin
 Item.StoneJavelin.Name=Stone Javelin
@@ -43,6 +56,64 @@ Item.GoldJavelin.Name=Gold Javelin
 Item.DiamondJavelin.Name=Diamond Javelin
 Item.AncientJavelin.Name=Ancient Javelin
 Item.Whip.Name=Whip
+Item.MagicConch.Name=Magic Conch
+Item.LegBone.Name=Leg Bone
+Item.Claw.Name=Claw
+Item.Foot.Name=Foot
+Item.Skull.Name=Skull
+Item.BrokenSapling.Name=Plant Fossil
+Item.SkullHelmet.Name=Skull Helmet
+Item.RibCage.Name=Rib Cage
+Item.Femurs.Name=Shin Guards
+Item.Feet.Name=Feet
+##########Dino Meat Names
+Item.DinoSteak.Name=Dino Steak
+Item.rawTriceratops.Name=Triceratops Meat
+Item.rawVelociraptor.Name=Velociraptor Meat
+Item.rawTRex.Name=TRex Meat
+Item.rawPterosaur.Name=Pterosaur Meat
+Item.rawNautilus.Name=Nautilus Meat
+Item.rawPlesiosaur.Name=Plesiosaur Meat
+Item.rawMosasaurus.Name=Mosasaurus Meat
+Item.rawStegosaurus.Name=Stegosaurus Meat
+Item.rawDilophosaurus.Name=Dilophosaurus Meat
+Item.rawBrachiosaurus.Name=Brachiosaurus Meat
+##########Dino Egg Names
+Item.eggTriceratops.Name=Triceratops Egg
+Item.eggVelociraptor.Name=Velociraptor Egg
+Item.eggTRex.Name=TRex Egg
+Item.eggPterosaur.Name=Pterosaur Egg
+Item.shellNautilus.Name=Nautilus Shell
+Item.eggPlesiosaur.Name=Plesiosaur Egg
+Item.eggMosasaurus.Name=Mosasaurus Egg
+Item.eggStegosaurus.Name=Stegosaurus Egg
+Item.eggDilophosaurus.Name=Dilophosaurus Egg
+Item.eggBrachiosaurus.Name=Brachiosaurus Egg
+##########Dino DNA Names
+Item.dnaTriceratops.Name=Triceratops DNA
+Item.dnaVelociraptor.Name=Velociraptor DNA
+Item.dnaTRex.Name=TRex DNA
+Item.dnaPterosaur.Name=Pterosaur DNA
+Item.dnaNautilus.Name=Nautilus DNA
+Item.dnaPlesiosaur.Name=Plesiosaur DNA
+Item.dnaMosasaurus.Name=Mosasaurus DNA
+Item.dnaStegosaurus.Name=Stegosaurus DNA
+Item.dnaDilophosaurus.Name=Dilophosaurus DNA
+Item.dnaBrachiosaurus.Name=Brachiosaurus DNA
+##########Other DNA
+Item.dnaPig.Name=Pig DNA
+Item.dnaSheep.Name=Sheep DNA
+Item.dnaCow.Name=Cow DNA
+Item.dnaChicken.Name=Chicken DNA
+Item.dnaSaberCat.Name=Sabercat DNA
+Item.dnaMammoth.Name=Mammoth DNA
+##########Other Embryo
+Item.embryoPig.Name=Pig Embryo
+Item.embryoSheep.Name=Sheep Embryo
+Item.embryoCow.Name=Cow Embryo
+Item.embryoChicken.Name=Chicken Embryo
+Item.embryoSaberCat.Name=Sabercat Embryo
+Item.embryoMammoth.Name=Mammoth Embryo
 #
 DNAName.Head=DNA of 
 DNAName.Tail=
@@ -71,12 +142,15 @@ Status.Hungry.Head=This
 Status.Hungry=is hungry.
 Status.Starve.Head=A
 Status.Starve=was starved to death.
+Status.LearningChest.Head=A
 Status.LearningChest=has learned how to use chests.
+Status.Betrayed.Head=This
 Status.Betrayed=won't trust mankind anymore.
+Status.NoSpace.Head=This
 Status.NoSpace=hasn't enough space to grow.
 Status.StarveEsc=has escaped because starvation.
 Status.SJLBite=bit the Siu-Jiu-Le and ran away.
-Status.ChewTime= needs time to chew.
+Status.ChewTime=needs time to chew.
 Status.Full=is full.
 Status.Nervous.Head=You made the little
 Status.Nervous=too nervous to hunt itself.
@@ -90,20 +164,17 @@ Dino.Pterosaur=Pterosaur
 Dino.Plesiosaur=Plesiosaur
 Dino.Mosasaurus=Mosasaurus
 Dino.Stegosaurus=Stegosaurus
-Dino.Utahraptor=Utahraptor
+Dino.Dilophosaurus=Dilophosaurus
 Dino.Brachiosaurus=Brachiosaurus
 Dino.Nautilus=Nautilus
-#
-AnimalType.SaberCat=Saber Cat
-AnimalType.Mammoth=Mammoth
-########## Only 11 Digits
+##########General Dino Messages, Only 11 Digits
 PediaText.Owner=Owner:
 PediaText.Chest=* Chests
 PediaText.Caution=!!!Dangerous!!!
 PediaText.Rideable=* Rideable
 PediaText.Weak=Almost Dead
 PediaText.Fly=* Able to fly
-#
+##########Dino Egg Messages, Only 11 Digits
 PediaText.egg.Head=Egg of 
 PediaText.egg.wet=Wet
 PediaText.egg.dry=Dry
@@ -111,11 +182,17 @@ PediaText.egg.warm=Warm
 PediaText.egg.cold=Cold
 PediaText.egg.Status=Status:
 PediaText.egg.Progress=Hatching:
-
-PediaText.vivi.inside=Embryo inside:
-PediaText.vivi.growing=Growing progress:
 PediaText.Day=Day
 PediaText.Days=Days
+##########Embryo Messages, only 11 Digits
+PediaText.Embryo.inside=Embryo in:
+PediaText.Embryo.growing=Progress:
+PediaText.Embryo.Pig=Pig
+PediaText.Embryo.Sheep=Sheep
+PediaText.Embryo.Cow=Cow
+PediaText.Embryo.Chicken=Chicken
+PediaText.Embryo.SaberCat=Smilodon
+PediaText.Embryo.Mammoth=Mammoth
 #
 AnuSpeaker.self=Anu:
 AnuSpeaker.Hello=Knees down,Resistance is futile.
@@ -143,9 +220,9 @@ Dinoegg.cold= died because too cold.
 ########## Dinoegg.x
 Dinoegg.Hatched=A dino egg has hatched!
 Dinoegg.NoSpace=This egg can not spawn here.
-#
+########## A failure in dna cultivating
 Cultivate.OutBreak=Warning! Cultivating failed!
-#
+##########Order Drum Messages
 Drum.Trigger=Drum Order:
 Drum.Ordering=Ordering 
 Drum.TRex1=Ordering T-Rexes to come for breakfast.

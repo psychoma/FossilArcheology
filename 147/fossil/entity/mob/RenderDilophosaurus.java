@@ -12,14 +12,14 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class RenderUtahraptor extends RenderLiving
+public class RenderDilophosaurus extends RenderLiving
 {
-    public RenderUtahraptor(ModelBase var1, float var2)
+    public RenderDilophosaurus(ModelBase var1, float var2)
     {
         super(var1, var2);
     }
 
-    public void RenderDino(EntityUtahraptor var1, double var2, double var4, double var6, float var8, float var9)
+    public void RenderDino(EntityDilophosaurus var1, double var2, double var4, double var6, float var8, float var9)
     {
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_CULL_FACE);
@@ -47,7 +47,7 @@ public class RenderUtahraptor extends RenderLiving
             this.rotateCorpse(var1, var13, var10, var9);
             float var14 = 0.0625F;
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-            GL11.glScalef(var1.getGLX(), -var1.getGLY(), var1.getGLZ());
+            GL11.glScalef(var1.getDinoWidth(), -var1.getDinoHeight(), var1.getDinoLength());
             this.preRenderCallback(var1, var9);
             GL11.glTranslatef(0.0F, -24.0F * var14 - 0.0078125F, 0.0F);
             float var15 = var1.prevLegYaw + (var1.legYaw - var1.prevLegYaw) * var9;
@@ -64,14 +64,14 @@ public class RenderUtahraptor extends RenderLiving
 
             if (var1.getEntityToAttack() == null && var1.ItemInMouth == null)
             {
-                ((ModelUtahraptor)this.mainModel).CloseMouth(10);
+                ((ModelDilophosaurus)this.mainModel).CloseMouth(10);
             }
             else
             {
-                ((ModelUtahraptor)this.mainModel).OpenMouth(5);
+                ((ModelDilophosaurus)this.mainModel).OpenMouth(5);
             }
 
-            ((ModelUtahraptor)this.mainModel).render(var1, var16, var15, var13, var11 - var10, var12, var14);
+            ((ModelDilophosaurus)this.mainModel).render(var1, var16, var15, var13, var11 - var10, var12, var14);
 
             for (int var17 = 0; var17 < 4; ++var17)
             {
@@ -98,7 +98,7 @@ public class RenderUtahraptor extends RenderLiving
                 if (var1.hurtTime > 0 || var1.deathTime > 0)
                 {
                     GL11.glColor4f(var25, 0.0F, 0.0F, 0.4F);
-                    ((ModelUtahraptor)this.mainModel).render(var1, var16, var15, var13, var11 - var10, var12, var14);
+                    ((ModelDilophosaurus)this.mainModel).render(var1, var16, var15, var13, var11 - var10, var12, var14);
 
                     for (int var19 = 0; var19 < 4; ++var19)
                     {
@@ -117,7 +117,7 @@ public class RenderUtahraptor extends RenderLiving
                     float var21 = (float)(var18 & 255) / 255.0F;
                     float var22 = (float)(var18 >> 24 & 255) / 255.0F;
                     GL11.glColor4f(var26, var20, var21, var22);
-                    ((ModelUtahraptor)this.mainModel).render(var1, var16, var15, var13, var11 - var10, var12, var14);
+                    ((ModelDilophosaurus)this.mainModel).render(var1, var16, var15, var13, var11 - var10, var12, var14);
 
                     for (int var23 = 0; var23 < 4; ++var23)
                     {
@@ -149,7 +149,7 @@ public class RenderUtahraptor extends RenderLiving
 
     public void doRenderLiving(EntityLiving var1, double var2, double var4, double var6, float var8, float var9)
     {
-        this.RenderDino((EntityUtahraptor)var1, var2, var4, var6, var8, var9);
+        this.RenderDino((EntityDilophosaurus)var1, var2, var4, var6, var8, var9);
     }
     
     /*protected void renderEquippedItems(EntityLiving var1, float var2)
@@ -203,6 +203,6 @@ public class RenderUtahraptor extends RenderLiving
      */
     public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
-        this.RenderDino((EntityUtahraptor)var1, var2, var4, var6, var8, var9);
+        this.RenderDino((EntityDilophosaurus)var1, var2, var4, var6, var8, var9);
     }
 }

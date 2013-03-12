@@ -68,12 +68,17 @@ public class EntityPterosaur extends EntityDinosaurce
         super(var1);
         this.SelfType = EnumDinoType.Pterosaur;
         this.looksWithInterest = false;
-        this.CheckSkin();
+        //this.CheckSkin();
         this.setSize(0.8F, 0.8F);
         //this.moveSpeed = 2.0F;
         this.health = 10;
         
-        
+        this.Width0=1.2F;
+        this.WidthInc=0.3F;
+        this.Length0=1.0F;
+        this.LengthInc=0.4F;
+        this.Height0=0.8F;
+        this.HeightInc=0.2F;
         //this.BaseattackStrength=;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
@@ -157,7 +162,7 @@ public class EntityPterosaur extends EntityDinosaurce
             this.SubType = var1.getInteger("SubType");
         }*/
 
-        this.InitSize();
+        //this.InitSize();
         this.AirSpeed = var1.getFloat("Airspeed");
         this.AirAngle = var1.getFloat("AirAngle");
         this.AirPitch = var1.getFloat("AirPitch");
@@ -320,7 +325,7 @@ public class EntityPterosaur extends EntityDinosaurce
 
     public void updateRiderPosition()
     {
-        float var1 = -this.getGLY();
+        float var1 = -this.getDinoHeight();
 
         if (this.riddenByEntity != null)
         {
@@ -450,12 +455,12 @@ public class EntityPterosaur extends EntityDinosaurce
         }
     }
 
-    private void InitSize()
+    /*private void InitSize()
     {
-        this.CheckSkin();
+        //this.CheckSkin();
         this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
-    }
+    }*/
 
     /*public void CheckSkin()
     {
@@ -744,7 +749,7 @@ public class EntityPterosaur extends EntityDinosaurce
         }
     }
 
-    public void updateSize()
+   /* public void updateSize()
     {
         this.setSize((float)(0.800000011920929D + 0.2D * (double)((float)this.getDinoAge())), (float)(0.800000011920929D + 0.2D * (double)((float)this.getDinoAge())));
     }
@@ -757,7 +762,7 @@ public class EntityPterosaur extends EntityDinosaurce
     public float getGLY()
     {
         return (float)(0.800000011920929D + 0.2D * (double)((float)this.getDinoAge()));
-    }
+    }*/
 
     public EntityAgeable func_90011_a(EntityAgeable var1)
     {

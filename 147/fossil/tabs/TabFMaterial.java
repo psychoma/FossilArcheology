@@ -21,7 +21,7 @@ public class TabFMaterial extends CreativeTabs
     
     public String getTranslatedTabLabel()
     {
-     return "Fossil Material";
+     return Fossil.GetLangTextByKey("Tab.Material.Name");
     }
 	
 }

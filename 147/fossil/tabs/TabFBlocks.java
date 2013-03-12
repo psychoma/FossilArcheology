@@ -21,7 +21,7 @@ public class TabFBlocks extends CreativeTabs
     
     public String getTranslatedTabLabel()
     {
-     return "Fossil Blocks";
+     return Fossil.GetLangTextByKey("Tab.Blocks.Name");
     }
 	
 }

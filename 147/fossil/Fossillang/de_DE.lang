@@ -1,15 +1,29 @@
-block.Fossil.Name=Fossil
-block.Skull.Name=Schädel
-block.SkullLantern.Name=Schädellaterne
-block.Analyzer.Name=Analysator
-block.CultureVat.Name=Zuchttank
-block.workbench.Name=Archäologen Werkbank
-block.Drum.Name=Kommandotrommel
-block.Feeder.Name=Futterapperat
-block.Permafrost.Name=Permafrost
-block.IcedStone.Name=Gefrorener Stein
-block.TimeMachine.Name=Zeitmaschine
-#
+##########Names of the Tabs
+Tab.Armor.Name=Alte Rüstungen
+Tab.Blocks.Name=Fossile Blöcke
+Tab.Combat.Name=Alte Waffen
+Tab.Food.Name=Alte Nahrungsmittel
+Tab.Items.Name=Alte Gegenstände
+Tab.Material.Name=Alte Materialien
+Tab.Tools.Name=Alte Werkzeuge
+##########Names of all new Blocks
+Block.Fossil.Name=Fossil
+Block.Skull.Name=Schädel
+Block.SkullLantern.Name=Schädellaterne
+Block.Analyzer.Name=Analysator
+Block.CultureVat.Name=Zuchttank
+Block.Workbench.Name=Archäologen Werkbank
+Block.Drum.Name=Kommandotrommel
+Block.Feeder.Name=Futterapparat
+Block.Permafrost.Name=Permafrost
+Block.IcedStone.Name=Gefrorener Stein
+Block.TimeMachine.Name=Zeitmaschine
+Block.Tar.Name=Teer
+Block.PalLog.Name=Palaeoraphe-Holz
+Block.PalLeaves.Name=Palaeoraphe-Blätter
+Block.PalSap.Name=Palaeoraphe-Setzling
+Block.PalPlank.Name=Palaeoraphe-Bretter
+##########Names of all new Items
 Item.BioFossil.Name=Biofossil
 Item.Relic.Name=Reliktrest
 Item.Tablet.Name=Steintafel
@@ -42,6 +56,65 @@ Item.IronJavelin.Name=Eisenspeer
 Item.GoldJavelin.Name=Goldspeer
 Item.DiamondJavelin.Name=Diamantspeer
 Item.AncientJavelin.Name=Uralter Speer
+Item.Whip.Name=Peitsche
+Item.MagicConch.Name=Magische Muschel
+Item.LegBone.Name=Beinknochen
+Item.Claw.Name=Klaue
+Item.Foot.Name=Fuss
+Item.Skull.Name=Schädel
+Item.BrokenSapling.Name=Pflanzenfossil
+Item.SkullHelmet.Name=Schädelhelm
+Item.RibCage.Name=Brustkorb
+Item.Femurs.Name=Schienenbeinschützer
+Item.Feet.Name=Füsse
+##########Dino Meat Names
+Item.DinoSteak.Name=Dino Steak
+Item.rawTriceratops.Name=Triceratopsfleisch
+Item.rawVelociraptor.Name=Velociraptorfleisch
+Item.rawTRex.Name=TRexfleisch
+Item.rawPterosaur.Name=Pterosaurfleisch
+Item.rawNautilus.Name=Nautilusfleisch
+Item.rawPlesiosaur.Name=Plesiosaurfleisch
+Item.rawMosasaurus.Name=Mosasaurusfleisch
+Item.rawStegosaurus.Name=Stegosaurusfleisch
+Item.rawDilophosaurus.Name=Dilophosaurusfleisch
+Item.rawBrachiosaurus.Name=Brachiosaurusfleisch
+##########Dino Egg Names
+Item.eggTriceratops.Name=Triceratops-Ei
+Item.eggVelociraptor.Name=Velociraptor-Ei
+Item.eggTRex.Name=TRex-Ei
+Item.eggPterosaur.Name=Pterosaurus-Ei
+Item.shellNautilus.Name=Lebender Nautilus
+Item.eggPlesiosaur.Name=Plesiosaur-Ei
+Item.eggMosasaurus.Name=Mosasaurus-Ei
+Item.eggStegosaurus.Name=Stegosaurus-Ei
+Item.eggDilophosaurus.Name=Dilophosaurus-Ei
+Item.eggBrachiosaurus.Name=Brachiosaurus-Ei
+##########Dino DNA Names
+Item.dnaTriceratops.Name=Triceratops-DNA
+Item.dnaVelociraptor.Name=Velociraptor-DNA
+Item.dnaTRex.Name=TRex-DNA
+Item.dnaPterosaur.Name=Pterosaurus-DNA
+Item.dnaNautilus.Name=Nautilus-DNA
+Item.dnaPlesiosaur.Name=Plesiosaurus-DNA
+Item.dnaMosasaurus.Name=Mosasaurus-DNA
+Item.dnaStegosaurus.Name=Stegosaurus-DNA
+Item.dnaDilophosaurus.Name=Dilophosaurus-DNA
+Item.dnaBrachiosaurus.Name=Brachiosaurus-DNA
+##########Other DNA
+Item.dnaPig.Name=Schweine-DNA
+Item.dnaSheep.Name=Schafs-DNA
+Item.dnaCow.Name=Kuh-DNA
+Item.dnaChicken.Name=Huhn-DNA
+Item.dnaSaberCat.Name=Säbelzahntiger-DNA
+Item.dnaMammoth.Name=Mammut-DNA
+##########Other Embryo
+Item.embryoPig.Name=Schweineembryo
+Item.embryoSheep.Name=Schafsembryo
+Item.embryoCow.Name=Kuhembryo
+Item.embryoChicken.Name=Huhnembryo
+Item.embryoSaberCat.Name=Säbelzahntigerembryo
+Item.embryoMammoth.Name=Mammutembryo
 #
 DNAName.Head=DNA eines 
 DNAName.Tail=
@@ -70,11 +143,14 @@ Status.Hungry.Head=Dieser
 Status.Hungry=ist hungrig.
 Status.Starve.Head=Ein
 Status.Starve=ist verhungert.
+Status.LearningChest.Head=Ein
 Status.LearningChest= hat gelernt Truhen zu öffnen.
+Status.Betrayed.Head=Dieser
 Status.Betrayed=wird den Menschen nicht mehr trauen.
+Status.NoSpace.Head=Ein
 Status.NoSpace=hat nicht genug Platz zum wachsen.
-Status.StarveEsc= ist wegen Hunger geflüchtet.
-Status.SJLBite= hat den Schneckensnack gegessen und rannte davon.
+Status.StarveEsc=ist wegen Hunger geflüchtet.
+Status.SJLBite=hat den Schneckensnack gegessen und rannte davon.
 Status.ChewTime=braucht Zeit zum kauen.
 Status.Full=ist voll.
 Status.Nervous.Head=Du hast den kleinen
@@ -84,25 +160,22 @@ Status.GemErrorHealth=Der Skarabäus ist nicht in der Lage so viel Lebenskraft z
 ########## Name of the dino, only 11 digits
 Dino.Triceratops=Triceratops
 Dino.Velociraptor=Velociraptor
-Dino.TRex=Tyrannosaurus
+Dino.TRex=Tyrannosaur
 Dino.Pterosaur=Pteranodon
 Dino.Plesiosaur=Plesiosaurus
 Dino.Mosasaurus=Mosasaurus
 Dino.Stegosaurus=Stegosaurus
-Dino.Utahraptor=Utahraptor
+Dino.Dilophosaurus=Dilophosaurus
 Dino.Brachiosaurus=Brachiosaurus
 Dino.Nautilus=Nautilus
-#
-AnimalType.SaberCat= Säbelzahntiger
-AnimalType.Mammoth=Mammut
-########## Only 11 Digits
-PediaText.owner=Besitzer:
+##########General Dino Messages, Only 11 Digits
+PediaText.Owner=Besitzer:
 PediaText.EnableChest=* Kann Truhen öffnen
 PediaText.Caution=!!!Gefährlich!!!
-PediaText.Ridiable=* Reitbar
+PediaText.Rideable=* Reitbar
 PediaText.Weak=fast tot
 PediaText.Fly=* kann fliegen
-#
+##########Dino Egg Messages, Only 11 Digits
 PediaText.egg.Head=Ei von einem 
 PediaText.egg.wet=Nass
 PediaText.egg.dry=Trocken
@@ -110,10 +183,17 @@ PediaText.egg.warm=Warm
 PediaText.egg.cold=Kalt
 PediaText.egg.Status=Status:
 PediaText.egg.Progress=Fortschritt:
-PediaText.vivi.inside=Embryo enthalten:
-PediaText.vivi.growing=Wachstumsfortschritt:
 PediaText.Day=Tag
 PediaText.Days=Tage
+##########Embryo Messages, only 11 Digits
+PediaText.Embryo.inside=Embryo in:
+PediaText.Embryo.growing=Progress:
+PediaText.Embryo.Pig=Pig
+PediaText.Embryo.Sheep=Sheep
+PediaText.Embryo.Cow=Cow
+PediaText.Embryo.Chicken=Chicken
+PediaText.Embryo.SaberCat=Smilodon
+PediaText.Embryo.Mammoth=Mammoth
 #
 AnuSpeaker.self=Anu:
 AnuSpeaker.Hello=Knie nieder, Widerstand ist zwecklos!
@@ -141,9 +221,9 @@ Dinoegg.cold=starb an Unterkühlung.
 ########## Dinoegg.x
 Dinoegg.Hatched=Ein Dinosaurier ist geschlüpft!
 Dinoegg.NoSpace=Das Ei kann hier nicht abgelegt werden.
-#
+########## A failure in dna cultivating
 Cultivate.OutBreak=Warnung!! Züchtung fehlgeschlagen!!
-#
+##########Order Drum Messages
 Drum.Trigger=Trommelkommando:
 Drum.Ordering=Ordne
 Drum.Msg.TRex.1=Befehle den Tyrannosauriern in 50 Radius zum Frühstück zu kommen.

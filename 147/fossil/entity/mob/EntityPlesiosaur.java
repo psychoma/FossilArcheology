@@ -79,6 +79,12 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         //this.moveSpeed = 0.7F;
         this.health = 8;
         
+        this.Width0=0.5F;
+        this.WidthInc=0.3F;
+        this.Length0=0.5F;
+        this.LengthInc=0.5F;
+        this.Height0=0.5F;
+        this.HeightInc=0.3F;
         this.BaseattackStrength=3;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
@@ -140,21 +146,21 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    /*public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
         var1.setBoolean("Angry", this.isSelfAngry());
-    }
+    }*/
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    /*public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
         this.setSelfAngry(var1.getBoolean("Angry"));
-        this.InitSize();
-    }
+        //this.InitSize();
+    }*/
 
     /**
      * Returns the sound this mob makes while it's alive.
@@ -603,12 +609,12 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         return this.worldObj.checkIfAABBIsClear(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox);
     }
 
-    private void InitSize()
+    /*private void InitSize()
     {
         this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
         this.moveSpeed = this.getSpeed();//0.5F + (float)(this.getDinoAge() * 3);
-    }
+    }*/
 
     public boolean CheckSpace()
     {
@@ -642,7 +648,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
     {
         if (this.riddenByEntity != null)
         {
-            this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getGLY() * 0.75D + 0.07D * (double)(18 - this.getDinoAge()), this.posZ);
+            this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getDinoHeight() * 0.75D + 0.07D * (double)(18 - this.getDinoAge()), this.posZ);
         }
     }
 
@@ -937,7 +943,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         return new EntityPlesiosaur(this.worldObj);
     }
 
-    public void updateSize()
+    /*public void updateSize()
     {
         this.setSize((float)(1.0D + 0.3D * (double)((float)this.getDinoAge())), (float)(1.0D + 0.3D * (double)((float)this.getDinoAge())));
     }
@@ -950,7 +956,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
     public float getGLY()
     {
         return (float)(1.0D + 0.3D * (double)((float)this.getDinoAge()));
-    }
+    }*/
 
     public EntityAgeable func_90011_a(EntityAgeable var1)
     {

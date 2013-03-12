@@ -21,7 +21,7 @@ public class TabFCombat extends CreativeTabs
     
     public String getTranslatedTabLabel()
     {
-     return "Fossil Combat";
+     return Fossil.GetLangTextByKey("Tab.Combat.Name");
     }
 	
 }

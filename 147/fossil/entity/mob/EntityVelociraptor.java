@@ -79,16 +79,22 @@ public class EntityVelociraptor extends EntityDinosaurce
         super(var1);
         this.SelfType = EnumDinoType.Velociraptor;
         this.looksWithInterest = false;
-        this.CheckSkin();
+        //this.CheckSkin();
         this.setSize(0.3F, 0.3F);
         //this.moveSpeed = 0.3F;
         this.health = 10;
         
+        this.Width0=0.3F;
+        this.WidthInc=0.12F;
+        this.Length0=0.3F;
+        this.LengthInc=0.13F;
+        this.Height0=0.3F;
+        this.HeightInc=0.1F;
         //this.BaseattackStrength=;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
-        //this.BaseSpeed=;
-        //this.SpeedIncrease=;
+        this.BaseSpeed=0.5F;
+        this.SpeedIncrease=1.3F;
         this.MaxAge=9;
         this.BaseHealth=21;
         this.HealthIncrease=1;
@@ -149,6 +155,7 @@ public class EntityVelociraptor extends EntityDinosaurce
     {
         return true;
     }
+    
 
     /*protected void entityInit()
     {
@@ -171,10 +178,8 @@ public class EntityVelociraptor extends EntityDinosaurce
     public String getTexture()
     {
         if (this.isModelized())
-        {
             return super.getTexture();
-        }
-        else if (this.isAdult())
+        if (this.isAdult())
         {
             switch (this.getSubSpecies())
             {
@@ -191,22 +196,19 @@ public class EntityVelociraptor extends EntityDinosaurce
                 	return "/fossil/textures/raptor_brown_adult.png";
             }
         }
-        else
+        switch (this.getSubSpecies())
         {
-            switch (this.getSubSpecies())
-            {
-                case 1:
-                    return "/fossil/textures/raptor_blue_Baby.png";
+            case 1:
+                return "/fossil/textures/raptor_blue_Baby.png";
 
-                case 2:
-                    return "/fossil/textures/raptor_green_Baby.png";
-                
-                case 3:
-                    return "/fossil/textures/raptor_brown_Baby.png";
+            case 2:
+                return "/fossil/textures/raptor_green_Baby.png";
+            
+            case 3:
+                return "/fossil/textures/raptor_brown_Baby.png";
 
-                default:
-                	return "/fossil/textures/raptor_brown_Baby.png";
-            }
+            default:
+            	return "/fossil/textures/raptor_brown_Baby.png";
         }
     }
 
@@ -260,6 +262,7 @@ public class EntityVelociraptor extends EntityDinosaurce
     public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
+        this.LearningChestTick=var1.getInteger("LearningChestTick");
         /*short var2 = var1.getShort("Itemid");
         byte var3 = var1.getByte("ItemCount");
         short var4 = var1.getShort("ItemDamage");
@@ -281,7 +284,7 @@ public class EntityVelociraptor extends EntityDinosaurce
             this.setSubSpecies(var1.getInteger("SubType"));
         }*/
 
-        this.InitSize();
+       // this.InitSize();
     }
 
     /**
@@ -644,7 +647,7 @@ public class EntityVelociraptor extends EntityDinosaurce
         }
     }
 
-    private void InitSize()
+   /* private void InitSize()
     {
         this.CheckSkin();
         this.updateSize();
@@ -654,7 +657,7 @@ public class EntityVelociraptor extends EntityDinosaurce
     public void updateSize()
     {
     	this.setSize((float)(0.30000001192092896D + 0.1D * (double)((float)this.getAge())), (float)(0.30000001192092896D + 0.1D * (double)((float)this.getAge())));
-    }
+    }*/
     
     /*public boolean HandleEating(int var1)
     {
@@ -796,7 +799,7 @@ public class EntityVelociraptor extends EntityDinosaurce
         }
     }*/
 
-    public float getGLX()
+    /*public float getGLX()
     {
         return (float)(0.20000000298023224D + 0.1D * (double)this.getDinoAge());
     }
@@ -804,7 +807,7 @@ public class EntityVelociraptor extends EntityDinosaurce
     public float getGLY()
     {
         return (float)(0.3199999928474426D + 0.1D * (double)this.getDinoAge());
-    }
+    }*/
 
     public EntityAgeable func_90011_a(EntityAgeable var1)
     {

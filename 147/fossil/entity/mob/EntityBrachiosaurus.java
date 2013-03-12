@@ -58,6 +58,14 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         this.SelfType = EnumDinoType.Brachiosaurus;
         this.setSize(1.5F, 1.5F);
         this.health = 8;
+        
+        
+        this.Width0=1.5F;
+        this.WidthInc=0.2F;
+        this.Length0=2.0F;
+        this.LengthInc=0.52F;
+        this.Height0=1.2F;
+        this.HeightInc=0.16F;
         //this.BaseattackStrength=;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
@@ -65,7 +73,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         //this.SpeedIncrease=;
         this.MaxAge=36;
         //this.BaseHealth=;
-        this.HealthIncrease=10;
+        this.HealthIncrease=5;
         this.AdultAge=12;
         //this.AgingTicks=;
         this.MaxHunger=500;
@@ -264,28 +272,28 @@ public class EntityBrachiosaurus extends EntityDinosaurce
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    /*public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
         //var1.setByte("OrderStatus", (byte)Fossil.EnumToInt(this.OrderStatus));//already done
-    }
+    }*/
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    /*public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
-        this.InitSize();
+        //this.InitSize();
         //this.OrderStatus = EnumOrderType.values()[var1.getByte("OrderStatus")];//already done
-    }
+    }*/
 
-    private void InitSize()
+    /*private void InitSize()
     {
         this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
         this.moveSpeed = this.getSpeed();//0.3F + (float)this.getDinoAge() * 0.05F;//done centrally
-    }
+    }*/
 
     /**
      * Called to update the entity's position/logic.
@@ -501,7 +509,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         }
     }
 
-    public void updateSize()
+    /*public void updateSize()
     {
         this.setSize((float)(1.5D + 0.15D * (double)((float)this.getDinoAge())), (float)(1.5D + 0.15D * (double)((float)this.getDinoAge())));
     }
@@ -514,7 +522,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
     public float getGLY()
     {
         return (float)(1.5D + 0.3D * (double)((float)this.getDinoAge()));
-    }
+    }*/
 
     /*public EntityAgeable func_90011_a(EntityAgeable var1)
     {

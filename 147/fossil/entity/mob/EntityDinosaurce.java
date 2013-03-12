@@ -59,16 +59,24 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     public static String FlyText = " * Can Fly";*/
     public EnumDinoType SelfType = null;
     
+    //Starting width and increase of the Dino
+    public float Width0=0.5F;
+    public float WidthInc=0.4F;
+    
+    //Starting length and increase of the Dino
+    public float Length0=0.5F;
+    public float LengthInc=0.2F;
+    
+    //Starting height and increase of the dino
+    public float Height0=0.5F;
+    public float HeightInc=0.2F;
+    
     //The attacking strength of the Dino when hatched
     public int BaseattackStrength = 2;
-    
-    //The attacking strength increase when aging
     public int AttackStrengthIncrease = 1;
     
     //The speed of the dino when hatched
     public float BaseSpeed = 0.3F;
-    		
-    //The speed increase when aging
     public float SpeedIncrease = 0.1F;
     
     //Breed Tick at the moment, 0=breed, BreedingTime=timer just started
@@ -87,7 +95,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     public int HealthIncrease = 2;
     
     //Age When Dino gets adult, starts Breeding, is Ridable...
-    public int AdultAge = 5;
+    public int AdultAge = 6;
     
   //Age When Dino gets teen..
     public int TeenAge = 3;
@@ -129,6 +137,66 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
         this.BreedTick = this.BreedingTime;
         this.setHunger(this.MaxHunger);
     }
+    /*public abstract void updateSize();
+    public abstract void InitSize();
+    public abstract float getDinoWidth();
+    public abstract float getDinoHeight();
+    public abstract float getDinoLength();*/
+    public void setPosition(double par1, double par3, double par5)
+    {
+        this.posX = par1;
+        this.posY = par3;
+        this.posZ = par5;
+        float w_2 = this.getDinoWidth() / 2.0F;
+    	float l_2 = this.getDinoLength() / 2.0F;
+        this.boundingBox.setBounds(this.posX - (double)w_2, this.posY - (double)this.yOffset + (double)this.ySize, this.posZ - (double)l_2, this.posX + (double)w_2, this.posY - (double)this.yOffset + (double)this.ySize + (double)this.getDinoHeight(), this.posZ + (double)l_2);
+    }
+    public void updateSize()
+    {
+    	setSize(this.getDinoWidth(),this.getDinoHeight());
+    	setPosition(this.posX, this.posY, this.posZ);
+    	//float w_2 = this.getDinoWidth();// / 2.0F;
+    	//float l_2 = this.getDinoLength();// / 2.0F;
+        //float var8 = this.getD;
+        //this.boundingBox.setBounds(this.posX - (double)w_2, this.posY - (double)this.yOffset + (double)this.ySize, this.posZ - (double)l_2, this.posX + (double)w_2, this.posY - (double)this.yOffset + (double)this.ySize + (double)this.getDinoHeight()*2.0D, this.posZ + (double)l_2);
+    	this.moveSpeed=this.getSpeed();
+    }
+    public void InitSize()//Necessary to overload existing
+    {this.updateSize();}
+    public float getDinoWidth()
+    {
+    	try
+    	{
+    		return this.Width0 + this.WidthInc * (float)this.getDinoAge();
+    	}
+    	catch(NullPointerException e)
+    	{
+    		return 1.0F;
+    	}
+    }
+    public float getDinoHeight()
+    {
+    	try
+    	{
+    		return this.Height0 + this.HeightInc * (float)this.getDinoAge();
+    	}
+    	catch(NullPointerException e)
+    	{
+    		return 1.0F;
+    	}
+    }
+    public float getDinoLength()
+    {
+    	try
+    	{
+    		return this.Length0 + this.LengthInc * (float)this.getDinoAge();
+    	}
+    	catch(NullPointerException e)
+    	{
+    		return 1.0F;
+    	}
+    }
+    
     private void setPedia()
     {Fossil.ToPedia = (Object)this;}
     
@@ -136,12 +204,12 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
      * Tells if the Dino is a Baby
      */
     public boolean isAdult()
-    {return this.getDinoAge() > this.AdultAge;}
+    {return this.getDinoAge() >= this.AdultAge;}
     /**
      * Tells if the Dino is a Baby
      */
     public boolean isTeen()
-    {return this.getDinoAge() > this.TeenAge;}
+    {return this.getDinoAge() >= this.TeenAge;}
     /**
      * Returns the MaxHealth of the Dino depending on the age
      */
@@ -209,7 +277,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
      */
     public boolean increaseDinoAge()
     {
-    	if(this.getDinoAge()<this.MaxAge || this.isModelized())
+    	if(this.getDinoAge()<this.MaxAge)
     	{
     		this.setDinoAge(this.getDinoAge() + 1);
     		return true;
@@ -440,24 +508,23 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
 
                         if (var4.SelfType == this.SelfType && var4.isAdult())//only adults mate
                             ++PartnerCount;
+                        if (PartnerCount > 30)//There are too many already
+                            return;
                     }
                 }
 
-                if (PartnerCount > 30)//More won't help
-                	PartnerCount = 30;
+                if (PartnerCount > 20)//More won't help
+                	PartnerCount = 20;
 
-                if (PartnerCount > 40)//There are too many already
-                    return;
-
-                if ((new Random()).nextInt(100) < PartnerCount)
+                if ((new Random()).nextInt(60) < PartnerCount)
                 {
                     EntityDinoEgg var5 = null;
                     var5 = new EntityDinoEgg(this.worldObj, this.SelfType);
-                    var5.setLocationAndAngles(this.posX + (double)((new Random()).nextInt(3) - 1), this.posY+1, this.posZ + (double)((new Random()).nextInt(3) - 1), this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
+                    ((Entity)var5).setLocationAndAngles(this.posX + (double)((new Random()).nextInt(3) - 1), this.posY, this.posZ + (double)((new Random()).nextInt(3) - 1), this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
 
                     if (this.worldObj.checkIfAABBIsClear(var5.boundingBox) && this.worldObj.getCollidingBoundingBoxes(var5, var5.boundingBox).size() == 0)
                     {
-                        this.worldObj.spawnEntityInWorld(var5);
+                        this.worldObj.spawnEntityInWorld((Entity)var5);
                     }
 
                     this.showHeartsOrSmokeFX(true);
@@ -650,16 +717,16 @@ var1.
     		return Item.bone.itemID;
     	switch(this.SelfType)
     	{
-	    	case Triceratops:  return Fossil.rawTriceratopsID;
-	    	case Stegosaurus:  return Fossil.rawStegosaurusID;
-	    	case Mosasaurus:   return Fossil.rawMosasaurusID;
-	    	case Velociraptor:	   return Fossil.rawVelociraptorID;
-	    	case TRex:		   return Fossil.rawTRexID;
-	    	case Pterosaur:	   return Fossil.rawPterosaurID;
-	    	case Plesiosaur:   return Fossil.rawPlesiosaurID;
-	    	case Brachiosaurus:return Fossil.rawBrachiosaurusID;
-	    	case Utahraptor:   return Fossil.rawUtahraptorID;
-	    	default: return Fossil.rawDinoMeatID;
+	    	case Triceratops:  return Fossil.rawTriceratops.itemID;
+	    	case Stegosaurus:  return Fossil.rawStegosaurus.itemID;
+	    	case Mosasaurus:   return Fossil.rawMosasaurus.itemID;
+	    	case Velociraptor:	   return Fossil.rawVelociraptor.itemID;
+	    	case TRex:		   return Fossil.rawTRex.itemID;
+	    	case Pterosaur:	   return Fossil.rawPterosaur.itemID;
+	    	case Plesiosaur:   return Fossil.rawPlesiosaur.itemID;
+	    	case Brachiosaurus:return Fossil.rawBrachiosaurus.itemID;
+	    	case Dilophosaurus:   return Fossil.rawDilophosaurus.itemID;
+	    	default: return Fossil.rawDinoMeat.itemID;
     	}
         //return this.isModelized() ? Item.bone.itemID : Fossil.rawDinoMeat.itemID;
     }
@@ -714,8 +781,6 @@ var1.
             this.DropRareDrop();
         }
     }
-
-    public abstract void updateSize();
 
     public boolean isAngry()
     {return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;}
@@ -1098,7 +1163,7 @@ var1.
         }
     }
 
-    public void CheckSkin() {}
+    //public void CheckSkin() {}
 
     public void BlockInteractive() {}
 
@@ -1121,14 +1186,14 @@ var1.
 
     public void readSpawnData(ByteArrayDataInput var1) {}
 
-    public abstract float getGLX();
+    /*public abstract float getGLX();
 
     public abstract float getGLY();
 
     public float getGLZ()
     {
         return this.getGLX();
-    }
+    }*/
 
     /*public String[] additionalPediaMessage()
     {

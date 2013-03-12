@@ -2,9 +2,9 @@ package fossil.items;
 
 import net.minecraft.item.Item;
 
-public class ItemGen extends Item
+public class ItemGem extends Item
 {
-    public ItemGen(int var1)
+    public ItemGem(int var1)
     {
         super(var1);
         this.maxStackSize = 64;

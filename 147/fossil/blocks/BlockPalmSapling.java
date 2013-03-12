@@ -3,6 +3,8 @@ package fossil.blocks;
 import java.util.Random;
 
 import cpw.mods.fml.common.IWorldGenerator;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import fossil.Fossil;
 import fossil.gens.WorldGenPalaeoraphe;
@@ -25,7 +27,7 @@ public class BlockPalmSapling extends BlockFlower
         this.setCreativeTab(Fossil.tabFBlocks);
 	}
 
-
+	@SideOnly(Side.SERVER)
     public void updateTick(World world, int i, int j, int k, Random random)
     {
         if(world.isRemote)
@@ -85,7 +87,7 @@ public class BlockPalmSapling extends BlockFlower
     	return ("/fossil/textures/Fos_items.png");
     }
 
-
+    @SideOnly(Side.CLIENT)
     public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par2, float par3, float par4, float par5)
     {
        ItemStack equipped = entityplayer.getCurrentEquippedItem();

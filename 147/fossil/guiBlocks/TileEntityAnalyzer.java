@@ -245,7 +245,7 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
             {
                 int var2 = this.analyzerItemStacks[var1].getItem().itemID;
                 
-                if ((var2 == Fossil.rawUtahraptor.itemID) || (var2 == Fossil.rawTriceratops.itemID) || (var2 == Fossil.rawTRex.itemID) || (var2 == Fossil.rawStegosaurus.itemID) || (var2 == Fossil.rawVelociraptor.itemID) || (var2 == Fossil.rawPterosaur.itemID) || (var2 == Fossil.rawPlesiosaur.itemID) || (var2 == Fossil.rawMosasaurus.itemID) || (var2 == Fossil.rawBrachiosaurus.itemID) || (var2 == Fossil.biofossil.itemID ) || (var2 == Fossil.relic.itemID) || /*(var2 == Fossil.rawDinoMeat.itemID) ||*/ (var2 == Item.porkRaw.itemID) || (var2 == Item.beefRaw.itemID) || (var2 == Item.egg.itemID) || (var2 == Item.chickenRaw.itemID) || (var2 == Block.cloth.blockID) || (var2 == Fossil.icedMeat.itemID))
+                if ((var2 == Fossil.rawDilophosaurus.itemID) || (var2 == Fossil.rawTriceratops.itemID) || (var2 == Fossil.rawTRex.itemID) || (var2 == Fossil.rawStegosaurus.itemID) || (var2 == Fossil.rawVelociraptor.itemID) || (var2 == Fossil.rawPterosaur.itemID) || (var2 == Fossil.rawPlesiosaur.itemID) || (var2 == Fossil.rawMosasaurus.itemID) || (var2 == Fossil.rawBrachiosaurus.itemID) || (var2 == Fossil.biofossil.itemID ) || (var2 == Fossil.relic.itemID) || /*(var2 == Fossil.rawDinoMeat.itemID) ||*/ (var2 == Item.porkRaw.itemID) || (var2 == Item.beefRaw.itemID) || (var2 == Item.egg.itemID) || (var2 == Item.chickenRaw.itemID) || (var2 == Block.cloth.blockID) || (var2 == Fossil.icedMeat.itemID))
                 {
                 	
                     this.RawIndex = var1;
@@ -313,7 +313,7 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
 	                	case 2:i0=Fossil.dnaPlesiosaur;break;
 	                	case 3:i0=Fossil.dnaVelociraptor;break;
 	                	case 4:i0=Fossil.dnaTRex;break;
-	                	case 5:i0=Fossil.dnaUtahraptor;break;
+	                	case 5:i0=Fossil.dnaDilophosaurus;break;
 	                	case 6:i0=Fossil.dnaMosasaurus;break;
 	                	case 7:i0=Fossil.dnaPterosaur;break;
 	                	case 8:i0=Fossil.dnaStegosaurus;break;
@@ -364,14 +364,14 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Fossil.rawTriceratops)
                 var1 = new ItemStack(Fossil.dnaTriceratops, 1);
 
-            if (this.analyzerItemStacks[this.RawIndex].getItem() == Fossil.rawUtahraptor)
-                var1 = new ItemStack(Fossil.dnaUtahraptor, 1);
+            if (this.analyzerItemStacks[this.RawIndex].getItem() == Fossil.rawDilophosaurus)
+                var1 = new ItemStack(Fossil.dnaDilophosaurus, 1);
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.porkRaw)
                 var1 = new ItemStack(Fossil.dnaPig, 2);
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.beefRaw)
-                var1 = new ItemStack(Fossil.dnaTCow, 2);
+                var1 = new ItemStack(Fossil.dnaCow, 2);
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Item.egg)
                 var1 = new ItemStack(Fossil.dnaChicken, 1);
@@ -381,11 +381,17 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
 
             if (this.analyzerItemStacks[this.RawIndex].getItem() == Fossil.icedMeat)
             {
-                if (var2 <= 33)
+                if (var2 < 10)
                     var1 = new ItemStack(Fossil.dnaSaberCat, 1);
 
-                if (var2 > 33 && var2 < 66)
+                if (var2 >= 10 && var2 < 20)
                     var1 = new ItemStack(Fossil.dnaMammoth, 1);
+                
+                if (var2 >= 20 && var2 < 40)
+                    var1 = new ItemStack(Item.chickenRaw, 1);
+                
+                if (var2 >= 40 && var2 < 60)
+                    var1 = new ItemStack(Item.porkRaw, 1);
 
                 if (var1 == null)
                     var1 = new ItemStack(Item.beefRaw);
@@ -408,7 +414,7 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
 
             if (var1 != null)
             {
-                if (var1.itemID == Item.dyePowder.itemID || var1.itemID == Fossil.fernSeed.itemID|| var1.itemID == Fossil.stoneboard.itemID || var1.itemID == Item.flint.itemID || var1.itemID == Block.gravel.blockID || var1.itemID == Fossil.relic.itemID || var1.itemID == Fossil.brokenSapling.itemID || var1.itemID == Block.sand.blockID)
+                if (var1.itemID == Item.dyePowder.itemID || var1.itemID == Fossil.fernSeed.itemID|| var1.itemID == Fossil.stoneboard.itemID || var1.itemID == Item.flint.itemID || var1.itemID == Block.gravel.blockID || var1.itemID == Fossil.relic.itemID || var1.itemID == Fossil.brokenSapling.itemID || var1.itemID == Block.sand.blockID  || (var2 == Item.silk.itemID) || (var2 == Item.beefRaw.itemID))
                 {
                     for (var3 = 12; var3 > 8; --var3)
                     {

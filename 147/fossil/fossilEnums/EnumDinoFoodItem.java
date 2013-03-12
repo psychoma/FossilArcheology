@@ -39,7 +39,7 @@ public enum EnumDinoFoodItem
 	Plesiosaur(Fossil.rawPlesiosaur,30,3),
 	Mosasaur(Fossil.rawMosasaurus,20,3),
 	Stegosaur(Fossil.rawStegosaurus,50,3),
-	Utahraptor(Fossil.rawUtahraptor,25,2),
+	Dilophosaurus(Fossil.rawDilophosaurus,25,2),
 	Brachiosaur(Fossil.rawBrachiosaurus,50,4),
 	DinoMeatCooked(Fossil.cookedDinoMeat,50,5),	
 	//DinoMeatRaw(Fossil.rawDinoMeat,30,3)

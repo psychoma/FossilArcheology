@@ -1,11 +1,11 @@
 package fossil.fossilInterface;
 
-import fossil.fossilEnums.EnumEmbyos;
-import net.minecraft.entity.player.EntityPlayer;
+import fossil.fossilEnums.EnumEmbryos;
+import fossil.guiBlocks.GuiPedia;
 
 public interface IViviparous
 {
-    void showPedia(EntityPlayer var1);
+    void ShowPedia(GuiPedia var1);
 
-    void SetEmbyo(EnumEmbyos var1);
+    void SetEmbryo(EnumEmbryos var1);
 }

@@ -16,12 +16,12 @@ public class TabFTools extends CreativeTabs
     @SideOnly(Side.CLIENT)
     public int getTabIconItemIndex()
     {
-       return Fossil.genHoe.itemID;
+       return Fossil.gemHoe.itemID;
     }
     
     public String getTranslatedTabLabel()
     {
-     return "Fossil Tools";
+     return Fossil.GetLangTextByKey("Tab.Tools.Name");
     }
 	
 }

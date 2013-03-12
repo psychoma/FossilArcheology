@@ -21,7 +21,7 @@ public class TabFArmor extends CreativeTabs
     
     public String getTranslatedTabLabel()
     {
-     return "Fossil Armor";
+    	return Fossil.GetLangTextByKey("Tab.Armor.Name");
     }
 	
 }

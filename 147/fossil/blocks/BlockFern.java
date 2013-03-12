@@ -73,7 +73,7 @@ public class BlockFern extends BlockFlower
                 {
                     var6 += 7;
                 }*/
-                System.out.println(String.valueOf(var6));
+                //System.out.println(String.valueOf(var6));
                 var1.setBlockMetadataWithNotify(var2, var3, var4, var6); 
             }
             /*else if (!this.lv2 && var5.nextInt(100) < 5)

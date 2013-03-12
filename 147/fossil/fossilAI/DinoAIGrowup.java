@@ -2,6 +2,7 @@ package fossil.fossilAI;
 
 import fossil.client.FossilOptions;
 import fossil.entity.mob.EntityDinosaurce;
+import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumSituation;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.DamageSource;
@@ -36,7 +37,8 @@ public class DinoAIGrowup extends EntityAIBase
     {
         this.AITarget.setDinoAgeTick(0);
         this.AITarget.increaseDinoAge();
-        this.AITarget.CheckSkin();
+        //this.AITarget.CheckSkin();
+        //TODO Test, if thats done by the gettexture functions already
 
         if (this.AITarget.getHealth() < this.AITarget.getMaxHealth())
         {//the dino heals itself 5% when growing up
@@ -46,10 +48,11 @@ public class DinoAIGrowup extends EntityAIBase
         this.AITarget.updateSize();
         this.AITarget.setPosition(this.AITarget.posX, this.AITarget.posY, this.AITarget.posZ);
 
-        if (!this.AITarget.CheckSpace())
+        if ((!this.AITarget.CheckSpace() && this.AITarget.SelfType!=EnumDinoType.Mosasaurus) || (this.AITarget.isInWater() && this.AITarget.SelfType==EnumDinoType.Mosasaurus))
         {
             this.AITarget.setDinoAge(this.AITarget.getDinoAge()-1);
-            this.AITarget.CheckSkin();
+            //this.AITarget.CheckSkin();
+            //TODO Test, if thats done by the gettexture functions already
 
             if (this.AITarget.getHealth() > MathHelper.ceiling_double_int(this.AITarget.getMaxHealth()*0.05f))
             {
@@ -57,7 +60,7 @@ public class DinoAIGrowup extends EntityAIBase
             }
 
             this.AITarget.updateSize();
-            this.AITarget.setPosition(this.AITarget.posX, this.AITarget.posY, this.AITarget.posZ);
+            //this.AITarget.setPosition(this.AITarget.posX, this.AITarget.posY, this.AITarget.posZ);
 
             if (this.AITarget.isTamed())
             {

@@ -9,7 +9,7 @@ import fossil.entity.mob.EntityVelociraptor;
 import fossil.entity.mob.EntityStegosaurus;
 import fossil.entity.mob.EntityTRex;
 import fossil.entity.mob.EntityTriceratops;
-import fossil.entity.mob.EntityUtahraptor;
+import fossil.entity.mob.EntityDilophosaurus;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
@@ -36,7 +36,7 @@ public enum EnumDinoFoodMob
 	Plesiosaur(EntityPlesiosaur.class,50,3),
 	Mosasaur(EntityMosasaurus.class,50,3),
 	Stegosaur(EntityStegosaurus.class,50,3),
-	Utahraptor(EntityUtahraptor.class,25,2),
+	Dilophosaurus(EntityDilophosaurus.class,25,2),
 	Brachiosaur(EntityBrachiosaurus.class,80,5),
 	;
     public Class preyClass;
