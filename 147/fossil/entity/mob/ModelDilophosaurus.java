@@ -5,7 +5,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
 
-public class ModelUtahraptor extends ModelDinosaurs
+public class ModelDilophosaurus extends ModelDinosaurs
 {
     ModelRenderer Head = (new ModelRenderer(this, 0, 20)).setTextureSize(64, 32);
     ModelRenderer Jaw1;
@@ -32,7 +32,7 @@ public class ModelUtahraptor extends ModelDinosaurs
     ModelRenderer Frill2;
     ModelRenderer Frill1;
 
-    public ModelUtahraptor()
+    public ModelDilophosaurus()
     {
         this.Head.addBox(-3.0F, 0.0F, -6.0F, 6, 6, 6);
         this.Head.setRotationPoint(0.0F, 4.0F, -10.0F);

@@ -53,7 +53,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityUtahraptor extends EntityDinosaurce
+public class EntityDilophosaurus extends EntityDinosaurce
 {
     private boolean looksWithInterest;//IS THAT WORKING?
     
@@ -78,20 +78,28 @@ public class EntityUtahraptor extends EntityDinosaurce
     public float SwingAngle = -1000.0F;
     public int FleeingTick = 0;
 
-    public EntityUtahraptor(World var1)
+    public EntityDilophosaurus(World var1)
     {
         super(var1);
-        this.SelfType = EnumDinoType.Utahraptor;
+        this.SelfType = EnumDinoType.Dilophosaurus;
+        this.texture = "/fossil/textures/UtaCalm.png";
         this.looksWithInterest = false;
-        this.CheckSkin();
+        //this.CheckSkin();
         this.setSize(0.3F, 0.3F);
         this.health = 10;
         
+        
+        this.Width0=0.5F;
+        this.WidthInc=0.2F;
+        this.Length0=0.8F;
+        this.LengthInc=0.5F;
+        this.Height0=0.6F;
+        this.HeightInc=0.3F;
         //this.BaseattackStrength=;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
-        //this.BaseSpeed=;
-        //this.SpeedIncrease=;
+        this.BaseSpeed=0.4F;
+        this.SpeedIncrease=1.0F;
         this.MaxAge=9;
         //this.BaseHealth=;
         //this.HealthIncrease=;
@@ -200,7 +208,7 @@ public class EntityUtahraptor extends EntityDinosaurce
         //this.setSelfAngry(var1.getBoolean("Angry"));
         this.LearningChestTick=var1.getInteger("LearningChestTick");
         //this.setSelfSitting(var1.getBoolean("Sitting"));
-        this.InitSize();
+        //this.InitSize();
         //this.OrderStatus = EnumOrderType.values()[var1.getByte("OrderStatus")];
         /*String var2 = var1.getString("Owner");
 
@@ -637,7 +645,7 @@ public class EntityUtahraptor extends EntityDinosaurce
         }
     }
 
-    private void InitSize()
+    /*private void InitSize()
     {
         this.CheckSkin();
         this.updateSize();
@@ -658,8 +666,8 @@ public class EntityUtahraptor extends EntityDinosaurce
         {
             this.texture = "/fossil/textures/UtaCalm.png";
         }
-    }
-
+    }*/
+    //TODO TEXTURECHECK!!! when attacking!
     public boolean CheckSpace()
     {
         return !this.isEntityInsideOpaqueBlock();
@@ -693,7 +701,7 @@ public class EntityUtahraptor extends EntityDinosaurce
     public void ShowPedia(GuiPedia p0)
     {
     	super.ShowPedia(p0);
-    	p0.PrintItemXY(Fossil.dnaUtahraptor, 120, 7);
+    	p0.PrintItemXY(Fossil.dnaDilophosaurus, 120, 7);
     	if(this.LearningChestTick==0)
     		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Chest"), true);
     }
@@ -747,9 +755,9 @@ public class EntityUtahraptor extends EntityDinosaurce
         return var1;
     }*/
 
-    public EntityUtahraptor spawnBabyAnimal(EntityAgeable var1)
+    public EntityDilophosaurus spawnBabyAnimal(EntityAgeable var1)
     {
-        return new EntityUtahraptor(this.worldObj);
+        return new EntityDilophosaurus(this.worldObj);
     }
 
     public boolean IsIdle()
@@ -763,7 +771,8 @@ public class EntityUtahraptor extends EntityDinosaurce
     public void setTarget(Entity var1)
     {
         super.setTarget(var1);
-        this.CheckSkin();
+        //this.CheckSkin();
+        //TODO change the skin to the aggressive one==>could be handled in gettexture
     }
 
     public EnumOrderType getOrderType()
@@ -771,7 +780,7 @@ public class EntityUtahraptor extends EntityDinosaurce
         return this.OrderStatus;
     }
 
-    public float getGLX()
+    /*public float getGLX()
     {
         return (float)(0.20000000298023224D + 0.1D * (double)this.getDinoAge());
     }
@@ -779,7 +788,7 @@ public class EntityUtahraptor extends EntityDinosaurce
     public float getGLY()
     {
         return (float)(0.3199999928474426D + 0.1D * (double)this.getDinoAge());
-    }
+    }*/
 
     public EntityAgeable func_90011_a(EntityAgeable var1)
     {

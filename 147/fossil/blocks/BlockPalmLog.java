@@ -27,15 +27,15 @@ public class BlockPalmLog extends Block
         return 31;
     }
     
-    public boolean isOpaqueCube()
+    /*public boolean isOpaqueCube()
     {
         return true;
-    }
+    }*/
     
-    public boolean renderAsNormalBlock()
+    /*public boolean renderAsNormalBlock()
     {
         return false;
-    }
+    }*/
 
     // this sets the amount droped when broken.
     public int quantityDropped(Random par1Random)
@@ -137,7 +137,7 @@ public class BlockPalmLog extends Block
         return var3 == 0 && (par1 == 1 || par1 == 0) ? 68 : (var3 == 4 && (par1 == 5 || par1 == 4) ? 68 : (var3 == 8 && (par1 == 2 || par1 == 3) ? 68 : (var4 == 1 ? 24 : (var4 == 2 ? 25 : (var4 == 3 ? 26 : 52)))));
     }
     //this can be ignored
-    public int damageDropped(int par1)
+    /*public int damageDropped(int par1)
     {
         return par1 & 3;
     }
@@ -146,22 +146,22 @@ public class BlockPalmLog extends Block
     public static int limitToValidMetadata(int par0)
     {
         return par0 & 3;
-    }
+    }*/
 
     @SideOnly(Side.CLIENT)
 
     // i dont think this is needed however i kept it. this adds metadata blocks to the creative inventory. as you can see this
     // one will only add the first metablock
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    /*public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(new ItemStack(par1, 1, 0));
 
-    }
+    }*/
 
     //best to just ignore this
     protected ItemStack createStackedBlock(int par1)
     {
-        return new ItemStack(this.blockID, 1, limitToValidMetadata(par1));
+        return new ItemStack(this.blockID, 1,0);//, limitToValidMetadata(par1));
     }
 
     @Override

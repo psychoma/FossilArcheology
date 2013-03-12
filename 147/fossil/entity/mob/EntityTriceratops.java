@@ -61,6 +61,12 @@ public class EntityTriceratops extends EntityDinosaurce
         this.updateSize();
         this.health = 8;
         
+        this.Width0=1.2F;
+        this.WidthInc=0.4F;
+        this.Length0=1.1F;
+        this.LengthInc=0.7F;
+        this.Height0=1.2F;
+        this.HeightInc=0.36F;
         this.BaseattackStrength=3;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
@@ -115,49 +121,10 @@ public class EntityTriceratops extends EntityDinosaurce
     public String getTexture()
     {
         if (this.isModelized())
-        {
             return super.getTexture();
-        }
-        else if(!this.isAdult())
+        if(this.isAdult())
         {
-        	if(this.getDinoAge()>2)
-        	{
-	            switch (this.getSubSpecies())
-                {
-                    case 1:
-                        return "/fossil/textures/Triceratops_Teen_1.png";
-
-                    case 2:
-                        return "/fossil/textures/Triceratops_Teen_2.png";
-
-                    case 3:
-                        return "/fossil/textures/Triceratops_Teen_3.png";
-
-                    default:
-                        return "/fossil/textures/Triceratops_Teen_1.png";
-                }
-        	}
-        	else
-        	{
-        		switch (this.getSubSpecies())
-	            {
-	                case 1:
-	                    return "/fossil/textures/Triceratops_Baby_1.png";
-	
-	                case 2:
-	                    return "/fossil/textures/Triceratops_Baby_2.png";
-	
-	                case 3:
-	                    return "/fossil/textures/Triceratops_Baby_3.png";
-	
-	                default:
-	                    return "/fossil/textures/Triceratops_Baby_1.png";
-	            }
-        	}
-        }
-        else
-        {
-            switch (this.getSubSpecies())
+        	switch (this.getSubSpecies())
             {
                 case 1:
                     return "/fossil/textures/Triceratops_Adult_1.png";
@@ -172,29 +139,61 @@ public class EntityTriceratops extends EntityDinosaurce
                     return "/fossil/textures/Triceratops_Adult_1.png";
             }
         }
+        if(this.isTeen())
+        {
+        	switch (this.getSubSpecies())
+            {
+                case 1:
+                    return "/fossil/textures/Triceratops_Teen_1.png";
+
+                case 2:
+                    return "/fossil/textures/Triceratops_Teen_2.png";
+
+                case 3:
+                    return "/fossil/textures/Triceratops_Teen_3.png";
+
+                default:
+                    return "/fossil/textures/Triceratops_Teen_1.png";
+            }
+        }
+		switch (this.getSubSpecies())
+        {
+            case 1:
+                return "/fossil/textures/Triceratops_Baby_1.png";
+
+            case 2:
+                return "/fossil/textures/Triceratops_Baby_2.png";
+
+            case 3:
+                return "/fossil/textures/Triceratops_Baby_3.png";
+
+            default:
+                return "/fossil/textures/Triceratops_Baby_1.png";
+        }
+
     }
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    /*public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
         //var1.setInteger("SubSpecies", this.getSubSpecies());
-        var1.setBoolean("Angry", this.isSelfAngry());
-    }
+        //var1.setBoolean("Angry", this.isSelfAngry());
+    }*/
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    /*public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
         //this.setSubSpecies(var1.getInteger("SubSpecies"));
-        this.CheckSkin();
-        this.setSelfAngry(var1.getBoolean("Angry"));
-        this.InitSize();
-    }
+        //this.CheckSkin();
+        //this.setSelfAngry(var1.getBoolean("Angry"));
+        //this.InitSize();
+    }*/
 
     /**
      * Returns the sound this mob makes while it's alive.
@@ -411,12 +410,12 @@ public class EntityTriceratops extends EntityDinosaurce
         return this.worldObj.checkIfAABBIsClear(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox);
     }
 
-    private void InitSize()
+   /* private void InitSize()
     {
         this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
         this.moveSpeed = this.getSpeed();//0.5F + (float)(this.getDinoAge() * 3);
-    }
+    }*/
 
     /*private void ChangeTexture()
     {
@@ -427,7 +426,7 @@ public class EntityTriceratops extends EntityDinosaurce
     {
         if (this.riddenByEntity != null)
         {
-            this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getGLY() * 0.65D + 0.07D * (double)(12 - this.getDinoAge()), this.posZ);
+            this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getDinoHeight() * 0.65D + 0.07D * (double)(12 - this.getDinoAge()), this.posZ);
         }
     }
 
@@ -691,10 +690,10 @@ public class EntityTriceratops extends EntityDinosaurce
         }
     }
 
-    public void updateSize()
+    /*public void updateSize()
     {
         this.setSize((float)(1.5D + 0.3D * (double)((float)this.getDinoAge())), (float)(1.5D + 0.3D * (double)((float)this.getDinoAge())));
-    }
+    }*/
     
     /*protected int foodValue(Item var1)
     {
@@ -703,7 +702,7 @@ public class EntityTriceratops extends EntityDinosaurce
 
     public void HoldItem(Item var1) {}*/
 
-    public float getGLX()
+    /*public float getGLX()
     {
         return (float)(1.5D + 0.3D * (double)((float)this.getDinoAge()));
     }
@@ -711,7 +710,7 @@ public class EntityTriceratops extends EntityDinosaurce
     public float getGLY()
     {
         return (float)(1.5D + 0.3D * (double)((float)this.getDinoAge()));
-    }
+    }*/
 
     /*public String[] additionalPediaMessage()
     {

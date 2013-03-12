@@ -1,10 +1,12 @@
 package fossil.items;
 
 import java.util.List;
+
+import fossil.Fossil;
 import fossil.entity.mob.EntityPregnantCow;
 import fossil.entity.mob.EntityPregnantPig;
 import fossil.entity.mob.EntityPregnantSheep;
-import fossil.fossilEnums.EnumEmbyos;
+import fossil.fossilEnums.EnumEmbryos;
 import fossil.fossilInterface.IViviparous;
 import fossil.items.forgeItems.*;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,7 +20,6 @@ import net.minecraft.item.ItemStack;
 public class ItemEmbryoSyringe extends ForgeItem
 {
     //private String[] ItemNames = new String[] {"EmbyoPig", "EmbyoSheep", "EmbyoCow", "EmbyoSaberCat", "EmbyoMammoth"};
-
     public ItemEmbryoSyringe(int var1)
     {
         super(var1);
@@ -32,10 +33,10 @@ public class ItemEmbryoSyringe extends ForgeItem
 
     public String getTextureFile()
     {
-        return "/fossil/textures/needle.png";
+    	return "/fossil/textures/Fos_items.png";
     }
 
-    /**
+    /*
      * Gets an icon index based on an item's damage value
      */
     //public int getIconFromDamage(int var1)
@@ -49,9 +50,9 @@ public class ItemEmbryoSyringe extends ForgeItem
     //    return var2 < this.ItemNames.length ? this.ItemNames[var2] : "EmbyoSyring";
     //}
 
-    public static EnumEmbyos GetEmbyo(int var0)
+    public static EnumEmbryos GetEmbryo(int var0)
     {
-        return EnumEmbyos.values()[var0];
+        return EnumEmbryos.values()[var0];
     }
 
     /**
@@ -82,7 +83,14 @@ public class ItemEmbryoSyringe extends ForgeItem
 
             if (var3 != null)
             {
-                ((IViviparous)var3).SetEmbyo(GetEmbyo(var1.getItemDamage()));
+            	EnumEmbryos e0=EnumEmbryos.Chicken;
+            	if(var1.itemID==Fossil.embryoChicken.itemID)e0=EnumEmbryos.Chicken;
+            	if(var1.itemID==Fossil.embryoCow.itemID)e0=EnumEmbryos.Cow;
+            	if(var1.itemID==Fossil.embryoMammoth.itemID)e0=EnumEmbryos.Mammoth;
+            	if(var1.itemID==Fossil.embryoPig.itemID)e0=EnumEmbryos.Pig;
+            	if(var1.itemID==Fossil.embryoSaberCat.itemID)e0=EnumEmbryos.SaberCat;
+            	if(var1.itemID==Fossil.embryoSheep.itemID)e0=EnumEmbryos.Sheep;
+                ((IViviparous)var3).SetEmbryo(e0);
                 ((EntityAnimal)var3).setLocationAndAngles(var2.posX, var2.posY, var2.posZ, var2.rotationYaw, var2.rotationPitch);
                 var2.setDead();
 
@@ -93,13 +101,9 @@ public class ItemEmbryoSyringe extends ForgeItem
 
                 --var1.stackSize;
             }
-
             return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     /**

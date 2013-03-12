@@ -21,7 +21,7 @@ public class TabFFood extends CreativeTabs
     
     public String getTranslatedTabLabel()
     {
-     return "Fossil Food";
+     return Fossil.GetLangTextByKey("Tab.Food.Name");
     }
 	
 }

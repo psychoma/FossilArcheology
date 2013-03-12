@@ -2,14 +2,14 @@ package fossil.items;
 
 import java.util.List;
 
-import fossil.fossilEnums.EnumAnimalType;
+import fossil.fossilEnums.EnumEmbryos;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ItemNonDinoDNA extends Item
 {
-    public static final int TypeCount = EnumAnimalType.values().length;
+    public static final int TypeCount = EnumEmbryos.values().length;
 
     public ItemNonDinoDNA(int var1)
     {
@@ -56,11 +56,11 @@ public class ItemNonDinoDNA extends Item
         }
     }*/
 
-    private EnumAnimalType GetTypeFromInt(int var1)
+    /*private EnumEmbryos GetTypeFromInt(int var1)
     {
-        EnumAnimalType[] var2 = EnumAnimalType.values();
+        EnumEmbryos[] var2 = EnumEmbryos.values();
         return var2[var1];
-    }
+    }*/
 
     /**
      * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)

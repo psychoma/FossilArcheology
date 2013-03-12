@@ -204,7 +204,7 @@ public class ItemAncientEgg extends Item
     	if(var1==Fossil.eggPlesiosaur.itemID)return EnumDinoType.Plesiosaur;
     	if(var1==Fossil.eggVelociraptor.itemID)return EnumDinoType.Velociraptor;
     	if(var1==Fossil.eggTRex.itemID)return EnumDinoType.TRex;
-    	if(var1==Fossil.eggUtahraptor.itemID)return EnumDinoType.Utahraptor;
+    	if(var1==Fossil.eggDilophosaurus.itemID)return EnumDinoType.Dilophosaurus;
     	if(var1==Fossil.eggMosasaurus.itemID)return EnumDinoType.Mosasaurus;
     	if(var1==Fossil.eggPterosaur.itemID)return EnumDinoType.Pterosaur;
     	if(var1==Fossil.eggStegosaurus.itemID)return EnumDinoType.Stegosaurus;

@@ -372,7 +372,7 @@ public class WorldGenShipWreck implements IWorldGenerator
             case 2:
                 if (var2 == 0)
                 {
-                    return new ItemStack(Fossil.gen);
+                    return new ItemStack(Fossil.gem);
                 }
 
                 if (var2 <= 10)

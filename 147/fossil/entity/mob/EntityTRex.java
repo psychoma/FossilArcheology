@@ -70,14 +70,20 @@ public class EntityTRex extends EntityDinosaurce
         //this.moveSpeed = 0.3F;
         this.health = 10;
         
+        this.Width0=0.7F;
+        this.WidthInc=0.07F;
+        this.Length0=0.8F;
+        this.LengthInc=0.16F;
+        this.Height0=0.5F;
+        this.HeightInc=0.07F;
         this.BaseattackStrength=4;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
         //this.BaseSpeed=;
-        //this.SpeedIncrease=;
+        this.SpeedIncrease=0.9F;
         this.MaxAge=23;
         //this.BaseHealth=;
-        this.HealthIncrease=10;
+        this.HealthIncrease=5;
         //this.AdultAge=;
         //this.AgingTicks=;
         this.MaxHunger=500;
@@ -90,7 +96,7 @@ public class EntityTRex extends EntityDinosaurce
         //FoodItemList.addItem(EnumDinoFoodItem.DinoMeatRaw);
         FoodItemList.addItem(EnumDinoFoodItem.Triceratops);
         FoodItemList.addItem(EnumDinoFoodItem.Stegosaur);
-        FoodItemList.addItem(EnumDinoFoodItem.Utahraptor);
+        FoodItemList.addItem(EnumDinoFoodItem.Dilophosaurus);
         FoodItemList.addItem(EnumDinoFoodItem.Plesiosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Pterosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Brachiosaur);
@@ -140,25 +146,25 @@ public class EntityTRex extends EntityDinosaurce
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    /*public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
         //var1.setBoolean("Angry", this.isSelfAngry());
         //var1.setBoolean("Sitting", this.isSelfSitting());
         //var1.setInteger("WeakToDeath", this.WeakToDeath);
-    }
+    }*/
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    /*public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
         //this.setSelfAngry(var1.getBoolean("Angry"));
         //this.setSelfSitting(var1.getBoolean("Sitting"));
-        this.InitSize();
+        //this.InitSize();
         //this.WeakToDeath = var1.getInteger("WeakToDeath");
-    }
+    }*/
 
     /**
      * Returns the sound this mob makes while it's alive.
@@ -450,7 +456,7 @@ public class EntityTRex extends EntityDinosaurce
 
         if (var2 != null)
         {
-        	if (var2.itemID == Fossil.gen.itemID)
+        	if (var2.itemID == Fossil.gem.itemID)
             {
         		if (this.isWeak() && !this.isTamed() && this.isAdult())
                 {
@@ -550,7 +556,7 @@ public class EntityTRex extends EntityDinosaurce
         }
     }*/
 
-    private void InitSize()
+    /*private void InitSize()
     {
         this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
@@ -562,12 +568,12 @@ public class EntityTRex extends EntityDinosaurce
         else
         {
             this.texture = "/fossil/textures/TRex.png";
-        }*/
+        }*
     }
     public void updateSize()
     {
-    	this.setSize((float)(0.5D + 0.2D * (double)((float)this.getDinoAge())), (float)(0.5D + 0.2D * (double)((float)this.getDinoAge())));
-    }
+    	this.setSize(0.5F + 0.5125F * (float)this.getDinoAge(),0.5F + 0.5125F * (float)this.getDinoAge());
+    }*/
 
     public boolean CheckSpace()
     {
@@ -600,7 +606,7 @@ public class EntityTRex extends EntityDinosaurce
         {
             if (this.riddenByEntity != null)
             {
-                this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getGLY() * 1.5D, this.posZ);
+                this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getDinoHeight() * 1.5D, this.posZ);
             }
         }
     }
@@ -842,7 +848,7 @@ public class EntityTRex extends EntityDinosaurce
         return var1;
     }
 
-    public float getGLX()
+    /*public float getGLX()
     {
         return (float)(0.5D + 0.5125D * (double)this.getDinoAge());
     }
@@ -850,7 +856,7 @@ public class EntityTRex extends EntityDinosaurce
     public float getGLY()
     {
         return (float)(0.5D + 0.5125D * (double)this.getDinoAge());
-    }
+    }*/
 
     public EntityAgeable func_90011_a(EntityAgeable var1)
     {

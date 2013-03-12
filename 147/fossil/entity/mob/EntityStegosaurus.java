@@ -66,12 +66,19 @@ public class EntityStegosaurus extends EntityDinosaurce
         this.SelfType = EnumDinoType.Stegosaurus;
         this.looksWithInterest = false;
         //this.SubSpecies = (new Random()).nextInt(3) + 1;
-        this.texture = "/fossil/textures/Stegosaurus_Baby.png";
-        this.CheckSkin();
+        //this.texture = "/fossil/textures/Stegosaurus_Baby.png";
+        //this.CheckSkin();
         this.setSize(1.0F, 1.0F);
         //this.moveSpeed = 0.3F;
         this.health = 8;
         
+        
+        this.Width0=0.7F;
+        this.WidthInc=0.5F;
+        this.Length0=1.0F;
+        this.LengthInc=0.7F;
+        this.Height0=1.2F;
+        this.HeightInc=0.36F;
         //this.BaseattackStrength=;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
@@ -118,22 +125,31 @@ public class EntityStegosaurus extends EntityDinosaurce
     {
         return this.riddenByEntity == null;
     }
+    
+    public String getTexture()
+    {
+        if (this.isModelized())
+            return super.getTexture();
+        if(this.isAdult())
+            return "/fossil/textures/Stegosaurus_Adult.png";
+		return "/fossil/textures/Stegosaurus_Baby.png";
+    }
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+    /*public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
         //var1.setInteger("SubSpecies", this.SubSpecies);
         //var1.setBoolean("Angry", this.isSelfAngry());
         //var1.setBoolean("isBaby", this.isBaby);
-    }
+    }*/
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    /*public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
         //this.SubSpecies = var1.getInteger("SubSpecies");
@@ -141,8 +157,8 @@ public class EntityStegosaurus extends EntityDinosaurce
         this.CheckSkin();
         //this.setSelfAngry(var1.getBoolean("Angry"));
         //this.setSelfSitting(var1.getBoolean("Sitting"));
-        this.InitSize();
-    }
+        //this.InitSize();
+    }*/
 
     /**
      * Returns the sound this mob makes while it's alive.
@@ -405,7 +421,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         return this.worldObj.checkIfAABBIsClear(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox);
     }
 
-    private void InitSize()
+    /*private void InitSize()
     {
         this.CheckSkin();
         this.updateSize();
@@ -415,13 +431,13 @@ public class EntityStegosaurus extends EntityDinosaurce
     public void updateSize()
     {
     	this.setSize((float)(1.5D + 0.3D * (double)((float)this.getDinoAge())), (float)(1.5D + 0.3D * (double)((float)this.getDinoAge())));
-    }
+    }*/
 
     public boolean CheckSpace()
     {
         return !this.isEntityInsideOpaqueBlock();
     }
-    public void CheckSkin()
+    /*public void CheckSkin()
     {
         if (this.isAdult())
         {
@@ -431,15 +447,15 @@ public class EntityStegosaurus extends EntityDinosaurce
         {
             this.texture = "/fossil/textures/Stegosaurus_Baby.png";
         }
-    }
+    }*/
 
-    /*public void updateRiderPosition()
+    public void updateRiderPosition()
     {
         if (this.riddenByEntity != null)
         {
-            this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getGLY() * 0.65D + 0.07D * (double)(12 - this.getDinoAge()), this.posZ);
+            this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getDinoHeight() * 0.65D + 0.07D * (double)(12 - this.getDinoAge()), this.posZ);
         }
-    }*/
+    }
 
     /*public boolean HandleEating(int var1)
     {
@@ -751,7 +767,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         return new EntityStegosaurus(this.worldObj);
     }
 
-    public float getGLX()
+    /*public float getGLX()
     {
         return (float)(1.5D + 0.3D * (double)this.getDinoAge());
     }
@@ -759,7 +775,7 @@ public class EntityStegosaurus extends EntityDinosaurce
     public float getGLY()
     {
         return (float)(1.5D + 0.3D * (double)this.getDinoAge());
-    }
+    }*/
 
     public EntityAgeable func_90011_a(EntityAgeable var1)
     {

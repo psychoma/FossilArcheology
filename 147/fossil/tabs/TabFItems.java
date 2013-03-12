@@ -21,7 +21,7 @@ public class TabFItems extends CreativeTabs
     
     public String getTranslatedTabLabel()
     {
-     return "Fossil Items";
+     return Fossil.GetLangTextByKey("Tab.Items.Name");
     }
 	
 }

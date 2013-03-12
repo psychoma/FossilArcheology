@@ -68,6 +68,12 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         this.health = 10;
         //this.attackStrength = 4 + 2 * this.getDinoAge();
         
+        this.Width0=0.25F;
+        this.WidthInc=0.25F;
+        this.Length0=0.5F;
+        this.LengthInc=0.45F;
+        this.Height0=0.2F;
+        this.HeightInc=0.15F;
         this.BaseattackStrength=4;
         this.AttackStrengthIncrease=2;
         //this.BreedingTime=;
@@ -125,21 +131,21 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound var1)
+   /* public void writeEntityToNBT(NBTTagCompound var1)
     {
         super.writeEntityToNBT(var1);
         var1.setBoolean("Angry", this.isSelfAngry());
-    }
+    }*/
 
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound var1)
+    /*public void readEntityFromNBT(NBTTagCompound var1)
     {
         super.readEntityFromNBT(var1);
         this.setSelfAngry(var1.getBoolean("Angry"));
         this.InitSize();
-    }
+    }*/
 
     /**
      * Returns the sound this mob makes while it's alive.
@@ -523,7 +529,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         }
     }*/
 
-    private void InitSize()
+    /*private void InitSize()
     {
     	this.updateSize();
         this.setPosition(this.posX, this.posY, this.posZ);
@@ -532,7 +538,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
     public void updateSize()
     {
     	this.setSize((float)(0.5D + 0.5125D * (double)((float)this.getDinoAge())), (float)(0.5D + 0.5125D * (double)((float)this.getDinoAge())));
-    }
+    }*/
 
     public boolean CheckSpace()
     {
@@ -764,7 +770,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         return new EntityMosasaurus(this.worldObj);
     }
     
-    public float getGLX()
+    /*public float getGLX()
     {
         return (float)(0.5D + 0.5125D * (double)this.getDinoAge());
     }
@@ -772,7 +778,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
     public float getGLY()
     {
         return (float)(0.5D + 0.5125D * (double)this.getDinoAge());
-    }
+    }*/
 
     public EntityAgeable func_90011_a(EntityAgeable var1)
     {

@@ -71,7 +71,7 @@ public class RenderPterosaur extends RenderLiving
             this.rotateCorpse(var1, var13, var10, var9);
             float var14 = 0.0625F;
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-            GL11.glScalef(var1.getGLX(), -var1.getGLY(), var1.getGLZ());
+            GL11.glScalef(var1.getDinoWidth(), -var1.getDinoHeight(), var1.getDinoLength());
             this.preRenderCallback(var1, var9);
             GL11.glTranslatef(0.0F, -24.0F * var14 - 0.0078125F, 0.0F);
             float var15 = var1.prevLegYaw + (var1.legYaw - var1.prevLegYaw) * var9;

@@ -23,7 +23,8 @@ public class WorldGenPalaeoraphe extends WorldGenerator
         {
         	return false;
         }
-        int deltaY= 5;//var2.nextInt(6);
+        int deltaY = 5;
+        //int deltaY = var2.nextInt(6);
         for(int y=var4+1;y<=var4+10+deltaY;y++)
             var1.setBlockAndMetadata(var3, y, var5, Fossil.palmLog.blockID, 0);
             /*var1.setBlockAndMetadata(var3, var4 + 2, var5, Fossil.palmLog.blockID, 0);
