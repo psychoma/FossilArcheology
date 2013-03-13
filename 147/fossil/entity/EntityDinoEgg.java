@@ -434,7 +434,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
             else
                 --this.BirthTick;
         }
-        else if ((double)var2 >= 0.5D)
+        else if ((double)var2 >= 0.5D && !this.inWater)
             ++this.BirthTick;
         else 
         {

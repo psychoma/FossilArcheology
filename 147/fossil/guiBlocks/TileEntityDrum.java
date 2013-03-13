@@ -132,12 +132,12 @@ public class TileEntityDrum extends TileEntity
 	            EntityDinosaurce var4 = (EntityDinosaurce)var3;
 	
 	            if (var1 == var4.SelfType.getOrderItem().itemID && var4.isTamed() && var2.username.equalsIgnoreCase(var4.getOwnerName()))
-	            {
+	            //{
 	                var4.SetOrder(this.Order);
-	                Fossil.ShowMessage("YES",var2);
+	            /*    Fossil.ShowMessage("YES",var2);
 	            }
 	            else
-	            	Fossil.ShowMessage("NOPE",var2);
+	            	Fossil.ShowMessage("NOPE",var2);*/
 	        }
         }
         else

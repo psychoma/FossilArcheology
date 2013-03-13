@@ -1,5 +1,6 @@
-package fossil;
+package fossil.blocks;
 
+import fossil.Fossil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 

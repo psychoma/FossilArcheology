@@ -87,7 +87,7 @@ public class BlockPalmSapling extends BlockFlower
     	return ("/fossil/textures/Fos_items.png");
     }
 
-    @SideOnly(Side.CLIENT)
+    @SideOnly(Side.SERVER)
     public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par2, float par3, float par4, float par5)
     {
        ItemStack equipped = entityplayer.getCurrentEquippedItem();

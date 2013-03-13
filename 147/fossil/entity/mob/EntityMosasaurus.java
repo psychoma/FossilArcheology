@@ -474,6 +474,10 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         {
             this.increaseHunger(100);
         }
+        if (var1 instanceof EntitySquid)
+        {
+            this.increaseHunger(30);
+        }
 
         this.heal(5);
     }

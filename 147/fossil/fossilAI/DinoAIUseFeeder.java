@@ -105,9 +105,12 @@ public class DinoAIUseFeeder extends EntityAIBase
     public void startExecuting()
     {
         double var10000 = Math.pow(this.entityVar.posX - this.destX, 2.0D) + Math.pow(this.entityVar.posZ - this.destZ, 2.0D);
-        this.getClass();
+        //this.getClass();
 
         if (var10000 < Math.pow(3.0D, 2.0D))
+        	/*TileEntity var14 = var1.getBlockTileEntity(var15, var16, var17);
+
+                        if (var14 != null && var14 instanceof TileEntityFeeder && ((TileEntityFeeder)var14).isFilled())*/
         {
             this.targetFeeder.Feed(this.entityVar, this.eating);
 

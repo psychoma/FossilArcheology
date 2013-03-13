@@ -28,6 +28,7 @@ import fossil.blocks.BlockFern;
 import fossil.blocks.BlockFossil;
 import fossil.blocks.BlockFossilSkull;
 import fossil.blocks.BlockIcedStone;
+import fossil.blocks.BlockPalaePlanks;
 import fossil.blocks.BlockPalmLeaves;
 import fossil.blocks.BlockPalmLog;
 import fossil.blocks.BlockPalmSapling;
@@ -198,7 +199,7 @@ public class Fossil
 	 * If DebugMode = true
 	 * HatchTime is set to 1
 	 */
-	public static boolean DebugMode = false;
+	public static boolean DebugMode = true;
 	public static final double MESSAGE_DISTANCE = 25.0D;
 	
     //private static int[] blockIDs = new int[] {1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1151, 1152, 1153};
@@ -410,16 +411,6 @@ public class Fossil
 	public static Item rawDilophosaurus;
 	public static Item rawBrachiosaurus;
 	public static Item cookedDinoMeat;
-	
-	//Biomes
-	public static BiomeGenBase jungle1;
-	public static BiomeGenBase jungle2;
-	public static BiomeGenBase river1;
-	public static BiomeGenBase river2;
-	public static BiomeGenBase ocean1;
-	public static BiomeGenBase ocean2;
-	public static BiomeGenBase swamp1;
-	public static BiomeGenBase swamp2;
 	
 	//Config ID INTs
 	//Blocks
@@ -977,16 +968,6 @@ public class Fossil
 		chickenEss = new ForgeItemFood(chickenEssID, 10, 0.0F, false).setIconIndex(59).setItemName("ChickenEss").setContainerItem(Item.glassBottle).setCreativeTab(this.tabFFood);
 		sjl = new ForgeItemFood(sjlID, 8, 2.0F, false).setIconIndex(43).setItemName("SioChiuLe").setCreativeTab(this.tabFFood);
         
-		//Biomes
-		jungle1 = new BiomeJungle1(30);
-		jungle2 = new BiomeJungle2(31);
-		river1 = new BiomeRiver1(32);
-		river2 = new BiomeRiver2(33);
-		ocean1 = new BiomeOcean1(34);
-		ocean2 = new BiomeOcean2(35);
-		swamp1 = new BiomeSwamp1(36);
-		swamp2 = new BiomeSwamp2(37);
-				
 		//HarvestLevel
 		MinecraftForge.setBlockHarvestLevel(blockFossil, 0, "pickaxe", 2);
 		MinecraftForge.setBlockHarvestLevel(blockPermafrost, 0, "shovel", 2);
@@ -1222,36 +1203,40 @@ public class Fossil
 		GameRegistry.addRecipe(new ItemStack(Block.pistonBase, 1), new Object[] {"PPP", "CIC", "CRC", 'P', this.palaePlanks, 'R', Item.redstone, 'I',Item.ingotIron,'C',Block.cobblestone});
 		GameRegistry.addRecipe(new ItemStack(Block.bookShelf, 1), new Object[] {"PPP", "BBB", "PPP", 'P', this.palaePlanks, 'B', Item.book});
 		
+		GameRegistry.addRecipe(new ItemStack(feet, 1), new Object[] {"* *","# #", '#', this.foot, '*', this.claw});
+		GameRegistry.addRecipe(new ItemStack(femurs, 1), new Object[] {"###","* *","# #", '#', Item.bone,'*', this.legBone});
+		GameRegistry.addRecipe(new ItemStack(ribCage, 1), new Object[] {"# #"," # ","###", '#', Item.bone});
+		GameRegistry.addRecipe(new ItemStack(skullHelmet, 1), new Object[] {"#*#","# #", '#', Item.bone,'*', Item.skull});
 		
         GameRegistry.addSmelting(rawChickenSoup.itemID, new ItemStack(cookedChickenSoup), 3.0F);
         GameRegistry.addSmelting(rawDinoMeat.itemID, new ItemStack(cookedDinoMeat), 3.0F);
         GameRegistry.addSmelting(icedMeat.itemID, new ItemStack(Item.beefCooked), 3.0F);
 		
-		EntityRegistry.registerModEntity(EntityStoneboard.class, "StoneBoard", 1, this, 250, 5, false);
-		EntityRegistry.registerModEntity(EntityJavelin.class, "Javelin", 2, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityAncientJavelin.class, "AncientJavelin", 3, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityMLighting.class, "FriendlyLighting", 4, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityFailuresaurus.class, "Failuresaurus", 5, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityBones.class, "Bones", 6, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityNautilus.class, "Nautilus", 7, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityStoneboard.class, 		"StoneBoard", 			1, this, 250, 5, false);
+		EntityRegistry.registerModEntity(EntityJavelin.class, 			"Javelin", 				2, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityAncientJavelin.class, 	"AncientJavelin", 		3, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityMLighting.class, 		"FriendlyLighting", 	4, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityFailuresaurus.class, 	"Failuresaurus", 		5, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityBones.class, 			"Bones", 				6, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityNautilus.class, 			"Nautilus", 			7, this, 250, 5, true);
 		EntityRegistry.addSpawn(EntityNautilus.class, 5, 4, 14, EnumCreatureType.waterCreature, new BiomeGenBase[] {BiomeGenBase.beach});
-		EntityRegistry.registerModEntity(EntityDinoEgg.class, "DinoEgg", 8, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityVelociraptor.class, "Velociraptor", 9, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityTriceratops.class, "Triceratops", 10, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityTRex.class, "Tyrannosaurus", 11, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityFriendlyPigZombie.class, "FriendlyPigZombie", 12, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityPigBoss.class, "PigBoss", 13, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityPterosaur.class, "Pterosaur", 14, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityPlesiosaur.class, "Plesiosaur", 15, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityMosasaurus.class, "Mosasaurus", 16, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityStegosaurus.class, "Stegosaurus", 17, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityDilophosaurus.class, "Dilophosaurus", 18, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityPregnantSheep.class, "PregnantSheep", 19, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityPregnantCow.class, "PregnantCow", 20, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityPregnantPig.class, "PregnantPig", 21, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntitySaberCat.class, "SaberCat", 22, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityBrachiosaurus.class, "Brachiosaurus", 23, this, 250, 5, true);
-		EntityRegistry.registerModEntity(EntityMammoth.class, "Mammoth", 24, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityDinoEgg.class, 			"DinoEgg", 				8, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityVelociraptor.class, 		"Velociraptor", 		9, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityTriceratops.class, 		"Triceratops", 			10, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityTRex.class, 				"Tyrannosaurus", 		11, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityFriendlyPigZombie.class, "FriendlyPigZombie", 	12, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityPigBoss.class, 			"PigBoss", 				13, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityPterosaur.class, 		"Pterosaur", 			14, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityPlesiosaur.class, 		"Plesiosaur", 			15, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityMosasaurus.class, 		"Mosasaurus", 			16, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityStegosaurus.class, 		"Stegosaurus", 			17, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityDilophosaurus.class, 	"Dilophosaurus", 		18, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityPregnantSheep.class, 	"PregnantSheep", 		19, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityPregnantCow.class, 		"PregnantCow", 			20, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityPregnantPig.class, 		"PregnantPig", 			21, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntitySaberCat.class, 			"SaberCat", 			22, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityBrachiosaurus.class, 	"Brachiosaurus", 		23, this, 250, 5, true);
+		EntityRegistry.registerModEntity(EntityMammoth.class, 			"Mammoth", 				24, this, 250, 5, true);
 
 		
 		GameRegistry.registerWorldGenerator(new FossilGenerator());
