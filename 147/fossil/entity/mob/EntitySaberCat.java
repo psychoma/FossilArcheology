@@ -1,8 +1,13 @@
 package fossil.entity.mob;
 
 import java.util.List;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import fossil.Fossil;
 import fossil.fossilAI.EntityAIBegSC;
+import fossil.guiBlocks.GuiPedia;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
@@ -87,6 +92,8 @@ public class EntitySaberCat extends EntityTameable
     {
         return true;
     }
+    private void setPedia()
+    {Fossil.ToPedia = (Object)this;}
 
     /**
      * Sets the active target the Task system uses for tracking
@@ -274,12 +281,12 @@ public class EntitySaberCat extends EntityTameable
 
     private boolean isInterest(int var1)
     {
-        return this.isChild() ? var1 == Item.bucketMilk.itemID : var1 == Item.beefRaw.itemID || var1 == Item.porkRaw.itemID || var1 == Item.chickenRaw.itemID || var1 == Fossil.rawDinoMeat.itemID;
+        return this.isChild() ? var1 == Item.bucketMilk.itemID : var1 == Item.beefRaw.itemID || var1 == Item.porkRaw.itemID || var1 == Item.chickenRaw.itemID;// || var1 == Fossil.rawDinoMeat.itemID;
     }
 
     private boolean TamedInterest(int var1)
     {
-        return !this.isTamed() ? this.isInterest(var1) : var1 == Item.beefRaw.itemID || var1 == Item.porkRaw.itemID || var1 == Item.chickenRaw.itemID || var1 == Fossil.rawDinoMeat.itemID;
+        return !this.isTamed() ? this.isInterest(var1) : var1 == Item.beefRaw.itemID || var1 == Item.porkRaw.itemID || var1 == Item.chickenRaw.itemID;// || var1 == Fossil.rawDinoMeat.itemID;
     }
 
     /**
@@ -518,7 +525,12 @@ public class EntitySaberCat extends EntityTameable
     public boolean interact(EntityPlayer var1)
     {
         ItemStack var2 = var1.inventory.getCurrentItem();
-
+        if (var2!=null && FMLCommonHandler.instance().getSide().isClient() && var2.getItem().itemID == Fossil.dinoPedia.itemID)
+        {
+        	this.setPedia();
+            var1.openGui(Fossil.instance, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
+            return true;
+        }
         if (!this.isTamed())
         {
             if (var2 != null && this.isInterest(var2.itemID) && !this.isAngry())
@@ -665,6 +677,21 @@ public class EntitySaberCat extends EntityTameable
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -2)));
         }
+    }
+    @SideOnly(Side.CLIENT)
+    public void ShowPedia(GuiPedia p0)
+    {
+    	p0.reset();
+    	p0.PrintStringXY(Fossil.GetLangTextByKey("Animal.SaberCat"), 97, 23,40,90,245);
+    	if(this.isTamed())
+    	{
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Owner"), true);
+    		String s0=this.getOwnerName();
+    		if(s0.length()>11)
+    			s0=this.getOwnerName().substring(0, 11);
+    		p0.AddStringLR(s0, true);
+    	}
+    	p0.PrintItemXY(Fossil.embryoSaberCat, 120, 7);
     }
 
     public boolean isAngry()

@@ -726,7 +726,7 @@ var1.
 	    	case Plesiosaur:   return Fossil.rawPlesiosaur.itemID;
 	    	case Brachiosaurus:return Fossil.rawBrachiosaurus.itemID;
 	    	case Dilophosaurus:   return Fossil.rawDilophosaurus.itemID;
-	    	default: return Fossil.rawDinoMeat.itemID;
+	    	default: return Fossil.rawTriceratops.itemID;
     	}
         //return this.isModelized() ? Item.bone.itemID : Fossil.rawDinoMeat.itemID;
     }
@@ -1062,7 +1062,7 @@ var1.
     	                var1.openGui(Fossil.instance/*var1*/, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
     	                return true;
     	            }
-            		if (this.SelfType.getOrderItem()!= null && var2.itemID == this.SelfType.getOrderItem().itemID && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))
+            		if (this.SelfType.OrderItem!= null && var2.itemID == this.SelfType.OrderItem.itemID && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))
                 	{//THIS DINOS ITEM TO BE CONTROLLED WITH
     	                if (!this.worldObj.isRemote)
     	                {
@@ -1089,7 +1089,7 @@ var1.
     	                }
     	                return true;
                 	}
-            		if(this.SelfType.canCarryItems() && this.ItemInMouth == null && ((this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName())) || (new Random()).nextInt(40)==1 ))
+            		if(this.SelfType.canCarryItems()&& var2.itemID != Fossil.dinoPedia.itemID && this.ItemInMouth == null && ((this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName())) || (new Random()).nextInt(40)==1 ))
         			{//The dino takes the item if: able to, has nothing now and is tamed by the user or willingly(2.5%)
         				this.HoldItem(var2);
         				--var2.stackSize;
@@ -1112,7 +1112,7 @@ var1.
                         return true;
                     }
             	}
-            	if(this.SelfType.getOrderItem() == null && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))
+            	if(this.SelfType.OrderItem == null && this.isTamed() && var1.username.equalsIgnoreCase(this.getOwnerName()))
             	{//This dino is controlled without a special item
             		if (!this.worldObj.isRemote)
 	                {

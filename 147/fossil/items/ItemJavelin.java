@@ -1,5 +1,6 @@
 package fossil.items;
 
+import fossil.Fossil;
 import fossil.entity.EntityAncientJavelin;
 import fossil.entity.EntityJavelin;
 import fossil.items.forgeItems.*;
@@ -16,13 +17,13 @@ import net.minecraft.world.World;
 public class ItemJavelin extends ForgeItem
 {
     public EnumToolMaterial SelfMaterial;
-    private boolean isAncient = false;
+    //private boolean isAncient = false;
 
     public ItemJavelin(int var1, EnumToolMaterial var2)
     {
         super(var1);
         this.maxStackSize = 64;
-        this.iconIndex = 48;
+        //this.iconIndex = 48;
         this.hasSubtypes = true;
         this.SelfMaterial = var2;
     }
@@ -30,10 +31,10 @@ public class ItemJavelin extends ForgeItem
     /**
      * Gets an icon index based on an item's damage value
      */
-    public int getIconFromDamage(int var1)
+    /*public int getIconFromDamage(int var1)
     {
         return this.SelfMaterial == EnumToolMaterial.GOLD ? 52 : (this.SelfMaterial == EnumToolMaterial.EMERALD ? 51 : (this.isAncient ? 64 : this.SelfMaterial.getHarvestLevel() + 48));
-    }
+    }*/
 
     /**
      * called when the player releases the use item button. Args: itemstack, world, entityplayer, itemInUseCount
@@ -60,7 +61,7 @@ public class ItemJavelin extends ForgeItem
 
             Object var8;
 
-            if (!this.isAncient)
+            if (this.itemID!=Fossil.ancientJavelin.itemID)//!this.isAncient)
             {
                 var8 = new EntityJavelin(var2, var3, var7 * 2.0F, this.SelfMaterial);
             }
@@ -153,7 +154,7 @@ public class ItemJavelin extends ForgeItem
         return 1;
     }
 
-    public boolean isAncient()
+    /*public boolean isAncient()
     {
         return this.isAncient;
     }
@@ -162,5 +163,5 @@ public class ItemJavelin extends ForgeItem
     {
         this.isAncient = var1;
         return this;
-    }
+    }*/
 }

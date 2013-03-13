@@ -120,7 +120,7 @@ public class TileEntityDrum extends TileEntity
         {
 	        for(int i=0;i<EnumDinoType.values().length;++i)
 	        {
-	        	if(EnumDinoType.values()[i].getOrderItem()!=null && EnumDinoType.values()[i].getOrderItem().itemID==var1)
+	        	if(EnumDinoType.values()[i].OrderItem!=null && EnumDinoType.values()[i].OrderItem.itemID==var1)
 	        		Fossil.ShowMessage(Fossil.GetLangTextByKey("Drum.Ordering")+ " " + Fossil.GetLangTextByKey("Dino."+EnumDinoType.values()[i].toString()) + ": " + Fossil.GetLangTextByKey("Order." + this.Order.toString()), var2);
 	        }		//Output: Ordering Triceratops: Stay
 	        List list = this.worldObj.getEntitiesWithinAABB(EntityDinosaurce.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)this.xCoord + 1.0D, (double)this.yCoord + 1.0D, (double)this.zCoord + 1.0D).expand(30.0D, 4.0D, 30.0D));
@@ -131,7 +131,7 @@ public class TileEntityDrum extends TileEntity
 	            Entity var3 = (Entity)it.next();
 	            EntityDinosaurce var4 = (EntityDinosaurce)var3;
 	
-	            if (var1 == var4.SelfType.getOrderItem().itemID && var4.isTamed() && var2.username.equalsIgnoreCase(var4.getOwnerName()))
+	            if (var1 == var4.SelfType.OrderItem.itemID && var4.isTamed() && var2.username.equalsIgnoreCase(var4.getOwnerName()))
 	            //{
 	                var4.SetOrder(this.Order);
 	            /*    Fossil.ShowMessage("YES",var2);

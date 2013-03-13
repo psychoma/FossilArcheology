@@ -5,9 +5,11 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fossil.entity.EntityDinoEgg;
 import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityMammoth;
 import fossil.entity.mob.EntityPregnantCow;
 import fossil.entity.mob.EntityPregnantPig;
 import fossil.entity.mob.EntityPregnantSheep;
+import fossil.entity.mob.EntitySaberCat;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -150,6 +152,8 @@ public class GuiPedia extends GuiContainer
     	if(Fossil.ToPedia instanceof EntityPregnantCow)((EntityPregnantCow)Fossil.ToPedia).ShowPedia(this);
     	if(Fossil.ToPedia instanceof EntityPregnantPig)((EntityPregnantPig)Fossil.ToPedia).ShowPedia(this);
     	if(Fossil.ToPedia instanceof EntityPregnantSheep)((EntityPregnantSheep)Fossil.ToPedia).ShowPedia(this);
+    	if(Fossil.ToPedia instanceof EntityMammoth)((EntityMammoth)Fossil.ToPedia).ShowPedia(this);
+    	if(Fossil.ToPedia instanceof EntitySaberCat)((EntitySaberCat)Fossil.ToPedia).ShowPedia(this);
     }
 
     /**

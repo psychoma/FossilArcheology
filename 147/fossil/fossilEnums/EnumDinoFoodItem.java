@@ -16,7 +16,9 @@ public enum EnumDinoFoodItem
 	Cookie(Item.cookie,15,4),
 	PumpkinPie(Item.pumpkinPie,20,4),
 	Sugar(Item.sugar,10,2),
-	FishRaw(Item.fishRaw,30,3),
+	Bread(Item.bread,25,2),
+	
+	FishRaw(Item.fishRaw,30,3),//this MUST BE the first carnivore food!
 	FishCooked(Item.fishCooked,40,4),
 	BeefCooked(Item.beefCooked,50,5),
 	BeefRaw(Item.beefRaw,40,4),
@@ -25,9 +27,7 @@ public enum EnumDinoFoodItem
 	PorkRaw(Item.porkRaw,30,2),
 	PorkCooked(Item.porkCooked,50,3),
 	Egg(Item.egg,10,2),
-	Bread(Item.bread,25,2),
-	
-	Sjl(Fossil.sjl,30,3),//SioChiuLe, this MUST BE the first carnivore food!
+	Sjl(Fossil.sjl,30,3),//SioChiuLe
 	Nautilus(Fossil.rawNautilus,20,2),
 	ChickenSoupRaw(Fossil.rawChickenSoup,30,3),
 	ChickenSoupCooked(Fossil.cookedChickenSoup,40,3),
@@ -75,7 +75,7 @@ public enum EnumDinoFoodItem
 		{
 			if (EnumDinoFoodItem.values()[i].item.itemID==i0)//found it in the list
 			{
-				if(i<EnumDinoFoodItem.Sjl.ordinal())//its before SJL, the first carn. food
+				if(i<EnumDinoFoodItem.FishRaw.ordinal())//its before SJL, the first carn. food
 					return ISHERBIVOROUS;
 				return ISCARNIVOROUS;
 			}

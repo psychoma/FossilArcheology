@@ -27,36 +27,36 @@ interface C
 
 public enum EnumDinoType
 {
-	//Name(Class							Modelable	Tameable	Rideable	Can Carry Items Order Item
-    /*Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick),
-    Raptor(EntityRaptor.class, 				C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone),
-    TRex(EntityTRex.class, 					C.NO_MODEL,	C.NO_TAME,	C.RIDE,		C.NO_CARRY,		Fossil.skullStick),
-    Pterosaur(EntityPterosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.arrow),
-    Nautilus(EntityNautilus.class, 			C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY,		null),//I think not really neccessary...
-    Plesiosaur(EntityPlesiosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Fossil.emptyShell),
-    Mosasaurus(EntityMosasaurus.class, 		C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY,		null),
-    Stegosaurus(EntityStegosaurus.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.NO_CARRY,		Item.stick),
-    Utahraptor(Entitydil.class, 			C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone),
-    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick);*/
+	//Name(Class							Modelable	Tameable	Rideable	Can Carry Items
+    Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY),
+    Velociraptor(EntityVelociraptor.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY),
+    TRex(EntityTRex.class, 					C.NO_MODEL,	C.NO_TAME,	C.RIDE,		C.NO_CARRY),
+    Pterosaur(EntityPterosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY),
+    Nautilus(EntityNautilus.class, 			C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY),//I think not really neccessary...
+    Plesiosaur(EntityPlesiosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY),
+    Mosasaurus(EntityMosasaurus.class, 		C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY),
+    Stegosaurus(EntityStegosaurus.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.NO_CARRY),
+    Dilophosaurus(EntityDilophosaurus.class,C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY),
+    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY);
 
 
-    Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick,			Fossil.rawTriceratops, 	Fossil.dnaTriceratops, 	Fossil.eggTriceratops),
+    /*Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick,			Fossil.rawTriceratops, 	Fossil.dnaTriceratops, 	Fossil.eggTriceratops),
     Velociraptor(EntityVelociraptor.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone,			Fossil.rawVelociraptor, Fossil.dnaVelociraptor, Fossil.eggVelociraptor),
     TRex(EntityTRex.class, 					C.NO_MODEL,	C.NO_TAME,	C.RIDE,		C.NO_CARRY,		Fossil.skullStick,	Fossil.rawTRex, 		Fossil.dnaTRex, 		Fossil.eggTRex),
     Pterosaur(EntityPterosaur.class, 		C.MODEL,	C.TAME,		C.NO_RIDE,	C.NO_CARRY,		Item.arrow,			Fossil.rawPterosaur, 	Fossil.dnaPterosaur, 	Fossil.eggPterosaur),
     Nautilus(EntityNautilus.class, 			C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY,		null,				Fossil.rawNautilus, 	Fossil.dnaNautilus, 	Fossil.shellNautilus),//I think not really neccessary...
-    Plesiosaur(EntityPlesiosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Fossil.magicConch/*.emptyShell*/,	Fossil.rawPlesiosaur, 	Fossil.dnaPlesiosaur, 	Fossil.eggPlesiosaur),
+    Plesiosaur(EntityPlesiosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Fossil.magicConch/*.emptyShell*,	Fossil.rawPlesiosaur, 	Fossil.dnaPlesiosaur, 	Fossil.eggPlesiosaur),
     Mosasaurus(EntityMosasaurus.class, 		C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY,		null,				Fossil.rawMosasaurus, 	Fossil.dnaMosasaurus, 	Fossil.eggMosasaurus),
     Stegosaurus(EntityStegosaurus.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.NO_CARRY,		Item.stick,			Fossil.rawStegosaurus, 	Fossil.dnaStegosaurus, 	Fossil.eggStegosaurus),
     Dilophosaurus(EntityDilophosaurus.class,C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone,			Fossil.rawDilophosaurus,Fossil.dnaDilophosaurus,Fossil.eggDilophosaurus),
-    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick,			Fossil.rawBrachiosaurus,Fossil.dnaBrachiosaurus,Fossil.eggBrachiosaurus);
+    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick,			Fossil.rawBrachiosaurus,Fossil.dnaBrachiosaurus,Fossil.eggBrachiosaurus);*/
 
     private final Class dinoClass;
     private final boolean modelable;
     private final boolean tameable;
     private final boolean rideable;
     private final boolean carryitems;
-    private Item OrderItem;
+    public Item OrderItem;
     public Item DropItem;
     public Item DNAItem;
     public Item EggItem;
@@ -64,16 +64,16 @@ public enum EnumDinoType
     /**
      * Params: Class, Modelable,Tameable,Rideable,CanCarryItems
      */
-    /*private EnumDinoType(Class class0, boolean model0,boolean tame0,boolean ride0,boolean carry0,Item i0)
+    private EnumDinoType(Class class0, boolean model0,boolean tame0,boolean ride0,boolean carry0/*,Item i0*/)
     {
         this.dinoClass = class0;
         this.modelable = model0;
         this.tameable = tame0;
         this.rideable = ride0;
         this.carryitems = carry0;
-        this.OrderItem = i0;
-    }*/
-    private EnumDinoType(Class clas, boolean model,boolean tame,boolean ride,boolean carry,Item i,Item drop,Item dna,Item egg)
+        //this.OrderItem = i0;
+    }
+    /*private EnumDinoType(Class clas, boolean model,boolean tame,boolean ride,boolean carry,Item i,Item drop,Item dna,Item egg)
     {
         this.dinoClass = clas;
         this.DropItem = drop;
@@ -84,14 +84,34 @@ public enum EnumDinoType
         this.rideable = ride;
         this.carryitems = carry;
         this.OrderItem = i;
-        //System.out.println(String.valueOf(Fossil.dnaPterosaur!=null));
+        //System.out.println(String.valueOf(this.DropItem!=null));
+    }*/
+    private void setDetails(Item order,Item drop,Item dna,Item egg)
+    {
+    	this.DropItem = drop;
+        this.DNAItem = dna;
+        this.EggItem = egg;
+        this.OrderItem = order;
+    }
+    public static void init()
+    {//								Order Item			Drop Item				DNA Item				Egg Item
+    	Triceratops.setDetails(		Item.stick,			Fossil.rawTriceratops, 	Fossil.dnaTriceratops, 	Fossil.eggTriceratops);
+        Velociraptor.setDetails(	Item.bone,			Fossil.rawVelociraptor, Fossil.dnaVelociraptor, Fossil.eggVelociraptor);
+        TRex.setDetails(			Fossil.skullStick,	Fossil.rawTRex, 		Fossil.dnaTRex, 		Fossil.eggTRex);
+        Pterosaur.setDetails(		Item.arrow,			Fossil.rawPterosaur, 	Fossil.dnaPterosaur, 	Fossil.eggPterosaur);
+        Nautilus.setDetails(		null,				Fossil.rawNautilus, 	Fossil.dnaNautilus, 	Fossil.shellNautilus);
+        Plesiosaur.setDetails(		Fossil.magicConch,	Fossil.rawPlesiosaur, 	Fossil.dnaPlesiosaur, 	Fossil.eggPlesiosaur);
+        Mosasaurus.setDetails(		null,				Fossil.rawMosasaurus, 	Fossil.dnaMosasaurus, 	Fossil.eggMosasaurus);
+        Stegosaurus.setDetails(		Item.stick,			Fossil.rawStegosaurus, 	Fossil.dnaStegosaurus, 	Fossil.eggStegosaurus);
+        Dilophosaurus.setDetails(	Item.bone,			Fossil.rawDilophosaurus,Fossil.dnaDilophosaurus,Fossil.eggDilophosaurus);
+        Brachiosaurus.setDetails(	Item.stick,			Fossil.rawBrachiosaurus,Fossil.dnaBrachiosaurus,Fossil.eggBrachiosaurus);
     }
     public boolean isDinoDNA(Item i0)
     {
 		for(int i=0;i<this.values().length;i++)
 		{
 		    if(this.values()[i].DNAItem.itemID == i0.itemID)
-			return true;
+		    	return true;
 		}
 		return false;
     }
@@ -100,7 +120,7 @@ public enum EnumDinoType
 		for(int i=0;i<this.values().length;i++)
 		{
 		    if(this.values()[i].DropItem.itemID == i0.itemID)
-			return true;
+		    	return true;
 		}
 		return false;
     }
@@ -109,13 +129,9 @@ public enum EnumDinoType
 		for(int i=0;i<this.values().length;i++)
 		{
 		    if(this.values()[i].DropItem.itemID == i0.itemID || this.values()[i].EggItem.itemID == i0.itemID)
-			return this.values()[i].DNAItem;
+		    	return this.values()[i].DNAItem;
 		}
 		return null;
-    }
-    public Item getDNA()
-    {
-    	return this.DNAItem;
     }
     public Item getDrop(Item i0)
     {
@@ -126,10 +142,6 @@ public enum EnumDinoType
 		}
 		return null;
     }
-    public Item getDrop()
-    {
-    	return this.DropItem;
-    }
     public Item getEgg(Item i0)
     {
 		for(int i=0;i<this.values().length;i++)
@@ -138,11 +150,6 @@ public enum EnumDinoType
 			return this.values()[i].EggItem;
 		}
 		return null;
-    }
-    public Item getEgg()
-    {
-    	System.out.println(String.valueOf(this.EggItem!=null));
-    	return this.EggItem;
     }
     public Class getDinoClass()
     {
@@ -163,10 +170,6 @@ public enum EnumDinoType
     public boolean canCarryItems()
     {
         return this.carryitems;
-    }
-    public Item getOrderItem()
-    {
-        return this.OrderItem;
     }
 }
 /*package fossil.fossilEnums;

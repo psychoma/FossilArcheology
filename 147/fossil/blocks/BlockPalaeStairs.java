@@ -28,7 +28,7 @@ public class BlockPalaeStairs extends BlockStairs
       //gets texture file
         public String getTextureFile()
         {
-        	return "/microjunk/trees/common/aart/Blocks.png";
+        	return "/fossil/textures/Fos_terrian.png";
         }
 
         @SideOnly(Side.CLIENT) //Client side only
