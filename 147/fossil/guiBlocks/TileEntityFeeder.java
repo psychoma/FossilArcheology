@@ -6,6 +6,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import fossil.Fossil;
 import fossil.entity.mob.EntityDinosaurce;
 import fossil.fossilEnums.*;
+import fossil.items.ItemDinoMeat;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -195,9 +196,44 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
         {
             int var3;
 
-            if (this.feederItemStacks[0] != null)
-            {
-                var3 = this.feederItemStacks[0].itemID;
+            if (this.feederItemStacks[0] != null && this.MeatCurrent<this.MeatMax && EnumDinoFoodItem.foodtype(this.feederItemStacks[0].itemID)==EnumDinoFoodItem.ISCARNIVOROUS)//the carnivore part
+            {//there is an item in, its carn. food and there is space
+            	
+            	int val=EnumDinoFoodItem.getItemFood(this.feederItemStacks[0].itemID);
+            	
+            	if(this.feederItemStacks[0].getItem() instanceof fossil.items.ItemDinoMeat)
+            	{//TODO the feeder contains the raw food of the dino....he wont eat out of it anymore until it has been emptied!
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawTriceratops.itemID)this.ContainType[EnumDinoType.Triceratops.ordinal()]=true;
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawVelociraptor.itemID)this.ContainType[EnumDinoType.Velociraptor.ordinal()]=true;
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawTRex.itemID)this.ContainType[EnumDinoType.TRex.ordinal()]=true;
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawStegosaurus.itemID)this.ContainType[EnumDinoType.Stegosaurus.ordinal()]=true;
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawPterosaur.itemID)this.ContainType[EnumDinoType.Pterosaur.ordinal()]=true;
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawPlesiosaur.itemID)this.ContainType[EnumDinoType.Plesiosaur.ordinal()]=true;
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawMosasaurus.itemID)this.ContainType[EnumDinoType.Mosasaurus.ordinal()]=true;
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawDilophosaurus.itemID)this.ContainType[EnumDinoType.Dilophosaurus.ordinal()]=true;
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawBrachiosaurus.itemID)this.ContainType[EnumDinoType.Brachiosaurus.ordinal()]=true;
+            	}
+            	if (val * this.feederItemStacks[0].stackSize + this.MeatCurrent < this.MeatMax)
+                {//can take all of it
+                    this.MeatCurrent += val * this.feederItemStacks[0].stackSize;
+                    var1 = true;
+                    this.feederItemStacks[0] = null;
+                }
+                else
+                {
+                    while (val + this.MeatCurrent < this.MeatMax && this.feederItemStacks[0] != null)
+                    {
+                        this.MeatCurrent += val;
+                        var1 = true;
+                        --this.feederItemStacks[0].stackSize;
+
+                        if (this.feederItemStacks[0].stackSize == 0)
+                        {
+                            this.feederItemStacks[0] = null;
+                        }
+                    }
+                }
+                /*var3 = this.feederItemStacks[0].itemID;
 
                 if (this.MeatValue(var3) > 0)
                 {
@@ -226,12 +262,33 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
                             }
                         }
                     }
-                }
+                }*/
             }
 
-            if (this.feederItemStacks[1] != null)
+            if (this.feederItemStacks[1] != null && this.VegCurrent<this.VegMax && EnumDinoFoodItem.foodtype(this.feederItemStacks[1].itemID)==EnumDinoFoodItem.ISHERBIVOROUS)//herbivore part
             {
-                var3 = this.feederItemStacks[1].itemID;
+            	int val=EnumDinoFoodItem.getItemFood(this.feederItemStacks[1].itemID);
+                if (val * this.feederItemStacks[1].stackSize + this.VegCurrent < this.VegMax)
+                {
+                    this.VegCurrent += val * this.feederItemStacks[1].stackSize;
+                    var1 = true;
+                    this.feederItemStacks[1] = null;
+                }
+                else
+                {
+                    while (val + this.VegCurrent < this.VegMax && this.feederItemStacks[1] != null)
+                    {
+                        this.VegCurrent += val;
+                        var1 = true;
+                        --this.feederItemStacks[1].stackSize;
+
+                        if (this.feederItemStacks[1].stackSize == 0)
+                        {
+                            this.feederItemStacks[1] = null;
+                        }
+                    }
+                }
+                /*var3 = this.feederItemStacks[1].itemID;
 
                 if (this.VegValue(var3) > 0)
                 {
@@ -255,7 +312,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
                             }
                         }
                     }
-                }
+                }*/
             }
 
             boolean var4 = this.MeatCurrent > 0 || this.VegCurrent > 0;
@@ -272,7 +329,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
         }
     }
 
-    public int MeatValue(int var1)
+    /*public int MeatValue(int var1)
     {
         return var1 == Item.egg.itemID ? 100 : (var1 == Item.porkRaw.itemID ? 20 : (var1 == Item.porkCooked.itemID ? 30 : (var1 == Item.chickenCooked.itemID ? 10 : (var1 == Item.chickenRaw.itemID ? 30 : (var1 == Item.beefCooked.itemID ? 20 : (var1 == Item.beefRaw.itemID ? 40 : (var1 == Item.fishRaw.itemID ? 40 : (var1 == Item.fishCooked.itemID ? 60 : (var1 == Item.slimeBall.itemID ? 10 : (var1 == Fossil.rawDinoMeat.itemID ? 100 : (var1 == Fossil.cookedDinoMeat.itemID ? 100 : -1)))))))))));
     }
@@ -280,7 +337,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
     public int VegValue(int var1)
     {
         return var1 == Fossil.fernSeed.itemID ? 50 : (var1 == Item.appleRed.itemID ? 100 : (var1 == Item.wheat.itemID ? 40 : (var1 == Item.reed.itemID ? 20 : (var1 == Item.paper.itemID ? 60 : (var1 == Item.book.itemID ? 180 : (var1 == Item.bread.itemID ? 120 : (var1 == Item.melon.itemID ? 25 : (var1 != Block.plantRed.blockID && var1 != Block.plantYellow.blockID ? (var1 != Block.mushroomBrown.blockID && var1 != Block.mushroomBrown.blockID ? (var1 != Block.leaves.blockID && var1 != Block.vine.blockID ? (var1 == Block.sapling.blockID ? 10 : (var1 == Block.melon.blockID ? 200 : -1)) : 10) : 15) : 20))))))));
-    }
+    }*/
 
     /**
      * Do not make give this method the name canInteractWith because it clashes with Container
@@ -326,8 +383,8 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
         }
     }
 
-    public boolean GetIfEatingSameBreed(EnumDinoType var1)
-    {
+    /*public boolean GetIfEatingSameBreed(EnumDinoType var1)
+    {//Seems to be completely senseless to me, will return true for all dinos
         EnumDinoType[] var2 = EnumDinoType.values();
 
         for (int var3 = 0; var3 < var2.length; ++var3)
@@ -339,7 +396,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
         }
 
         return false;
-    }
+    }*/
 
     public int getSizeInventorySide(ForgeDirection var1)
     {

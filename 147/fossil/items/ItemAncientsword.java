@@ -1,5 +1,7 @@
 package fossil.items;
 
+import java.util.Random;
+
 import fossil.Fossil;
 import fossil.entity.EntityMLighting;
 import fossil.entity.mob.EntityFriendlyPigZombie;
@@ -49,8 +51,8 @@ public class ItemAncientsword extends ItemSword
                 var3.Mouth.SendSpeech(EnumPigmenSpeaks.LifeFor, var3.LeaderName);
             }
         }
-
-        var1.worldObj.addWeatherEffect(new EntityMLighting(var1.worldObj, var1.posX, var1.posY, var1.posZ));
+        if((new Random()).nextInt(100)<15)
+        	var1.worldObj.addWeatherEffect(new EntityMLighting(var1.worldObj, var1.posX, var1.posY, var1.posZ));
         return 4 + EnumToolMaterial.IRON.getDamageVsEntity() * 2;
     }
 

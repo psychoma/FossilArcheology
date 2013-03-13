@@ -112,7 +112,7 @@ public class EntityNautilus extends EntityWaterMob
 
         if (var2 == null)
         {
-            ItemStack var3 = new ItemStack(Fossil.shellNautilus/*Fossil.ancientegg*/, 1, 4);
+            ItemStack var3 = new ItemStack(Fossil.shellNautilus/*Fossil.ancientegg*/, 1);
 
             if (var1.inventory.addItemStackToInventory(var3))
             {
@@ -121,18 +121,10 @@ public class EntityNautilus extends EntityWaterMob
                     this.worldObj.playSoundAtEntity(var1, "random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                     this.setDead();
                 }
-
                 return true;
             }
-            else
-            {
-                return false;
-            }
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     /**

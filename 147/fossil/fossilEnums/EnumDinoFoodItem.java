@@ -6,7 +6,7 @@ import fossil.Fossil;
 
 public enum EnumDinoFoodItem
 {
-	Wheat(Item.wheat,10,2),
+	Wheat(Item.wheat,10,2),//Veggie Foods
 	Melon(Item.melon,10,2),
 	Apple(Item.appleRed,15,3),
 	Potato(Item.potato,10,2),
@@ -27,7 +27,7 @@ public enum EnumDinoFoodItem
 	Egg(Item.egg,10,2),
 	Bread(Item.bread,25,2),
 	
-	Sjl(Fossil.sjl,30,3),//SioChiuLe
+	Sjl(Fossil.sjl,30,3),//SioChiuLe, this MUST BE the first carnivore food!
 	Nautilus(Fossil.rawNautilus,20,2),
 	ChickenSoupRaw(Fossil.rawChickenSoup,30,3),
 	ChickenSoupCooked(Fossil.cookedChickenSoup,40,3),
@@ -47,6 +47,10 @@ public enum EnumDinoFoodItem
     public Item item;
     public int FoodValue;
     public int HealValue;
+    
+    public static final int ISHERBIVOROUS=1;
+    public static final int ISCARNIVOROUS=-1;
+    public static final int ISNOFOOD=0;
 
     /*private EnumDinoFoodItem(EnumDinoFoodItem Item0)
     {
@@ -60,4 +64,36 @@ public enum EnumDinoFoodItem
         FoodValue = Food;
         HealValue = Heal;
     }
+    
+    /**
+     * 
+     * Takes the itemid and tells if its herbivore, carnivore or no food 
+     */
+    public static int foodtype(int i0)
+    {
+		for (int i=0;i<EnumDinoFoodItem.values().length;i++)//check all entries
+		{
+			if (EnumDinoFoodItem.values()[i].item.itemID==i0)//found it in the list
+			{
+				if(i<EnumDinoFoodItem.Sjl.ordinal())//its before SJL, the first carn. food
+					return ISHERBIVOROUS;
+				return ISCARNIVOROUS;
+			}
+		}
+		return ISNOFOOD;//wasnt found at all
+    }
+    
+    /**
+     * 
+     * Takes the itemid and gives the food value
+     */
+    public static int getItemFood(int i0)
+	{
+		for (int i=0;i<EnumDinoFoodItem.values().length;i++)
+		{
+			if (EnumDinoFoodItem.values()[i].item.itemID==i0)
+				return EnumDinoFoodItem.values()[i].FoodValue;
+		}
+		return 0;	
+	}
 }

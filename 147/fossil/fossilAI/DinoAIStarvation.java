@@ -20,12 +20,12 @@ public class DinoAIStarvation extends EntityAIBase
      */
     public boolean shouldExecute()
     {
-        if (FossilOptions.DinoHunger)
+        //if (FossilOptions.DinoHunger)
         {
             this.mover.decreaseHungerTick();
-            return this.mover.getHungerTick() <= 0 && this.mover.worldObj.difficultySetting > 0;
+            return this.mover.getHungerTick() <= 0;// && this.mover.worldObj.difficultySetting > 0;
         }
-        return false;
+        //return false;
     }
 
     /**
@@ -33,7 +33,7 @@ public class DinoAIStarvation extends EntityAIBase
      */
     public void startExecuting()
     {
-        this.mover.getClass();
+        //this.mover.getClass();
         this.mover.setHungerTick(300);
         this.mover.decreaseHunger();
         if(this.mover.ItemInMouth != null)//The Dino has something in its mouth and gets hungry

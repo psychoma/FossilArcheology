@@ -208,7 +208,7 @@ public class ItemAncientEgg extends Item
     	if(var1==Fossil.eggMosasaurus.itemID)return EnumDinoType.Mosasaurus;
     	if(var1==Fossil.eggPterosaur.itemID)return EnumDinoType.Pterosaur;
     	if(var1==Fossil.eggStegosaurus.itemID)return EnumDinoType.Stegosaurus;
-    	//if(var1==Fossil.shellNautilus.itemID)return EnumDinoType.Stegosaurus;
+    	if(var1==Fossil.shellNautilus.itemID)return EnumDinoType.Nautilus;
     	System.out.println("FAULT!!!!:Dinotype " + String.valueOf(var1)+ " does not exist!");
     	return EnumDinoType.Triceratops;
     }

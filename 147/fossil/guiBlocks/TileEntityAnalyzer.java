@@ -304,7 +304,7 @@ public class TileEntityAnalyzer extends TileEntity implements IInventory, ISided
 
                 if (var2 > 90)
                 {
-                	int i=(new Random()).nextInt(10);//make 11 for Nautilus
+                	int i=(new Random()).nextInt(11);
                 	Item i0=null;
                 	switch(i)
                 	{
