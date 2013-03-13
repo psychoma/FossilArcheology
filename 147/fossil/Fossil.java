@@ -3,6 +3,7 @@ package fossil;
 import java.io.BufferedReader;
 
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,19 +17,13 @@ import fossil.client.FossilCfgLoader;
 import fossil.client.FossilGuiHandler;
 import fossil.client.FossilMessageHandler;
 import fossil.client.FossilOptions;
-import fossil.biomes.BiomeJungle1;
-import fossil.biomes.BiomeJungle2;
-import fossil.biomes.BiomeOcean1;
-import fossil.biomes.BiomeOcean2;
-import fossil.biomes.BiomeRiver1;
-import fossil.biomes.BiomeRiver2;
-import fossil.biomes.BiomeSwamp1;
-import fossil.biomes.BiomeSwamp2;
 import fossil.blocks.BlockFern;
 import fossil.blocks.BlockFossil;
 import fossil.blocks.BlockFossilSkull;
 import fossil.blocks.BlockIcedStone;
 import fossil.blocks.BlockPalaePlanks;
+import fossil.blocks.BlockPalaeSlab;
+import fossil.blocks.BlockPalaeStairs;
 import fossil.blocks.BlockPalmLeaves;
 import fossil.blocks.BlockPalmLog;
 import fossil.blocks.BlockPalmSapling;
@@ -36,6 +31,7 @@ import fossil.blocks.BlockPermafrost;
 import fossil.blocks.BlockTar;
 import fossil.blocks.BlockVolcanicAsh;
 import fossil.blocks.BlockVolcanicRock;
+import fossil.blocks.FossilSlabs;
 import fossil.entity.EntityAncientJavelin;
 import fossil.entity.EntityDinoEgg;
 import fossil.entity.EntityJavelin;
@@ -250,9 +246,9 @@ public class Fossil
 	public static Block palmLeaves;
 	public static Block palmSap;
 	public static Block palaePlanks;
-	//public static Block newBlock;
-	//public static Block newBlock;
-	//public static Block newBlock;
+	public static FossilSlabs palaeSingleSlab;
+	public static FossilSlabs palaeDoubleSlab;
+	public static Block palaeStairs;
 	//public static Block newBlock;
 	//public static Block newBlock;
 	//public static Block newBlock;
@@ -439,9 +435,9 @@ public class Fossil
 	public static int palmLeavesID;
 	public static int palmSapID;
 	public static int palaePlanksID;
-	//public static int newBlockID;
-	//public static int newBlockID;
-	//public static int newBlockID;
+	public static int palaeSingleSlabID;
+	public static int palaeDoubleSlabID;
+	public static int palaeStairsID;
 	//public static int newBlockID;
 	//public static int newBlockID;
 	//public static int newBlockID;
@@ -642,9 +638,9 @@ public class Fossil
 		palmLeavesID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palmLeaves", 3022).getInt(3022);
 		palmSapID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palmSap", 3023).getInt(3023);
 		palaePlanksID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palaePlanks", 3024).getInt(3024);
-		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3024).getInt(3024);
-		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3025).getInt(3025);
-		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3026).getInt(3026);
+		palaeSingleSlabID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palaeSingleSlab", 3024).getInt(3024);
+		palaeDoubleSlabID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palaeDoubleSlab", 3025).getInt(3025);
+		palaeStairsID = var2.getBlock(Configuration.CATEGORY_BLOCK, "palaeStairs", 3026).getInt(3026);
 		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3027).getInt(3027);
 		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3028).getInt(3028);
 		//newBlockID = var2.getBlock(Configuration.CATEGORY_BLOCK, "newBlock", 3029).getInt(3029);
@@ -857,6 +853,9 @@ public class Fossil
         palmLeaves = new BlockPalmLeaves(palmLeavesID, 53).setStepSound(Block.soundGrassFootstep).setHardness(0.2F).setResistance(1F).setBlockName("Palm Leaves").setRequiresSelfNotify();
         palmSap = new BlockPalmSapling(palmSapID, 62).setStepSound(Block.soundGrassFootstep).setHardness(0.2F).setResistance(1F).setBlockName("Palm Sapling").setRequiresSelfNotify();
         palaePlanks = new BlockPalaePlanks(palaePlanksID, 80).setHardness(2.0F).setResistance(5.0F).setStepSound(Block.soundWoodFootstep).setBlockName("palaePlanks").setRequiresSelfNotify();
+        palaeDoubleSlab = (FossilSlabs)(new BlockPalaeSlab(palaeDoubleSlabID, true)).setHardness(1.6F).setResistance(7.5F).setStepSound(Block.soundWoodFootstep).setBlockName("blackWoodSlab");
+        palaeSingleSlab = (FossilSlabs)(new BlockPalaeSlab(palaeSingleSlabID, false)).setHardness(1.6F).setResistance(7.5F).setStepSound(Block.soundWoodFootstep).setBlockName("blackWoodSlab").setCreativeTab(this.tabFBlocks);
+        palaeStairs = new BlockPalaeStairs(palaeStairsID, palaePlanks, 80).setBlockName("blackWoodStairs").setRequiresSelfNotify();
         //volcanicAsh = new BlockVolcanicAsh(volcanicAshID, 1).setHardness(0.5F).setStepSound(Block.soundGrassFootstep).setBlockName("VolcanicAsh").setCreativeTab(this.tabFBlocks);
 		//volcanicRock = new BlockVolcanicRock(volcanicRockID, 1).setHardness(3.0F).setResistance(5.0F).setStepSound(Block.soundStoneFootstep).setBlockName("VolcanicRock").setCreativeTab(this.tabFBlocks);
 		tar = new BlockTar(tarID, 22).setHardness(100.0F).setBlockName("Tar");
@@ -995,6 +994,9 @@ public class Fossil
 		GameRegistry.registerBlock(palmLog, "palmLog");
 		GameRegistry.registerBlock(palmLeaves, "palmLeaves");
 		GameRegistry.registerBlock(palmSap, "palmSap");
+		GameRegistry.registerBlock(palaeSingleSlab, "palaeSingleSlab");
+		GameRegistry.registerBlock(palaeDoubleSlab, "palaeDoubleSlab");
+		GameRegistry.registerBlock(palaeStairs, "palaeStairs");
 		GameRegistry.registerBlock(palaePlanks, "palaePlanks");
 
 		//GameRegistry.registerBlock(volcanicAsh, "VolcanicAsh");
@@ -1018,6 +1020,9 @@ public class Fossil
         LanguageRegistry.addName(palmLeaves, GetLangTextByKey("Block.PalLeaves.Name"));
 		LanguageRegistry.addName(palmSap, GetLangTextByKey("Block.PalSap.Name"));
 		LanguageRegistry.addName(palaePlanks, GetLangTextByKey("Block.PalPlank.Name"));
+		LanguageRegistry.addName(palaeSingleSlab, "palaeSingleSlab");
+		LanguageRegistry.addName(palaeDoubleSlab, "palaeDoubleSlab");
+		LanguageRegistry.addName(palaeStairs, "palaeStairs");
 		//LanguageRegistry.addName(volcanicAsh, "Volcanic Ash");
 		//LanguageRegistry.addName(volcanicRock, "Volcanic Rock");
         
@@ -1202,6 +1207,10 @@ public class Fossil
 		GameRegistry.addRecipe(new ItemStack(Block.music, 1), new Object[] {"PPP", "PRP", "PPP", 'P', this.palaePlanks, 'R', Item.redstone});
 		GameRegistry.addRecipe(new ItemStack(Block.pistonBase, 1), new Object[] {"PPP", "CIC", "CRC", 'P', this.palaePlanks, 'R', Item.redstone, 'I',Item.ingotIron,'C',Block.cobblestone});
 		GameRegistry.addRecipe(new ItemStack(Block.bookShelf, 1), new Object[] {"PPP", "BBB", "PPP", 'P', this.palaePlanks, 'B', Item.book});
+		
+		GameRegistry.addRecipe(new ItemStack(palaeSingleSlab, 1), new Object[] {"   ", "   ", "PPP", 'P', this.palaePlanks});
+		GameRegistry.addRecipe(new ItemStack(palaeDoubleSlab, 1), new Object[] {"   ", "PPP", "PPP", 'P', this.palaePlanks});
+		GameRegistry.addRecipe(new ItemStack(palaeStairs, 1), new Object[] {"P  ", "PP ", "PPP", 'P', this.palaePlanks});
 		
 		GameRegistry.addRecipe(new ItemStack(feet, 1), new Object[] {"* *","# #", '#', this.foot, '*', this.claw});
 		GameRegistry.addRecipe(new ItemStack(femurs, 1), new Object[] {"###","* *","# #", '#', Item.bone,'*', this.legBone});
