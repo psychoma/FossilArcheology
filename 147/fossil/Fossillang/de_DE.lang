@@ -168,6 +168,9 @@ Dino.Stegosaurus=Stegosaurus
 Dino.Dilophosaurus=Dilophosaurus
 Dino.Brachiosaurus=Brachiosaurus
 Dino.Nautilus=Nautilus
+##########Names of the Animals
+Animal.Mammoth=Mammut
+Animal.SaberCat=Smilodon
 ##########General Dino Messages, Only 11 Digits
 PediaText.Owner=Besitzer:
 PediaText.EnableChest=* Kann Truhen öffnen

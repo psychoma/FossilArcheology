@@ -2,7 +2,12 @@ package fossil.entity.mob;
 
 import java.util.ArrayList;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import fossil.Fossil;
+import fossil.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
@@ -79,7 +84,8 @@ public class EntityMammoth extends EntityTameable implements IShearable
     {
         return true;
     }
-
+    private void setPedia()
+    {Fossil.ToPedia = (Object)this;}
     public boolean attackEntityAsMob(Entity var1)
     {
         this.swingTick = 10;
@@ -237,14 +243,39 @@ public class EntityMammoth extends EntityTameable implements IShearable
     {
         ItemStack var2 = var1.inventory.getCurrentItem();
 
-        if (var2 != null && var2.getItem().equals(Fossil.chickenEss))
+        if (var2 != null)
         {
-            this.setGrowingAge(this.getGrowingAge() + 2000);
+        	if(var2.getItem().equals(Fossil.chickenEss))
+        	{
+        		this.setGrowingAge(this.getGrowingAge() + 2000);
+        		var2.stackSize--;
+        		return true;
+        	}
+        	if (FMLCommonHandler.instance().getSide().isClient() && var2.getItem().itemID == Fossil.dinoPedia.itemID)
+            {
+            	this.setPedia();
+                var1.openGui(Fossil.instance, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
+                return true;
+            }
         }
 
         return super.interact(var1);
     }
-
+    @SideOnly(Side.CLIENT)
+    public void ShowPedia(GuiPedia p0)
+    {
+    	p0.reset();
+    	p0.PrintStringXY(Fossil.GetLangTextByKey("Animal.Mammoth"), 97, 23,40,90,245);
+    	if(this.isTamed())
+    	{
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Owner"), true);
+    		String s0=this.getOwnerName();
+    		if(s0.length()>11)
+    			s0=this.getOwnerName().substring(0, 11);
+    		p0.AddStringLR(s0, true);
+    	}
+    	p0.PrintItemXY(Fossil.embryoMammoth, 120, 7);
+    }
     public EntityAnimal spawnBabyAnimal(EntityAnimal var1)
     {
         EntityMammoth var2 = new EntityMammoth(this.worldObj);

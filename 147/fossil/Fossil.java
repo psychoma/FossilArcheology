@@ -3,7 +3,6 @@ package fossil;
 import java.io.BufferedReader;
 
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -91,6 +90,7 @@ import fossil.guiBlocks.TileEntityFeeder;
 import fossil.guiBlocks.TileEntityTimeMachine;
 import fossil.guiBlocks.TileEntityWorktable;
 import fossil.items.ItemAncientEgg;
+import fossil.items.ItemAncientHelmet;
 import fossil.items.ItemAncientsword;
 import fossil.items.ItemBioFossil;
 import fossil.items.ItemBrokenHelmet;
@@ -320,7 +320,7 @@ public class Fossil
 	//public static Item newArmor;
 	
 	//DNA
-	public static Item dna;
+	//public static Item dna;
 	public static Item dnaTriceratops;
 	public static Item dnaVelociraptor;
 	public static Item dnaTRex;
@@ -339,7 +339,7 @@ public class Fossil
 	//public static Item newDinoDNA;
 
 	//Animal Dna
-	public static Item animalDNA;
+	//public static Item animalDNA;
 	public static Item dnaPig;
 	public static Item dnaSheep;
 	public static Item dnaCow;
@@ -357,7 +357,7 @@ public class Fossil
 	//public static Item dnaSkeleton;
 	
 	//Ancient Egg
-	public static Item ancientegg;
+	//public static Item ancientegg;
 	public static Item eggTriceratops;
 	public static Item eggVelociraptor;
 	public static Item eggTRex;
@@ -376,7 +376,7 @@ public class Fossil
 	//public static Item eggNew;
 	
 	//Embryos
-	public static Item embyoSyringe;
+	//public static Item embyoSyringe;
 	public static Item embryoPig;
 	public static Item embryoSheep;
 	public static Item embryoCow;
@@ -395,7 +395,7 @@ public class Fossil
 	public static Item rawChickenSoup;
     public static Item chickenEss;
 	public static Item sjl;
-	public static Item rawDinoMeat;
+	//public static Item rawDinoMeat;
 	public static Item rawTriceratops;
 	public static Item rawVelociraptor;
 	public static Item rawTRex;
@@ -509,7 +509,7 @@ public class Fossil
 	//public static int newArmorID;
 	
 	//DNA
-	public static int dnaID;
+	//public static int dnaID;
 	public static int dnaTriceratopsID;
 	public static int dnaVelociraptorID;
 	public static int dnaTRexID;
@@ -528,7 +528,7 @@ public class Fossil
 	//public static int newDinoDNAID;
 
 	//Animal DNA
-	public static int animalDNAID;
+	//public static int animalDNAID;
 	public static int dnaPigID;
 	public static int dnaSheepID;
 	public static int dnaCowID;
@@ -546,7 +546,7 @@ public class Fossil
 	//public static int dnaSkeletonID;
 	
 	//Ancient Egg
-	public static int ancienteggID;
+	//public static int ancienteggID;
 	public static int eggTriceratopsID;
 	public static int eggVelociraptorID;
 	public static int eggTRexID;
@@ -565,7 +565,7 @@ public class Fossil
 	//public static int eggNewID;
 	
 	//Embryos
-	public static int embyoSyringeID;
+	//public static int embyoSyringeID;
 	public static int embryoPigID;
 	public static int embryoSheepID;
 	public static int embryoCowID;
@@ -584,7 +584,7 @@ public class Fossil
 	public static int rawChickenSoupID;
     public static int chickenEssID;
 	public static int sjlID;
-	public static int rawDinoMeatID;
+	//public static int rawDinoMeatID;
 	public static int rawTriceratopsID;
 	public static int rawVelociraptorID;
 	public static int rawTRexID;
@@ -713,7 +713,7 @@ public class Fossil
 		//newArmorID = var2.getItem(Configuration.CATEGORY_ITEM, "newArmor", 10058).getInt(10058);
 	
 		//DNA
-		dnaID = var2.getItem(Configuration.CATEGORY_ITEM, "dna", 10059).getInt(10059);
+		//dnaID = var2.getItem(Configuration.CATEGORY_ITEM, "dna", 10059).getInt(10059);
 		dnaTriceratopsID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaTriceratops", 10060).getInt(10060);
 		dnaVelociraptorID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaVelociraptor", 10061).getInt(10061);
 		dnaTRexID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaTRex", 10062).getInt(10062);
@@ -732,7 +732,7 @@ public class Fossil
 		//newDinoDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "newDinoDNA", 10075).getInt(10075);
 
 		//Animal DNA
-		animalDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "animalDNA", 10076).getInt(10076);
+		//animalDNAID = var2.getItem(Configuration.CATEGORY_ITEM, "animalDNA", 10076).getInt(10076);
 		dnaPigID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaPig", 10077).getInt(10077);
 		dnaSheepID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaSheep", 10078).getInt(10078);
 		dnaCowID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaCow", 10079).getInt(10079);
@@ -750,7 +750,7 @@ public class Fossil
 		//dnaSkeletonID = var2.getItem(Configuration.CATEGORY_ITEM, "dnaMammoth", 10089).getInt(10089);
 
 		//Ancient Egg
-		ancienteggID = var2.getItem(Configuration.CATEGORY_ITEM, "ancientegg", 10090).getInt(10090);
+		//ancienteggID = var2.getItem(Configuration.CATEGORY_ITEM, "ancientegg", 10090).getInt(10090);
 		eggTriceratopsID = var2.getItem(Configuration.CATEGORY_ITEM, "eggTriceratops", 10091).getInt(10091);
 		eggVelociraptorID = var2.getItem(Configuration.CATEGORY_ITEM, "eggVelociraptor", 10092).getInt(10092);
 		eggTRexID = var2.getItem(Configuration.CATEGORY_ITEM, "eggTRex", 10093).getInt(10093);
@@ -769,7 +769,7 @@ public class Fossil
 		//eggNewID = var2.getItem(Configuration.CATEGORY_ITEM, "eggNew", 10106).getInt(10106);
 	
 		//Embryos
-		embyoSyringeID = var2.getItem(Configuration.CATEGORY_ITEM, "embyoSyringe", 10107).getInt(10107);
+		//embyoSyringeID = var2.getItem(Configuration.CATEGORY_ITEM, "embyoSyringe", 10107).getInt(10107);
 		embryoPigID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoPig", 10108).getInt(10108);
 		embryoSheepID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoSheep", 10109).getInt(10109);
 		embryoCowID = var2.getItem(Configuration.CATEGORY_ITEM, "embryoCow", 10110).getInt(10110);
@@ -788,7 +788,7 @@ public class Fossil
 		rawChickenSoupID = var2.getItem(Configuration.CATEGORY_ITEM, "rawChickenSoup", 10121).getInt(10121);
 		chickenEssID = var2.getItem(Configuration.CATEGORY_ITEM, "chickenEss", 10122).getInt(10122);
 		sjlID = var2.getItem(Configuration.CATEGORY_ITEM, "sjl", 10123).getInt(10123);
-		rawDinoMeatID = var2.getItem(Configuration.CATEGORY_ITEM, "rawDinoMeat", 10124).getInt(10124);
+		//rawDinoMeatID = var2.getItem(Configuration.CATEGORY_ITEM, "rawDinoMeat", 10124).getInt(10124);
 		rawTriceratopsID = var2.getItem(Configuration.CATEGORY_ITEM, "rawTriceratops", 10125).getInt(10125);
 		rawVelociraptorID = var2.getItem(Configuration.CATEGORY_ITEM, "rawVelociraptor", 10126).getInt(10126);
 		rawTRexID = var2.getItem(Configuration.CATEGORY_ITEM, "rawTRex", 10127).getInt(10127);
@@ -802,8 +802,8 @@ public class Fossil
 		cookedDinoMeatID = var2.getItem(Configuration.CATEGORY_ITEM, "cookedDinoMeat", 10135).getInt(10135);
 		
 		Option_Gen_Palaeoraphe = var2.get("option", "Palaeoraphe", false).getBoolean(false);
-		Option_Gen_Academy = var2.get("option", "Academy", false).getBoolean(false);
-		Option_Gen_Ships = var2.get("option", "Ships", false).getBoolean(false);
+		Option_Gen_Academy = var2.get("option", "Academy", true).getBoolean(true);
+		Option_Gen_Ships = var2.get("option", "Ships", true).getBoolean(true);
 		Option_Lang_Server = var2.get("option", "Serverlanguage", "en_US").value;
 	
 		}
@@ -873,25 +873,25 @@ public class Fossil
 		ancientSword = new ItemAncientsword(ancientSwordID).setIconIndex(1).setItemName("ancientsword").setCreativeTab(this.tabFCombat);
 		brokenSword = new ItemBrokenSword(brokenSwordID).setIconIndex(0).setItemName("Brokensword").setCreativeTab(this.tabFMaterial);
 		fernSeed = new ItemFernSeed(fernSeedID, ferns.blockID).setIconIndex(40).setItemName("FernSeed").setCreativeTab(this.tabFItems);
-		ancienthelmet = new ForgeItemArmor(ancienthelmetID, EnumArmorMaterial.IRON, 3, 0).setIconIndex(3).setItemName("ancientHelmet").setCreativeTab(CreativeTabs.tabCombat);
+		ancienthelmet = new ItemAncientHelmet(ancienthelmetID, EnumArmorMaterial.IRON, 3, 0).setIconIndex(3).setItemName("ancientHelmet").setCreativeTab(this.tabFArmor);
 		brokenhelmet = new ItemBrokenHelmet(brokenhelmetID).setIconIndex(2).setItemName("BrokenHelmet").setCreativeTab(this.tabFMaterial);
 		skullStick = new ForgeItem(skullStickID).setIconIndex(5).setItemName("SkullStick").setCreativeTab(this.tabFItems);
 		gem = new ItemGem(gemID).setIconIndex(4).setItemName("Gem").setCreativeTab(this.tabFItems);
 		gemAxe = new ForgeItemAxe(gemAxeID, EnumToolMaterial.EMERALD).setIconIndex(19).setItemName("GemAxe").setCreativeTab(this.tabFTools);
 		gemPickaxe = new ForgeItemPickaxe(gemPickaxeID, EnumToolMaterial.EMERALD).setIconIndex(18).setItemName("GemPickaxe").setCreativeTab(this.tabFTools);
-		gemSword = new ForgeItemSword(gemSwordID, EnumToolMaterial.EMERALD).setIconIndex(16).setItemName("GemSword");
+		gemSword = new ForgeItemSword(gemSwordID, EnumToolMaterial.EMERALD).setIconIndex(16).setItemName("GemSword").setCreativeTab(this.tabFCombat);;
 		gemHoe = new ForgeItemHoe(gemHoeID, EnumToolMaterial.EMERALD).setIconIndex(20).setItemName("GemHoe").setCreativeTab(this.tabFTools);
 		gemShovel = new ForgeItemSpade(gemShovelID, EnumToolMaterial.EMERALD).setIconIndex(17).setItemName("GemShovel").setCreativeTab(this.tabFTools);
 		dinoPedia = new ForgeItem(dinoPediaID).setIconIndex(53).setItemName("dinopedia").setCreativeTab(this.tabFItems);
 		emptyShell = new ForgeItem(emptyShellID).setIconIndex(42).setItemName("EmptyShell").setCreativeTab(this.tabFItems);
 		magicConch = new ItemMagicConch(magicConchID).setIconIndex(21).setItemName("MagicConch").setCreativeTab(this.tabFTools);
 		icedMeat = new ItemIcedMeat(icedMeatID, EnumToolMaterial.EMERALD).setIconIndex(57).setItemName("IcedMeat").setCreativeTab(this.tabFItems);
-		woodjavelin = new ItemJavelin(woodjavelinID, EnumToolMaterial.WOOD).setIconIndex(0).setItemName("WoodJavelin").setCreativeTab(this.tabFCombat);
-		stonejavelin = new ItemJavelin(stonejavelinID, EnumToolMaterial.STONE).setIconIndex(0).setItemName("StoneJavelin").setCreativeTab(this.tabFCombat);
-		ironjavelin = new ItemJavelin(ironjavelinID, EnumToolMaterial.IRON).setIconIndex(0).setItemName("IronJavelin").setCreativeTab(this.tabFCombat);
-		goldjavelin = new ItemJavelin(goldjavelinID, EnumToolMaterial.GOLD).setIconIndex(0).setItemName("GoldJavelin").setCreativeTab(this.tabFCombat);
-		diamondjavelin = new ItemJavelin(diamondjavelinID, EnumToolMaterial.EMERALD).setIconIndex(0).setItemName("DiamondJavelin").setCreativeTab(this.tabFCombat);
-		ancientJavelin = new ItemJavelin(ancientJavelinID, EnumToolMaterial.IRON).setItemName("AncientJavelin").setCreativeTab(this.tabFCombat);
+		woodjavelin = new ItemJavelin(woodjavelinID, EnumToolMaterial.WOOD).setIconIndex(48).setItemName("WoodJavelin").setCreativeTab(this.tabFCombat);
+		stonejavelin = new ItemJavelin(stonejavelinID, EnumToolMaterial.STONE).setIconIndex(49).setItemName("StoneJavelin").setCreativeTab(this.tabFCombat);
+		ironjavelin = new ItemJavelin(ironjavelinID, EnumToolMaterial.IRON).setIconIndex(50).setItemName("IronJavelin").setCreativeTab(this.tabFCombat);
+		goldjavelin = new ItemJavelin(goldjavelinID, EnumToolMaterial.GOLD).setIconIndex(52).setItemName("GoldJavelin").setCreativeTab(this.tabFCombat);
+		diamondjavelin = new ItemJavelin(diamondjavelinID, EnumToolMaterial.EMERALD).setIconIndex(51).setItemName("DiamondJavelin").setCreativeTab(this.tabFCombat);
+		ancientJavelin = new ItemJavelin(ancientJavelinID, EnumToolMaterial.IRON).setIconIndex(64).setItemName("AncientJavelin").setCreativeTab(this.tabFCombat);
 		whip = new ItemWhip(whipID).setIconIndex(65).setItemName("FossilWhip").setCreativeTab(this.tabFTools);
         legBone = new ItemLegBone(legBoneID).setIconIndex(80).setItemName("LegBone").setCreativeTab(this.tabFItems);
 		claw = new ItemClaw(clawID).setIconIndex(81).setItemName("Claw").setCreativeTab(this.tabFItems);
@@ -900,13 +900,13 @@ public class Fossil
 		brokenSapling = new ItemBrokenSapling(brokenSaplingID).setIconIndex(61).setItemName("BrokenSapling").setCreativeTab(this.tabFMaterial);
 		
 		//BoneArmor
-		skullHelmet = new ItemSkullHelmet(skullHelmetID, dinoBone, 3, 0).setIconIndex(66).setItemName("SkullHelmet");
-		ribCage = new ItemRibCage(ribCageID, dinoBone, 3, 1).setIconIndex(67).setItemName("RibCage");
-		femurs = new ItemFemurs(femursID, dinoBone, 3, 2).setIconIndex(68).setItemName("ShinGuard");
+		skullHelmet = new ItemSkullHelmet(skullHelmetID, dinoBone, 3, 0).setIconIndex(66).setItemName("SkullHelmet").setCreativeTab(Fossil.tabFArmor);;
+		ribCage = new ItemRibCage(ribCageID, dinoBone, 3, 1).setIconIndex(67).setItemName("RibCage").setCreativeTab(Fossil.tabFArmor);;
+		femurs = new ItemFemurs(femursID, dinoBone, 3, 2).setIconIndex(68).setItemName("ShinGuard").setCreativeTab(Fossil.tabFArmor);;
 		feet = new ItemFeet(feetID, dinoBone, 3, 3).setIconIndex(69).setItemName("Feet").setCreativeTab(this.tabFArmor);
 		
 		//Ancient Egg
-		ancientegg = new ItemAncientEgg(ancienteggID);
+		//ancientegg = new ItemAncientEgg(ancienteggID);
 		eggTriceratops = new ItemAncientEgg(eggTriceratopsID).setIconIndex(22).setItemName("eggTriceratops").setCreativeTab(this.tabFMaterial);
 		eggVelociraptor = new ItemAncientEgg(eggVelociraptorID).setIconIndex(23).setItemName("eggVelociraptor").setCreativeTab(this.tabFMaterial);
 		eggTRex = new ItemAncientEgg(eggTRexID).setIconIndex(24).setItemName("eggTRex").setCreativeTab(this.tabFMaterial);
@@ -919,7 +919,7 @@ public class Fossil
 		eggBrachiosaurus = new ItemAncientEgg(eggBrachiosaurusID).setIconIndex(31).setItemName("eggBrachiosaurus").setCreativeTab(this.tabFMaterial);
 		
 		//DNA
-		dna = new ItemDNA(dnaID);
+		//dna = new ItemDNA(dnaID);
 		dnaTriceratops = new ItemDNA(dnaTriceratopsID).setIconIndex(6).setItemName("dnaTriceratops").setCreativeTab(this.tabFMaterial);
 		dnaVelociraptor = new ItemDNA(dnaVelociraptorID).setIconIndex(7).setItemName("dnaVelociraptor").setCreativeTab(this.tabFMaterial);
 		dnaTRex = new ItemDNA(dnaTRexID).setIconIndex(8).setItemName("dnaTRex").setCreativeTab(this.tabFMaterial);
@@ -932,7 +932,7 @@ public class Fossil
 		dnaBrachiosaurus = new ItemDNA(dnaBrachiosaurusID).setIconIndex(15).setItemName("dnaBrachiosaurus").setCreativeTab(this.tabFMaterial);
 
 		//animalDNA
-		animalDNA = new ItemNonDinoDNA(animalDNAID);
+		//animalDNA = new ItemNonDinoDNA(animalDNAID);
 		dnaPig = new ItemNonDinoDNA(dnaPigID).setIconIndex(70).setItemName("dnaPig").setCreativeTab(this.tabFMaterial);
 		dnaSheep = new ItemNonDinoDNA(dnaSheepID).setIconIndex(71).setItemName("dnaSheep").setCreativeTab(this.tabFMaterial);
 		dnaCow = new ItemNonDinoDNA(dnaCowID).setIconIndex(72).setItemName("dnaCow").setCreativeTab(this.tabFMaterial);
@@ -941,7 +941,7 @@ public class Fossil
 		dnaMammoth = new ItemNonDinoDNA(dnaMammothID).setIconIndex(75).setItemName("dnaMammoth").setCreativeTab(this.tabFMaterial);
 		
 		//Ebryos
-		embyoSyringe = new ItemEmbryoSyringe(embyoSyringeID);
+		//embyoSyringe = new ItemEmbryoSyringe(embyoSyringeID);
 		embryoPig = new ItemEmbryoSyringe(embryoPigID).setIconIndex(84).setItemName("embryoPig").setCreativeTab(this.tabFItems);
 		embryoSheep = new ItemEmbryoSyringe(embryoSheepID).setIconIndex(85).setItemName("embryoSheep").setCreativeTab(this.tabFItems);
 		embryoCow = new ItemEmbryoSyringe(embryoCowID).setIconIndex(86).setItemName("embryoCow").setCreativeTab(this.tabFItems);
@@ -950,7 +950,7 @@ public class Fossil
 		embryoMammoth = new ItemEmbryoSyringe(embryoMammothID).setIconIndex(88).setItemName("embryoMammoth").setCreativeTab(this.tabFItems);
 		
 		//Item Food
-		rawDinoMeat = new ItemDinoMeat(rawDinoMeatID, 3, 0.3F, true);
+		//rawDinoMeat = new ItemDinoMeat(rawDinoMeatID, 3, 0.3F, true).setCreativeTab(this.tabFFood);
 		rawTriceratops = new ItemDinoMeat(rawTriceratopsID, 3, 0.3F, true).setIconIndex(0).setItemName("Triceratops Meat").setCreativeTab(this.tabFFood);
 		rawVelociraptor = new ItemDinoMeat(rawVelociraptorID, 3, 0.3F, true).setIconIndex(0).setItemName("Velociraptor Meat").setCreativeTab(this.tabFFood);
 		rawTRex = new ItemDinoMeat(rawTRexID, 3, 0.3F, true).setIconIndex(0).setItemName("TRex Meat").setCreativeTab(this.tabFFood);
@@ -966,7 +966,10 @@ public class Fossil
 		rawChickenSoup = new ItemChickenSoup(rawChickenSoupID).setIconIndex(58).setItemName("RawChickenSoup").setMaxStackSize(1).setContainerItem(Item.bucketEmpty).setCreativeTab(this.tabFFood);
 		chickenEss = new ForgeItemFood(chickenEssID, 10, 0.0F, false).setIconIndex(59).setItemName("ChickenEss").setContainerItem(Item.glassBottle).setCreativeTab(this.tabFFood);
 		sjl = new ForgeItemFood(sjlID, 8, 2.0F, false).setIconIndex(43).setItemName("SioChiuLe").setCreativeTab(this.tabFFood);
-        
+		
+		//make the dino types complete by registering the dinos items
+		EnumDinoType.init();
+		
 		//HarvestLevel
 		MinecraftForge.setBlockHarvestLevel(blockFossil, 0, "pickaxe", 2);
 		MinecraftForge.setBlockHarvestLevel(blockPermafrost, 0, "shovel", 2);
@@ -1178,7 +1181,7 @@ public class Fossil
 		//GameRegistry.addShapelessRecipe(new ItemStack(magicConch, 1, 1), new Object[] {new ItemStack(magicConch, 1, 0)});
 		//GameRegistry.addShapelessRecipe(new ItemStack(magicConch, 1, 2), new Object[] {new ItemStack(magicConch, 1, 1)});
 		//GameRegistry.addShapelessRecipe(new ItemStack(magicConch, 1, 0), new Object[] {new ItemStack(magicConch, 1, 2)});
-		GameRegistry.addRecipe(new ItemStack(chickenEss, 8), new Object[] {"XXX", "XYX", "XXX", 'X', Item.glassBottle, 'Y', new ItemStack(rawChickenSoup, 1, 1)});
+		GameRegistry.addRecipe(new ItemStack(chickenEss, 8), new Object[] {"XXX", "XYX", "XXX", 'X', Item.glassBottle, 'Y', cookedChickenSoup});
 		GameRegistry.addRecipe(new ItemStack(whip, 1), new Object[] {"XXS", "XTS", "TXS", 'T', Item.stick, 'S', Item.silk});
 		
 		GameRegistry.addRecipe(new ItemStack(palaePlanks, 4), new Object[] {"P", 'P', this.palmLog});
@@ -1208,17 +1211,26 @@ public class Fossil
 		GameRegistry.addRecipe(new ItemStack(Block.pistonBase, 1), new Object[] {"PPP", "CIC", "CRC", 'P', this.palaePlanks, 'R', Item.redstone, 'I',Item.ingotIron,'C',Block.cobblestone});
 		GameRegistry.addRecipe(new ItemStack(Block.bookShelf, 1), new Object[] {"PPP", "BBB", "PPP", 'P', this.palaePlanks, 'B', Item.book});
 		
-		GameRegistry.addRecipe(new ItemStack(palaeSingleSlab, 1), new Object[] {"   ", "   ", "PPP", 'P', this.palaePlanks});
-		GameRegistry.addRecipe(new ItemStack(palaeDoubleSlab, 1), new Object[] {"   ", "PPP", "PPP", 'P', this.palaePlanks});
-		GameRegistry.addRecipe(new ItemStack(palaeStairs, 1), new Object[] {"P  ", "PP ", "PPP", 'P', this.palaePlanks});
+		GameRegistry.addRecipe(new ItemStack(palaeSingleSlab, 6), new Object[] {"PPP", 'P', this.palaePlanks});
+		GameRegistry.addRecipe(new ItemStack(palaeStairs, 4), new Object[] {"P  ", "PP ", "PPP", 'P', this.palaePlanks});
+		GameRegistry.addRecipe(new ItemStack(palaeStairs, 4), new Object[] {"  P", " PP", "PPP", 'P', this.palaePlanks});
 		
 		GameRegistry.addRecipe(new ItemStack(feet, 1), new Object[] {"* *","# #", '#', this.foot, '*', this.claw});
 		GameRegistry.addRecipe(new ItemStack(femurs, 1), new Object[] {"###","* *","# #", '#', Item.bone,'*', this.legBone});
 		GameRegistry.addRecipe(new ItemStack(ribCage, 1), new Object[] {"# #"," # ","###", '#', Item.bone});
-		GameRegistry.addRecipe(new ItemStack(skullHelmet, 1), new Object[] {"#*#","# #", '#', Item.bone,'*', Item.skull});
+		GameRegistry.addRecipe(new ItemStack(skullHelmet, 1), new Object[] {"#X#","# #", '#', Item.bone,'X', Fossil.skull});
 		
         GameRegistry.addSmelting(rawChickenSoup.itemID, new ItemStack(cookedChickenSoup), 3.0F);
-        GameRegistry.addSmelting(rawDinoMeat.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        //GameRegistry.addSmelting(rawDinoMeat.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawTriceratops.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawStegosaurus.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawVelociraptor.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawDilophosaurus.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawTRex.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawPlesiosaur.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawPterosaur.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawMosasaurus.itemID, new ItemStack(cookedDinoMeat), 3.0F);
+        GameRegistry.addSmelting(rawBrachiosaurus.itemID, new ItemStack(cookedDinoMeat), 3.0F);
         GameRegistry.addSmelting(icedMeat.itemID, new ItemStack(Item.beefCooked), 3.0F);
 		
 		EntityRegistry.registerModEntity(EntityStoneboard.class, 		"StoneBoard", 			1, this, 250, 5, false);
@@ -1228,7 +1240,7 @@ public class Fossil
 		EntityRegistry.registerModEntity(EntityFailuresaurus.class, 	"Failuresaurus", 		5, this, 250, 5, true);
 		EntityRegistry.registerModEntity(EntityBones.class, 			"Bones", 				6, this, 250, 5, true);
 		EntityRegistry.registerModEntity(EntityNautilus.class, 			"Nautilus", 			7, this, 250, 5, true);
-		EntityRegistry.addSpawn(EntityNautilus.class, 5, 4, 14, EnumCreatureType.waterCreature, new BiomeGenBase[] {BiomeGenBase.beach});
+		EntityRegistry.addSpawn(EntityNautilus.class, 5, 4, 14, EnumCreatureType.waterCreature, new BiomeGenBase[] {BiomeGenBase.river,BiomeGenBase.ocean});
 		EntityRegistry.registerModEntity(EntityDinoEgg.class, 			"DinoEgg", 				8, this, 250, 5, true);
 		EntityRegistry.registerModEntity(EntityVelociraptor.class, 		"Velociraptor", 		9, this, 250, 5, true);
 		EntityRegistry.registerModEntity(EntityTriceratops.class, 		"Triceratops", 			10, this, 250, 5, true);

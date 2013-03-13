@@ -54,7 +54,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
     public EntityJavelin(World var1, EntityLiving var2, float var3, EnumToolMaterial var4)
     {
         super(var1, var2, var3);
-        this.SelfMaterial = EnumToolMaterial.WOOD;
+        //this.SelfMaterial = EnumToolMaterial.WOOD;
         this.SelfMaterial = var4;
     }
 
@@ -421,7 +421,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
 
         switch (this.SelfMaterial.ordinal())//EntityJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[this.SelfMaterial.ordinal()])
         {
-            case 1:
+            case 0:
             default:
                 var2 = new ItemStack(Fossil.woodjavelin, 1);
                 break;
@@ -434,11 +434,11 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
                 var2 = new ItemStack(Fossil.diamondjavelin, 1);
                 break;
 
-            case 4:
+            case 1:
                 var2 = new ItemStack(Fossil.stonejavelin, 1);
                 break;
 
-            case 5:
+            case 4:
                 var2 = new ItemStack(Fossil.goldjavelin, 1);
         }
 
@@ -459,7 +459,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
     {
         switch (this.SelfMaterial.ordinal())//EntityJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[this.SelfMaterial.ordinal()])
         {
-            case 1:
+            case 0:
             default:
                 return Fossil.woodjavelin;
 
@@ -469,10 +469,10 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
             case 3:
                 return Fossil.diamondjavelin;
 
-            case 4:
+            case 1:
                 return Fossil.stonejavelin;
 
-            case 5:
+            case 4:
                 return Fossil.goldjavelin;
         }
     }

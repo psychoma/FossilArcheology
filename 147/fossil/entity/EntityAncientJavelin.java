@@ -1,5 +1,7 @@
 package fossil.entity;
 
+import java.util.Random;
+
 import fossil.Fossil;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -65,7 +67,8 @@ public class EntityAncientJavelin extends EntityJavelin
 
         if (this.inGround && !this.lighteningShot)
         {
-            this.worldObj.addWeatherEffect(new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ));
+        	if((new Random()).nextInt(100)<30)
+        		this.worldObj.addWeatherEffect(new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ));
             this.lighteningShot = true;
         }
     }

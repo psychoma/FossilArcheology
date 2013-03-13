@@ -603,10 +603,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
             var1.openGui(Fossil.instance/*var1*/, 4, this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
             return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     private int EnumToInt(EnumDinoType var1)
