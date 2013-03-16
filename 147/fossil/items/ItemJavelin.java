@@ -22,9 +22,10 @@ public class ItemJavelin extends ForgeItem
     public ItemJavelin(int var1, EnumToolMaterial var2)
     {
         super(var1);
-        this.maxStackSize = 64;
+        this.maxStackSize=16;
+        this.setMaxDamage(30);
         //this.iconIndex = 48;
-        this.hasSubtypes = true;
+        this.hasSubtypes = false;
         this.SelfMaterial = var2;
     }
 
@@ -63,11 +64,11 @@ public class ItemJavelin extends ForgeItem
 
             if (this.itemID!=Fossil.ancientJavelin.itemID)//!this.isAncient)
             {
-                var8 = new EntityJavelin(var2, var3, var7 * 2.0F, this.SelfMaterial);
+                var8 = new EntityJavelin(var2, var3, var7 * 2.0F, this.SelfMaterial,var1.getItemDamage()+1);
             }
             else
             {
-                var8 = new EntityAncientJavelin(var2, var3, var7 * 2.0F, this.SelfMaterial);
+                var8 = new EntityAncientJavelin(var2, var3, var7 * 2.0F, this.SelfMaterial,var1.getItemDamage()+1);
             }
 
             if (var7 == 1.0F)
@@ -122,7 +123,7 @@ public class ItemJavelin extends ForgeItem
      */
     public int getMaxItemUseDuration(ItemStack var1)
     {
-        return 72000;
+        return 720000;
     }
 
     /**

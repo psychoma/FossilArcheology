@@ -8621,8 +8621,8 @@ System.out.println("Generating CheheWreck");
 	
 	private ItemStack pickCheckLootItem(Random var1)
     {
-        int var2 = var1.nextInt(100);
-        return var2 == 0 ? new ItemStack(Item.potion, 1, 1 + var1.nextInt(19)) : (var2 == 1 && var1.nextInt(3) == 0 ? new ItemStack(Fossil.relic, var1.nextInt(63) + 1) : (var2 == 2 && var1.nextInt(3) == 0 ? new ItemStack(Fossil.stoneboard) : null));
+        int var2 = var1.nextInt(11);
+        return var2 == 0 ? new ItemStack(Item.potion, var1.nextInt(5) + 1) : (var2 == 1 && var1.nextInt(3) == 0 ? new ItemStack(Fossil.stoneboard) : (var2 == 2 && var1.nextInt(3) == 0 ? new ItemStack(Item.bow) : (var2 == 3 ? new ItemStack(Fossil.relic, var1.nextInt(6) + 1) : (var2 == 4 ? new ItemStack(Item.arrow, var1.nextInt(8) + 1) : (var2 == 5 ? new ItemStack(Fossil.goldjavelin, var1.nextInt(15) + 1) : (var2 == 6 && var1.nextInt(2) == 0 ? new ItemStack(Item.expBottle, var1.nextInt(7) + 1) : (var2 == 7 && var1.nextInt(2) == 0 ? new ItemStack(Fossil.brokenhelmet, var1.nextInt(4) + 1) : (var2 == 8 ? new ItemStack(Item.bread, var1.nextInt(3) + 1) : (var2 == 9 && var1.nextInt(25) == 0 ? new ItemStack(Item.appleGold, var1.nextInt(3) + 1, 1) : (var2 == 10 && var1.nextInt(4) == 0 ? new ItemStack(Item.swordGold) : null))))))))));
     }
 	
 }

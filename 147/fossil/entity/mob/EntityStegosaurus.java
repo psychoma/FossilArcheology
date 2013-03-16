@@ -71,9 +71,10 @@ public class EntityStegosaurus extends EntityDinosaurce
         this.setSize(1.0F, 1.0F);
         //this.moveSpeed = 0.3F;
         this.health = 8;
+        this.experienceValue=3;
         
         
-        this.Width0=0.7F;
+        this.Width0=1.2F;
         this.WidthInc=0.5F;
         this.Length0=1.0F;
         this.LengthInc=0.7F;
@@ -336,7 +337,6 @@ public class EntityStegosaurus extends EntityDinosaurce
     	//Add special item interaction code here
         return super.interact(var1);
     }
-
     public void handleHealthUpdate(byte var1)
     {
         if (var1 == 7)

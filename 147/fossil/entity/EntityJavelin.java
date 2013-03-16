@@ -38,6 +38,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
     private int field_46027_au;
     public boolean arrowCritical;
     public EnumToolMaterial SelfMaterial;
+    private int damaged;
 
     public EntityJavelin(World var1)
     {
@@ -51,11 +52,12 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
         this.SelfMaterial = EnumToolMaterial.WOOD;
     }
 
-    public EntityJavelin(World var1, EntityLiving var2, float var3, EnumToolMaterial var4)
+    public EntityJavelin(World var1, EntityLiving var2, float var3, EnumToolMaterial var4, int damagevalue)
     {
         super(var1, var2, var3);
         //this.SelfMaterial = EnumToolMaterial.WOOD;
         this.SelfMaterial = var4;
+        this.damaged=damagevalue;
     }
 
     public EntityJavelin(World var1, EntityLiving var2, float var3)
@@ -238,6 +240,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
                     {
                         var23 = DamageSource.causeThrownDamage(this, this.shootingEntity);
                     }
+                    this.setVelocity(0, 0, 0);
 
                     if (this.isBurning())
                     {
@@ -441,7 +444,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
             case 4:
                 var2 = new ItemStack(Fossil.goldjavelin, 1);
         }
-
+        var2.setItemDamage(damaged);
         return var1.inventory.addItemStackToInventory(var2);
     }
 

@@ -38,7 +38,6 @@ public class DinoAIGrowup extends EntityAIBase
         this.AITarget.setDinoAgeTick(0);
         this.AITarget.increaseDinoAge();
         //this.AITarget.CheckSkin();
-        //TODO Test, if thats done by the gettexture functions already
 
         if (this.AITarget.getHealth() < this.AITarget.getMaxHealth())
         {//the dino heals itself 5% when growing up
@@ -52,7 +51,6 @@ public class DinoAIGrowup extends EntityAIBase
         {
             this.AITarget.setDinoAge(this.AITarget.getDinoAge()-1);
             //this.AITarget.CheckSkin();
-            //TODO Test, if thats done by the gettexture functions already
 
             if (this.AITarget.getHealth() > MathHelper.ceiling_double_int(this.AITarget.getMaxHealth()*0.05f))
             {

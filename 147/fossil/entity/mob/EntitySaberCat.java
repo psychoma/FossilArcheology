@@ -78,6 +78,7 @@ public class EntitySaberCat extends EntityTameable
         this.targetTasks.addTask(6, new EntityAITargetNonTamed(this, EntityCow.class, 16.0F, 200, false));
         this.targetTasks.addTask(7, new EntityAITargetNonTamed(this, EntityChicken.class, 16.0F, 200, false));
         this.targetTasks.addTask(8, new EntityAITargetNonTamed(this, EntityVillager.class, 16.0F, 200, false));
+        this.experienceValue=5;
     }
 
     public int getMaxHealth()

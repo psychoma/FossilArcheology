@@ -72,6 +72,7 @@ public class EntityPterosaur extends EntityDinosaurce
         this.setSize(0.8F, 0.8F);
         //this.moveSpeed = 2.0F;
         this.health = 10;
+        this.experienceValue=3;
         
         this.Width0=1.2F;
         this.WidthInc=0.3F;

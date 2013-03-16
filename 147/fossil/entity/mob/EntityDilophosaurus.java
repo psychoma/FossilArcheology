@@ -87,6 +87,7 @@ public class EntityDilophosaurus extends EntityDinosaurce
         //this.CheckSkin();
         this.setSize(0.3F, 0.3F);
         this.health = 10;
+        this.experienceValue=10;
         
         
         this.Width0=0.5F;

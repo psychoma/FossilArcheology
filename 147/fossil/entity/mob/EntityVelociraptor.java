@@ -83,6 +83,7 @@ public class EntityVelociraptor extends EntityDinosaurce
         this.setSize(0.3F, 0.3F);
         //this.moveSpeed = 0.3F;
         this.health = 10;
+        this.experienceValue=7;
         
         this.Width0=0.3F;
         this.WidthInc=0.12F;

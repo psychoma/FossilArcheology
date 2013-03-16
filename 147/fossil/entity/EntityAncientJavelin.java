@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 public class EntityAncientJavelin extends EntityJavelin
 {
     private boolean lighteningShot = false;
+    private int damaged;
 
     public EntityAncientJavelin(World var1)
     {
@@ -25,10 +26,11 @@ public class EntityAncientJavelin extends EntityJavelin
         super(var1, var2, var4, var6);
     }
 
-    public EntityAncientJavelin(World var1, EntityLiving var2, float var3, EnumToolMaterial var4)
+    public EntityAncientJavelin(World var1, EntityLiving var2, float var3, EnumToolMaterial var4, int damagevalue)
     {
         super(var1, var2, var3);
         this.SelfMaterial = var4;
+        this.damaged=damagevalue;
     }
 
     public EntityAncientJavelin(World var1, EntityLiving var2, float var3)
@@ -76,6 +78,7 @@ public class EntityAncientJavelin extends EntityJavelin
     protected boolean addJavelinToPlayer(EntityPlayer var1)
     {
         ItemStack var2 = new ItemStack(Fossil.ancientJavelin, 1);
+        var2.setItemDamage(damaged);
         return var1.inventory.addItemStackToInventory(var2);
     }
 }

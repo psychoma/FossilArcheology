@@ -78,6 +78,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         this.setSize(1.0F, 1.0F);
         //this.moveSpeed = 0.7F;
         this.health = 8;
+        this.experienceValue=2;
         
         this.Width0=0.5F;
         this.WidthInc=0.3F;

@@ -29,15 +29,12 @@ public class DinoAIEatFerns extends EntityAIBase
     {
         if (this.entityVar.IsHungry()/*(float)this.entityVar.getHunger() >= this.HUNT_LIMIT*/)
         {
-            return false;
-        }
-        else
-        {
             int var1 = MathHelper.floor_double(this.entityVar.posX);
             int var2 = MathHelper.floor_double(this.entityVar.posY);
             int var3 = MathHelper.floor_double(this.entityVar.posZ);
             return this.worldObj.getBlockId(var1, var2, var3) == Fossil.ferns.blockID;
         }
+        return false;
     }
 
     /**
@@ -88,7 +85,7 @@ public class DinoAIEatFerns extends EntityAIBase
             {
                 this.worldObj.playAuxSFX(2001, var1, var2, var3, Block.tallGrass.blockID + 4096);
                 this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
-                this.entityVar.setHunger(this.entityVar.getHunger()+90);
+                this.entityVar.increaseHunger(25);
             }
         }
     }

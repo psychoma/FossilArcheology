@@ -21,6 +21,7 @@ public class EntityBones extends EntityMob
         super(var1);
         this.texture = "/mob/skeleton.png";
         this.tasks.addTask(1, new EntityAIDeadBones(this));
+        this.experienceValue=7;
     }
 
     public int getMaxHealth()

@@ -128,6 +128,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     public EntityDinosaurce(World var1)
     {
         super(var1);
+        //this.getClass();
         this.OrderStatus = EnumOrderType.FreeMove;
         this.FoodItemList = new DinoFoodItemList();
         this.FoodBlockList = new DinoFoodBlockList();
@@ -135,7 +136,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
         this.tasks.addTask(0, new DinoAIGrowup(this));
         this.tasks.addTask(0, new DinoAIStarvation(this));
         this.BreedTick = this.BreedingTime;
-        this.setHunger(this.MaxHunger);
+        this.setHunger(this.MaxHunger/2);
     }
     /*public abstract void updateSize();
     public abstract void InitSize();
@@ -201,12 +202,12 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     {Fossil.ToPedia = (Object)this;}
     
     /**
-     * Tells if the Dino is a Baby
+     * Tells if the Dino is a Adult
      */
     public boolean isAdult()
     {return this.getDinoAge() >= this.AdultAge;}
     /**
-     * Tells if the Dino is a Baby
+     * Tells if the Dino is a Teen
      */
     public boolean isTeen()
     {return this.getDinoAge() >= this.TeenAge;}
@@ -216,6 +217,13 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     public int getMaxHealth()
     {
     	return this.BaseHealth+this.getDinoAge()*this.HealthIncrease;
+    }
+    /**
+     * Returns the MaxHunger of the Dino
+     */
+    public int getMaxHunger()
+    {
+    	return this.MaxHunger;
     }
     
     /**
@@ -252,7 +260,7 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
         super.entityInit();
         this.dataWatcher.addObject(AGE_DATA_INDEX, new Integer(0));
         this.dataWatcher.addObject(AGE_TICK_DATA_INDEX, new Integer(0));
-        this.dataWatcher.addObject(HUNGER_DATA_INDEX, new Integer(100));
+        this.dataWatcher.addObject(HUNGER_DATA_INDEX, new Integer(30));
         this.dataWatcher.addObject(HUNGER_TICK_DATA_INDEX, new Integer(300));
         this.dataWatcher.addObject(SUBSPECIES_INDEX, new Integer(1));
         this.dataWatcher.addObject(MODELIZED_INDEX, new Byte((byte) - 1));
@@ -265,7 +273,11 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     {this.dataWatcher.updateObject(SUBSPECIES_INDEX, Integer.valueOf(var1));}
 
     
-    
+    /*public int getHealth()
+    {
+    	//this.getClass();
+    	return super.getHealth();
+    }*/
     public int getDinoAge()
     {return this.dataWatcher.getWatchableObjectInt(AGE_DATA_INDEX);}
 
@@ -296,32 +308,32 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     
 
     public int getHunger()
-    {return this.dataWatcher.getWatchableObjectInt(HUNGER_DATA_INDEX);}
+    {/*this.getClass();*/return this.dataWatcher.getWatchableObjectInt(HUNGER_DATA_INDEX);}
     
     public void setHunger(int var1)
     {this.dataWatcher.updateObject(HUNGER_DATA_INDEX, Integer.valueOf(var1));}
     
     public boolean increaseHunger(int var1)
     {
-    	if(this.getHunger()>=this.MaxHunger)
+    	if(this.getHunger()>=this.getMaxHunger())
     		return false;
     	this.setHunger(this.getHunger() + var1);
-    	if(this.getHunger()>this.MaxHunger)
-    		this.setHunger(this.MaxHunger);
+    	if(this.getHunger()>this.getMaxHunger())
+    		this.setHunger(this.getMaxHunger());
     	return true;
     }
     
     public void decreaseHunger()
     {
         if (this.getHunger() > 0)
-            this.increaseHunger(-1);
+        	this.setHunger(this.getHunger() - 1);
     }
     
     public boolean IsHungry()
-    {return this.getHunger()<this.MaxHunger*this.Hungrylevel;}
+    {return this.getHunger()<this.getMaxHunger()*this.Hungrylevel;}
     
     public boolean IsDeadlyHungry()
-    {return this.getHunger()<this.MaxHunger*(1-this.Hungrylevel);}
+    {return this.getHunger()<this.getMaxHunger()*(1-this.Hungrylevel);}
 
     
     public int getHungerTick()
@@ -329,9 +341,6 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
 
     public void setHungerTick(int var1)
     {this.dataWatcher.updateObject(HUNGER_TICK_DATA_INDEX, Integer.valueOf(var1));}
-    
-    public void increaseHungerTick()
-    {this.setHungerTick(this.getHungerTick() + 1);}
 
     public void decreaseHungerTick()
     {
@@ -379,17 +388,18 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
     {
+    	//this.getClass();//needed to set which is the actual instance using this function
     	p0.reset();
     	p0.PrintStringXY(Fossil.GetLangTextByKey("Dino."+this.SelfType.toString()), 97, 23,40,90,245);
     	p0.PrintPictXY("/fossil/textures/PediaClock.png", 97, 34,8,8);
     	p0.PrintPictXY("/fossil/textures/PediaHeart.png", 97, 46,9,9);
     	p0.PrintPictXY("/fossil/textures/PediaFood.png", 97, 58,9,9);
     	if(this.getDinoAge()==1)
-    		p0.PrintStringXY("" + this.getDinoAge() +" "+ Fossil.GetLangTextByKey("PediaText.Day"), 109, 35);
+    		p0.PrintStringXY(String.valueOf(this.getDinoAge()) +" "+ Fossil.GetLangTextByKey("PediaText.Day"), 109, 35);
     	else
-    		p0.PrintStringXY("" + this.getDinoAge() +" "+ Fossil.GetLangTextByKey("PediaText.Days"), 109, 35);
-    	p0.PrintStringXY("" + this.getHealth() + '/' + this.getMaxHealth(), 109, 47);
-    	p0.PrintStringXY("" + this.getHunger() + '/' + this.MaxHunger, 109, 59);
+    		p0.PrintStringXY(String.valueOf(this.getDinoAge()) +" "+ Fossil.GetLangTextByKey("PediaText.Days"), 109, 35);
+    	p0.PrintStringXY(String.valueOf(this.getHealth()) + '/' + this.getMaxHealth(), 109, 47);
+    	p0.PrintStringXY(String.valueOf(this.getHunger()) + '/' + this.getMaxHunger(), 109, 59);
     	
     	if(this.SelfType.isRideable() && this.isAdult())
     		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Rideable"), true);
@@ -417,17 +427,17 @@ public abstract class EntityDinosaurce extends EntityTameable implements IEntity
     	if(this.IsHungry() && this.FoodItemList.CheckItemById(item0.itemID))
     	{	//The Dino is Hungry and it can eat the item
     		this.showHeartsOrSmokeFX(false);
-    		while(i > 0 && this.getHunger() < this.MaxHunger)
+    		while(i > 0 && this.getHunger() < this.getMaxHunger())
     		{
     			this.setHunger(this.getHunger()+ this.FoodItemList.getItemFood(item0.itemID));
     			this.heal(this.FoodItemList.getItemHeal(item0.itemID));
     			i--;
     		}	
-    		if(this.getHunger() > this.MaxHunger)
+    		if(this.getHunger() > this.getMaxHunger())
     		{
     			if(this.isTamed())
     				this.SendStatusMessage(EnumSituation.Full);
-    			this.setHunger(this.MaxHunger);
+    			this.setHunger(this.getMaxHunger());
     		}
     	}
     	return i;
@@ -920,10 +930,10 @@ var1.
             this.ItemInMouth = null;
         }
         
-        if (this.getHunger() <= 0)
+        /*if (this.getHunger() <= 0)
         {
-            this.setHunger(this.MaxHunger);
-        }
+            this.setHunger(this.getMaxHunger());
+        }*/
 
         this.OrderStatus = EnumOrderType.values()[var1.getByte("OrderStatus")];
         String var2 = var1.getString("Owner");
@@ -973,6 +983,7 @@ var1.
      */
     public boolean interact(EntityPlayer var1)
     {
+    	//this.getClass();//needed to set which is the actual instance using this function
         if (this.isModelized())
         {
             return this.modelizedInteract(var1);
@@ -983,7 +994,7 @@ var1.
 
             if (var2 != null)
             {
-            	if (var2.itemID == Fossil.chickenEss.itemID)
+            	if (var2.itemID == Fossil.chickenEss.itemID && !var1.worldObj.isRemote)
             	{// Be grown up by chicken essence
             		if (this.getDinoAge() < this.AdultAge && this.getHunger() > 0)
             	    {
@@ -999,24 +1010,24 @@ var1.
             	     }
             	     return false;
             	}
-            	if (this.FoodItemList.CheckItemById(var2.itemID))
+            	if (this.FoodItemList.CheckItemById(var2.itemID) && !var1.worldObj.isRemote)
             	{//Item is one of the dinos food items
-            		if(this.MaxHunger>this.getHunger())
+            		if(this.getMaxHunger()>this.getHunger())
                 	{	//The Dino is Hungry and it can eat the item
                 		this.showHeartsOrSmokeFX(false);
-                		this.setHunger(this.getHunger()+this.FoodItemList.getItemFood(var2.itemID));
+                		this.increaseHunger(this.FoodItemList.getItemFood(var2.itemID));
                 		this.heal(this.FoodItemList.getItemHeal(var2.itemID));
-                		if(this.getHunger() > this.MaxHunger)
+                		if(this.getHunger() >= this.getMaxHunger())
                 		{
                 			if(this.isTamed())
                 				this.SendStatusMessage(EnumSituation.Full);
-                			this.setHunger(this.MaxHunger);
+                			//this.setHunger(this.getMaxHunger());
                 		}
                 		--var2.stackSize;
-	                    if (var2.stackSize <= 0)
+	                    /*if (var2.stackSize <= 0)
 	                    {
 	                        var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-	                    }
+	                    }*/
 	                    if(!this.isTamed() && this.SelfType.isTameable() && (new Random()).nextInt(10)==1)//taming probability 10% (not TREX!)
 	                    {
 	                    	this.setTamed(true);
@@ -1031,23 +1042,23 @@ var1.
             			{//It has nothing in it's mouth
             				this.HoldItem(var2);
             				--var2.stackSize;
-    	                    if (var2.stackSize <= 0)
+    	                    /*if (var2.stackSize <= 0)
     	                    {
     	                        var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-    	                    }
+    	                    }*/
     	                    return true;
             			}
             			else
             			{
             				if(this.FoodItemList.getItemFood(ItemInMouth.itemID)<this.FoodItemList.getItemFood(var2.itemID))
             				{//The item given is better food for the dino
-            					//TODO: Spit out the old item
+            					entityDropItem(new ItemStack(this.ItemInMouth.itemID, 1, 0), 0.5F);//Spit out the old item
             					this.HoldItem(var2);
             					--var2.stackSize;
-        	                    if (var2.stackSize <= 0)
+        	                    /*if (var2.stackSize <= 0)
         	                    {
         	                        var1.inventory.setInventorySlotContents(var1.inventory.currentItem, (ItemStack)null);
-        	                    }
+        	                    }*/
             				}
             			}
             		}
@@ -1071,7 +1082,10 @@ var1.
     	                    this.OrderStatus = EnumOrderType.values()[(this.OrderStatus.ordinal()+1) % 3/*(Fossil.EnumToInt(this.OrderStatus) + 1) % 3*/];
     	                    this.SendOrderMessage(this.OrderStatus);
     	                    if(this.OrderStatus==EnumOrderType.Stay)
+    	                    {
+    	                    	this.getNavigator().clearPathEntity();
     	                    	this.setPathToEntity(null);
+    	                    }
     	
     	                    /*switch (EntityTriceratops$1.$SwitchMap$mod_Fossil$EnumOrderType[this.OrderStatus.ordinal()])
     	                    {//This is not neccessary anymore because the sitting is handled directly through the orderstatus

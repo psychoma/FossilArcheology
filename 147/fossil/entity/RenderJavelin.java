@@ -22,15 +22,15 @@ public class RenderJavelin extends Render
                 this.loadTexture("/fossil/textures/IronJavelin.png");
                 break;
 
-            case 3:
+            case 4:
                 this.loadTexture("/fossil/textures/GoldJavelin.png");
                 break;
 
-            case 4:
+            case 3:
                 this.loadTexture("/fossil/textures/DiamondJavelin.png");
                 break;
 
-            case 5:
+            case 0:
             default:
                 this.loadTexture("/fossil/textures/WoodenJavelin.png");
         }
