@@ -69,6 +69,7 @@ public class EntityTRex extends EntityDinosaurce
         this.setSize(2.5F, 2.5F);
         //this.moveSpeed = 0.3F;
         this.health = 10;
+        this.experienceValue=20;
         
         this.Width0=0.7F;
         this.WidthInc=0.07F;

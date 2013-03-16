@@ -67,6 +67,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         //this.moveSpeed = 0.3F;
         this.health = 10;
         //this.attackStrength = 4 + 2 * this.getDinoAge();
+        this.experienceValue=20;
         
         this.Width0=0.25F;
         this.WidthInc=0.25F;

@@ -12,6 +12,7 @@ public class EntityFailuresaurus extends EntityZombie
     {
         super(var1);
         this.texture = "/fossil/textures/Failuresaurus.png";
+        this.experienceValue=4;
     }
 
     /**

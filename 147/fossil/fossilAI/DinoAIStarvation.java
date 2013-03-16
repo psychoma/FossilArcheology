@@ -2,6 +2,8 @@ package fossil.fossilAI;
 
 import fossil.client.FossilOptions;
 import fossil.entity.mob.EntityDinosaurce;
+import fossil.fossilEnums.EnumOrderType;
+import fossil.fossilEnums.EnumSituation;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -21,10 +23,10 @@ public class DinoAIStarvation extends EntityAIBase
     public boolean shouldExecute()
     {
         //if (FossilOptions.DinoHunger)
-        {
+        //{
             this.mover.decreaseHungerTick();
             return this.mover.getHungerTick() <= 0;// && this.mover.worldObj.difficultySetting > 0;
-        }
+        //}
         //return false;
     }
 
@@ -36,6 +38,11 @@ public class DinoAIStarvation extends EntityAIBase
         //this.mover.getClass();
         this.mover.setHungerTick(300);
         this.mover.decreaseHunger();
+        if(this.mover.IsDeadlyHungry() && this.mover.OrderStatus!=EnumOrderType.FreeMove)
+        {
+        	this.mover.OrderStatus=EnumOrderType.FreeMove;
+        	this.mover.SendStatusMessage(EnumSituation.StarveEsc);
+        }
         if(this.mover.ItemInMouth != null)//The Dino has something in its mouth and gets hungry
         {
         	if(this.mover.FoodItemList.CheckItemById(this.mover.ItemInMouth.itemID))
@@ -64,6 +71,8 @@ public class DinoAIStarvation extends EntityAIBase
 
     private void handleStarvation()
     {
+    	if(this.mover.getHealth()<=5)
+    		this.mover.SendStatusMessage(EnumSituation.Starve);
         this.mover.attackEntityFrom(DamageSource.starve, 5);
     }
 }

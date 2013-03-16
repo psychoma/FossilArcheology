@@ -217,9 +217,11 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
      */
     public void onUpdate()
     {
+    	
         super.onUpdate();
+        //if(!this.worldObj.isRemote)
         this.HandleHatching();
-        super.onUpdate();
+        //super.onUpdate();
 
         if (this.timeSinceHit > 0)
         {
@@ -419,6 +421,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     }
     private void HandleHatching()
     {
+    	//this.getClass();//needed to set which is the actual instance using this function
         float var2 = this.getBrightness(1.0F);
         EntityPlayer var4 = null;
 
@@ -466,7 +469,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         {
             if (this.BirthTick >= this.HatchingNeedTime)
             {
-                if (this.worldObj.isRemote)return;
+                //if (this.worldObj.isRemote)return;
 
                 BiomeGenBase var3 = this.worldObj.provider.worldChunkMgr.getBiomeGenAt((int)Math.floor(this.posX), (int)Math.floor(this.posZ));
                 Object var5 = null;
@@ -610,7 +613,8 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     {
         return this.DinoInside.ordinal();
     }
-
+    
+    @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
     {
     	Item it0;

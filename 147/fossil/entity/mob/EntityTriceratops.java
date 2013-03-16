@@ -60,6 +60,7 @@ public class EntityTriceratops extends EntityDinosaurce
         this.looksWithInterest = false;
         this.updateSize();
         this.health = 8;
+        this.experienceValue=3;
         
         this.Width0=1.2F;
         this.WidthInc=0.4F;
@@ -612,7 +613,35 @@ public class EntityTriceratops extends EntityDinosaurce
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
     {
+    	//this.getClass();//needed to set which is the actual instance using this function
     	super.ShowPedia(p0);
+    	/*p0.reset();
+    	p0.PrintStringXY(Fossil.GetLangTextByKey("Dino."+this.SelfType.toString()), 97, 23,40,90,245);
+    	p0.PrintPictXY("/fossil/textures/PediaClock.png", 97, 34,8,8);
+    	p0.PrintPictXY("/fossil/textures/PediaHeart.png", 97, 46,9,9);
+    	p0.PrintPictXY("/fossil/textures/PediaFood.png", 97, 58,9,9);
+    	if(this.getDinoAge()==1)
+    		p0.PrintStringXY("" + this.getDinoAge() +" "+ Fossil.GetLangTextByKey("PediaText.Day"), 109, 35);
+    	else
+    		p0.PrintStringXY("" + this.getDinoAge() +" "+ Fossil.GetLangTextByKey("PediaText.Days"), 109, 35);
+    	p0.PrintStringXY("" + this.getHealth() + '/' + this.getMaxHealth(), 109, 47);
+    	p0.PrintStringXY("" + this.getHunger() + '/' + this.MaxHunger, 109, 59);
+    	
+    	if(this.SelfType.isRideable() && this.isAdult())
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Rideable"), true);
+    	if(this.SelfType.isTameable() && this.isTamed())
+    	{
+    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Owner"), true);
+    		String s0=this.getOwnerName();
+    		if(s0.length()>11)
+    			s0=this.getOwnerName().substring(0, 11);
+    		p0.AddStringLR(s0, true);
+    	}
+    	for(int i=0; i<this.FoodItemList.index;i++)
+    	{
+    		if(this.FoodItemList.getItem(i)!=null)
+    			p0.AddMiniItem(this.FoodItemList.getItem(i));
+    	}*/
     	p0.PrintItemXY(Fossil.dnaTriceratops, 120, 7);
     }
     

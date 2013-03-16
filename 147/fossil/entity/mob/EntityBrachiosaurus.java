@@ -58,6 +58,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         this.SelfType = EnumDinoType.Brachiosaurus;
         this.setSize(1.5F, 1.5F);
         this.health = 8;
+        this.experienceValue=5;
         
         
         this.Width0=1.5F;

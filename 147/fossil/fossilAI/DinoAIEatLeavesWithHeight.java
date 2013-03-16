@@ -116,7 +116,7 @@ public class DinoAIEatLeavesWithHeight extends EntityAIBase
             {
                 var1.playAuxSFX(2001, (int)this.destX, (int)this.destY, (int)this.destZ, Block.leaves.blockID + 4096);
                 var1.setBlockWithNotify((int)this.destX, (int)this.destY, (int)this.destZ, 0);
-                this.entityVar.setHunger(this.entityVar.getHunger()+30);
+                this.entityVar.increaseHunger(30);
 
                 if (!this.entityVar.IsHungry())//(float)this.entityVar.getHunger() > this.HUNT_LIMIT)
                 {

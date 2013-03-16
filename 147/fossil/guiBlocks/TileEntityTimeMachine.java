@@ -1,6 +1,8 @@
 package fossil.guiBlocks;
 
 import java.util.Random;
+
+import fossil.Fossil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -30,7 +32,7 @@ public class TileEntityTimeMachine extends TileEntity implements IInventory, ISi
     private int[][][] memoryArray = (int[][][])null;
     private int[][][] memoryMDArray = (int[][][])null;
     public boolean isRestoring = false;
-    private int restoringLayer = 0;
+    private int restoringLayer = 60;
     private int restoreTick = 0;
     private final int RESTORE_TICK = 10;
 
@@ -51,6 +53,8 @@ public class TileEntityTimeMachine extends TileEntity implements IInventory, ISi
             {
                 this.startMemory();
             }
+            //if (this.memoryArray != null && this.memoryMDArray != null && this.isCharged())
+            //	this.startWork();
         }
         else if (++this.restoreTick == 10)
         {
@@ -374,7 +378,8 @@ public class TileEntityTimeMachine extends TileEntity implements IInventory, ISi
                     {
                         this.memoryMDArray[var1][var2][var3] = 0;
                     }
-
+                    if(var4==Block.dirt.blockID)
+                    	var4=Fossil.palaePlanks.blockID;
                     this.memoryArray[var1][var2][var3] = var4;
                 }
             }

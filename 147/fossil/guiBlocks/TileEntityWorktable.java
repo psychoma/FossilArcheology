@@ -3,6 +3,7 @@ package fossil.guiBlocks;
 import fossil.Fossil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -148,14 +149,14 @@ public class TileEntityWorktable extends TileEntity implements IInventory, ISide
 
     public int getCookProgressScaled(int var1)
     {
-        return this.furnaceCookTime * var1 / 3000;
+        return this.furnaceCookTime * var1 / this.timeToSmelt();
     }
 
     public int getBurnTimeRemainingScaled(int var1)
     {
         if (this.currentItemBurnTime == 0)
         {
-            this.currentItemBurnTime = 3000;
+            this.currentItemBurnTime = timeToSmelt();
         }
 
         return this.furnaceBurnTime * var1 / this.currentItemBurnTime;
@@ -213,7 +214,7 @@ public class TileEntityWorktable extends TileEntity implements IInventory, ISide
             {
                 ++this.furnaceCookTime;
 
-                if (this.furnaceCookTime == 3000)
+                if (this.furnaceCookTime == timeToSmelt())
                 {
                     this.furnaceCookTime = 0;
                     this.smeltItem();
@@ -246,7 +247,8 @@ public class TileEntityWorktable extends TileEntity implements IInventory, ISide
         }
         else
         {
-            ItemStack var1 = this.CheckSmelt(this.furnaceItemStacks[0].getItem().itemID);
+            //ItemStack var1 = this.CheckSmelt(this.furnaceItemStacks[0].getItem().itemID);
+        	ItemStack var1 = this.CheckSmelt(this.furnaceItemStacks[0]);
             return var1 == null ? false : (this.furnaceItemStacks[2] == null ? true : (!this.furnaceItemStacks[2].isItemEqual(var1) ? false : (this.furnaceItemStacks[2].stackSize < this.getInventoryStackLimit() && this.furnaceItemStacks[2].stackSize < this.furnaceItemStacks[2].getMaxStackSize() ? true : this.furnaceItemStacks[2].stackSize < var1.getMaxStackSize())));
         }
     }
@@ -255,7 +257,7 @@ public class TileEntityWorktable extends TileEntity implements IInventory, ISide
     {
         if (this.canSmelt())
         {
-            ItemStack var1 = this.CheckSmelt(this.furnaceItemStacks[0].getItem().itemID);
+            ItemStack var1 = this.CheckSmelt(this.furnaceItemStacks[0]);
 
             if (this.furnaceItemStacks[2] == null)
             {
@@ -303,9 +305,60 @@ public class TileEntityWorktable extends TileEntity implements IInventory, ISide
         return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : var1.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
     }
 
-    private ItemStack CheckSmelt(int var1)
+    /*private ItemStack CheckSmelt(int var1)
     {
         return var1 == Fossil.brokenSword.itemID ? new ItemStack(Fossil.ancientSword) : (var1 == Fossil.brokenhelmet.itemID ? new ItemStack(Fossil.ancienthelmet) : (var1 == Fossil.gemAxe.itemID ? new ItemStack(Fossil.gemAxe) : (var1 == Fossil.gemPickaxe.itemID ? new ItemStack(Fossil.gemPickaxe) : (var1 == Fossil.gemSword.itemID ? new ItemStack(Fossil.gemSword) : (var1 == Fossil.gemHoe.itemID ? new ItemStack(Fossil.gemHoe) : (var1 == Fossil.gemShovel.itemID ? new ItemStack(Fossil.gemShovel) : null))))));
+    }*/
+    
+    private ItemStack CheckSmelt(ItemStack var1)
+    {
+    	ItemStack n=null;
+        if(var1.getItem().itemID == Fossil.brokenSword.itemID)return new ItemStack(Fossil.ancientSword);
+        if(var1.getItem().itemID == Fossil.brokenhelmet.itemID)return new ItemStack(Fossil.ancienthelmet);
+        
+        if(var1.getItem().itemID == Fossil.gemAxe.itemID)n= new ItemStack(Fossil.gemAxe);
+        if(var1.getItem().itemID == Fossil.gemPickaxe.itemID)n= new ItemStack(Fossil.gemPickaxe);
+        if(var1.getItem().itemID == Fossil.gemSword.itemID)n= new ItemStack(Fossil.gemSword);
+        if(var1.getItem().itemID == Fossil.gemHoe.itemID)n= new ItemStack(Fossil.gemHoe);
+        if(var1.getItem().itemID == Fossil.gemShovel.itemID)n= new ItemStack(Fossil.gemShovel);
+        if(n!=null)
+        {
+        	if(var1.getItemDamage()/var1.getMaxDamage()>=0.1F)
+        		n.setItemDamage(var1.getItemDamage()-(int)(0.1*var1.getMaxDamage()));
+        	else
+        		n.setItemDamage(0);
+        	return n;
+        }
+        if(var1.getItem().itemID == Fossil.woodjavelin.itemID)n=new ItemStack(Fossil.woodjavelin,1);
+        if(var1.getItem().itemID == Fossil.stonejavelin.itemID)n=new ItemStack(Fossil.stonejavelin,1);
+        if(var1.getItem().itemID == Fossil.ironjavelin.itemID)n=new ItemStack(Fossil.ironjavelin,1);
+        if(var1.getItem().itemID == Fossil.goldjavelin.itemID)n=new ItemStack(Fossil.goldjavelin,1);
+        if(var1.getItem().itemID == Fossil.diamondjavelin.itemID)n=new ItemStack(Fossil.diamondjavelin,1);
+        if(n!=null)
+        {
+        	if(var1.getItemDamage()>5)
+        		n.setItemDamage(var1.getItemDamage()-5);
+        	else
+        		n.setItemDamage(0);
+        	return n;
+        }
+        if(var1.getItem().itemID == Fossil.ancientJavelin.itemID)
+        {
+        	n=new ItemStack(Fossil.ancientJavelin,1);
+        	if(var1.getItemDamage()>3)
+        		n.setItemDamage(var1.getItemDamage()-3);
+        	else
+        		n.setItemDamage(0);
+        	return n;
+        }
+        return null;
+    }
+    private int timeToSmelt()
+    {
+    	if(this.furnaceItemStacks[0]==null)return 3000;
+    	if(this.furnaceItemStacks[0].getItem().itemID==Fossil.ancientSword.itemID)return 3000;
+    	if(this.furnaceItemStacks[0].getItem().itemID==Fossil.ancienthelmet.itemID)return 3000;
+    	return 300;
     }
 
     public void openChest() {}

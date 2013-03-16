@@ -56,6 +56,7 @@ import fossil.entity.mob.EntityStegosaurus;
 import fossil.entity.mob.EntityTRex;
 import fossil.entity.mob.EntityTriceratops;
 import fossil.entity.mob.EntityDilophosaurus;
+import fossil.entity.BehaviorJavelinDispense;
 //import fossil.fossilEnums.EnumAnimalType;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumEmbryos;
@@ -133,6 +134,7 @@ import fossil.tabs.TabFItems;
 import fossil.tabs.TabFMaterial;
 import fossil.tabs.TabFTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
@@ -141,6 +143,7 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.ModLoader;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.StringTranslate;
@@ -170,7 +173,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = "Fossil", name = "Fossil/Archeology", version = "1.47 0003_pre")
+@Mod(modid = "Fossil", name = "Fossil/Archeology", version = "1.47 0003")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 
 public class Fossil 
@@ -195,7 +198,7 @@ public class Fossil
 	 * If DebugMode = true
 	 * HatchTime is set to 1
 	 */
-	public static boolean DebugMode = true;
+	public static boolean DebugMode = false;
 	public static final double MESSAGE_DISTANCE = 25.0D;
 	
     //private static int[] blockIDs = new int[] {1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1151, 1152, 1153};
@@ -969,6 +972,14 @@ public class Fossil
 		
 		//make the dino types complete by registering the dinos items
 		EnumDinoType.init();
+		//Initiate some other things...
+		BlockDispenser.dispenseBehaviorRegistry.putObject(Fossil.ancientJavelin, new BehaviorJavelinDispense(MinecraftServer.getServer(),-1));
+		
+		BlockDispenser.dispenseBehaviorRegistry.putObject(Fossil.woodjavelin, new BehaviorJavelinDispense(MinecraftServer.getServer(),0));
+		BlockDispenser.dispenseBehaviorRegistry.putObject(Fossil.stonejavelin, new BehaviorJavelinDispense(MinecraftServer.getServer(),1));
+		BlockDispenser.dispenseBehaviorRegistry.putObject(Fossil.ironjavelin, new BehaviorJavelinDispense(MinecraftServer.getServer(),2));
+		BlockDispenser.dispenseBehaviorRegistry.putObject(Fossil.diamondjavelin, new BehaviorJavelinDispense(MinecraftServer.getServer(),3));
+		BlockDispenser.dispenseBehaviorRegistry.putObject(Fossil.goldjavelin, new BehaviorJavelinDispense(MinecraftServer.getServer(),4));
 		
 		//HarvestLevel
 		MinecraftForge.setBlockHarvestLevel(blockFossil, 0, "pickaxe", 2);

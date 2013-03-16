@@ -2,6 +2,7 @@ package fossil.blocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -27,23 +28,22 @@ public class BlockPalmSapling extends BlockFlower
         this.setCreativeTab(Fossil.tabFBlocks);
 	}
 
-	@SideOnly(Side.SERVER)
+	//@SideOnly(Side.SERVER)
     public void updateTick(World world, int i, int j, int k, Random random)
     {
-        if(world.isRemote)
-        {
-        	return;
-        }
-        super.updateTick(world, i, j, k, random);
-
-        if(world.getBlockLightValue(i, j + 1, k) >= 9 && random.nextInt(7) == 0)
-        {
-            int l = world.getBlockMetadata(i, j, k);
-            if((l & 8) == 0)
-            	world.setBlockMetadataWithNotify(i, j, k, l | 8);
-            else
-                growTree(world, i, j, k, random);
-        }
+    	if(!world.isRemote)
+    	{
+	        super.updateTick(world, i, j, k, random);
+	
+	        if(world.getBlockLightValue(i, j + 1, k) >= 9 && random.nextInt(7) == 0)
+	        {
+	            int l = world.getBlockMetadata(i, j, k);
+	            if((l & 8) == 0)
+	            	world.setBlockMetadataWithNotify(i, j, k, l | 8);
+	            else
+	                growTree(world, i, j, k, random);
+	        }
+    	}
     }
 
     public int getBlockTextureFromSideAndMetadata(int i, int j)
@@ -72,8 +72,8 @@ public class BlockPalmSapling extends BlockFlower
         int j1 = world.getBlockId(i, j - 1, k);
 		if((j1 == Block.grass.blockID || j1 == Block.dirt.blockID) && j < 128 - 12 - 1)
         {
-            world.setBlock/*AndMetadata*/(i, j, k, Fossil.palmLog.blockID);//, l);
             w0.generate(world,random,i,j,k);
+            world.setBlock/*AndMetadata*/(i, j, k, Fossil.palmLog.blockID);//, l);
         }
     }
 
@@ -87,20 +87,23 @@ public class BlockPalmSapling extends BlockFlower
     	return ("/fossil/textures/Fos_items.png");
     }
 
-    @SideOnly(Side.SERVER)
+    //@SideOnly(Side.SERVER)
     public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par2, float par3, float par4, float par5)
     {
-       ItemStack equipped = entityplayer.getCurrentEquippedItem();
-       if (equipped != null && (equipped.getItem() == Item.dyePowder) && (equipped.getItemDamage() == 15)) //if bone meal
-       {
-    	   int j1 = world.getBlockId(i, j, k);
-    	   if((j1 == Fossil.palmSap.blockID))
-           {
-    		   growTree(world, i, j, k, world.rand);
-    		   equipped.stackSize -= 1;
-           }
-    	   return true;
-       }
-       return false;
+    	if(!world.isRemote)
+    	{
+    		ItemStack equipped = entityplayer.getCurrentEquippedItem();
+    		if (equipped != null && (equipped.getItem() == Item.dyePowder) && (equipped.getItemDamage() == 15)) //if bone meal
+    		{
+    			int j1 = world.getBlockId(i, j, k);
+    			if((j1 == Fossil.palmSap.blockID))
+    			{
+    				growTree(world, i, j, k, world.rand);
+    				equipped.stackSize -= 1;
+    			}
+    			return true;
+    		}
+    	}
+	    return false;
     }
 }
