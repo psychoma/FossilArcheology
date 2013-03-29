@@ -4,7 +4,7 @@ import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fossil.Fossil;
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.fossilEnums.*;
 import fossil.items.ItemDinoMeat;
 import net.minecraft.block.Block;
@@ -368,7 +368,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
         }
     }
 
-    public void Feed(EntityDinosaurce var1, EnumDinoEating var2)
+    public void Feed(EntityDinosaur var1, EnumDinoEating var2)
     {
         while (var1.increaseHunger(1) && !this.CheckIsEmpty(var2))
         {

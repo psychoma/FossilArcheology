@@ -131,7 +131,7 @@ public class ModelPterosaurFlying extends ModelPterosaurGround
      */
     public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
     {
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, ((EntityDinosaurce)var1).isModelized());
+        this.setRotationAngles(var2, var3, var4, var5, var6, var7, ((EntityDinosaur)var1).isModelized());
         this.Body.render(var7);
         this.Neck_1.render(var7);
         this.New_Shape1.render(var7);
@@ -148,9 +148,9 @@ public class ModelPterosaurFlying extends ModelPterosaurGround
         this.right_leg.render(var7);
     }
 
-    protected void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, boolean var7)
+    protected void setRotationAngles()//float var1, float var2, float var3, float var4, float var5, float var6, boolean var7)
     {
-        if (var7==false)
+        //if (var7==false)
         {
             this.Left_wing_1.rotateAngleX = -((float)Math.PI / 2F) + this.AirPitch;
             this.Left_wing_2.rotateAngleX = ((float)Math.PI / 2F) + this.AirPitch;
@@ -165,6 +165,7 @@ public class ModelPterosaurFlying extends ModelPterosaurGround
             this.upper_mouth.rotateAngleX = this.AirPitch;
             this.lower_mouth.rotateAngleX = 0.1356083F + this.AirPitch;
             this.Left_leg.rotateAngleX = this.right_leg.rotateAngleX = ((float)Math.PI / 2F) + this.AirPitch;
+            
             this.Body.rotateAngleZ = this.AirRoll;
             this.Neck_1.rotateAngleZ = this.AirRoll;
             this.New_Shape1.rotateAngleZ = this.AirRoll;

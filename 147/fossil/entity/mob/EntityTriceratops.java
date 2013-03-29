@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 import fossil.Fossil;
+import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIEatFerns;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItem;
 import fossil.fossilAI.DinoAIPickItems;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAIUseFeeder;
@@ -23,16 +23,18 @@ import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,14 +44,14 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityTriceratops extends EntityDinosaurce
+public class EntityTriceratops extends EntityDinosaur
 {
     private boolean looksWithInterest;
     //public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
     /*private float field_25048_b;
     private float field_25054_c;
     private boolean field_25052_g;*/
-    public int RushTick = 0;
+    //public int RushTick = 0;
     public boolean Running = false;
 
     public EntityTriceratops(World var1)
@@ -58,7 +60,6 @@ public class EntityTriceratops extends EntityDinosaurce
         this.OrderStatus = EnumOrderType.FreeMove;
         this.SelfType = EnumDinoType.Triceratops;
         this.looksWithInterest = false;
-        this.updateSize();
         this.health = 8;
         this.experienceValue=3;
         
@@ -68,6 +69,11 @@ public class EntityTriceratops extends EntityDinosaurce
         this.LengthInc=0.7F;
         this.Height0=1.2F;
         this.HeightInc=0.36F;
+        
+        /*this.HitboxXfactor=5.0F;
+        this.HitboxYfactor=5.0F;
+        this.HitboxZfactor=5.0F;*/
+        
         this.BaseattackStrength=3;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
@@ -80,7 +86,8 @@ public class EntityTriceratops extends EntityDinosaurce
         //this.AgingTicks=;
         this.MaxHunger=500;
         //this.Hungrylevel=;
-        this.moveSpeed = this.getSpeed();//should work
+        this.updateSize();
+        //System.out.println("DINO SELF");
         
         this.FoodItemList.addItem(EnumDinoFoodItem.Wheat);
         this.FoodItemList.addItem(EnumDinoFoodItem.Melon);
@@ -93,17 +100,17 @@ public class EntityTriceratops extends EntityDinosaurce
         //this.tasks.addTask(0, new DinoAIGrowup(this));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this, 0.34F));
+        this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));//, 0.34F));
         this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
-        this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
+        this.tasks.addTask(4, new DinoAIAttackOnCollide(this, true));
+        this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
         this.tasks.addTask(6, new DinoAIEatFerns(this/*, this.MaxHunger*this.Hungrylevel*/));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24, EnumDinoEating.Herbivorous));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24, EnumDinoEating.Herbivorous));
         //this.tasks.addTask(7, new DinoAIPickItem(this, Item.wheat, this.moveSpeed, 24, this.HuntLimit));
         //this.tasks.addTask(7, new DinoAIPickItem(this, Item.appleRed, this.moveSpeed, 24, this.HuntLimit));
         //this.tasks.addTask(7, new DinoAIPickItem(this, Item.melon, this.moveSpeed, 24, this.HuntLimit));
-        this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
-        this.tasks.addTask(8, new DinoAIWander(this, this.moveSpeed));
+        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(8, new DinoAIWander(this));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(10, new EntityAILookIdle(this));
     }
@@ -544,8 +551,9 @@ public class EntityTriceratops extends EntityDinosaurce
         }
     }
 
-    public void BlockInteractive()
+    public int BlockInteractive()
     {
+    	int destroyed=0;
         for (int var1 = (int)Math.round(this.boundingBox.minX) - 1; var1 <= (int)Math.round(this.boundingBox.maxX) + 1; ++var1)
         {
             for (int var2 = (int)Math.round(this.boundingBox.minY); var2 <= (int)Math.round(this.boundingBox.maxY); ++var2)
@@ -558,7 +566,7 @@ public class EntityTriceratops extends EntityDinosaurce
 
                         if (!this.inWater)
                         {
-                            if (this.isTamed() && this.riddenByEntity == null)
+                            /*if (this.isTamed() && this.riddenByEntity == null)
                             {
                                 if (var4 == Block.wood.blockID || var4 == Block.leaves.blockID)
                                 {
@@ -566,7 +574,7 @@ public class EntityTriceratops extends EntityDinosaurce
                                     this.RushTick = 10;
                                 }
                             }
-                            else if ((double)Block.blocksList[var4].getBlockHardness(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ) < 5.0D || var4 == Block.wood.blockID)
+                            else*/ if ((double)Block.blocksList[var4].getBlockHardness(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ) <= 1.5D || var4 == Block.wood.blockID || var4 == Block.planks.blockID || var4 == Block.woodDoubleSlab.blockID || var4 == Block.woodSingleSlab.blockID)
                             {
                                 if ((new Random()).nextInt(10) == 5)
                                 {
@@ -574,13 +582,15 @@ public class EntityTriceratops extends EntityDinosaurce
                                 }
 
                                 this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
-                                this.RushTick = 10;
+                                destroyed++;
+                                //this.RushTick = 10;
                             }
                         }
                     }
                 }
             }
         }
+        return destroyed;
     }
 
     /*public boolean isWheat(ItemStack var1)
@@ -613,35 +623,7 @@ public class EntityTriceratops extends EntityDinosaurce
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
     {
-    	//this.getClass();//needed to set which is the actual instance using this function
     	super.ShowPedia(p0);
-    	/*p0.reset();
-    	p0.PrintStringXY(Fossil.GetLangTextByKey("Dino."+this.SelfType.toString()), 97, 23,40,90,245);
-    	p0.PrintPictXY("/fossil/textures/PediaClock.png", 97, 34,8,8);
-    	p0.PrintPictXY("/fossil/textures/PediaHeart.png", 97, 46,9,9);
-    	p0.PrintPictXY("/fossil/textures/PediaFood.png", 97, 58,9,9);
-    	if(this.getDinoAge()==1)
-    		p0.PrintStringXY("" + this.getDinoAge() +" "+ Fossil.GetLangTextByKey("PediaText.Day"), 109, 35);
-    	else
-    		p0.PrintStringXY("" + this.getDinoAge() +" "+ Fossil.GetLangTextByKey("PediaText.Days"), 109, 35);
-    	p0.PrintStringXY("" + this.getHealth() + '/' + this.getMaxHealth(), 109, 47);
-    	p0.PrintStringXY("" + this.getHunger() + '/' + this.MaxHunger, 109, 59);
-    	
-    	if(this.SelfType.isRideable() && this.isAdult())
-    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Rideable"), true);
-    	if(this.SelfType.isTameable() && this.isTamed())
-    	{
-    		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Owner"), true);
-    		String s0=this.getOwnerName();
-    		if(s0.length()>11)
-    			s0=this.getOwnerName().substring(0, 11);
-    		p0.AddStringLR(s0, true);
-    	}
-    	for(int i=0; i<this.FoodItemList.index;i++)
-    	{
-    		if(this.FoodItemList.getItem(i)!=null)
-    			p0.AddMiniItem(this.FoodItemList.getItem(i));
-    	}*/
     	p0.PrintItemXY(Fossil.dnaTriceratops, 120, 7);
     }
     

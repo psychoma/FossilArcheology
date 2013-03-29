@@ -3,6 +3,8 @@ package fossil;
 import java.io.BufferedReader;
 
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,6 +14,7 @@ import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import fossil.RenderHUD;
 import fossil.client.FossilCfgLoader;
 import fossil.client.FossilGuiHandler;
 import fossil.client.FossilMessageHandler;
@@ -38,7 +41,7 @@ import fossil.entity.EntityMLighting;
 import fossil.entity.EntityStoneboard;
 import fossil.entity.mob.EntityBones;
 import fossil.entity.mob.EntityBrachiosaurus;
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.entity.mob.EntityFailuresaurus;
 import fossil.entity.mob.EntityFriendlyPigZombie;
 import fossil.entity.mob.EntityMammoth;
@@ -56,6 +59,7 @@ import fossil.entity.mob.EntityStegosaurus;
 import fossil.entity.mob.EntityTRex;
 import fossil.entity.mob.EntityTriceratops;
 import fossil.entity.mob.EntityDilophosaurus;
+import fossil.entity.mob.Packet250RiderInput;
 import fossil.entity.BehaviorJavelinDispense;
 //import fossil.fossilEnums.EnumAnimalType;
 import fossil.fossilEnums.EnumDinoType;
@@ -143,14 +147,18 @@ import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.ModLoader;
 import net.minecraft.stats.Achievement;
 import net.minecraft.util.StringTranslate;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -165,18 +173,21 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IChatListener;
+import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod(modid = "Fossil", name = "Fossil/Archeology", version = "1.47 0003")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 
-public class Fossil 
+public class Fossil implements IPacketHandler
 {
 	@SidedProxy(clientSide = "fossil.client.ClientProxy", serverSide = "fossil.CommonProxy")
 	public static CommonProxy proxy;
@@ -185,6 +196,7 @@ public class Fossil
 	public static Fossil instance;
 	
 	public static FossilGuiHandler GH = new FossilGuiHandler();
+	public static FossilOptions FossilOptions;
 	public static Properties LangProps = new Properties();
 	public static int blockRendererID = 0;
 	public static Object ToPedia;
@@ -600,10 +612,11 @@ public class Fossil
 	public static int rawBrachiosaurusID;
 	public static int cookedDinoMeatID;
 	
-	public static boolean Option_Gen_Palaeoraphe;
+	/*public static boolean Option_Gen_Palaeoraphe;
 	public static boolean Option_Gen_Academy;
 	public static boolean Option_Gen_Ships;
 	public static String Option_Lang_Server;
+	public static boolean Option_Heal_Dinos;*/
 	
 	static EnumArmorMaterial dinoBone = EnumHelper.addArmorMaterial("DinoBone", 35, new int[]{4,9,7,6}, 15);
 	
@@ -804,11 +817,20 @@ public class Fossil
 		rawBrachiosaurusID = var2.getItem(Configuration.CATEGORY_ITEM, "rawBrachiosaurus", 10134).getInt(10134);
 		cookedDinoMeatID = var2.getItem(Configuration.CATEGORY_ITEM, "cookedDinoMeat", 10135).getInt(10135);
 		
-		Option_Gen_Palaeoraphe = var2.get("option", "Palaeoraphe", false).getBoolean(false);
+		/*Option_Gen_Palaeoraphe = var2.get("option", "Palaeoraphe", false).getBoolean(false);
 		Option_Gen_Academy = var2.get("option", "Academy", true).getBoolean(true);
 		Option_Gen_Ships = var2.get("option", "Ships", true).getBoolean(true);
 		Option_Lang_Server = var2.get("option", "Serverlanguage", "en_US").value;
-	
+		Option_Heal_Dinos = var2.get("option", "Heal_Dinos", true).getBoolean(true);*/
+		
+		//FossilOptions.Load(var2);
+		FossilOptions.Gen_Palaeoraphe = var2.get("option", "Palaeoraphe", false).getBoolean(false);
+		FossilOptions.Gen_Academy = var2.get("option", "Academy", true).getBoolean(true);
+		FossilOptions.Gen_Ships = var2.get("option", "Ships", true).getBoolean(true);
+		FossilOptions.Lang_Server = var2.get("option", "Serverlanguage", "en_US").value;
+		FossilOptions.Heal_Dinos = var2.get("option", "Heal_Dinos", true).getBoolean(true);
+		FossilOptions.Dinos_Starve = var2.get("option", "Dinos_Starve", true).getBoolean(true);
+		FossilOptions.Dino_Block_Breaking = var2.get("option", "Dino_Block_Breaking", true).getBoolean(true);
 		}
         catch (Exception var7)
         {
@@ -852,12 +874,12 @@ public class Fossil
         blockIcedStone = new BlockIcedStone(blockIcedStoneID, 6).setHardness(1.5F).setResistance(10.0F).setStepSound(Block.soundStoneFootstep).setBlockName("IcedStone").setRequiresSelfNotify().setCreativeTab(this.tabFBlocks);
         blockFossil = new BlockFossil(blockFossilID, 1).setHardness(3.0F).setResistance(5.0F).setStepSound(Block.soundStoneFootstep).setBlockName("fossil").setCreativeTab(this.tabFBlocks);
         blockSkull = new BlockFossilSkull(blockSkullID, 0, false).setHardness(1.0F).setStepSound(Block.soundStoneFootstep).setBlockName("Skull").setCreativeTab(this.tabFBlocks);
-        palmLog = new BlockPalmLog(palmLogID).setStepSound(Block.soundWoodFootstep).setHardness(2.0F)/*.setResistance(1.0F)*/.setBlockName("Palm Log").setRequiresSelfNotify();
+        palmLog = new BlockPalmLog(palmLogID).setStepSound(Block.soundWoodFootstep).setHardness(1.4F)/*.setResistance(1.0F)*/.setBlockName("Palm Log").setRequiresSelfNotify();
         palmLeaves = new BlockPalmLeaves(palmLeavesID, 53).setStepSound(Block.soundGrassFootstep).setHardness(0.2F).setResistance(1F).setBlockName("Palm Leaves").setRequiresSelfNotify();
         palmSap = new BlockPalmSapling(palmSapID, 62).setStepSound(Block.soundGrassFootstep).setHardness(0.2F).setResistance(1F).setBlockName("Palm Sapling").setRequiresSelfNotify();
         palaePlanks = new BlockPalaePlanks(palaePlanksID, 80).setHardness(2.0F).setResistance(5.0F).setStepSound(Block.soundWoodFootstep).setBlockName("palaePlanks").setRequiresSelfNotify();
-        palaeDoubleSlab = (FossilSlabs)(new BlockPalaeSlab(palaeDoubleSlabID, true)).setHardness(1.6F).setResistance(7.5F).setStepSound(Block.soundWoodFootstep).setBlockName("blackWoodSlab");
-        palaeSingleSlab = (FossilSlabs)(new BlockPalaeSlab(palaeSingleSlabID, false)).setHardness(1.6F).setResistance(7.5F).setStepSound(Block.soundWoodFootstep).setBlockName("blackWoodSlab").setCreativeTab(this.tabFBlocks);
+        palaeDoubleSlab = (FossilSlabs)(new BlockPalaeSlab(palaeDoubleSlabID, true)).setHardness(1.4F).setResistance(7.5F).setStepSound(Block.soundWoodFootstep).setBlockName("blackWoodSlab");
+        palaeSingleSlab = (FossilSlabs)(new BlockPalaeSlab(palaeSingleSlabID, false)).setHardness(1.4F).setResistance(7.5F).setStepSound(Block.soundWoodFootstep).setBlockName("blackWoodSlab").setCreativeTab(this.tabFBlocks);
         palaeStairs = new BlockPalaeStairs(palaeStairsID, palaePlanks, 80).setBlockName("blackWoodStairs").setRequiresSelfNotify();
         //volcanicAsh = new BlockVolcanicAsh(volcanicAshID, 1).setHardness(0.5F).setStepSound(Block.soundGrassFootstep).setBlockName("VolcanicAsh").setCreativeTab(this.tabFBlocks);
 		//volcanicRock = new BlockVolcanicRock(volcanicRockID, 1).setHardness(3.0F).setResistance(5.0F).setStepSound(Block.soundStoneFootstep).setBlockName("VolcanicRock").setCreativeTab(this.tabFBlocks);
@@ -1274,9 +1296,9 @@ public class Fossil
 		GameRegistry.registerWorldGenerator(new FossilGenerator());
 		GameRegistry.registerWorldGenerator(new TarGenerator());
 		//GameRegistry.registerWorldGenerator(new WorldGenPalaeoraphe());//not needed?
-		if(Fossil.Option_Gen_Ships==true)
+		if(FossilOptions.Gen_Ships)
 			GameRegistry.registerWorldGenerator(new WorldGenShips());
-		if(Fossil.Option_Gen_Academy==true)
+		if(FossilOptions.Gen_Academy)
 			GameRegistry.registerWorldGenerator(new WorldGenAcademy());
 		//GameRegistry.registerWorldGenerator(new WorldGenBigShip());
 		//GameRegistry.registerWorldGenerator(new WorldGenCheheWreck());
@@ -1286,12 +1308,13 @@ public class Fossil
 		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck270());
 		//GameRegistry.registerWorldGenerator(new WorldGenShipWreck90());
 		//GameRegistry.registerWorldGenerator(new WorldGenGalleonWreck());
-		if(Fossil.Option_Gen_Palaeoraphe==true)
+		if(FossilOptions.Gen_Palaeoraphe)
 			GameRegistry.registerWorldGenerator(new WorldGeneratorPalaeoraphe());
 		GameRegistry.registerWorldGenerator(new WorldGenWeaponShop());
 
 		NetworkRegistry.instance().registerChatListener(messagerHandler);
 		NetworkRegistry.instance().registerGuiHandler(this, GH);
+		NetworkRegistry.instance().registerChannel(this, "RiderInput");
 
 		GameRegistry.registerTileEntity(TileEntityCultivate.class, "Cultivate");
 		GameRegistry.registerTileEntity(TileEntityAnalyzer.class, "Analyzer");
@@ -1299,6 +1322,10 @@ public class Fossil
 		GameRegistry.registerTileEntity(TileEntityDrum.class, "Drum");
 		GameRegistry.registerTileEntity(TileEntityFeeder.class, "Feeder");
 		GameRegistry.registerTileEntity(TileEntityTimeMachine.class, "TimeMachine");
+		
+		TickRegistry.registerTickHandler(new RenderHUD(), Side.CLIENT);
+		TickRegistry.registerTickHandler(new RenderHUD(), Side.SERVER);
+		
 		
 		proxy.registerTileEntitySpecialRenderer();
         proxy.registerRenderThings();
@@ -1399,7 +1426,7 @@ public class Fossil
 				if(opt)//client
 					var2 = new BufferedReader(new FileReader(new File(Minecraft.getMinecraftDir(), path+Minecraft.getMinecraft().gameSettings.language+".lang")));
 				else//server
-					var2 = new BufferedReader(new FileReader(new File(".", path+Fossil.Option_Lang_Server+".lang")));
+					var2 = new BufferedReader(new FileReader(new File(".", path+FossilOptions.Lang_Server+".lang")));
 				for (String var3 = var2.readLine(); var3 != null; var3 = var2.readLine())
 				{
 		    		if (!var3.startsWith("#"))
@@ -1639,6 +1666,44 @@ public class Fossil
 	public void PostInit(FMLPostInitializationEvent event)
 	{
 		
+	}
+
+	@Override
+	public void onPacketData(INetworkManager manager,Packet250CustomPayload packet, Player player)
+	{
+		if("RiderInput".equals(packet.channel))
+		{
+			//System.out.println(packet.channel+"2");
+			DataInputStream in = new DataInputStream(new ByteArrayInputStream(packet.data));
+			try
+	        {
+				int EntityID = in.readInt();
+				float Strafe = in.readFloat();
+				float Forward = in.readFloat();
+				boolean Jump = in.readBoolean();
+				boolean Sneak = in.readBoolean();
+				
+				//Entity E0=Minecraft.getMinecraft().thePlayer.worldObj.getEntityByID(EntityID);
+				Entity E0 =((EntityPlayerMP)player).worldObj.getEntityByID(EntityID);
+				if(E0 instanceof EntityDinosaur)
+				{
+					//System.out.println("FOUND");
+					((EntityDinosaur) E0).RiderForward=Forward;
+					((EntityDinosaur) E0).RiderJump=Jump;
+					((EntityDinosaur) E0).RiderStrafe=Strafe;
+					((EntityDinosaur) E0).RiderSneak=Sneak;
+				}
+				//System.out.println(String.valueOf(EntityID)+":Output "+String.valueOf(Forward));
+				//System.out.println(String.valueOf(EntityID)+":Daataa "+String.valueOf(((EntityDinosaur) E0).RiderStrafe));
+				//System.out.println(String.valueOf(E0.worldObj.isRemote));
+	        }
+	        catch (IOException e)
+	        {
+	            throw new RuntimeException(e);
+	        }
+		}
+		//System.out.println(String.valueOf(((Packet250RiderInput)packet).Entity)+":Output "+String.valueOf(((Packet250RiderInput)packet).Strafe));
+		//System.out.println(packet.channel);
 	}
 	
 }

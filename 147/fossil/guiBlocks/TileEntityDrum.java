@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import fossil.Fossil;
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 //import fossil.entity.mob.EntityPterosaur;
 //import fossil.entity.mob.EntityRaptor;
 import fossil.entity.mob.EntityTRex;
@@ -123,13 +123,13 @@ public class TileEntityDrum extends TileEntity
 	        	if(EnumDinoType.values()[i].OrderItem!=null && EnumDinoType.values()[i].OrderItem.itemID==var1)
 	        		Fossil.ShowMessage(Fossil.GetLangTextByKey("Drum.Ordering")+ " " + Fossil.GetLangTextByKey("Dino."+EnumDinoType.values()[i].toString()) + ": " + Fossil.GetLangTextByKey("Order." + this.Order.toString()), var2);
 	        }		//Output: Ordering Triceratops: Stay
-	        List list = this.worldObj.getEntitiesWithinAABB(EntityDinosaurce.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)this.xCoord + 1.0D, (double)this.yCoord + 1.0D, (double)this.zCoord + 1.0D).expand(30.0D, 4.0D, 30.0D));
+	        List list = this.worldObj.getEntitiesWithinAABB(EntityDinosaur.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)this.xCoord + 1.0D, (double)this.yCoord + 1.0D, (double)this.zCoord + 1.0D).expand(30.0D, 4.0D, 30.0D));
 	        Iterator it = list.iterator();
 	
 	        while (it.hasNext())
 	        {
 	            Entity var3 = (Entity)it.next();
-	            EntityDinosaurce var4 = (EntityDinosaurce)var3;
+	            EntityDinosaur var4 = (EntityDinosaur)var3;
 	
 	            if (var1 == var4.SelfType.OrderItem.itemID && var4.isTamed() && var2.username.equalsIgnoreCase(var4.getOwnerName()))
 	            //{
@@ -212,7 +212,7 @@ public class TileEntityDrum extends TileEntity
         while (var2.hasNext())
         {
             Entity var3 = (Entity)var2.next();
-            EntityDinosaurce var4 = (EntityDinosaurce)var3;
+            EntityDinosaur var4 = (EntityDinosaur)var3;
 
             if (var4.isTamed())
             {
@@ -229,7 +229,7 @@ public class TileEntityDrum extends TileEntity
         while (var2.hasNext())
         {
             Entity var3 = (Entity)var2.next();
-            EntityDinosaurce var4 = (EntityDinosaurce)var3;
+            EntityDinosaur var4 = (EntityDinosaur)var3;
 
             if (var4.isTamed())
             {
@@ -246,7 +246,7 @@ public class TileEntityDrum extends TileEntity
         while (var2.hasNext())
         {
             Entity var3 = (Entity)var2.next();
-            EntityDinosaurce var4 = (EntityDinosaurce)var3;
+            EntityDinosaur var4 = (EntityDinosaur)var3;
 
             if (var4.isTamed())
             {

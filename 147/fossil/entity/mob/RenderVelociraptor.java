@@ -238,7 +238,7 @@ public class RenderVelociraptor extends RenderLiving
 
     protected void renderEquippedItems(EntityLiving var1, float var2)
     {
-        float var3 = 1.0F + 0.0F * (float)((EntityDinosaurce)var1).getDinoAge();
+        float var3 = 1.0F + 0.0F * (float)((EntityDinosaur)var1).getDinoAge();
         ItemStack var4 = ((EntityVelociraptor)var1).ItemInMouth;
 
         if (var4 != null)

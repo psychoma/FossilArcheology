@@ -192,7 +192,7 @@ public class BlockPalmLeaves extends BlockLeavesBase implements IShearable
    // this code deals with the drop rates
     public int quantityDropped(Random par1Random)
     {
-        return par1Random.nextInt(20) == 0 ? 1 : 0;
+        return par1Random.nextInt(15) == 0 ? 1 : 0;
     }
 
     //this makes it so sapplings can be droped if leaves are exploded. 
@@ -208,23 +208,23 @@ public class BlockPalmLeaves extends BlockLeavesBase implements IShearable
     {
         if (!par1World.isRemote)
         {
-            byte var8 = 20;
+            byte var8 = 15;
 
-            if ((par5 & 3) == 3)
-            {
+            /*if ((par5 & 3) == 3)
+            {//Change probability for Jungle Trees
                 var8 = 40;
-            }
+            }*/
 
             if (par1World.rand.nextInt(var8) == 0)
             {
-                int var9 = this.idDropped(par5, par1World.rand, par7);
-                this.dropBlockAsItem_do(par1World, par2, par3, par4, new ItemStack(var9, 1, this.damageDropped(par5)));
+                int var9 = Fossil.palmSap.blockID;//this.idDropped(par5, par1World.rand, par7);
+                this.dropBlockAsItem_do(par1World, par2, par3, par4, new ItemStack(var9, 1,0));// this.damageDropped(par5)));
             }
 
-            if ((par5 & 3) == 0 && par1World.rand.nextInt(200) == 0)
+            /*if ((par5 & 3) == 0 && par1World.rand.nextInt(200) == 0)
             {
                 this.dropBlockAsItem_do(par1World, par2, par3, par4, new ItemStack(Fossil.palmSap, 1, 0));
-            }
+            }*/
         }
     }
 
@@ -234,11 +234,11 @@ public class BlockPalmLeaves extends BlockLeavesBase implements IShearable
         super.harvestBlock(par1World, par2EntityPlayer, par3, par4, par5, par6);
     }
 
-    //you can ignore this
-    public int damageDropped(int par1)
+    //for the wood subtypes
+    /*public int damageDropped(int par1)
     {
         return par1 & 3;
-    }
+    }*/
 
     //this makes the block render correctly
     public boolean isOpaqueCube()
@@ -286,7 +286,7 @@ public class BlockPalmLeaves extends BlockLeavesBase implements IShearable
     @Override
     public void beginLeavesDecay(World world, int x, int y, int z)
     {
-        world.setBlockMetadata(x, y, z, world.getBlockMetadata(x, y, z) | 8);
+        //world.setBlockMetadata(x, y, z, world.getBlockMetadata(x, y, z) | 8);//Only for Subblocks
     }
 
     //tells minecraft this block is made of leaves

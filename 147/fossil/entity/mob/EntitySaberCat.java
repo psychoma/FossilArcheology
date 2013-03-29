@@ -775,6 +775,9 @@ public class EntitySaberCat extends EntityTameable
 	@Override
 	public EntityAgeable createChild(EntityAgeable var1) 
 	{
-		return null;
+		EntityAgeable var2 = (new EntitySaberCat(this.worldObj));
+		var2.setGrowingAge(-24000);
+        var2.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+		return var2;
 	}
 }

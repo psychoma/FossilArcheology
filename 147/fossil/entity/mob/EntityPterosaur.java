@@ -6,9 +6,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import fossil.Fossil;
+import fossil.fossilAI.DinoAIAttackOnCollide;
+import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItem;
 import fossil.fossilAI.DinoAIPickItems;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAIUseFeeder;
@@ -24,7 +25,6 @@ import net.minecraft.block.StepSound;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
@@ -44,7 +44,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityPterosaur extends EntityDinosaurce
+public class EntityPterosaur extends EntityDinosaur
 {
     //protected final int AGE_LIMIT = 8;
     //public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
@@ -57,11 +57,15 @@ public class EntityPterosaur extends EntityDinosaurce
     public int LearningChestTick = 900;
    // public int SubType = 0;
     //public int BreedTick = 3000;
-    public float AirSpeed = 0.0F;
+    public float AirSpeed = 0.0F;//Speed of the DinoAIControlledByPlayer instance
     public float AirAngle = 0.0F;
     public float AirPitch = 0.0F;
-    public float LastAirPitch = 0.0F;
+    //public float LastAirPitch = 0.0F;
     public boolean Landing = false;
+    
+    //public static final int AIR_SPEED_INDEX = 25;
+    public static final int AIR_ANGLE_INDEX = 26;
+    public static final int AIR_PITCH_INDEX = 27;
 
     public EntityPterosaur(World var1)
     {
@@ -69,7 +73,7 @@ public class EntityPterosaur extends EntityDinosaurce
         this.SelfType = EnumDinoType.Pterosaur;
         this.looksWithInterest = false;
         //this.CheckSkin();
-        this.setSize(0.8F, 0.8F);
+        //this.setSize(0.8F, 0.8F);
         //this.moveSpeed = 2.0F;
         this.health = 10;
         this.experienceValue=3;
@@ -92,7 +96,7 @@ public class EntityPterosaur extends EntityDinosaurce
         //this.AgingTicks=;
         //this.MaxHunger=;
         //this.Hungrylevel=;
-        this.moveSpeed = this.getSpeed();//should work
+        this.updateSize();
         
         FoodItemList.addItem(EnumDinoFoodItem.FishRaw);
         FoodItemList.addItem(EnumDinoFoodItem.FishCooked);
@@ -103,17 +107,18 @@ public class EntityPterosaur extends EntityDinosaurce
         this.texture = "/fossil/textures/Pterosaur.png";
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
-        this.tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
-        this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityTRex.class, 8.0F, 0.3F, 0.35F));
-        this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityBrachiosaurus.class, 8.0F, 0.3F, 0.35F));
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
-        this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
+        this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));//, 0.34F));
+        this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
+        //this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityTRex.class, 8.0F, 0.3F, 0.35F));
+        //this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityBrachiosaurus.class, 8.0F, 0.3F, 0.35F));
+        this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
+        this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
         /*this.tasks.addTask(6, new DinoAIPickItem(this, Item.fishRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.fishCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.sjl, this.moveSpeed * 2.0F, 24, this.HuntLimit));*/
-        this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
-        this.tasks.addTask(7, new DinoAIWander(this, this.moveSpeed));
+        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(7, new DinoAIWander(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
@@ -133,7 +138,15 @@ public class EntityPterosaur extends EntityDinosaurce
      */
     public boolean isAIEnabled()
     {
-        return this.isModelized() ? false : this.riddenByEntity == null;
+        return this.isModelized() ? false : true;//this.riddenByEntity == null;
+    }
+    
+    protected void entityInit()
+    {
+        super.entityInit();
+        //this.dataWatcher.addObject(AIR_SPEED_INDEX, new Integer(0));
+        this.dataWatcher.addObject(AIR_ANGLE_INDEX, new Integer(0));
+        this.dataWatcher.addObject(AIR_PITCH_INDEX, new Integer(0));
     }
 
     /**
@@ -164,10 +177,28 @@ public class EntityPterosaur extends EntityDinosaurce
         }*/
 
         //this.InitSize();
+        this.LearningChestTick=var1.getInteger("LearningChestTick");
         this.AirSpeed = var1.getFloat("Airspeed");
         this.AirAngle = var1.getFloat("AirAngle");
         this.AirPitch = var1.getFloat("AirPitch");
     }
+    /*public float getAirSpeed()
+    {return (float)(this.dataWatcher.getWatchableObjectInt(AIR_SPEED_INDEX)/100F);}
+    
+    public void setAirSpeed(float var1)
+    {this.dataWatcher.updateObject(AIR_SPEED_INDEX, Integer.valueOf((int)(var1*100)));}*/
+    
+    public float getAirAngle()
+    {return (float)(this.dataWatcher.getWatchableObjectInt(AIR_ANGLE_INDEX)/100.0F);}
+    
+    public void setAirAngle(float var1)
+    {this.dataWatcher.updateObject(AIR_ANGLE_INDEX, Integer.valueOf((int)(var1*100)));}
+   
+    public float getAirPitch()
+    {return (float)(this.dataWatcher.getWatchableObjectInt(AIR_PITCH_INDEX)/100.0F);}
+    
+    public void setAirPitch(float var1)
+    {this.dataWatcher.updateObject(AIR_PITCH_INDEX, Integer.valueOf((int)(var1*100)));}
 
     /**
      * Returns the sound this mob makes while it's alive.
@@ -205,11 +236,11 @@ public class EntityPterosaur extends EntityDinosaurce
      * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
      * use this to react to sunlight and start to burn.
      */
-    public void onLivingUpdate()
+    /*public void onLivingUpdate()
     {
         this.HandleRiding();
         super.onLivingUpdate();
-    }
+    }*/
 
     /**
      * Called to update the entity's position/logic.
@@ -239,7 +270,7 @@ public class EntityPterosaur extends EntityDinosaurce
             this.numTicksToChaseTarget = 10;
         }
     }
-    public boolean isLearnedChest()
+    public boolean hasLearnedChest()
     {
         return this.LearningChestTick == 0;
     }
@@ -330,7 +361,17 @@ public class EntityPterosaur extends EntityDinosaurce
 
         if (this.riddenByEntity != null)
         {
-            if (this.onGround)
+        	int heightt=10;
+        	for(int i=1;i<10;i++)
+        	{
+        		if(this.worldObj.isBlockNormalCube(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY)-i, MathHelper.floor_double(this.posZ)))
+        		{
+        			heightt=i;
+        			break;
+        		}
+        	}
+        	boolean onlyAjump=heightt<3;
+            if (this.onGround || this.isInWater() || onlyAjump)
             {
                 this.riddenByEntity.setPosition(this.posX, this.posY - (double)var1 * 1.1D, this.posZ);
             }
@@ -341,6 +382,7 @@ public class EntityPterosaur extends EntityDinosaurce
             else
             {
                 this.riddenByEntity.setPosition(this.posX, this.posY - (double)var1 * 0.6D, this.posZ);
+                //this.riddenByEntity.setAngles(this.rotationYaw, this.AirPitch);
             }
         }
     }
@@ -348,13 +390,13 @@ public class EntityPterosaur extends EntityDinosaurce
     /**
      * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
      */
-    public boolean interact(EntityPlayer var1)
+    /*public boolean interact(EntityPlayer var1)
     {
     	//Add special item interaction code here
         return super.interact(var1);
-    }
+    }*/
 
-    public void handleHealthUpdate(byte var1)
+    /*public void handleHealthUpdate(byte var1)
     {
         if (var1 == 7)
         {
@@ -372,7 +414,7 @@ public class EntityPterosaur extends EntityDinosaurce
         {
             super.handleHealthUpdate(var1);
         }
-    }
+    }*/
 
    /* public boolean isSelfAngry()
     {
@@ -584,123 +626,169 @@ public class EntityPterosaur extends EntityDinosaurce
      */
     public void jump()
     {
-        this.motionY = 0.8D;
+        this.motionY = 0.5D;
     }
-
-    private void HandleRiding()
+    @Override
+    public float HandleRiding(float Speed,float SpeedBoosted)
     {
-        if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityClientPlayerMP)
-        {
-            EntityClientPlayerMP var1 = (EntityClientPlayerMP)this.riddenByEntity;
-            this.HandleLanding();
-
-            if (!this.onGround && !this.inWater)
+        //if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityClientPlayerMP)
+        //{
+        //    EntityClientPlayerMP var1 = (EntityClientPlayerMP)this.riddenByEntity;
+    	int heightt=10;
+    	for(int i=1;i<10;i++)
+    	{
+    		if(this.worldObj.isBlockNormalCube(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY)-i, MathHelper.floor_double(this.posZ)))
+    		{
+    			heightt=i;
+    			break;
+    		}
+    	}
+    	boolean onlyAjump=heightt<3;
+    	//System.out.println("H: "+String.valueOf(heightt));
+    	//System.out.println("L: "+String.valueOf(this.Landing));
+    	
+            if (!this.onGround && !this.inWater && !onlyAjump && Speed>0F)
             {
-                this.AirAngle -= var1.movementInput.moveStrafe;
+            	if(this.AirSpeed==-1F)
+            	{
+            		this.AirPitch=-10F;
+            		this.AirSpeed=Speed*2.5F;
+            	}
+            	this.Landing=this.RiderSneak;
+            	/*if (!this.isCollidedVertically)
+                    if (!this.Landing && this.AirPitch == 40.0F)
+                        this.Landing = true;
+                else
+                    this.Landing = false;*/
+            	
+            	if(this.RiderStrafe!=0F)
+            		this.AirAngle -= this.RiderStrafe;
+            	else
+            	{
+            		if(this.AirAngle>0)
+            			this.AirAngle-=0.5F;
+            		if(this.AirAngle<0)
+            			this.AirAngle+=0.5F;
+            	}
 
                 if (this.AirAngle > 30.0F)
-                {
                     this.AirAngle = 30.0F;
-                }
 
                 if (this.AirAngle < -30.0F)
-                {
                     this.AirAngle = -30.0F;
-                }
 
-                if (Math.abs(this.AirAngle) > 10.0F)
-                {
-                    this.rotationYaw += (float)(this.AirAngle > 0.0F ? 1 : -1);
-                }
+                //if (Math.abs(this.AirAngle) > 10.0F)
+                    //this.rotationYaw += (float)(this.AirAngle > 0.0F ? 1 : -1);
+                this.rotationYaw += this.AirAngle/20F;
+                
 
-                while (this.rotationYaw < -180.0F)
-                {
+                /*while (this.rotationYaw < -180.0F)
                     this.rotationYaw += 360.0F;
-                }
 
                 while (this.rotationYaw >= 180.0F)
-                {
-                    this.rotationYaw -= 360.0F;
-                }
+                    this.rotationYaw -= 360.0F;*/
+                this.rotationYaw=MathHelper.wrapAngleTo180_float(this.rotationYaw);
 
                 if (this.Landing)
                 {
-                    this.AirPitch = 0.0F;
+                    this.AirPitch = 10.0F;
+                    this.AirSpeed = 1.5F * this.getSpeed();
 
                     if (!this.isCollidedVertically)
-                    {
                         this.motionY = -0.2D;
-                    }
                     else
-                    {
                         this.motionY = 0.0D;
-                    }
-
-                    this.setMoveForward(this.AirSpeed);
+                    this.motionX=-this.AirSpeed*MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F)*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
+                    this.motionZ=this.AirSpeed*MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F)*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
+                    this.posX+=this.motionX;
+                    this.posY+=this.motionY;
+                    this.posZ+=this.motionZ;
+                    //this.setMoveForward(this.AirSpeed);
                 }
                 else
                 {
                     if ((this.isCollidedHorizontally || this.isCollidedVertically) && this.AirSpeed != 0.0F)
                     {
                         this.AirSpeed = 0.0F;
-                        this.setMoveForward(0.0F);
-                        return;
+                        this.motionY = -0.2F;
+                        this.posY = -0.2F;
+                        //this.setMoveForward(0.0F);
+                        return 0;
                     }
 
-                    if (this.AirSpeed == 0.0F && this.moveForward != 0.0F)
+                    /*if (this.AirSpeed == 0.0F && this.moveForward != 0.0F)
                     {
                         this.AirSpeed = this.moveForward * this.moveSpeed;
-                    }
-
-                    this.AirAngle -= var1.movementInput.moveStrafe;
-
-                    if (this.AirAngle > 30.0F)
+                    }*/
+                    
+                    if(this.RiderForward!=0F)
+                    	this.AirPitch -= this.RiderForward*0.5F;
+                    else
                     {
-                        this.AirAngle = 30.0F;
+                    	if(this.AirPitch<0F)
+                    		this.AirPitch+=0.5F;
+                    	if(this.AirPitch>0F)
+                    		this.AirPitch-=0.5F;
                     }
 
-                    if (this.AirAngle < -30.0F)
-                    {
-                        this.AirAngle = -30.0F;
-                    }
-
-                    this.AirPitch -= var1.movementInput.moveForward * 2.0F;
-
-                    if (this.AirPitch > 90.0F)
-                    {
-                        this.AirPitch = 90.0F;
-                    }
+                    if (this.AirPitch > 40.0F)
+                        this.AirPitch = 40.0F;
 
                     if (this.AirPitch < -60.0F)
-                    {
                         this.AirPitch = -60.0F;
-                    }
 
-                    float var2 = (float)((double)this.AirPitch * 0.017453292519943295D);
+                    //float var2 = (float)((double)this.AirPitch * 0.017453292519943295D);
 
-                    if (this.LastAirPitch >= this.AirPitch)
+                    //if (this.LastAirPitch >= this.AirPitch)
                     {
-                        double var3 = Math.cos((double)var2);
+                        //double var3 = Math.cos((double)var2);
 
-                        if (var2 < 0.0F)
-                        {
-                            ++var3;
-                        }
+                        //this.setMoveForward(this.AirSpeed * (float)var3);
+                        float var5 = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F);
+                        float var6 = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F);
+                        
+                        //this.AirSpeed=this.getSpeed()*2.5F*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
+                        
+                        if(this.AirSpeed>this.getSpeed()*2.5*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F) && this.AirPitch>=0F)//slow down when rising
+                    		this.AirSpeed*=0.99F;
+                        if(this.AirSpeed>this.getSpeed()*2.5/MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F) && this.AirPitch<0F)//slow down when too fast
+                    		this.AirSpeed*=0.995F;
+                        if(this.AirSpeed<this.getSpeed()*2.5*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F))
+                    		this.AirSpeed*=1.01F;
+                    	if(this.AirPitch<0F)
+                    		this.AirSpeed-=MathHelper.sin(this.AirPitch * (float)Math.PI / 180.0F)*0.005F;//get faster
+                        
+                        this.motionX=-this.AirSpeed*(1.0F+(SpeedBoosted>0?0.3F:0F))*MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F)*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
+                        this.motionZ=this.AirSpeed*(1.0F+(SpeedBoosted>0?0.3F:0F))*MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F)*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
+                        this.motionY=/*0.20000000298023224D+*/this.AirSpeed*(1.0F+(SpeedBoosted>0?0.3F:0F))*MathHelper.sin(this.AirPitch * (float)Math.PI / 180.0F);
 
-                        this.setMoveForward(this.AirSpeed * (float)var3);
-
-                        if (this.AirPitch < 60.0F && this.moveForward > 0.1F)
+                        //System.out.println("AirSpeed: "+String.valueOf(this.AirSpeed));
+                        /*System.out.println("AirAngle: "+String.valueOf(this.AirAngle));
+                    	System.out.println("AirPitch: "+String.valueOf(this.AirPitch));
+                    	System.out.println("W: "+String.valueOf(this.rotationYaw));
+                    	System.out.println("X: "+String.valueOf(this.motionX));*/
+                    	//System.out.println("Y: "+String.valueOf(this.motionY));
+                    	/*System.out.println("Z: "+String.valueOf(this.motionZ));
+                    	System.out.println("T: "+String.valueOf(this.ticksExisted));*/
+                        
+                        this.posX+=this.motionX;
+                        this.posY+=this.motionY;
+                        this.posZ+=this.motionZ;
+                        /*if (this.AirPitch < 60.0F && this.moveForward > 0.1F)
                         {
                             this.motionY = Math.sin((double)var2) * 0.4D;
-                        }
+                        }*/
                     }
 
-                    this.LastAirPitch = this.AirPitch;
+                    //this.LastAirPitch = this.AirPitch;
                 }
             }
             else
             {
-                if (this.AirSpeed != 0.0F)
+            	this.AirPitch=0;
+            	this.AirAngle=0;
+            	this.AirSpeed=-1F;//Indicates that the dino was on the ground last
+                /*if (this.AirSpeed != 0.0F)
                 {
                     this.AirSpeed = 0.0F;
                 }
@@ -715,7 +803,7 @@ public class EntityPterosaur extends EntityDinosaurce
                     this.AirPitch = 0.0F;
                 }
 
-                for (this.rotationYaw -= var1.movementInput.moveStrafe * 5.0F; this.rotationYaw < -180.0F; this.rotationYaw += 360.0F)
+                for (this.rotationYaw -= this.RiderStrafe * 5.0F; this.rotationYaw < -180.0F; this.rotationYaw += 360.0F)
                 {
                     ;
                 }
@@ -725,29 +813,37 @@ public class EntityPterosaur extends EntityDinosaurce
                     this.rotationYaw -= 360.0F;
                 }
 
-                this.setMoveForward(var1.movementInput.moveForward * this.moveSpeed);
+                this.setMoveForward(this.RiderForward * this.moveSpeed);*/
+            	if(this.RiderForward>0)
+            		Speed += (this.getSpeed()*2.0F - Speed) * 0.3F*this.RiderForward;
+            	else
+            		if(Speed>0)
+            		{
+            			Speed += (this.getSpeed()*2.0F - Speed) * 0.8F*this.RiderForward;//Break faster
+            			if(Speed<0)Speed=0;
+            		}
+            		else
+            			Speed += (this.getSpeed()*2.0F - Speed) * 0.3F*this.RiderForward;
+            	this.rotationYaw = MathHelper.wrapAngleTo180_float(this.rotationYaw - this.RiderStrafe*5.0F);
+            	if(this.RiderJump)
+                	this.getJumpHelper().setJumping();
+            	//this.motionY-=0.08;
+                this.moveEntityWithHeading(0.0F, Speed+Speed*(0.3F+0.85F*MathHelper.sin(SpeedBoosted*(float)Math.PI)));
             }
-        }
+        //}
+        this.setAirAngle(this.AirAngle);
+        this.setAirPitch(this.AirPitch);
+    	return Speed;
     }
+    /**
+     * Takes in the distance the entity has fallen this tick and whether its on the ground to update the fall distance
+     * and deal fall damage if landing on the ground.  Args: distanceFallenThisTick, onGround
+     */
+    protected void updateFallState(double par1, boolean par3) {}
 
     public EntityPterosaur spawnBabyAnimal(EntityAgeable var1)
     {
         return new EntityPterosaur(this.worldObj);
-    }
-
-    public void HandleLanding()
-    {
-        if (this.riddenByEntity != null && !this.isCollidedVertically && !this.onGround)
-        {
-            if (!this.Landing && this.AirPitch > 60.0F)
-            {
-                this.Landing = true;
-            }
-        }
-        else
-        {
-            this.Landing = false;
-        }
     }
 
    /* public void updateSize()
@@ -775,4 +871,133 @@ public class EntityPterosaur extends EntityDinosaurce
 	{
 		return null;
 	}
+	/**
+     * Moves the entity based on the specified heading.  Args: strafe, forward
+     */
+    public void moveEntityWithHeading(float par1, float par2)
+    {
+        double var9;
+
+        if (this.isInWater())
+        {
+            var9 = this.posY;
+            this.moveFlying(par1, par2, this.isAIEnabled() ? 0.04F : 0.02F);
+            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+            this.motionX *= 0.800000011920929D;
+            this.motionY *= 0.800000011920929D;
+            this.motionZ *= 0.800000011920929D;
+            this.motionY -= 0.02D;
+
+            if (this.isCollidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + var9, this.motionZ))
+            {
+                this.motionY = 0.30000001192092896D;
+            }
+        }
+        else if (this.handleLavaMovement())
+        {
+            var9 = this.posY;
+            this.moveFlying(par1, par2, 0.02F);
+            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+            this.motionX *= 0.5D;
+            this.motionY *= 0.5D;
+            this.motionZ *= 0.5D;
+            this.motionY -= 0.02D;
+
+            if (this.isCollidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + var9, this.motionZ))
+            {
+                this.motionY = 0.30000001192092896D;
+            }
+        }
+        else
+        {
+            float var3 = 0.91F;
+
+            if (this.onGround)
+            {
+                var3 = 0.54600006F;
+                int var4 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
+
+                if (var4 > 0)
+                {
+                    var3 = Block.blocksList[var4].slipperiness * 0.91F;
+                }
+            }
+
+            float var8 = 0.16277136F / (var3 * var3 * var3);
+            float var5;
+
+            if (this.onGround)
+            {
+                if (this.isAIEnabled())
+                {
+                    var5 = this.getAIMoveSpeed();
+                }
+                else
+                {
+                    var5 = this.landMovementFactor;
+                }
+
+                var5 *= var8;
+            }
+            else
+            {
+                var5 = this.jumpMovementFactor;
+            }
+
+            this.moveFlying(par1, par2, var5);
+            var3 = 0.91F;
+
+            if (this.onGround)
+            {
+                var3 = 0.54600006F;
+                int var6 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
+
+                if (var6 > 0)
+                {
+                    var3 = Block.blocksList[var6].slipperiness * 0.91F;
+                }
+            }
+
+            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+
+            if (this.isCollidedHorizontally && this.isOnLadder())
+            {
+                this.motionY = 0.2D;
+            }
+
+            if (this.worldObj.isRemote && (!this.worldObj.blockExists((int)this.posX, 0, (int)this.posZ) || !this.worldObj.getChunkFromBlockCoords((int)this.posX, (int)this.posZ).isChunkLoaded))
+            {
+                if (this.posY > 0.0D)
+                {
+                    this.motionY = -0.1D;
+                }
+                else
+                {
+                    this.motionY = 0.0D;
+                }
+            }
+            else
+            {
+            	if(this.riddenByEntity==null || this.AirSpeed<=0F)
+            		this.motionY -= 0.08D;
+            }
+
+            this.motionY *= 0.9800000190734863D;
+            this.motionX *= (double)var3;
+            this.motionZ *= (double)var3;
+        }
+
+        this.prevLegYaw = this.legYaw;
+        var9 = this.posX - this.prevPosX;
+        double var12 = this.posZ - this.prevPosZ;
+        float var11 = MathHelper.sqrt_double(var9 * var9 + var12 * var12) * 4.0F;
+
+        if (var11 > 1.0F)
+        {
+            var11 = 1.0F;
+        }
+
+        this.legYaw += (var11 - this.legYaw) * 0.4F;
+        this.legSwing += this.legYaw;
+    }
 }

@@ -9,6 +9,7 @@ import java.util.Random;
 
 import fossil.client.FossilOptions;
 import fossil.Fossil;
+import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIEatLeavesWithHeight;
 import fossil.fossilAI.DinoAIFollowOwner;
@@ -27,7 +28,6 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -42,7 +42,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityBrachiosaurus extends EntityDinosaurce
+public class EntityBrachiosaurus extends EntityDinosaur
 {
     public boolean isTamed = false;
     //public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
@@ -56,7 +56,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         super(var1);
         this.texture = "/fossil/textures/Brachiosaurus.png";
         this.SelfType = EnumDinoType.Brachiosaurus;
-        this.setSize(1.5F, 1.5F);
+        //this.setSize(1.5F, 1.5F);
         this.health = 8;
         this.experienceValue=5;
         
@@ -67,6 +67,11 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         this.LengthInc=0.52F;
         this.Height0=1.2F;
         this.HeightInc=0.16F;
+        
+        /*this.HitboxXfactor=10.0F;
+        this.HitboxYfactor=5.0F;
+        this.HitboxZfactor=5.0F;*/
+        
         //this.BaseattackStrength=;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
@@ -79,7 +84,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         //this.AgingTicks=;
         this.MaxHunger=500;
         //this.Hungrylevel=;
-        this.moveSpeed = this.getSpeed();//should work
+        this.updateSize();
         
         FoodItemList.addItem(EnumDinoFoodItem.Sugar);
         FoodItemList.addItem(EnumDinoFoodItem.Cookie);
@@ -90,14 +95,14 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         //this.tasks.addTask(0, new DinoAIGrowup(this, 36));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, new EntityAISwimming(this));
-        this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this, 0.34F));
+        this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));//, 0.34F));
         this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
-        this.tasks.addTask(4, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
-        this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIEatLeavesWithHeight(this, this.moveSpeed, 24));//, this.HuntLimit));
-        this.tasks.addTask(6, new DinoAIUseFeederWithHeight(this, this.moveSpeed, 24));//, this.HuntLimit));
-        this.tasks.addTask(7, new DinoAIWander(this, this.moveSpeed));
-        this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
+        this.tasks.addTask(4, new DinoAIAttackOnCollide(this, true));
+        this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
+        this.tasks.addTask(6, new DinoAIEatLeavesWithHeight(this, 24));//, this.HuntLimit));
+        this.tasks.addTask(6, new DinoAIUseFeederWithHeight(this, 24));//, this.HuntLimit));
+        this.tasks.addTask(7, new DinoAIWander(this));
+        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
     }
@@ -303,7 +308,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
     {
         super.onUpdate();
 
-        if (this.isAdult())//this.getDinoAge() >= 4)
+        if (this.isAdult() && ! this.isModelized())//this.getDinoAge() >= 4)
         {
             this.BlockInteractive();
         }
@@ -329,7 +334,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
     }
 
     /*public void setSelfSitting(boolean var1)
-    {//handled in dinosaurce
+    {//handled in Dinosaur
         if (var1)
         {
             this.OrderStatus = EnumOrderType.Stay;
@@ -365,46 +370,36 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         return var1;
     }*/
 
-    public void BlockInteractive()
+    public int BlockInteractive()
     {
-        if (FossilOptions.TRexBreakingBlocks)
+
+        for (int var5 = (int)Math.round(this.boundingBox.minX) - 1; var5 <= (int)Math.round(this.boundingBox.maxX) + 1; ++var5)
         {
-            if (!this.isModelized())
+            for (int var9 = 0; var9 <= (int)this.getHalfHeight(); ++var9)
             {
-                boolean var1 = false;
-                boolean var2 = false;
-                boolean var3 = false;
-                boolean var4 = false;
-
-                for (int var5 = (int)Math.round(this.boundingBox.minX) - 1; var5 <= (int)Math.round(this.boundingBox.maxX) + 1; ++var5)
+                for (int var6 = (int)Math.round(this.boundingBox.minZ) - 1; var6 <= (int)Math.round(this.boundingBox.maxZ) + 1; ++var6)
                 {
-                    for (int var9 = 0; var9 <= (int)this.getHalfHeight(); ++var9)
+                    int var10 = (int)Math.round(this.boundingBox.minY) + var9;
+                    int var8 = this.worldObj.getBlockId(var5, var10, var6);
+
+                    if (Block.blocksList[var8] != null)
                     {
-                        for (int var6 = (int)Math.round(this.boundingBox.minZ) - 1; var6 <= (int)Math.round(this.boundingBox.maxZ) + 1; ++var6)
+                        float var10000 = Block.blocksList[var8].getBlockHardness(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
+
+                        if (var10000 < 0.5F || (this.RiderSneak && (var10000<2.0F || var8 == Block.wood.blockID || var8 == Block.planks.blockID || var8 == Block.woodDoubleSlab.blockID || var8 == Block.woodSingleSlab.blockID)))
                         {
-                            int var10 = (int)Math.round(this.boundingBox.minY) + var9;
-                            int var8 = this.worldObj.getBlockId(var5, var10, var6);
+                            int var7 = this.GetObjectTall(var5, var10, var6);
 
-                            if (Block.blocksList[var8] != null)
+                            if (var7 > 0 && !this.isObjectTooTall(var7 + var9))
                             {
-                                float var10000 = Block.blocksList[var8].getBlockHardness(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ);
-                                this.getClass();
-
-                                if (var10000 < 5.0F)
-                                {
-                                    int var7 = this.GetObjectTall(var5, var10, var6);
-
-                                    if (var7 > 0 && !this.isObjectTooTall(var7 + var9))
-                                    {
-                                        this.DestroyTower(var5, var10, var6, var7);
-                                    }
-                                }
+                                this.DestroyTower(var5, var10, var6, var7);
                             }
                         }
                     }
                 }
             }
         }
+        return 0;
     }
 
     private boolean isObjectTooTall(int var1, int var2, int var3)
@@ -487,7 +482,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
         }
     }
 
-    private void HandleRiding()
+    /*private void HandleRiding()
     {
         if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayerSP && this.onGround)
         {
@@ -508,7 +503,7 @@ public class EntityBrachiosaurus extends EntityDinosaurce
             }
             this.moveForward = ((EntityPlayerSP)this.riddenByEntity).movementInput.moveForward * this.moveSpeed;
         }
-    }
+    }*/
 
     /*public void updateSize()
     {

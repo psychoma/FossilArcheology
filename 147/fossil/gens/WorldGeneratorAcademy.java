@@ -1644,7 +1644,7 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 8, j + 3, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 8, j + 3, k + 25, Block.brick.blockID);
 		var1.setBlock(i + 8, j + 4, k + 5, Block.thinGlass.blockID);
-		var1.setBlock(i + 8, j + 4, k + 19, Block.blockDiamond.blockID);
+		var1.setBlock(i + 8, j + 4, k + 19, Fossil.blockcultivateIdleID);//Block.blockDiamond.blockID);
 		var1.setBlock(i + 8, j + 4, k + 23, Block.brick.blockID);
 		var1.setBlock(i + 8, j + 4, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 8, j + 4, k + 25, Block.brick.blockID);
@@ -2015,8 +2015,8 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 10, j + 4, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 10, j + 4, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 10, j + 4, k + 6, Block.brick.blockID);
-		var1.setBlock(i + 10, j + 4, k + 17, Block.blockDiamond.blockID);
-		var1.setBlock(i + 10, j + 4, k + 21, Block.blockDiamond.blockID);
+		var1.setBlock(i + 10, j + 4, k + 17, Fossil.blockcultivateIdleID);//Block.blockDiamond.blockID);
+		var1.setBlock(i + 10, j + 4, k + 21, Fossil.blockcultivateIdleID);//Block.blockDiamond.blockID);
 		var1.setBlock(i + 10, j + 4, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 10, j + 5, k + 2, Block.stoneBrick.blockID);
 		var1.setBlockAndMetadata(i + 10, j + 5, k + 3, Block.stoneBrick.blockID, 2);
@@ -2586,8 +2586,8 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 13, j + 4, k + 4, Block.brick.blockID);
 		var1.setBlock(i + 13, j + 4, k + 5, Block.brick.blockID);
 		var1.setBlock(i + 13, j + 4, k + 6, Block.brick.blockID);
-		var1.setBlock(i + 13, j + 4, k + 17, Block.blockDiamond.blockID);
-		var1.setBlock(i + 13, j + 4, k + 21, Block.blockDiamond.blockID);
+		var1.setBlock(i + 13, j + 4, k + 17, Fossil.blockcultivateIdleID);//Block.blockDiamond.blockID);
+		var1.setBlock(i + 13, j + 4, k + 21, Fossil.blockcultivateIdleID);//Block.blockDiamond.blockID);
 		var1.setBlock(i + 13, j + 4, k + 24, Block.stoneBrick.blockID);
 		var1.setBlock(i + 13, j + 5, k + 2, Block.stoneBrick.blockID);
 		var1.setBlock(i + 13, j + 5, k + 3, Block.stoneBrick.blockID);
@@ -2959,7 +2959,7 @@ public class WorldGeneratorAcademy extends WorldGenerator
 		var1.setBlock(i + 15, j + 3, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 15, j + 3, k + 25, Block.brick.blockID);
 		var1.setBlock(i + 15, j + 4, k + 5, Block.thinGlass.blockID);
-		var1.setBlock(i + 15, j + 4, k + 19, Block.blockDiamond.blockID);
+		var1.setBlock(i + 15, j + 4, k + 19, Fossil.blockcultivateIdleID);//Block.blockDiamond.blockID);
 		var1.setBlock(i + 15, j + 4, k + 23, Block.brick.blockID);
 		var1.setBlock(i + 15, j + 4, k + 24, Block.brick.blockID);
 		var1.setBlock(i + 15, j + 4, k + 25, Block.brick.blockID);

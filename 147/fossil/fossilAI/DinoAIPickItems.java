@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
@@ -18,13 +18,10 @@ import net.minecraft.util.Vec3;
 
 public class DinoAIPickItems extends EntityAIBase
 {
-    private EntityDinosaurce Dino;
+    private EntityDinosaur Dino;
     private double destX;
     private double destY;
     private double destZ;
-    
-    // The dinos speed
-    private float Speed;
     
     //the range in which the dino is able to look for items
     private final int SEARCH_RANGE;
@@ -42,11 +39,10 @@ public class DinoAIPickItems extends EntityAIBase
     /**
      * Creates The AI, Input: Dino, Speed, searching range
      */
-    public DinoAIPickItems(EntityDinosaurce Dino0, float Speed0, int Range0)
+    public DinoAIPickItems(EntityDinosaur Dino0, int Range0)
     {
     	this.targetItem = null;
         this.Dino = Dino0;
-        this.Speed = Speed0;
         this.setMutexBits(1);
         this.SEARCH_RANGE = Range0;
         this.RANGE = Range0;
@@ -132,7 +128,7 @@ public class DinoAIPickItems extends EntityAIBase
         }
         else
         {
-            this.Dino.getNavigator().tryMoveToXYZ(this.destX, this.destY, this.destZ, this.Speed);
+            this.Dino.getNavigator().tryMoveToXYZ(this.destX, this.destY, this.destZ, this.Dino.getSpeed());
         }
     }
 

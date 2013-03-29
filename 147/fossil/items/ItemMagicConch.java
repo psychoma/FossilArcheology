@@ -3,7 +3,7 @@ package fossil.items;
 import java.util.Iterator;
 import java.util.List;
 import fossil.Fossil;
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.entity.mob.EntityPlesiosaur;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
@@ -54,7 +54,7 @@ public class ItemMagicConch extends Item
         String var6 = "Head";
         String var7 = "Middle";
         String var8 = "Tail";
-        String var9 = Fossil.GetLangTextByKey("Dino.Plesiosaur");//EntityDinosaurce.GetNameByEnum(EnumDinoType.Plesiosaur, true);
+        String var9 = Fossil.GetLangTextByKey("Dino.Plesiosaur");//EntityDinosaur.GetNameByEnum(EnumDinoType.Plesiosaur, true);
         String var10 = Fossil.GetLangTextByKey("Drum.Msg.Head");
         String var11 = Fossil.GetLangTextByKey("Drum.Msg.Middle");
         String var12 = Fossil.GetLangTextByKey("Drum.Msg.Tail");
@@ -65,7 +65,7 @@ public class ItemMagicConch extends Item
         while (var15.hasNext())
         {
             Entity var16 = (Entity)var15.next();
-            EntityDinosaurce var17 = (EntityDinosaurce)var16;
+            EntityDinosaur var17 = (EntityDinosaur)var16;
 
             if (var17.isTamed())
             {

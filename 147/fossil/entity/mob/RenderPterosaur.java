@@ -4,8 +4,11 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.MathHelper;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import fossil.entity.mob.ModelPterosaurFlying;
 
 public class RenderPterosaur extends RenderLiving
 {
@@ -85,11 +88,6 @@ public class RenderPterosaur extends RenderLiving
             this.loadDownloadableImageTexture(var1.skinUrl, var1.getTexture());
             GL11.glEnable(GL11.GL_ALPHA_TEST);
 
-            if (this.FlyingModel)
-            {
-                ;
-            }
-
             if (this.LandingModel)
             {
                 this.LandModel.setLivingAnimations(var1, var16, var15, var9);
@@ -97,8 +95,10 @@ public class RenderPterosaur extends RenderLiving
             }
             else if (this.FlyingModel)
             {
-                ((ModelPterosaurFlying)this.FlyModel).AirPitch = -((float)((double)var1.AirPitch * 0.017453292519943295D));
-                ((ModelPterosaurFlying)this.FlyModel).AirRoll = (float)((double)var1.AirAngle * 0.017453292519943295D);
+                ((ModelPterosaurFlying)this.FlyModel).AirPitch = -((float)((double)var1.getAirPitch() * 0.017453292519943295D));
+                ((ModelPterosaurFlying)this.FlyModel).AirRoll = (float)((double)var1.getAirAngle() * 0.017453292519943295D);
+                //System.out.println("AirPitch: "+String.valueOf(var1.AirPitch));
+                ((ModelPterosaurFlying)this.FlyModel).setRotationAngles();
                 this.FlyModel.setLivingAnimations(var1, var16, var15, var9);
                 this.FlyModel.render(var1, var16, var15, var13, var11 - var10, var12, var14);
             }
@@ -219,7 +219,17 @@ public class RenderPterosaur extends RenderLiving
      */
     public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
-        if (((EntityPterosaur)var1).getDinoAge() >= 5 && !var1.onGround && !var1.isInWater())
+    	int heightt=10;
+    	for(int i=1;i<10;i++)
+    	{
+    		if(var1.worldObj.isBlockNormalCube(MathHelper.floor_double(var1.posX), MathHelper.floor_double(var1.posY)-i, MathHelper.floor_double(var1.posZ)))
+    		{
+    			heightt=i;
+    			break;
+    		}
+    	}
+    	boolean onlyAjump=heightt<3;
+        if (((EntityPterosaur)var1).isAdult() && !var1.onGround && !var1.isInWater() && !onlyAjump)
         {
             if (!this.FlyingModel)
             {

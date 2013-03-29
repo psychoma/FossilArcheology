@@ -42,7 +42,10 @@ public class DinoFoodItemList {
 		for (int i=0;i<index;i++)
 		{
 			if (Items[i].item.itemID == ID)
+			{
+				//System.out.println("ItemHealValue:"+String.valueOf(Items[i].HealValue));
 				return Items[i].HealValue;
+			}
 		}
 		return 0;	
 	}

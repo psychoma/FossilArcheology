@@ -64,11 +64,11 @@ public class ItemJavelin extends ForgeItem
 
             if (this.itemID!=Fossil.ancientJavelin.itemID)//!this.isAncient)
             {
-                var8 = new EntityJavelin(var2, var3, var7 * 2.0F, this.SelfMaterial,var1.getItemDamage()+1);
+                var8 = new EntityJavelin(var2, var3, var7 * 2.0F, this.SelfMaterial,var1.getMaxDamage()-(var1.getItemDamage()+1));
             }
             else
             {
-                var8 = new EntityAncientJavelin(var2, var3, var7 * 2.0F, this.SelfMaterial,var1.getItemDamage()+1);
+                var8 = new EntityAncientJavelin(var2, var3, var7 * 2.0F, this.SelfMaterial,var1.getMaxDamage()-(var1.getItemDamage()+1));
             }
 
             if (var7 == 1.0F)

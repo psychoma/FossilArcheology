@@ -121,7 +121,7 @@ public class ModelTriceratops extends ModelDinosaurs
     public void render(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
     {
         super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.setRotationAngles(var2, var3, var4, var5, var6, var7, ((EntityDinosaurce)var1).isModelized());
+        this.setRotationAngles(var2, var3, var4, var5, var6, var7, ((EntityDinosaur)var1).isModelized());
         this.noumenon1.render(var7);
         this.noumenon2.render(var7);
         this.noumenon3.render(var7);
@@ -148,7 +148,7 @@ public class ModelTriceratops extends ModelDinosaurs
     public void renderRun(Entity var1, float var2, float var3, float var4, float var5, float var6, float var7)
     {
         super.render(var1, var2, var3, var4, var5, var6, var7);
-        this.RunningPose(var2, var3, var4, var5, var6, var7, ((EntityDinosaurce)var1).isModelized());
+        this.RunningPose(var2, var3, var4, var5, var6, var7, ((EntityDinosaur)var1).isModelized());
         this.noumenon1.render(var7);
         this.noumenon2.render(var7);
         this.noumenon3.render(var7);

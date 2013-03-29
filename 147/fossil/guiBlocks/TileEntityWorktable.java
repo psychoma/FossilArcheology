@@ -316,6 +316,9 @@ public class TileEntityWorktable extends TileEntity implements IInventory, ISide
         if(var1.getItem().itemID == Fossil.brokenSword.itemID)return new ItemStack(Fossil.ancientSword);
         if(var1.getItem().itemID == Fossil.brokenhelmet.itemID)return new ItemStack(Fossil.ancienthelmet);
         
+        if(var1.getItem().itemID == Fossil.ancientSword.itemID)n= new ItemStack(Fossil.ancientSword);
+        if(var1.getItem().itemID == Fossil.ancienthelmet.itemID)n= new ItemStack(Fossil.ancienthelmet);
+        
         if(var1.getItem().itemID == Fossil.gemAxe.itemID)n= new ItemStack(Fossil.gemAxe);
         if(var1.getItem().itemID == Fossil.gemPickaxe.itemID)n= new ItemStack(Fossil.gemPickaxe);
         if(var1.getItem().itemID == Fossil.gemSword.itemID)n= new ItemStack(Fossil.gemSword);
@@ -356,8 +359,8 @@ public class TileEntityWorktable extends TileEntity implements IInventory, ISide
     private int timeToSmelt()
     {
     	if(this.furnaceItemStacks[0]==null)return 3000;
-    	if(this.furnaceItemStacks[0].getItem().itemID==Fossil.ancientSword.itemID)return 3000;
-    	if(this.furnaceItemStacks[0].getItem().itemID==Fossil.ancienthelmet.itemID)return 3000;
+    	if(this.furnaceItemStacks[0].getItem().itemID==Fossil.brokenSword.itemID)return 3000;
+    	if(this.furnaceItemStacks[0].getItem().itemID==Fossil.brokenhelmet.itemID)return 3000;
     	return 300;
     }
 

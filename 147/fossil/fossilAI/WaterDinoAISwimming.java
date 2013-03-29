@@ -1,6 +1,6 @@
 package fossil.fossilAI;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilInterface.IWaterDino;
 import net.minecraft.block.material.Material;
@@ -10,7 +10,7 @@ import net.minecraft.util.AxisAlignedBB;
 
 public class WaterDinoAISwimming extends EntityAIBase
 {
-    protected EntityDinosaurce entity;
+    protected EntityDinosaur entity;
     protected IWaterDino entityInterface;
     protected boolean usuallySurface;
     protected final float FLOAT_SPEED;
@@ -21,7 +21,7 @@ public class WaterDinoAISwimming extends EntityAIBase
     protected boolean fastFlag;
     protected boolean diveAtNight;
 
-    public WaterDinoAISwimming(EntityDinosaurce var1, boolean var2, float var3, float var4)
+    public WaterDinoAISwimming(EntityDinosaur var1, boolean var2, float var3, float var4)
     {
         this.entityInterface = null;
         this.usuallySurface = true;
@@ -42,7 +42,7 @@ public class WaterDinoAISwimming extends EntityAIBase
         this.FAST_SINK_SPEED = -this.FAST_FLOAT_SPEED;
     }
 
-    public WaterDinoAISwimming(EntityDinosaurce var1, boolean var2, float var3)
+    public WaterDinoAISwimming(EntityDinosaur var1, boolean var2, float var3)
     {
         this(var1, var2, var3, var3);
     }

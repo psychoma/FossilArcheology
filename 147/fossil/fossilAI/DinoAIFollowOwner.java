@@ -1,6 +1,6 @@
 package fossil.fossilAI;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.fossilEnums.EnumOrderType;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -10,21 +10,19 @@ import net.minecraft.world.World;
 
 public class DinoAIFollowOwner extends EntityAIBase
 {
-    private EntityDinosaurce DinoEntity;
+    private EntityDinosaur DinoEntity;
     private EntityLiving FollowTarget;
     World WorldObj;
-    private float speed;
     private PathNavigate selfNavigator;
     private int actionCount;
     float closeRange;
     float stayRange;
     private boolean field_48311_i;
 
-    public DinoAIFollowOwner(EntityDinosaurce var1, float var2, float var3, float var4)
+    public DinoAIFollowOwner(EntityDinosaur var1, float var3, float var4)
     {
         this.DinoEntity = var1;
         this.WorldObj = var1.worldObj;
-        this.speed = var2;
         this.selfNavigator = var1.getNavigator();
         this.stayRange = var3;
         this.closeRange = var4;
@@ -103,7 +101,7 @@ public class DinoAIFollowOwner extends EntityAIBase
         {
             this.actionCount = 10;
 
-            if (!this.selfNavigator.tryMoveToEntityLiving(this.FollowTarget, this.speed) && this.DinoEntity.getDistanceSqToEntity(this.FollowTarget) >= 144.0D)
+            if (!this.selfNavigator.tryMoveToEntityLiving(this.FollowTarget, this.DinoEntity.getSpeed()) && this.DinoEntity.getDistanceSqToEntity(this.FollowTarget) >= 144.0D)
             {
                 int var1 = MathHelper.floor_double(this.FollowTarget.posX) - 2;
                 int var2 = MathHelper.floor_double(this.FollowTarget.posZ) - 2;

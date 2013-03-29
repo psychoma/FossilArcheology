@@ -1,6 +1,6 @@
 package fossil.fossilAI;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.fossilEnums.EnumOrderType;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -8,16 +8,14 @@ import net.minecraft.util.Vec3;
 
 public class DinoAIWander extends EntityAIBase
 {
-    private EntityDinosaurce entity;
+    private EntityDinosaur entity;
     private double targetX;
     private double targetY;
     private double targetZ;
-    private float field_48317_e;
 
-    public DinoAIWander(EntityDinosaurce var1, float var2)
+    public DinoAIWander(EntityDinosaur var1)
     {
         this.entity = var1;
-        this.field_48317_e = var2;
         this.setMutexBits(1);
     }
 
@@ -70,6 +68,6 @@ public class DinoAIWander extends EntityAIBase
      */
     public void startExecuting()
     {
-        this.entity.getNavigator().tryMoveToXYZ(this.targetX, this.targetY, this.targetZ, this.field_48317_e);
+        this.entity.getNavigator().tryMoveToXYZ(this.targetX, this.targetY, this.targetZ, this.entity.getSpeed());
     }
 }

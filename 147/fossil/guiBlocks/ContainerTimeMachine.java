@@ -5,6 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 
 public class ContainerTimeMachine extends Container
 {
@@ -53,7 +54,7 @@ public class ContainerTimeMachine extends Container
     /**
      * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
      */
-    public ItemStack transferStackInSlot(int var1)
+    public ItemStack transferStackInSlot(EntityPlayer var1, int var2)
     {
         return null;
     }

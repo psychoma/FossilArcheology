@@ -1,6 +1,6 @@
 package fossil.fossilAI;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.fossilEnums.EnumDinoEating;
 import fossil.guiBlocks.TileEntityFeeder;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -10,21 +10,19 @@ import net.minecraft.world.World;
 
 public class DinoAIUseFeeder extends EntityAIBase
 {
-    protected EntityDinosaurce entityVar;
+    protected EntityDinosaur entityVar;
     private double destX;
     private double destY;
     private double destZ;
-    private float field_48317_e;
     protected final int SEARCH_RANGE;
     //private final float HUNT_LIMIT;
     private final int USE_RANGE = 3;
     protected TileEntityFeeder targetFeeder = null;
     protected EnumDinoEating eating;
 
-    public DinoAIUseFeeder(EntityDinosaurce var1, float var2, int var3/*, float var4*/, EnumDinoEating var5)
+    public DinoAIUseFeeder(EntityDinosaur var1, int var3/*, float var4*/, EnumDinoEating var5)
     {
         this.entityVar = var1;
-        this.field_48317_e = var2;
         this.setMutexBits(1);
         this.SEARCH_RANGE = var3;
         //this.HUNT_LIMIT = var4;
@@ -121,7 +119,7 @@ public class DinoAIUseFeeder extends EntityAIBase
         }
         else
         {
-            this.entityVar.getNavigator().tryMoveToXYZ(this.destX, this.destY, this.destZ, this.field_48317_e);
+            this.entityVar.getNavigator().tryMoveToXYZ(this.destX, this.destY, this.destZ, this.entityVar.getSpeed());
         }
     }
 }

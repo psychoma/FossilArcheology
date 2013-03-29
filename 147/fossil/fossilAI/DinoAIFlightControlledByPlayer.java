@@ -1,6 +1,6 @@
 package fossil.fossilAI;
 
-//import fossil.entity.mob.EntityDinosaurce;
+//import fossil.entity.mob.EntityDinosaur;
 import fossil.entity.mob.EntityPterosaur;
 import fossil.fossilEnums.EnumDinoType;
 import net.minecraft.block.Block;
