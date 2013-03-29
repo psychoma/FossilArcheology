@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -18,7 +18,7 @@ import net.minecraft.util.Vec3;
 
 public class DinoAIHuntMobs extends EntityAIBase
 {
-    private EntityDinosaurce Dino;
+    private EntityDinosaur Dino;
     private double destX;
     private double destY;
     private double destZ;
@@ -39,7 +39,7 @@ public class DinoAIHuntMobs extends EntityAIBase
     /**
      * Creates The AI, Input: Dino, Speed, searching range
      */
-    public DinoAIHuntMobs(EntityDinosaurce Dino0, float Speed0, int Range0)
+    public DinoAIHuntMobs(EntityDinosaur Dino0, float Speed0, int Range0)
     {
     	this.targetMob = null;
         this.Dino = Dino0;

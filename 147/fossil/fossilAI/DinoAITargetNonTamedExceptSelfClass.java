@@ -1,6 +1,6 @@
 package fossil.fossilAI;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import net.minecraft.entity.ai.EntityAITargetNonTamed;
 import net.minecraft.entity.passive.EntityTameable;
 
@@ -17,6 +17,6 @@ public class DinoAITargetNonTamedExceptSelfClass extends EntityAITargetNonTamed
     public boolean shouldExecute()
     {
         boolean var1 = super.shouldExecute();
-        return var1 && this.taskOwner instanceof EntityDinosaurce && ((EntityDinosaurce)this.taskOwner).SelfType == ((EntityDinosaurce)this.taskOwner).SelfType ? false : var1;
+        return var1 && this.taskOwner instanceof EntityDinosaur && ((EntityDinosaur)this.taskOwner).SelfType == ((EntityDinosaur)this.taskOwner).SelfType ? false : var1;
     }
 }

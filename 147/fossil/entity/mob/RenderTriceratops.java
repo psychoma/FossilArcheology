@@ -239,7 +239,7 @@ public class RenderTriceratops extends RenderLiving
      */
     protected int shouldRenderPass(EntityLiving var1, int var2, float var3)
     {
-        EntityDinosaurce var4 = (EntityDinosaurce)var1;
+        EntityDinosaur var4 = (EntityDinosaur)var1;
 
         if (var4.getHealth() < 8 + var4.getDinoAge() && var4.getHealth() > 20)
         {

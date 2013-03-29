@@ -38,7 +38,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
     private int field_46027_au;
     public boolean arrowCritical;
     public EnumToolMaterial SelfMaterial;
-    private int damaged;
+    protected int damaged;
 
     public EntityJavelin(World var1)
     {
@@ -144,6 +144,11 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
 
         if (this.inGround)
         {
+        	if(this.damaged==0)//Destroy the javelin when it is used up
+        	{
+        		this.worldObj.playSoundEffect(this.posX, this.posY, this.posZ, "random.break", 0.5F, 1.0F);
+        		this.setDead();
+        	}
             int var18 = this.worldObj.getBlockId(this.xTile, this.yTile, this.zTile);
             int var19 = this.worldObj.getBlockMetadata(this.xTile, this.yTile, this.zTile);
 
@@ -221,7 +226,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
                 if (var4.entityHit != null)
                 {
                     var20 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-                    int var21 = (int)Math.ceil((double)var20 * this.damage);
+                    int var21 = (int)Math.ceil((double)var20 * this.damage/3.0D);
                     var21 += this.SelfMaterial.getDamageVsEntity();
 
                     if (this.arrowCritical)
@@ -420,7 +425,7 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
 
     protected boolean addJavelinToPlayer(EntityPlayer var1)
     {
-        ItemStack var2;
+        /*ItemStack var2;
 
         switch (this.SelfMaterial.ordinal())//EntityJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[this.SelfMaterial.ordinal()])
         {
@@ -443,8 +448,9 @@ public class EntityJavelin extends EntityArrow implements IEntityAdditionalSpawn
 
             case 4:
                 var2 = new ItemStack(Fossil.goldjavelin, 1);
-        }
-        var2.setItemDamage(damaged);
+        }*/
+    	ItemStack var2=new ItemStack(GetJavelinByMaterial(),1);
+        var2.setItemDamage(var2.getMaxDamage()-damaged);
         return var1.inventory.addItemStackToInventory(var2);
     }
 

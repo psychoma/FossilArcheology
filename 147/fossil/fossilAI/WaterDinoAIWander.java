@@ -1,6 +1,6 @@
 package fossil.fossilAI;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.fossilInterface.IWaterDino;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -8,14 +8,13 @@ import net.minecraft.util.Vec3;
 
 public class WaterDinoAIWander extends EntityAIBase
 {
-    private EntityDinosaurce entity;
+    private EntityDinosaur entity;
     protected IWaterDino entityInterface = null;
     private double targetX;
     private double targetZ;
-    private float speed;
     private final float FLOAT_SPEED;
 
-    public WaterDinoAIWander(EntityDinosaurce var1, float var2, float var3)
+    public WaterDinoAIWander(EntityDinosaur var1, float var3)
     {
         this.entity = var1;
 
@@ -24,7 +23,6 @@ public class WaterDinoAIWander extends EntityAIBase
             this.entityInterface = (IWaterDino)this.entity;
         }
 
-        this.speed = var2;
         this.FLOAT_SPEED = var3;
         this.setMutexBits(1);
     }

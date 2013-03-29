@@ -2,7 +2,7 @@ package fossil.fossilAI;
 
 import java.util.Random;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
@@ -12,11 +12,11 @@ import net.minecraft.util.MathHelper;
 
 public class DinoAIFishing extends EntityAIBase
 {
-    private EntityDinosaurce theEntity;
+    private EntityDinosaur theEntity;
     //private final float huntLimit;
     private final int percentage;
 
-    public DinoAIFishing(EntityDinosaurce var1/*, float var2*/, int var3)
+    public DinoAIFishing(EntityDinosaur var1/*, float var2*/, int var3)
     {
         this.theEntity = var1;
         this.setMutexBits(4);

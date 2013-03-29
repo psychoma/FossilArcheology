@@ -16,7 +16,7 @@ public class TabFCombat extends CreativeTabs
     @SideOnly(Side.CLIENT)
     public int getTabIconItemIndex()
     {
-       return Fossil.ancienthelmet.itemID;
+       return Fossil.ancientSword.itemID;
     }
     
     public String getTranslatedTabLabel()

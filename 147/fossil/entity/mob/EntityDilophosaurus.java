@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import fossil.Fossil;
+import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
 import fossil.fossilAI.DinoAIPickItems;
@@ -27,7 +28,6 @@ import net.minecraft.block.StepSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
@@ -53,7 +53,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityDilophosaurus extends EntityDinosaurce
+public class EntityDilophosaurus extends EntityDinosaur
 {
     private boolean looksWithInterest;//IS THAT WORKING?
     
@@ -85,7 +85,7 @@ public class EntityDilophosaurus extends EntityDinosaurce
         this.texture = "/fossil/textures/UtaCalm.png";
         this.looksWithInterest = false;
         //this.CheckSkin();
-        this.setSize(0.3F, 0.3F);
+       // this.setSize(0.3F, 0.3F);
         this.health = 10;
         this.experienceValue=10;
         
@@ -108,7 +108,8 @@ public class EntityDilophosaurus extends EntityDinosaurce
         //this.AgingTicks=;
         //this.MaxHunger=;
         //this.Hungrylevel=;
-        this.moveSpeed = this.getSpeed();//should work
+        //this.moveSpeed = this.getSpeed();//should work
+        this.updateSize();
         
         FoodItemList.addItem(EnumDinoFoodItem.PorkRaw);
         FoodItemList.addItem(EnumDinoFoodItem.PorkCooked);
@@ -125,12 +126,12 @@ public class EntityDilophosaurus extends EntityDinosaurce
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityTRex.class, 8.0F, 0.3F, 0.35F));
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
+        this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
-        this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24, /*this.HuntLimit,*/ EnumDinoEating.Carnivorous));
-        this.tasks.addTask(7, new DinoAIWander(this, this.moveSpeed));
-        this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
+        this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24, /*this.HuntLimit,*/ EnumDinoEating.Carnivorous));
+        this.tasks.addTask(7, new DinoAIWander(this));
+        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));

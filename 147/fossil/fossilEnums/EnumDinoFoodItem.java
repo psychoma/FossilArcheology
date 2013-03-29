@@ -31,7 +31,7 @@ public enum EnumDinoFoodItem
 	Nautilus(Fossil.rawNautilus,20,2),
 	ChickenSoupRaw(Fossil.rawChickenSoup,30,3),
 	ChickenSoupCooked(Fossil.cookedChickenSoup,40,3),
-	ChickenEssence(Fossil.chickenEss,60,10),
+	//ChickenEssence(Fossil.chickenEss,60,10),
 	Triceratops(Fossil.rawTriceratops,50,3),
 	Raptor(Fossil.rawVelociraptor,20,3),
 	TRex(Fossil.rawTRex,20,3),

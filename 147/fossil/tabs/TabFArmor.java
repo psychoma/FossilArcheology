@@ -16,7 +16,7 @@ public class TabFArmor extends CreativeTabs
     @SideOnly(Side.CLIENT)
     public int getTabIconItemIndex()
     {
-       return Fossil.brokenhelmet.itemID;
+       return Fossil.ancienthelmet.itemID;
     }
     
     public String getTranslatedTabLabel()

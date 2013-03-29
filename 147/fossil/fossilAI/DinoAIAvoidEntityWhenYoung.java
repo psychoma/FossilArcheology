@@ -1,17 +1,17 @@
 package fossil.fossilAI;
 
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 
 public class DinoAIAvoidEntityWhenYoung extends EntityAIAvoidEntity
 {
-    EntityDinosaurce dinoEntity;
+    EntityDinosaur dinoEntity;
 
     public DinoAIAvoidEntityWhenYoung(EntityCreature var1, Class var2, float var3, float var4, float var5)
     {
         super(var1, var2, var3, var4, var5);
-        this.dinoEntity = (EntityDinosaurce)var1;
+        this.dinoEntity = (EntityDinosaur)var1;
     }
 
     /**

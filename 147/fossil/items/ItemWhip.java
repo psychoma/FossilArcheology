@@ -2,7 +2,10 @@ package fossil.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import fossil.entity.mob.EntityDinosaur;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemCarrotOnAStick;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -13,10 +16,17 @@ public class ItemWhip extends ItemCarrotOnAStick
     {
         super(var1);
         //this.setIconCoord(1, 4);
-        this.setMaxStackSize(1);
-        this.setMaxDamage(25);
     }
+    @SideOnly(Side.CLIENT)
 
+    /**
+     * Returns True is the item is renderer in full 3D when hold.
+     */
+    public boolean isFull3D()
+    {
+        return true;
+    }
+    
     @SideOnly(Side.CLIENT)
 
     /**
@@ -36,8 +46,24 @@ public class ItemWhip extends ItemCarrotOnAStick
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
-    public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
+    public ItemStack onItemRightClick(ItemStack I, World W, EntityPlayer P)
     {
-        return var1;
+    	if (P.isRiding() && P.ridingEntity instanceof EntityDinosaur)
+        {//
+    		EntityDinosaur D = (EntityDinosaur)P.ridingEntity;
+
+            if (D.getRidingHandler().isControlledByPlayer() && I.getMaxDamage() - I.getItemDamage() >= 5)
+            {
+                D.getRidingHandler().boostSpeed();
+                //System.out.println("SPEED BOOSTED!");
+                //System.out.println("Damage before:"+String.valueOf(I.getItemDamage()));
+                I.damageItem(5, P);
+                //System.out.println("Damage after:"+String.valueOf(I.getItemDamage()));
+                //I.setItemDamage(I.getItemDamage()+5);
+                //W.playSoundEffect(P.posX, P.posY, P.posZ, "WhipCrack", 0.5F, 1.0F);
+                P.ridingEntity.playSound("WhipCrack", 1.0F, 1.0F);
+            }
+        }
+        return I;
     }
 }

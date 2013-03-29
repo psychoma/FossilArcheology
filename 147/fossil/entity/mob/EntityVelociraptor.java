@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 import fossil.Fossil;
+import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItem;
 import fossil.fossilAI.DinoAIPickItems;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAITargetNonTamedExceptSelfClass;
@@ -27,7 +27,6 @@ import net.minecraft.block.StepSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
@@ -54,7 +53,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityVelociraptor extends EntityDinosaurce
+public class EntityVelociraptor extends EntityDinosaur
 {
     private boolean looksWithInterest;
     /*public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
@@ -80,7 +79,7 @@ public class EntityVelociraptor extends EntityDinosaurce
         this.SelfType = EnumDinoType.Velociraptor;
         this.looksWithInterest = false;
         //this.CheckSkin();
-        this.setSize(0.3F, 0.3F);
+        //this.setSize(0.3F, 0.3F);
         //this.moveSpeed = 0.3F;
         this.health = 10;
         this.experienceValue=7;
@@ -103,7 +102,7 @@ public class EntityVelociraptor extends EntityDinosaurce
         //this.AgingTicks=;
         //this.MaxHunger=;
         //this.Hungrylevel=;
-        this.moveSpeed = this.getSpeed();//should work
+        this.updateSize();
         
         FoodItemList.addItem(EnumDinoFoodItem.PorkRaw);
         FoodItemList.addItem(EnumDinoFoodItem.PorkCooked);
@@ -126,10 +125,10 @@ public class EntityVelociraptor extends EntityDinosaurce
         this.tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityTRex.class, 8.0F, 0.3F, 0.35F));
         this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityBrachiosaurus.class, 8.0F, 0.3F, 0.35F));
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
+        this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
-        this.tasks.addTask(5, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
+        this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
         /*this.tasks.addTask(6, new DinoAIPickItem(this, Item.porkRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.beefRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.chickenRaw, this.moveSpeed, 24, this.HuntLimit));
@@ -138,8 +137,8 @@ public class EntityVelociraptor extends EntityDinosaurce
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.chickenCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.rawDinoMeat, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.cookedDinoMeat, this.moveSpeed, 24, this.HuntLimit));*/
-        this.tasks.addTask(6, new DinoAIPickItems(this,this.moveSpeed, 24));
-        this.tasks.addTask(7, new DinoAIWander(this, this.moveSpeed));
+        this.tasks.addTask(6, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(7, new DinoAIWander(this));
         //this.tasks.addTask(7, new DinoAILearnChest(this));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));

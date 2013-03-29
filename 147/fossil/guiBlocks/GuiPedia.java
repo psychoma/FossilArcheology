@@ -4,7 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 
 import cpw.mods.fml.relauncher.SideOnly;
 import fossil.entity.EntityDinoEgg;
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.entity.mob.EntityMammoth;
 import fossil.entity.mob.EntityPregnantCow;
 import fossil.entity.mob.EntityPregnantPig;
@@ -147,7 +147,7 @@ public class GuiPedia extends GuiContainer
      */
     protected void drawGuiContainerForegroundLayer(int var1, int var2)
     {
-    	if(Fossil.ToPedia instanceof EntityDinosaurce)((EntityDinosaurce)Fossil.ToPedia).ShowPedia(this);	
+    	if(Fossil.ToPedia instanceof EntityDinosaur)((EntityDinosaur)Fossil.ToPedia).ShowPedia(this);	
     	if(Fossil.ToPedia instanceof EntityDinoEgg)((EntityDinoEgg)Fossil.ToPedia).ShowPedia(this);
     	if(Fossil.ToPedia instanceof EntityPregnantCow)((EntityPregnantCow)Fossil.ToPedia).ShowPedia(this);
     	if(Fossil.ToPedia instanceof EntityPregnantPig)((EntityPregnantPig)Fossil.ToPedia).ShowPedia(this);
@@ -201,7 +201,7 @@ public class GuiPedia extends GuiContainer
      */
     public void onGuiClosed()
     {
-        //EntityDinosaurce.pediaingDino = null;
+        //EntityDinosaur.pediaingDino = null;
         //Fossil.ToPedia=null;
         super.onGuiClosed();
     }

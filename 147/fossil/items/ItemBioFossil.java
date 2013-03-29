@@ -6,7 +6,7 @@ import java.util.Random;
 
 import fossil.Fossil;
 import fossil.entity.EntityDinoEgg;
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.entity.mob.EntityNautilus;
 import fossil.fossilEnums.EnumDinoType;
 import net.minecraft.block.Block;
@@ -43,11 +43,11 @@ public class ItemBioFossil extends Item
         else
         {
             Class var11 = this.getRandomModel().getDinoClass();
-            EntityDinosaurce var12;
+            EntityDinosaur var12;
 
             try
             {
-                var12 = (EntityDinosaurce)var11.getConstructor(new Class[] {World.class}).newInstance(new Object[] {var3});
+                var12 = (EntityDinosaur)var11.getConstructor(new Class[] {World.class}).newInstance(new Object[] {var3});
             }
             catch (Throwable var14)
             {

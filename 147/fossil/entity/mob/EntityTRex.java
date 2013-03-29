@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import fossil.Fossil;
-import fossil.blocks.BlockBreakingRule;
+import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIAvoidEntityWhenYoung;
+import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItem;
 import fossil.fossilAI.DinoAIPickItems;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAITargetNonTamedExceptSelfClass;
@@ -21,11 +21,11 @@ import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilEnums.EnumSituation;
 import fossil.guiBlocks.GuiPedia;
+import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -44,7 +44,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityTRex extends EntityDinosaurce
+public class EntityTRex extends EntityDinosaur
 {
     public final int Areas = 15;
     //public final float HuntLimit = (float)this.getHungerLimit() * 0.8F;
@@ -57,16 +57,16 @@ public class EntityTRex extends EntityDinosaurce
     //public int WeakToDeath = 0;
     public int TooNearMessageTick = 0;
     public boolean SneakScream = false;
-    private final BlockBreakingRule blockBreakingBehavior;
+    //private final BlockBreakingRule blockBreakingBehavior;
 
     public EntityTRex(World var1)
     {
         super(var1);
-        this.blockBreakingBehavior = new BlockBreakingRule(this.worldObj, this, 3, 5.0F);
+        //this.blockBreakingBehavior = new BlockBreakingRule(this.worldObj, this, 5.0F);
         this.SelfType = EnumDinoType.TRex;
         this.looksWithInterest = false;
         //this.texture = "/fossil/textures/TRex.png";
-        this.setSize(2.5F, 2.5F);
+        //this.setSize(2.5F, 2.5F);
         //this.moveSpeed = 0.3F;
         this.health = 10;
         this.experienceValue=20;
@@ -81,7 +81,7 @@ public class EntityTRex extends EntityDinosaurce
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
         //this.BaseSpeed=;
-        this.SpeedIncrease=0.9F;
+        this.SpeedIncrease=0.02F;
         this.MaxAge=23;
         //this.BaseHealth=;
         this.HealthIncrease=5;
@@ -89,12 +89,11 @@ public class EntityTRex extends EntityDinosaurce
         //this.AgingTicks=;
         this.MaxHunger=500;
         //this.Hungrylevel=;
-        this.moveSpeed = this.getSpeed();//should work
+        this.updateSize();
         
         FoodItemList.addItem(EnumDinoFoodItem.PorkRaw);
         FoodItemList.addItem(EnumDinoFoodItem.BeefRaw);
         FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
-        //FoodItemList.addItem(EnumDinoFoodItem.DinoMeatRaw);
         FoodItemList.addItem(EnumDinoFoodItem.Triceratops);
         FoodItemList.addItem(EnumDinoFoodItem.Stegosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Dilophosaurus);
@@ -106,12 +105,13 @@ public class EntityTRex extends EntityDinosaurce
         //this.attackStrength = 4 + this.getDinoAge();
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8, 23));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
-        this.tasks.addTask(1, new DinoAIAvoidEntityWhenYoung(this, EntityPlayer.class, 8.0F, 0.3F, 0.35F));
-        this.tasks.addTask(2, new EntityAILeapAtTarget(this, 0.4F));
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
-        this.tasks.addTask(4, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(5, new DinoAIUseFeeder(this, this.moveSpeed, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
-        this.tasks.addTask(6, new DinoAIWander(this, this.moveSpeed));
+        //this.tasks.addTask(1, new DinoAIAvoidEntityWhenYoung(this, EntityPlayer.class, 8.0F, 0.3F, 0.35F));
+        //this.tasks.addTask(2, new EntityAILeapAtTarget(this, 0.4F));
+        this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));
+        this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
+        this.tasks.addTask(4, new DinoAIFollowOwner(this, 5.0F, 2.0F));
+        this.tasks.addTask(5, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
+        this.tasks.addTask(6, new DinoAIWander(this));
         this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         /*this.tasks.addTask(8, new DinoAIPickItem(this, Item.porkRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(8, new DinoAIPickItem(this, Item.beefRaw, this.moveSpeed, 24, this.HuntLimit));
@@ -121,7 +121,7 @@ public class EntityTRex extends EntityDinosaurce
         this.tasks.addTask(8, new DinoAIPickItem(this, Item.chickenCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(8, new DinoAIPickItem(this, Fossil.rawDinoMeat, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(8, new DinoAIPickItem(this, Fossil.cookedDinoMeat, this.moveSpeed, 24, this.HuntLimit));*/
-        this.tasks.addTask(6, new DinoAIPickItems(this,this.moveSpeed, 24));
+        this.tasks.addTask(6, new DinoAIPickItems(this, 24));
         this.tasks.addTask(9, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new DinoAITargetNonTamedExceptSelfClass(this, EntityLiving.class, 16.0F, 50, false));
@@ -216,8 +216,9 @@ public class EntityTRex extends EntityDinosaurce
     public void onUpdate()
     {
         super.onUpdate();
-        this.blockBreakingBehavior.execute();
-
+        //this.blockBreakingBehavior.execute();
+        if(this.isAdult())
+        	BlockInteractive();
         if (this.health > 0)
         {
             /*this.field_25054_c = this.field_25048_b;
@@ -443,8 +444,8 @@ public class EntityTRex extends EntityDinosaurce
             {
                 this.increaseHunger(20);
             }
-
-            this.heal(5);
+            if(Fossil.FossilOptions.Heal_Dinos)
+            	this.heal(5);
         }
     }
 
@@ -459,9 +460,10 @@ public class EntityTRex extends EntityDinosaurce
         {
         	if (var2.itemID == Fossil.gem.itemID)
             {
-        		if (this.isWeak() && !this.isTamed() && this.isAdult())
+        		if (this.isWeak() && !this.isTamed())
                 {
-                    this.heal(200);
+        			if(Fossil.FossilOptions.Heal_Dinos)
+        				this.heal(200);
                     this.increaseHunger(500);
                     //this.WeakToDeath = 0;
                     this.setTamed(true);
@@ -481,22 +483,36 @@ public class EntityTRex extends EntityDinosaurce
                     if (!this.isAdult())
                         //this.SendStatusMessage(EnumSituation.GemErrorYoung);//, this.SelfType);
                     	Fossil.ShowMessage(Fossil.GetLangTextByKey("Status.GemErrorYoung"),var1);
-                    return false;
+                    return true;
                 }
              }
-        	if(var2.itemID == Fossil.chickenEss.itemID)
-        		return false;
+        	if (var2.itemID == Fossil.whip.itemID && this.isTamed() && this.SelfType.isRideable() && this.isAdult() && !this.worldObj.isRemote && this.riddenByEntity == null)
+            {
+                if (var1.username.equalsIgnoreCase(this.getOwnerName()))
+		        {
+		            var1.rotationYaw = this.rotationYaw;
+		            var1.mountEntity(this);
+		            this.setPathToEntity((PathEntity)null);
+		            this.renderYawOffset = this.rotationYaw;
+		        }
+                return true;
+            }
+        	//if(var2.itemID == Fossil.chickenEss.itemID)
+        		//return true;
          }
         else 
         {
-        	if (!this.worldObj.isRemote && this.isTamed() && this.isAdult() && var1.username.equalsIgnoreCase(this.getOwnerName()) && (this.riddenByEntity == null || this.riddenByEntity == var1))
-	        {
-	            var1.rotationYaw = this.rotationYaw;
-	            var1.mountEntity(this);
-	            this.setPathToEntity((PathEntity)null);
-	            this.renderYawOffset = this.rotationYaw;
-	            return true;
-	        }
+        	if (this.isTamed() && this.SelfType.isRideable() && this.isAdult() && !this.worldObj.isRemote && (this.riddenByEntity == null || this.riddenByEntity == var1))
+        	{
+	        	if (var1.username.equalsIgnoreCase(this.getOwnerName()))
+		        {
+		            var1.rotationYaw = this.rotationYaw;
+		            var1.mountEntity(this);
+		            this.setPathToEntity((PathEntity)null);
+		            this.renderYawOffset = this.rotationYaw;
+		        }
+	        	return true;
+        	}
         }
         return super.interact(var1);
     }
@@ -604,12 +620,7 @@ public class EntityTRex extends EntityDinosaurce
     public void updateRiderPosition()
     {
         if (this.riddenByEntity != null)
-        {
-            if (this.riddenByEntity != null)
-            {
-                this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getDinoHeight() * 1.5D, this.posZ);
-            }
-        }
+        	this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getDinoHeight() * 1.5D, this.posZ);
     }
 
     private void Flee(Entity var1, int var2)
@@ -847,6 +858,39 @@ public class EntityTRex extends EntityDinosaurce
         }
 
         return var1;
+    }
+    public int BlockInteractive()
+    {
+    	int destroyed=0;
+        for (int var1 = (int)Math.round(this.boundingBox.minX) - 1; var1 <= (int)Math.round(this.boundingBox.maxX) + 1; ++var1)
+        {
+            for (int var2 = (int)Math.round(this.boundingBox.minY); var2 <= (int)Math.round(this.boundingBox.maxY); ++var2)
+            {
+                for (int var3 = (int)Math.round(this.boundingBox.minZ) - 1; var3 <= (int)Math.round(this.boundingBox.maxZ) + 1; ++var3)
+                {
+                    if (!this.worldObj.isAirBlock(var1, var2, var3))
+                    {
+                        int var4 = this.worldObj.getBlockId(var1, var2, var3);
+
+                        if (!this.inWater)
+                        {
+                            if ((double)Block.blocksList[var4].getBlockHardness(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ) < 5.0D)
+                            {
+                                if ((new Random()).nextInt(10) < 2)
+                                {
+                                    Block.blocksList[var4].dropBlockAsItem(this.worldObj, var1, var2, var3, 1, 0);
+                                }
+
+                                this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
+                                destroyed++;
+                                //this.RushTick = 10;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return destroyed;
     }
 
     /*public float getGLX()

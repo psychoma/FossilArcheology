@@ -8,10 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import fossil.Fossil;
+import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIEatFerns;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItem;
 import fossil.fossilAI.DinoAIPickItems;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAIUseFeeder;
@@ -27,7 +27,6 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -44,7 +43,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityStegosaurus extends EntityDinosaurce
+public class EntityStegosaurus extends EntityDinosaur
 {
     private boolean looksWithInterest;
     /*public final float HuntLimit = (float)this.getHungerLimit() * 0.9F;
@@ -68,7 +67,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         //this.SubSpecies = (new Random()).nextInt(3) + 1;
         //this.texture = "/fossil/textures/Stegosaurus_Baby.png";
         //this.CheckSkin();
-        this.setSize(1.0F, 1.0F);
+        //this.setSize(1.0F, 1.0F);
         //this.moveSpeed = 0.3F;
         this.health = 8;
         this.experienceValue=3;
@@ -92,7 +91,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         //this.AgingTicks=;
         this.MaxHunger=500;
         this.Hungrylevel=0.9F;
-        this.moveSpeed = this.getSpeed();//should work
+        this.updateSize();
         
         this.setSubSpecies((new Random()).nextInt(3) + 1);
         FoodItemList.addItem(EnumDinoFoodItem.Wheat);
@@ -107,14 +106,14 @@ public class EntityStegosaurus extends EntityDinosaurce
         //this.tasks.addTask(0, new DinoAIGrowup(this, 12));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAILeapAtTarget(this, 0.4F));
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
-        this.tasks.addTask(4, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
+        this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
+        this.tasks.addTask(4, new DinoAIFollowOwner(this, 5.0F, 2.0F));
         this.tasks.addTask(5, new DinoAIEatFerns(this/*, this.HuntLimit)*/));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24/*, this.HuntLimit*/, EnumDinoEating.Herbivorous));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Herbivorous));
         //this.tasks.addTask(6, new DinoAIPickItem(this, Item.wheat, this.moveSpeed, 24, this.HuntLimit));
         //this.tasks.addTask(6, new DinoAIPickItem(this, Item.appleRed, this.moveSpeed, 24, this.HuntLimit));
-        this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
-        this.tasks.addTask(7, new DinoAIWander(this, this.moveSpeed));
+        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(7, new DinoAIWander(this));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
     }
@@ -449,13 +448,13 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
     }*/
 
-    public void updateRiderPosition()
+    /*public void updateRiderPosition()
     {
         if (this.riddenByEntity != null)
         {
             this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getDinoHeight() * 0.65D + 0.07D * (double)(12 - this.getDinoAge()), this.posZ);
         }
-    }
+    }*/
 
     /*public boolean HandleEating(int var1)
     {
@@ -678,7 +677,7 @@ public class EntityStegosaurus extends EntityDinosaurce
         }
     }
 
-    public void BlockInteractive()
+    /*public int BlockInteractive()
     {
         for (int var1 = (int)Math.round(this.boundingBox.minX) - 1; var1 <= (int)Math.round(this.boundingBox.maxX) + 1; ++var1)
         {
@@ -715,7 +714,8 @@ public class EntityStegosaurus extends EntityDinosaurce
                 }
             }
         }
-    }
+        return 0;
+    }*/
 
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)

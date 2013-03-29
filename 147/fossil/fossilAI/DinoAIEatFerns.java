@@ -1,7 +1,7 @@
 package fossil.fossilAI;
 
 import fossil.Fossil;
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.MathHelper;
@@ -9,12 +9,12 @@ import net.minecraft.world.World;
 
 public class DinoAIEatFerns extends EntityAIBase
 {
-    protected EntityDinosaurce entityVar;
+    protected EntityDinosaur entityVar;
     protected World worldObj;
     int eatTick = 0;
     //final float HUNT_LIMIT;
 
-    public DinoAIEatFerns(EntityDinosaurce var1/*, float var2*/)
+    public DinoAIEatFerns(EntityDinosaur var1/*, float var2*/)
     {
         this.entityVar = var1;
         this.worldObj = var1.worldObj;
@@ -63,10 +63,10 @@ public class DinoAIEatFerns extends EntityAIBase
         return this.eatTick > 0;
     }
 
-    public int func_48396_h()
+    /*public int func_48396_h()
     {
         return this.eatTick;
-    }
+    }*/
 
     /**
      * Updates the task

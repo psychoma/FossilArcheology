@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 public class EntityAncientJavelin extends EntityJavelin
 {
     private boolean lighteningShot = false;
-    private int damaged;
 
     public EntityAncientJavelin(World var1)
     {
@@ -65,20 +64,19 @@ public class EntityAncientJavelin extends EntityJavelin
      */
     public void onUpdate()
     {
-        super.onUpdate();
-
         if (this.inGround && !this.lighteningShot)
         {
         	if((new Random()).nextInt(100)<30)
         		this.worldObj.addWeatherEffect(new EntityLightningBolt(this.worldObj, this.posX, this.posY, this.posZ));
             this.lighteningShot = true;
         }
+        super.onUpdate();
     }
 
     protected boolean addJavelinToPlayer(EntityPlayer var1)
     {
         ItemStack var2 = new ItemStack(Fossil.ancientJavelin, 1);
-        var2.setItemDamage(damaged);
+        var2.setItemDamage(var2.getMaxDamage()-damaged);
         return var1.inventory.addItemStackToInventory(var2);
     }
 }

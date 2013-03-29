@@ -14,7 +14,7 @@ import java.util.Random;
 
 import fossil.Fossil;
 import fossil.entity.mob.EntityBrachiosaurus;
-import fossil.entity.mob.EntityDinosaurce;
+import fossil.entity.mob.EntityDinosaur;
 import fossil.entity.mob.EntityMosasaurus;
 import fossil.entity.mob.EntityPlesiosaur;
 import fossil.entity.mob.EntityPterosaur;
@@ -57,15 +57,16 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     public int damageTaken;
     public int timeSinceHit;
     public EnumDinoType DinoInside;
-    public int BirthTick;
+    //public int BirthTick;
     public String ParentOwner;
     private int HatchTime;
     public final int HatchingNeedTime;
+    public static final int HATCHING_INDEX = 18;
 
     public EntityDinoEgg(World var1, EnumDinoType var2)
     {
         super(var1);
-        this.BirthTick = 0;
+        //this.BirthTick = 0;
         this.ParentOwner = "";
         this.HatchingNeedTime = this.HatchTime;
         this.damageTaken = 0;
@@ -94,7 +95,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     	Fossil.ToPedia = (Object)this;
     }
 
-    public EntityDinoEgg(World var1, EnumDinoType var2, EntityDinosaurce var3)
+    public EntityDinoEgg(World var1, EnumDinoType var2, EntityDinosaur var3)
     {
         this(var1, var2);
         this.ParentOwner = var3.getOwnerName();
@@ -119,7 +120,13 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         {
             this.HatchTime = 3000;
         }
+        this.dataWatcher.addObject(HATCHING_INDEX, new Integer(0));
     }
+    public int getBirthTick()
+    {return this.dataWatcher.getWatchableObjectInt(HATCHING_INDEX);}
+
+    public void setBirthTick(int var1)
+    {this.dataWatcher.updateObject(HATCHING_INDEX, Integer.valueOf(var1));}
 
     /**
      * Returns a boundingBox used to collide the entity with other entities and blocks. This enables the entity to be
@@ -433,43 +440,46 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         if (this.DinoInside == EnumDinoType.Mosasaurus)
         {
             if (this.inWater)
-                ++this.BirthTick;
+                this.setBirthTick(this.getBirthTick()+1);
             else
-                --this.BirthTick;
+            	this.setBirthTick(this.getBirthTick()-1);
         }
         else if ((double)var2 >= 0.5D && !this.inWater)
-            ++this.BirthTick;
+        	this.setBirthTick(this.getBirthTick()+1);
         else 
         {
         	BiomeGenBase var5 = this.worldObj.getBiomeGenForCoords((int)this.posX, (int)this.posZ);
             float var6 = var5.getFloatTemperature();
         	//if (!this.worldObj.canBlockSeeTheSky(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ)))
             if((var6<=0.15F && var2 < 0.5) || this.inWater)
-            	--this.BirthTick;
+            	this.setBirthTick(this.getBirthTick()-1);
         }
-        if (this.BirthTick <= -this.HatchingNeedTime)
+        if (this.getBirthTick() <= -this.HatchingNeedTime)
         {
-            String var6;
-
-            if (this.DinoInside == EnumDinoType.Mosasaurus)
-            {
-                var6 = Fossil.GetLangTextByKey("Dinoegg.dry");
-            }
-            else
-            {
-                var6 = Fossil.GetLangTextByKey("Dinoegg.cold");
-            }
-
-            String var1 = Fossil.GetLangTextByKey("Dinoegg.Head");
-            if(FMLCommonHandler.instance().getSide().isServer())
-            	Fossil.ShowMessage(var1 +" "+ Fossil.GetLangTextByKey("Dino."+this.DinoInside.toString())/*EntityDinosaurce.GetNameByEnum(this.DinoInside, false)*/ +" "+ var6, var4);
-            this.setDead();
+        	if(var4!=null)
+        	{
+	            String var6;
+	
+	            if (this.DinoInside == EnumDinoType.Mosasaurus)
+	            {
+	                var6 = Fossil.GetLangTextByKey("Dinoegg.dry");
+	            }
+	            else
+	            {
+	                var6 = Fossil.GetLangTextByKey("Dinoegg.cold");
+	            }
+	
+	            String var1 = Fossil.GetLangTextByKey("Dinoegg.Head");
+	            if(FMLCommonHandler.instance().getSide().isServer())
+	            	Fossil.ShowMessage(var1 +" "+ Fossil.GetLangTextByKey("Dino."+this.DinoInside.toString())/*EntityDinosaur.GetNameByEnum(this.DinoInside, false)*/ +" "+ var6, var4);
+        	}
+        	this.setDead();
         }
         else
         {
-            if (this.BirthTick >= this.HatchingNeedTime)
+            if (this.getBirthTick() >= this.HatchingNeedTime)
             {
-                //if (this.worldObj.isRemote)return;
+                if (this.worldObj.isRemote)return;
 
                 BiomeGenBase var3 = this.worldObj.provider.worldChunkMgr.getBiomeGenAt((int)Math.floor(this.posX), (int)Math.floor(this.posZ));
                 Object var5 = null;
@@ -497,10 +507,10 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
                         this.setDead();
                         return;
                 }
-                if(((EntityDinosaurce)var5).SelfType.isTameable() && var4 != null)
+                if(((EntityDinosaur)var5).SelfType.isTameable() && var4 != null)
                 {// Tameable and player next to it
-                	((EntityDinosaurce)var5).setOwner(var4.username);
-                    ((EntityDinosaurce)var5).setTamed(true);
+                	((EntityDinosaur)var5).setOwner(var4.username);
+                    ((EntityDinosaur)var5).setTamed(true);
                 }
 
                 ((EntityLiving)var5).setLocationAndAngles((double)((int)Math.floor(this.posX)), (double)((int)Math.floor(this.posY) + 1), (double)((int)Math.floor(this.posZ)), this.worldObj.rand.nextFloat() * 360.0F, 0.0F);
@@ -519,7 +529,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
                 {
                 	//System.err.println("EGGERROR-NOPLACE");
                     Fossil.ShowMessage(Fossil.GetLangTextByKey("Dinoegg.NoSpace"), var4);
-                    this.BirthTick -= 500;
+                    this.setBirthTick(this.getBirthTick()-500);
                     //System.err.println("EGGERROR3"+String.valueOf(i));
                 }
             }
@@ -531,7 +541,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
      */
     protected void writeEntityToNBT(NBTTagCompound var1)
     {
-        var1.setInteger("BirthTick", this.BirthTick);
+        var1.setInteger("BirthTick", this.getBirthTick());
         var1.setInteger("DinoType", this.EnumToInt(this.DinoInside));
         var1.setString("ParentOwner", this.ParentOwner);
     }
@@ -542,7 +552,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     protected void readEntityFromNBT(NBTTagCompound var1)
     {
         EnumDinoType[] var2 = EnumDinoType.values();
-        this.BirthTick = var1.getInteger("BirthTick");
+        this.setBirthTick(var1.getInteger("BirthTick"));
         this.DinoInside = var2[var1.getInteger("DinoType")];
         this.ParentOwner = var1.getString("ParentOwner");
     }
@@ -635,31 +645,31 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     	p0.reset();
     	p0.PrintItemXY(it0, 120, 7);
     	p0.PrintStringLR(/*Fossil.GetLangTextByKey("PediaText.egg.Head")+ " "+*/Fossil.GetLangTextByKey("Dino."+this.DinoInside.toString()), false, 1,40,90,245);
-    	int quot = (int)Math.floor(((float)this.BirthTick / (float)this.HatchingNeedTime * 100.0F));
+    	int quot = (int)Math.floor(((float)this.getBirthTick() / (float)this.HatchingNeedTime * 100.0F));
     	String stat;
     	if (this.DinoInside == EnumDinoType.Mosasaurus)
         {
-            if (this.BirthTick >= 0)
+            if (this.getBirthTick() >= 0)
                 stat = Fossil.GetLangTextByKey("PediaText.egg.wet");
             else
                 stat = Fossil.GetLangTextByKey("PediaText.egg.dry");
         }
         else 
         {
-        	if (this.BirthTick >= 0)
+        	if (this.getBirthTick() >= 0)
 	            stat = Fossil.GetLangTextByKey("PediaText.egg.warm");
 	        else
 	            stat = Fossil.GetLangTextByKey("PediaText.egg.cold");
         }
         p0.PrintStringLR(Fossil.GetLangTextByKey("PediaText.egg.Status"), false, 2,40,90,245);
         p0.PrintStringLR(stat, false, 3);
-        if (this.BirthTick >= 0)
+        if (this.getBirthTick() >= 0)
         {
         	p0.PrintStringLR(Fossil.GetLangTextByKey("PediaText.egg.Progress"), false, 4,40,90,245);
         	p0.PrintStringLR(String.valueOf(quot) + "/100", false, 5);
         }
         /*String var2 = "";
-        String var3 = Fossil.GetLangTextByKey("PediaText.egg.selfHead") + EntityDinosaurce.GetNameByEnum(this.DinoInside, false) + Fossil.GetLangTextByKey("PediaText.egg.selfTail");
+        String var3 = Fossil.GetLangTextByKey("PediaText.egg.selfHead") + EntityDinosaur.GetNameByEnum(this.DinoInside, false) + Fossil.GetLangTextByKey("PediaText.egg.selfTail");
         int var4 = (int)Math.floor((double)((float)this.BirthTick / (float)this.HatchingNeedTime * 100.0F));
         Fossil.ShowMessage(var3, var1);
 
@@ -691,13 +701,13 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
 
     public void writeSpawnData(ByteArrayDataOutput var1)
     {
-        var1.writeInt(this.BirthTick);
+        var1.writeInt(this.getBirthTick());
         var1.writeInt(this.EnumToInt(this.DinoInside));
     }
 
     public void readSpawnData(ByteArrayDataInput var1)
     {
-        this.BirthTick = var1.readInt();
+        this.setBirthTick(var1.readInt());
         this.DinoInside = EnumDinoType.values()[var1.readInt()];
     }
 }

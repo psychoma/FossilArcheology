@@ -91,7 +91,7 @@ public class EntityPigBoss extends EntityZombie
      */
     public boolean getCanSpawnHere()
     {
-        if (!FossilOptions.ShouldAnuSpawn)
+        if (true/*!FossilOptions.ShouldAnuSpawn//TODO*/)
         {
             return false;
         }

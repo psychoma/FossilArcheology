@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import fossil.Fossil;
+import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIGrowup;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.WaterDinoAINearestAttackableTarget;
@@ -23,7 +24,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
@@ -45,7 +45,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
+public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
 {
     public final int Areas = 60;
     //public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
@@ -63,7 +63,7 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         this.SelfType = EnumDinoType.Mosasaurus;
         this.looksWithInterest = false;
         this.texture = "/fossil/textures/Mosasaurus.png";
-        this.setSize(0.5F, 0.5F);
+        //this.setSize(0.5F, 0.5F);
         //this.moveSpeed = 0.3F;
         this.health = 10;
         //this.attackStrength = 4 + 2 * this.getDinoAge();
@@ -87,14 +87,14 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         //this.AgingTicks=;
         this.MaxHunger=500;
         //this.Hungrylevel=;
-        this.moveSpeed = this.getSpeed();//should work
+        this.updateSize();
         
         this.getNavigator().setCanSwim(true);
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, (new WaterDinoAISwimming(this, true, 0.09374999F, 0.018749999F)).setDiveAtNight());
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
-        this.tasks.addTask(4, new WaterDinoAIWander(this, this.moveSpeed, 0.003F));
+        this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
+        this.tasks.addTask(4, new WaterDinoAIWander(this, 0.003F));
         this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(6, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
@@ -479,8 +479,8 @@ public class EntityMosasaurus extends EntityDinosaurce implements IWaterDino
         {
             this.increaseHunger(30);
         }
-
-        this.heal(5);
+        if(Fossil.FossilOptions.Heal_Dinos)
+        	this.heal(5);
     }
 
     /**

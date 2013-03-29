@@ -9,10 +9,11 @@ import java.util.List;
 import java.util.Random;
 
 import fossil.Fossil;
+import fossil.fossilAI.DinoAIAttackOnCollide;
+import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIFishing;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItem;
 import fossil.fossilAI.DinoAIPickItems;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAIUseFeeder;
@@ -30,7 +31,6 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.item.EntityItem;
@@ -44,7 +44,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
+public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
 {
     private boolean looksWithInterest;
     //public final float HuntLimit = (float)(this.getHungerLimit() * 4 / 5);
@@ -54,7 +54,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
     private boolean field_25052_g;
     public int SubSpecies = 1;
     public boolean isBaby = true;*/
-    public int RushTick = 0;
+    //public int RushTick = 0;
     
     
     
@@ -75,7 +75,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         //this.SubSpecies = (new Random()).nextInt(3) + 1;
         this.setSubSpecies((new Random()).nextInt(3) + 1);
         this.texture = "/fossil/textures/Plesiosaur_adult.png";
-        this.setSize(1.0F, 1.0F);
+        //this.setSize(1.0F, 1.0F);
         //this.moveSpeed = 0.7F;
         this.health = 8;
         this.experienceValue=2;
@@ -89,8 +89,8 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         this.BaseattackStrength=3;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
-        this.BaseSpeed=0.5F;
-        this.SpeedIncrease=2.0F;
+        //this.BaseSpeed=0.2F;
+        //this.SpeedIncrease=0.02F;
         this.MaxAge=12;
         this.BaseHealth=30;
         this.HealthIncrease=10;
@@ -98,7 +98,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         //this.AgingTicks=;
         this.MaxHunger=500;
         //this.Hungrylevel=;
-        this.moveSpeed = this.getSpeed();//should work
+        this.updateSize();
         
         FoodItemList.addItem(EnumDinoFoodItem.FishRaw);
         FoodItemList.addItem(EnumDinoFoodItem.FishCooked);
@@ -108,16 +108,17 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         this.getNavigator().setCanSwim(true);
         //this.tasks.addTask(0, new DinoAIGrowup(this, 12));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
-        this.tasks.addTask(1, new WaterDinoAISwimming(this, true, 0.09374999F, 0.018749999F));
-        this.tasks.addTask(3, new EntityAIAttackOnCollide(this, this.moveSpeed, true));
-        this.tasks.addTask(4, new DinoAIFollowOwner(this, this.moveSpeed, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, this.moveSpeed, 24,/* this.HuntLimit,*/ EnumDinoEating.Carnivorous));
+        //this.tasks.addTask(1, new WaterDinoAISwimming(this, true, 0.09374999F, 0.018749999F));
+        this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));
+        this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
+        this.tasks.addTask(4, new DinoAIFollowOwner(this, 5.0F, 2.0F));
+        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24,/* this.HuntLimit,*/ EnumDinoEating.Carnivorous));
         /*this.tasks.addTask(7, new DinoAIPickItem(this, Item.fishRaw, this.moveSpeed * 2.0F, 24, this.HuntLimit));
         this.tasks.addTask(7, new DinoAIPickItem(this, Item.fishCooked, this.moveSpeed * 2.0F, 24, this.HuntLimit));
         this.tasks.addTask(7, new DinoAIPickItem(this, Fossil.sjl, this.moveSpeed * 2.0F, 24, this.HuntLimit));*/
-        this.tasks.addTask(7, new DinoAIPickItems(this,this.moveSpeed, 24));
+        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
         this.tasks.addTask(8, new DinoAIFishing(this, /*this.HuntLimit,*/ 1));
-        this.tasks.addTask(9, new DinoAIWander(this, this.moveSpeed));
+        this.tasks.addTask(9, new DinoAIWander(this));
         this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(11, new EntityAILookIdle(this));
     }
@@ -217,7 +218,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
      * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
      * use this to react to sunlight and start to burn.
      */
-    public void onLivingUpdate()
+    /*public void onLivingUpdate()
     {
         if (this.isInWater() && this.motionY <= 0.0D)
         {
@@ -232,7 +233,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         }
 
         super.onLivingUpdate();
-    }
+    }*/
 
     public boolean isOnSurface()
     {
@@ -246,7 +247,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
     {
         super.onUpdate();
 
-        if (this.isInWater())
+        /*if (this.isInWater())
         {
             if (!this.hasPath() && this.riddenByEntity == null)
             {
@@ -265,7 +266,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
                 }
             }*/
 
-            if ((!this.isOnSurface() && (double)this.TargetY > this.posY || (double)this.TargetY < this.posY) && !this.isCollidedVertically)
+            /*if ((!this.isOnSurface() && (double)this.TargetY > this.posY || (double)this.TargetY < this.posY) && !this.isCollidedVertically)
             {
                 if ((double)this.TargetY > this.posY)
                 {
@@ -290,14 +291,14 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
             if (Math.abs(this.posY - (double)this.TargetY) <= 0.125D)
             {
                 this.motionY = 0.0D;
-            }
-        }
+            }*/
+        //}
     }
 
     /**
      * Moves the entity based on the specified heading.  Args: strafe, forward
      */
-    public void moveEntityWithHeading(float var1, float var2)
+    /*public void moveEntityWithHeading(float var1, float var2)
     {
         double var3;
 
@@ -429,7 +430,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
 
         this.legYaw += (var7 - this.legYaw) * 0.4F;
         this.legSwing += this.legYaw;
-    }
+    }*/
 
     /**
      * Takes a coordinate in and returns a weight to determine how likely this creature will try to path to the block.
@@ -565,12 +566,12 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         if (var1)
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 2)));
-            this.moveSpeed = 2.0F;
+            //this.moveSpeed = 2.0F;
         }
         else
         {
             this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -3)));
-            this.moveSpeed = 0.5F;
+            //this.moveSpeed = 0.5F;
         }
     }
 
@@ -744,13 +745,13 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
     /**
      * Causes this entity to do an upwards motion (jumping).
      */
-    protected void jump()
+    /*protected void jump()
     {
         if (this.isInWater() && this.isCollidedHorizontally && this.riddenByEntity == null)
         {
             super.jump();
         }
-    }
+    }*/
 
     /**
      * Checks if this entity is inside water (if inWater field is true as a result of handleWaterMovement() returning
@@ -761,9 +762,9 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         return this.worldObj.handleMaterialAcceleration(this.boundingBox.expand(0.0D, -0.6000000238418579D, 0.0D), Material.water, this);
     }
 
-    private void HandleRiding()
+    public float HandleRiding(float Speed, float SpeedBoosted)
     {
-        if (this.RushTick > 0)
+        /*if (this.RushTick > 0)
         {
             --this.RushTick;
         }
@@ -807,7 +808,41 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
             {
                 this.TargetY = (float)this.posY;
             }
-        }
+        }*/
+    	if(this.RiderForward>0)
+    		Speed += (this.getSpeed()*(this.isInWater()?3.2F:1.3F) - Speed) * 0.1F*this.RiderForward;
+    	else
+    		if(Speed>0)
+    		{
+    			Speed += (this.getSpeed()*(this.isInWater()?3.2F:1.3F) - Speed) * 0.4F*this.RiderForward;//Break faster
+    			if(Speed<0)Speed=0;
+    		}
+    		else
+    			Speed += (this.getSpeed()*(this.isInWater()?3.2F:1.3F) - Speed) * 0.06F*this.RiderForward;
+    	this.rotationYaw = MathHelper.wrapAngleTo180_float(this.rotationYaw - (this.isInWater()?this.RiderStrafe*2.0F:this.RiderStrafe*5.0F));
+    	if(this.isInWater())
+    	{
+    		if(this.RiderJump)
+            	this.motionY+=(0.4F-this.motionY)*0.1F;
+    		else if(this.RiderSneak)
+            	this.motionY+=(-0.4F-this.motionY)*0.1F;
+    		else this.motionY+= this.motionY<0? 0.01F : -0.01F;//Make the upwards motion slower
+    		if((this.isOnSurface() && this.motionY>0F) || (this.motionY>-0.01F && this.motionY<0.01F))
+    			this.motionY=0.0F;
+    		if(this.RiderJump && this.isOnSurface())
+    			this.jump();
+    	}
+    	else
+    	{
+    		if(this.RiderJump)
+            {
+            	this.getJumpHelper().setJumping();
+            	this.RiderJump=false;
+            }
+    	}
+    	this.moveEntityWithHeading(0.0F, Speed+Speed*(0.3F+0.85F*MathHelper.sin(SpeedBoosted*(float)Math.PI)));
+    	//this.posY+=this.motionY;
+        return Speed;
     }
 
     /**
@@ -829,8 +864,9 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         }
     }
 
-    public void BlockInteractive()
+    public int BlockInteractive()
     {
+    	int destroyed=0;
         for (int var1 = (int)Math.round(this.boundingBox.minX) - 1; var1 <= (int)Math.round(this.boundingBox.maxX) + 1; ++var1)
         {
             for (int var2 = (int)Math.round(this.boundingBox.minY); var2 <= (int)Math.round(this.boundingBox.maxY); ++var2)
@@ -843,7 +879,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
 
                         if (!this.inWater)
                         {
-                            if (this.isTamed() && this.riddenByEntity == null)
+                            /*if (this.isTamed() && this.riddenByEntity == null)
                             {
                                 if (var4 == Block.wood.blockID || var4 == Block.leaves.blockID)
                                 {
@@ -851,7 +887,7 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
                                     this.RushTick = 10;
                                 }
                             }
-                            else if ((double)Block.blocksList[var4].getBlockHardness(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ) < 5.0D || var4 == Block.wood.blockID)
+                            else*/ if ((double)Block.blocksList[var4].getBlockHardness(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ) <= 1.5D || var4 == Block.wood.blockID || var4 == Block.planks.blockID || var4 == Block.woodDoubleSlab.blockID || var4 == Block.woodSingleSlab.blockID)
                             {
                                 if ((new Random()).nextInt(10) == 5)
                                 {
@@ -859,13 +895,15 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
                                 }
 
                                 this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
-                                this.RushTick = 10;
+                                destroyed++;
+                                //this.RushTick = 10;
                             }
                         }
                     }
                 }
             }
         }
+        return destroyed;
     }
 
     @SideOnly(Side.CLIENT)
@@ -928,8 +966,8 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
         {
             this.increaseHunger(100);
         }
-
-        this.heal(5);
+        if(Fossil.FossilOptions.Heal_Dinos)
+        	this.heal(5);
     }
 
     public void SetOrder(EnumOrderType var1)
@@ -969,4 +1007,132 @@ public class EntityPlesiosaur extends EntityDinosaurce implements IWaterDino
 	{
 		return null;
 	}
+	/**
+     * Moves the entity based on the specified heading.  Args: strafe, forward
+     */
+    public void moveEntityWithHeading(float par1, float par2)
+    {
+        double var9;
+
+        if (this.isInWater())
+        {
+            var9 = this.posY;
+            this.moveFlying(par1, par2, this.isAIEnabled() ? 0.04F : 0.02F);
+            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+            this.motionX *= 0.800000011920929D;
+            this.motionY *= 0.800000011920929D;
+            this.motionZ *= 0.800000011920929D;
+            if(this.riddenByEntity==null)
+            	this.motionY -= 0.02D;//gravity is on it if not ridden, then handling the riding...going straight forward
+
+            if (this.isCollidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + var9, this.motionZ))
+            {
+                this.motionY = 0.30000001192092896D;
+            }
+        }
+        else if (this.handleLavaMovement())
+        {
+            var9 = this.posY;
+            this.moveFlying(par1, par2, 0.02F);
+            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+            this.motionX *= 0.5D;
+            this.motionY *= 0.5D;
+            this.motionZ *= 0.5D;
+            this.motionY -= 0.02D;
+
+            if (this.isCollidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + var9, this.motionZ))
+            {
+                this.motionY = 0.30000001192092896D;
+            }
+        }
+        else
+        {
+            float var3 = 0.91F;
+
+            if (this.onGround)
+            {
+                var3 = 0.54600006F;
+                int var4 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
+
+                if (var4 > 0)
+                {
+                    var3 = Block.blocksList[var4].slipperiness * 0.91F;
+                }
+            }
+
+            float var8 = 0.16277136F / (var3 * var3 * var3);
+            float var5;
+
+            if (this.onGround)
+            {
+                if (this.isAIEnabled())
+                {
+                    var5 = this.getAIMoveSpeed();
+                }
+                else
+                {
+                    var5 = this.landMovementFactor;
+                }
+
+                var5 *= var8;
+            }
+            else
+            {
+                var5 = this.jumpMovementFactor;
+            }
+
+            this.moveFlying(par1, par2, var5);
+            var3 = 0.91F;
+
+            if (this.onGround)
+            {
+                var3 = 0.54600006F;
+                int var6 = this.worldObj.getBlockId(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.boundingBox.minY) - 1, MathHelper.floor_double(this.posZ));
+
+                if (var6 > 0)
+                {
+                    var3 = Block.blocksList[var6].slipperiness * 0.91F;
+                }
+            }
+            System.out.println(String.valueOf(this.motionY));
+            this.moveEntity(this.motionX, this.motionY, this.motionZ);
+
+            if (this.worldObj.isRemote && (!this.worldObj.blockExists((int)this.posX, 0, (int)this.posZ) || !this.worldObj.getChunkFromBlockCoords((int)this.posX, (int)this.posZ).isChunkLoaded))
+            {
+                if (this.posY > 0.0D)
+                {
+                    this.motionY = -0.1D;
+                }
+                else
+                {
+                    this.motionY = 0.0D;
+                }
+            }
+            else
+            {
+            	if(!this.isInWater())
+            	{
+            		System.out.println("WOPWOPWOP");
+            		this.motionY -= 0.08D;
+            	}
+            }
+
+            this.motionY *= 0.9800000190734863D;
+            this.motionX *= (double)var3;
+            this.motionZ *= (double)var3;
+        }
+
+        this.prevLegYaw = this.legYaw;
+        var9 = this.posX - this.prevPosX;
+        double var12 = this.posZ - this.prevPosZ;
+        float var11 = MathHelper.sqrt_double(var9 * var9 + var12 * var12) * 4.0F;
+
+        if (var11 > 1.0F)
+        {
+            var11 = 1.0F;
+        }
+
+        this.legYaw += (var11 - this.legYaw) * 0.4F;
+        this.legSwing += this.legYaw;
+    }
 }
