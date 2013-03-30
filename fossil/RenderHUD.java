@@ -28,7 +28,10 @@ public class RenderHUD implements ITickHandler
 	{
 		if(Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().currentScreen != null)
 			return;
-		
+		if(!Fossil.FossilOptions.Skull_Overlay)
+		{
+			return;
+		}
 		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorItemInSlot(3);
 		if(Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && helmet != null && helmet.itemID == Fossil.skullHelmet.itemID)
 		{

@@ -1022,8 +1022,8 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
             this.motionX *= 0.800000011920929D;
             this.motionY *= 0.800000011920929D;
             this.motionZ *= 0.800000011920929D;
-            if(this.riddenByEntity==null)
-            	this.motionY -= 0.02D;//gravity is on it if not ridden, then handling the riding...going straight forward
+ //           if(this.riddenByEntity==null)
+            	this.motionY += 0.02D;//gravity is on it if not ridden, then handling the riding...going straight forward
 
             if (this.isCollidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + var9, this.motionZ))
             {
@@ -1094,7 +1094,7 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
                     var3 = Block.blocksList[var6].slipperiness * 0.91F;
                 }
             }
-            System.out.println(String.valueOf(this.motionY));
+//            System.out.println(String.valueOf(this.motionY));
             this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
             if (this.worldObj.isRemote && (!this.worldObj.blockExists((int)this.posX, 0, (int)this.posZ) || !this.worldObj.getChunkFromBlockCoords((int)this.posX, (int)this.posZ).isChunkLoaded))
@@ -1112,7 +1112,7 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
             {
             	if(!this.isInWater())
             	{
-            		System.out.println("WOPWOPWOP");
+//            		System.out.println("WOPWOPWOP");
             		this.motionY -= 0.08D;
             	}
             }
