@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Facing;
@@ -80,7 +81,7 @@ public abstract class FossilSlabs extends Block
     public void addCollidingBlockToList(World par1World, int par2, int par3, int par4, AxisAlignedBB par5AxisAlignedBB, List par6List, Entity par7Entity)
     {
         this.setBlockBoundsBasedOnState(par1World, par2, par3, par4);
-        super.addCollidingBlockToList(par1World, par2, par3, par4, par5AxisAlignedBB, par6List, par7Entity);
+        super.addCollisionBoxesToList(par1World, par2, par3, par4, par5AxisAlignedBB, par6List, par7Entity);
     }
 
     /**
@@ -182,4 +183,11 @@ public abstract class FossilSlabs extends Block
     {
         return isBlockSingleSlab(this.blockID) ? this.blockID : (this.blockID == Block.stoneDoubleSlab.blockID ? Block.stoneSingleSlab.blockID : (this.blockID == Block.woodDoubleSlab.blockID ? Block.woodSingleSlab.blockID : Block.stoneSingleSlab.blockID));
     }
+    
+    //@Override
+    //public void registerIcons(IconRegister par1IconRegister)
+    //{
+    //	this.blockIcon = par1IconRegister.registerIcon("Fossil:PalaeoraphePlanks"); //adding in a texture, 1.5.1 style!
+    //}
+    
 }

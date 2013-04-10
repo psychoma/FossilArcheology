@@ -3,20 +3,21 @@ package fossil.blocks;
 import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 
 public class BlockIcedStone extends Block
 {
-    public BlockIcedStone(int var1, int var2)
+    public BlockIcedStone(int var1)
     {
-        super(var1, var2, Material.rock);
+        super(var1, Material.rock);
     }
 
-    public String getTextureFile()
+    /*public String getTextureFile()
     {
         return "/fossil/textures/Fos_terrian.png";
-    }
+    }*/
 
     /**
      * Returns the ID of the items to drop on destruction.
@@ -49,7 +50,7 @@ public class BlockIcedStone extends Block
                         continue;
                     }
 
-                    var1.setBlockWithNotify(var2, var3, var4, Block.stone.blockID);
+                    var1.setBlock(var2, var3, var4, Block.stone.blockID);
                     return;
                 }
 
@@ -100,9 +101,17 @@ public class BlockIcedStone extends Block
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public int getBlockTextureFromSideAndMetadata(int var1, int var2)
+    /*public int getBlockTextureFromSideAndMetadata(int var1, int var2)
     {
         return var2 == 1 ? this.blockIndexInTexture : this.blockIndexInTexture + 1;
+    }*/
+    /**
+     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+     * is the only chance you get to register icons.
+     */
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.blockIcon = par1IconRegister.registerIcon("Iced_Stone");
     }
 }
 

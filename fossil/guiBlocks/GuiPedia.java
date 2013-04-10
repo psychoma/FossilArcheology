@@ -13,9 +13,11 @@ import fossil.entity.mob.EntitySaberCat;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -104,10 +106,13 @@ public class GuiPedia extends GuiContainer
     	if(i<0)i=4;
     	if(i==0)i=8;
     	if(i>160)i=160;
-    	double px=((double)(it0.getIconFromDamage(0)%16))/16D;
-    	double py=((double)(it0.getIconFromDamage(0)/16))/16D;
+    	//double px=((double)(it0.getIconFromDamage(0)%16))/16D;
+    	//double py=((double)(it0.getIconFromDamage(0)/16))/16D;
+
+    	RenderItem r= new RenderItem();
+    	r.renderIcon(x0, y0, it0.getIcon(new ItemStack(it0,1), 1), i, i);
     	
-    	GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture(it0.getTextureFile()));
+    	/*GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.mc.renderEngine.getTexture(it0.getTextureFile()));
         //this.mc.renderEngine.bindTexture(this.mc.renderEngine.getTexture(it0.getTextureFile()));//Does the same as the line above
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Tessellator var9 = Tessellator.instance;
@@ -117,7 +122,7 @@ public class GuiPedia extends GuiContainer
         var9.addVertexWithUV((double)(x0 + i)	, (double)y0		, 0D, px+0.0625D, py);
         var9.addVertexWithUV((double)x0			, (double)y0		, 0D, px		, py);
         var9.draw();
-    	int pos0=it0.getIconFromDamage(0);
+    	int pos0=it0.getIconFromDamage(0);*/
         //this.drawTexturedModalRect(x0, y0, pos0 % 16 * 16, pos0 / 16 * 16, 16, 16);//Does this, too
     }
     
@@ -169,9 +174,8 @@ public class GuiPedia extends GuiContainer
      */
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
     {
-        int var4 = this.mc.renderEngine.getTexture("/fossil/textures/UIPedia.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(var4);
+        this.mc.renderEngine.bindTexture("/textures/gui/Dinopedia.png");
         int var5 = (this.width - this.xSize) / 2;
         int var6 = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);

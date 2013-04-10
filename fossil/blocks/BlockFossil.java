@@ -5,19 +5,15 @@ import java.util.Random;
 import fossil.Fossil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStone;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 
 public class BlockFossil extends BlockStone
 {
     public BlockFossil(int var1, int var2)
     {
-        super(var1, var2);
-        this.blockIndexInTexture = 0;
-    }
-
-    public String getTextureFile()
-    {
-        return "/fossil/textures/Fos_terrian.png";
+        super(var1);
+        //this.blockIndexInTexture = 0;
     }
 
     /**
@@ -39,4 +35,11 @@ public class BlockFossil extends BlockStone
         if(i < 900)	return Item.bone.itemID;
         return Block.cobblestone.blockID;
     }
+    
+    @Override
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+    	this.blockIcon = par1IconRegister.registerIcon("Fossil"); //adding in a texture, 1.5.1 style!
+    }
+    
 }

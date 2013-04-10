@@ -9,16 +9,42 @@ import cpw.mods.fml.relauncher.SideOnly;
 import fossil.Fossil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 public class BlockPalmLog extends Block
 {
+	public static final String[] woodType = new String[] {"palmLog"};
+	@SideOnly(Side.CLIENT)
+    private Icon Top;
+    
     public BlockPalmLog(int par1)
     {
-        super(par1, Material.wood);
+    	super(par1, Material.wood);
+        setBurnProperties(this.blockID, 5, 5);
         this.setCreativeTab(Fossil.tabFBlocks);
+    }
+    
+    @SideOnly(Side.CLIENT)
+    /**
+     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+     * is the only chance you get to register icons.
+     */
+    public void registerIcons(IconRegister var1)
+    {
+        this.blockIcon = var1.registerIcon("Palae_Log");
+        this.Top = var1.registerIcon("Palae_Log_Top");
+    }
+
+    /**
+     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
+     */
+    public Icon getBlockTextureFromSideAndMetadata(int var1, int var2)
+    {
+        return ((var2&12)==0 && var1 < 2) || ((var2&12)==8 && var1 > 1 && var1 < 4) || ((var2&12)==4 && var1 > 3)? this.Top : this.blockIcon;
     }
 
     // this sets how the block is rendered. i recomend keeping it at 31. 
@@ -27,16 +53,6 @@ public class BlockPalmLog extends Block
         return 31;
     }
     
-    /*public boolean isOpaqueCube()
-    {
-        return true;
-    }*/
-    
-    /*public boolean renderAsNormalBlock()
-    {
-        return false;
-    }*/
-
     // this sets the amount droped when broken.
     public int quantityDropped(Random par1Random)
     {
@@ -51,12 +67,12 @@ public class BlockPalmLog extends Block
     }
 
     // this essentially helps leaves to decay when they are not conected to wood. 
-    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
+    public void breakBlock(World var1, int var2, int var3, int var4, int var5, int var6)
     {
         byte var7 = 4;
         int var8 = var7 + 1;
 
-        if (par1World.checkChunksExist(par2 - var8, par3 - var8, par4 - var8, par2 + var8, par3 + var8, par4 + var8))
+        if (var1.checkChunksExist(var2 - var8, var3 - var8, var4 - var8, var2 + var8, var3 + var8, var4 + var8))
         {
             for (int var9 = -var7; var9 <= var7; ++var9)
             {
@@ -64,11 +80,16 @@ public class BlockPalmLog extends Block
                 {
                     for (int var11 = -var7; var11 <= var7; ++var11)
                     {
-                        int var12 = par1World.getBlockId(par2 + var9, par3 + var10, par4 + var11);
+                        int var12 = var1.getBlockId(var2 + var9, var3 + var10, var4 + var11);
 
-                        if (Block.blocksList[var12] != null)
+                        if (var12 == Fossil.palmLeaves.blockID || var12 == Fossil.palmLeaves.blockID)
                         {
-                            Block.blocksList[var12].beginLeavesDecay(par1World, par2 + var9, par3 + var10, par4 + var11);
+                            int var13 = var1.getBlockMetadata(var2 + var9, var3 + var10, var4 + var11);
+
+                            if ((var13 & 8) == 0)
+                            {
+                                var1.setBlockMetadataWithNotify(var2 + var9, var3 + var10, var4 + var11, var13 | 8, 2);
+                            }
                         }
                     }
                 }
@@ -76,48 +97,26 @@ public class BlockPalmLog extends Block
         }
     }
 
-    //this code is used for meta data. it is also used to get the mounted orientations
-    /*public void updateBlockMetadata(World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8)
-    {
-        int var9 = par1World.getBlockMetadata(par2, par3, par4) & 3;
-        byte var10 = 0;
-
-        switch (par5)
-        {
-            case 0:
-            case 1:
-                var10 = 0;
-                break;
-            case 2:
-            case 3:
-                var10 = 8;
-                break;
-            case 4:
-            case 5:
-                var10 = 4;
-        }
-
-        par1World.setBlockMetadataWithNotify(par2, par3, par4, var9 | var10);
-    }*/
-    
     /**
      * Called when a block is placed using its ItemBlock. Args: World, X, Y, Z, side, hitX, hitY, hitZ, block metadata
      */
-    public int onBlockPlaced(World par1World, int par2, int par3, int par4, int par5, float par6, float par7, float par8, int par9)
+    public int onBlockPlaced(World var1, int var2, int var3, int var4, int var5, float var6, float var7, float var8, int var9)
     {
-        int var10 = par9 & 3;
+        int var10 = var9 & 3;
         byte var11 = 0;
 
-        switch (par5)
+        switch (var5)
         {
             case 0:
             case 1:
                 var11 = 0;
                 break;
+
             case 2:
             case 3:
                 var11 = 8;
                 break;
+
             case 4:
             case 5:
                 var11 = 4;
@@ -126,60 +125,36 @@ public class BlockPalmLog extends Block
         return var10 | var11;
     }
 
-    //this code here separates the textures top,bottom etc. to simplify things for you just replace the 2 and 1 with values of 
-    //your textures. i have put some /**/ behind the said values to help you find what im talking about. 
-    //replace a 2 with what the top and bottom textures would be. replace 1 with the sides
-    //if this for some reason does not work play around with this till you get it ^_^
-    public int getBlockTextureFromSideAndMetadata(int par1, int par2)
+    /**
+     * Determines the damage on the item the block drops. Used in cloth and wood.
+     */
+    public int damageDropped(int var1)
     {
-        int var3 = par2 & 12;
-        int var4 = par2 & 3;
-        return var3 == 0 && (par1 == 1 || par1 == 0) ? 68 : (var3 == 4 && (par1 == 5 || par1 == 4) ? 68 : (var3 == 8 && (par1 == 2 || par1 == 3) ? 68 : (var4 == 1 ? 24 : (var4 == 2 ? 25 : (var4 == 3 ? 26 : 52)))));
-    }
-    //this can be ignored
-    /*public int damageDropped(int par1)
-    {
-        return par1 & 3;
+        return var1 & 3;
     }
 
-    //this can be ignored
-    public static int limitToValidMetadata(int par0)
+    public static int limitToValidMetadata(int var0)
     {
-        return par0 & 3;
-    }*/
-
-    @SideOnly(Side.CLIENT)
-
-    // i dont think this is needed however i kept it. this adds metadata blocks to the creative inventory. as you can see this
-    // one will only add the first metablock
-    /*public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-        par3List.add(new ItemStack(par1, 1, 0));
-
-    }*/
-
-    //best to just ignore this
-    protected ItemStack createStackedBlock(int par1)
-    {
-        return new ItemStack(this.blockID, 1,0);//, limitToValidMetadata(par1));
+        return var0 & 3;
     }
 
-    @Override
-    //sustains leaves
-    public boolean canSustainLeaves(World world, int x, int y, int z)
+    /**
+     * Returns an item stack containing a single instance of the current block type. 'i' is the block's subtype/damage
+     * and is ignored for blocks which do not support subtypes. Blocks which cannot be harvested should return null.
+     */
+    protected ItemStack createStackedBlock(int var1)
+    {
+        return new ItemStack(this.blockID, 1, limitToValidMetadata(var1));
+    }
+
+    public boolean canSustainLeaves(World var1, int var2, int var3, int var4)
     {
         return true;
     }
 
-    @Override
-    //tells minecraft that this block is wood. 
-    public boolean isWood(World world, int x, int y, int z)
+    public boolean isWood(World var1, int var2, int var3, int var4)
     {
         return true;
-    }
-    public String getTextureFile() //this specifies the texture path. 
-    {
-     return "/fossil/textures/Fos_terrian.png";
     }
 
 }

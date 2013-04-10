@@ -10,6 +10,7 @@ import fossil.entity.mob.EntityDinosaur;
 import fossil.entity.mob.EntityNautilus;
 import fossil.fossilEnums.EnumDinoType;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -27,11 +28,6 @@ public class ItemBioFossil extends Item
     {
         super(var1);
         this.maxStackSize = 64;
-    }
-
-    public String getTextureFile()
-    {
-        return "/fossil/textures/Fos_items.png";
     }
 
     public boolean tryPlaceIntoWorld(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6/*, int var7, float var8, float var9, float var10*/)
@@ -141,4 +137,11 @@ public class ItemBioFossil extends Item
 	        }
         return var1;
     }
+    
+    @Override
+    public void updateIcons(IconRegister iconRegister)
+    {
+             iconIndex = iconRegister.registerIcon("Fossil:BioFossil");
+    }
+
 }

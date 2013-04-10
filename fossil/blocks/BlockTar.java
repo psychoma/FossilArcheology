@@ -5,6 +5,7 @@ import java.util.Random;
 import fossil.Fossil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
@@ -12,9 +13,9 @@ import net.minecraft.world.World;
 
 public class BlockTar extends Block
 {
-    public BlockTar(int i, int j)
+    public BlockTar(int i, Material par2Material)
     {
-        super(i, j, Material.sand);
+        super(i, Material.sand);
         this.setCreativeTab(Fossil.tabFBlocks);
     }
     
@@ -71,9 +72,11 @@ public class BlockTar extends Block
         return true;
     }
     
-    public String getTextureFile()
+    @Override
+    public void registerIcons(IconRegister par1IconRegister)
     {
-    	return "/fossil/textures/Fos_terrian.png";
+        this.blockIcon = par1IconRegister.registerIcon("Tar"); //adding in a texture, 1.5.1 style!
     }
+
     
 }

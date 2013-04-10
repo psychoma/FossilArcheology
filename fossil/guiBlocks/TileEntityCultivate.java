@@ -378,4 +378,14 @@ public class TileEntityCultivate extends TileEntity implements IInventory, ISide
     {
         return null;
     }
+
+	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		return false;
+	}
 }

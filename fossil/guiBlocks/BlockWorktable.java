@@ -2,15 +2,20 @@ package fossil.guiBlocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import fossil.Fossil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -20,12 +25,15 @@ public class BlockWorktable extends BlockContainer
     private Random furnaceRand = new Random();
     private final boolean isActive;
     private static boolean keepFurnaceInventory = false;
+    private Icon Top;
+    private Icon Bottom;
+    private Icon Side2;
 
     public BlockWorktable(int var1, boolean var2)
     {
         super(var1, Material.rock);
         this.isActive = var2;
-        this.blockIndexInTexture = 45;
+        //this.blockIndexInTexture = 45;
     }
 
     /**
@@ -36,10 +44,10 @@ public class BlockWorktable extends BlockContainer
         return Fossil.blockworktableIdle.blockID;
     }
 
-    public String getTextureFile()
+    /*public String getTextureFile()
     {
         return "/fossil/textures/Fos_terrian.png";
-    }
+    }*/
 
     /**
      * Called whenever the block is added into the world. Args: world, x, y, z
@@ -60,34 +68,22 @@ public class BlockWorktable extends BlockContainer
             int var8 = var1.getBlockId(var2 + 1, var3, var4);
             byte var9 = 3;
 
-            if (Block.opaqueCubeLookup[var5] && !Block.opaqueCubeLookup[var6])
-            {
-                var9 = 3;
-            }
+            if (Block.opaqueCubeLookup[var5] && !Block.opaqueCubeLookup[var6])var9 = 3;
 
-            if (Block.opaqueCubeLookup[var6] && !Block.opaqueCubeLookup[var5])
-            {
-                var9 = 2;
-            }
+            if (Block.opaqueCubeLookup[var6] && !Block.opaqueCubeLookup[var5])var9 = 2;
 
-            if (Block.opaqueCubeLookup[var7] && !Block.opaqueCubeLookup[var8])
-            {
-                var9 = 5;
-            }
+            if (Block.opaqueCubeLookup[var7] && !Block.opaqueCubeLookup[var8])var9 = 5;
 
-            if (Block.opaqueCubeLookup[var8] && !Block.opaqueCubeLookup[var7])
-            {
-                var9 = 4;
-            }
+            if (Block.opaqueCubeLookup[var8] && !Block.opaqueCubeLookup[var7])var9 = 4;
 
-            var1.setBlockMetadataWithNotify(var2, var3, var4, var9);
+            var1.setBlockMetadataWithNotify(var2, var3, var4, var9,2);
         }
     }
 
     /**
      * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
      */
-    public int getBlockTexture(IBlockAccess var1, int var2, int var3, int var4, int var5)
+    /*public int getBlockTexture(IBlockAccess var1, int var2, int var3, int var4, int var5)
     {
         if (var5 == 1)
         {
@@ -102,7 +98,7 @@ public class BlockWorktable extends BlockContainer
             int var6 = var1.getBlockMetadata(var2, var3, var4);
             return var5 != var6 ? 32 : 33;
         }
-    }
+    }*/
 
     /**
      * A randomly called display update to be able to add particles or other items for display
@@ -112,9 +108,30 @@ public class BlockWorktable extends BlockContainer
     /**
      * Returns the block texture based on the side being looked at.  Args: side
      */
-    public int getBlockTextureFromSide(int var1)
+    /*public int getBlockTextureFromSide(int var1)
     {
         return var1 == 1 ? (this.isActive ? 17 : 16) : (var1 == 0 ? 68 : (var1 != 3 && var1 != 2 ? 32 : 33));
+    }*/
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+     * is the only chance you get to register icons.
+     */
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.blockIcon = par1IconRegister.registerIcon("Arch_Table_Side1");
+        this.Side2 = par1IconRegister.registerIcon("Arch_Table_Side2");
+        this.Top = this.isActive? par1IconRegister.registerIcon("Arch_Table_Top_Active") : par1IconRegister.registerIcon("Arch_Table_Top_Idle");
+        this.Bottom = par1IconRegister.registerIcon("Arch_Table_Side1");//TODO: Bottom!
+    }
+
+    /**
+     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
+     */
+    public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
+    {
+        return par1 == 1 ? this.Top : par1==0 ? this.Bottom : (par2&1)==0? this.blockIcon : this.Side2;
     }
 
     /**
@@ -141,15 +158,15 @@ public class BlockWorktable extends BlockContainer
 
         if (var0)
         {
-            var1.setBlockWithNotify(var2, var3, var4, Fossil.blockworktableActive.blockID);
+            var1.setBlock(var2, var3, var4, Fossil.blockworktableActive.blockID);
         }
         else
         {
-            var1.setBlockWithNotify(var2, var3, var4, Fossil.blockworktableIdle.blockID);
+            var1.setBlock(var2, var3, var4, Fossil.blockworktableIdle.blockID);
         }
 
         keepFurnaceInventory = false;
-        var1.setBlockMetadataWithNotify(var2, var3, var4, var5);
+        var1.setBlockMetadataWithNotify(var2, var3, var4, var5,2);
         var6.validate();
         var1.setBlockTileEntity(var2, var3, var4, var6);
     }
@@ -165,29 +182,17 @@ public class BlockWorktable extends BlockContainer
     /**
      * Called when the block is placed in the world.
      */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5)
+    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5, ItemStack par6ItemStack)
     {
         int var6 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
-        if (var6 == 0)
-        {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 2);
-        }
+        if (var6 == 0)var1.setBlockMetadataWithNotify(var2, var3, var4, 2,2);
 
-        if (var6 == 1)
-        {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 5);
-        }
+        if (var6 == 1)var1.setBlockMetadataWithNotify(var2, var3, var4, 5,2);
 
-        if (var6 == 2)
-        {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 3);
-        }
+        if (var6 == 2)var1.setBlockMetadataWithNotify(var2, var3, var4, 3,2);
 
-        if (var6 == 3)
-        {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 4);
-        }
+        if (var6 == 3)var1.setBlockMetadataWithNotify(var2, var3, var4, 4,2);
     }
 
     /**

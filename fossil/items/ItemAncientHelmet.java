@@ -1,6 +1,7 @@
 package fossil.items;
 
 import fossil.Fossil;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -17,14 +18,20 @@ public class ItemAncientHelmet extends ItemArmor implements IArmorTextureProvide
  
     }
  
-    public String getTextureFile()
+    /*public String getTextureFile()
 	{
            return "/fossil/textures/Fos_items.png";
-    }
+    }*/
  
     public String getArmorTextureFile(ItemStack par1)
     {
     	return "/fossil/armor/TextureAncientHelmet.png";
     }
+	
+	@Override
+	public void updateIcons(IconRegister iconRegister)
+	{
+	         iconIndex = iconRegister.registerIcon("Fossil:AnchientHelmet");
+	}
 	
 }

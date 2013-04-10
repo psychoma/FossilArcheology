@@ -25,7 +25,7 @@ public class GuiTimeMachine extends GuiContainer
     public void initGui()
     {
         super.initGui();
-        this.controlList.clear();
+        //this.controlList.clear();
     }
 
     protected void drawGuiContainerForegroundLayer()
@@ -43,9 +43,8 @@ public class GuiTimeMachine extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
     {
         boolean var4 = true;
-        int var5 = this.mc.renderEngine.getTexture("/fossil/textures/TMGui.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(var5);
+        this.mc.renderEngine.bindTexture("/textures/gui/Timemachine.png");
         int var6 = (this.width - this.xSize) / 2;
         int var7 = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(var6, var7, 0, 0, this.xSize, this.ySize);

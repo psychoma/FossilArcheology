@@ -2,28 +2,58 @@ package fossil.blocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import fossil.Fossil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 public class BlockFern extends BlockFlower
 {
 
-    public BlockFern(int var1, int var2)
+    public BlockFern(int var1, Material var2Material)
     {
-        super(var1, var2);
+        super(var1, var2Material.plants);
         this.setTickRandomly(true);
         float var3 = 0.5F;
         this.setBlockBounds(0.5F - var3, 0.0F, 0.5F - var3, 0.5F + var3, 0.25F, 0.5F + var3);
         this.disableStats();
-        this.setRequiresSelfNotify();
+        //this.setRequiresSelfNotify();
     }
+    
+    public static Icon[] fernPics = new Icon[13];
 
     /*public BlockFern(int var1, int var2, boolean lev0)
     {
         this(var1, var2);
     }*/
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+     * is the only chance you get to register icons.
+     */
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.fernPics[0]=par1IconRegister.registerIcon("Fern_1S1");
+        this.fernPics[1]=par1IconRegister.registerIcon("Fern_1S2");
+        this.fernPics[2]=par1IconRegister.registerIcon("Fern_1S3");
+        this.fernPics[3]=par1IconRegister.registerIcon("Fern_1S4");
+        this.fernPics[4]=par1IconRegister.registerIcon("Fern_1S5");
+        this.fernPics[5]=par1IconRegister.registerIcon("Fern_1S6");
+        this.fernPics[6]=par1IconRegister.registerIcon("Fern_1S7");
+        this.fernPics[7]=par1IconRegister.registerIcon("Fern_1S8");
+        this.fernPics[8]=par1IconRegister.registerIcon("Fern_2S1");
+        this.fernPics[9]=par1IconRegister.registerIcon("Fern_2S2");
+        this.fernPics[10]=par1IconRegister.registerIcon("Fern_2S3");
+        this.fernPics[11]=par1IconRegister.registerIcon("Fern_2S4");
+        this.fernPics[12]=par1IconRegister.registerIcon("Fern_2S5");
+    }
 
     public String getTextureFile()
     {
@@ -57,15 +87,15 @@ public class BlockFern extends BlockFlower
                         --var6;
                 	else//create new top block
                 	{
-                		var1.setBlockWithNotify(var2, var3 + 1, var4, Fossil.ferns.blockID);//fernUpper
-                        var1.setBlockMetadataWithNotify(var2, var3 + 1, var4, this.CheckSubType(var6)==0?var6+2:var6+1);
+                		var1.setBlock(var2, var3 + 1, var4, Fossil.ferns.blockID);//fernUpper
+                        var1.setBlock(var2, var3 + 1, var4, this.CheckSubType(var6)==0?var6+2:var6+1);
                 	}
                 	
                 }
                 else if (this.HasLv2(var6))
                 {
                     if (var1.getBlockId(var2, var3 + 1, var4) == Fossil.ferns.blockID)//fernUpper
-                        var1.setBlockMetadataWithNotify(var2, var3 + 1, var4, this.CheckSubType(var6)==0?var6+2:var6+1);//update top block meta data
+                        var1.setBlock(var2, var3 + 1, var4, this.CheckSubType(var6)==0?var6+2:var6+1);//update top block meta data
                     else
                     	var6=this.CheckSubType(var6)==0?3:10;//reset to last block one stage high
                 }
@@ -74,7 +104,7 @@ public class BlockFern extends BlockFlower
                     var6 += 7;
                 }*/
                 //System.out.println(String.valueOf(var6));
-                var1.setBlockMetadataWithNotify(var2, var3, var4, var6); 
+                var1.setBlockMetadataWithNotify(var2, var3, var4, var6, 0); 
             }
             /*else if (!this.lv2 && var5.nextInt(100) < 5)
             {
@@ -94,8 +124,8 @@ public class BlockFern extends BlockFlower
                     {
                         if ((var8 != 0 || var10 != 0 || var9 != 0) && var1.getBlockId(var2 + var8, var9 + var3 - 1, var4 + var10) == Block.grass.blockID && (var1.isAirBlock(var2 + var8, var9 + var3, var4 + var10) || var1.getBlockId(var2 + var8, var9 + var3, var4 + var10) == Block.tallGrass.blockID) && CheckUnderTree(var1, var2 + var8, var9 + var3, var4 + var10) && (new Random()).nextInt(10) <= 9)
                         {
-                            var1.setBlockWithNotify(var2 + var8, var9 + var3, var4 + var10, Fossil.ferns.blockID);
-                            var1.setBlockMetadataWithNotify(var2 + var8, var9 + var3, var4 + var10, 0+8*this.CheckSubType(var6));
+                            var1.setBlock(var2 + var8, var9 + var3, var4 + var10, Fossil.ferns.blockID);
+                            var1.setBlock(var2 + var8, var9 + var3, var4 + var10, 0+8*this.CheckSubType(var6));
                         }
                     }
                 }
@@ -105,7 +135,7 @@ public class BlockFern extends BlockFlower
 
     public void fertilize(World var1, int var2, int var3, int var4)//?????
     {
-        var1.setBlockMetadataWithNotify(var2, var3, var4, 5 + 7 * (new Random()).nextInt(1));
+        var1.setBlock(var2, var3, var4, 5 + 7 * (new Random()).nextInt(1));
     }
 
     private float getGrowthRate(World var1, int var2, int var3, int var4)
@@ -160,11 +190,11 @@ public class BlockFern extends BlockFlower
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public int getBlockTextureFromSideAndMetadata(int var1, int var2)
+    public Icon getBlockTextureFromSideAndMetadata(int var1, int var2)
     {
-       if (var2 < 0 || var2>=Fossil.fernPics.length)
+       if (var2 < 0 || var2>=fernPics.length)
         {var2 = 0;}
-        return Fossil.fernPics[var2];
+        return fernPics[var2];
     }
 
     /**

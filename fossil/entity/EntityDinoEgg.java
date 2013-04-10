@@ -250,7 +250,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
         {
             double var5 = this.boundingBox.minY + (this.boundingBox.maxY - this.boundingBox.minY) * (double)(var4 + 0) / (double)var1 - 0.125D;
             double var7 = this.boundingBox.minY + (this.boundingBox.maxY - this.boundingBox.minY) * (double)(var4 + 1) / (double)var1 - 0.125D;
-            AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.boundingBox.minX, var5, this.boundingBox.minZ, this.boundingBox.maxX, var7, this.boundingBox.maxZ);
+            AxisAlignedBB.getAABBPool().getAABB(this.boundingBox.minX, var5, this.boundingBox.minZ, this.boundingBox.maxX, var7, this.boundingBox.maxZ);
         }
 
         double var21;
@@ -407,7 +407,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
 
             if (this.worldObj.getBlockId(var24, var25, var20) == Block.snow.blockID)
             {
-                this.worldObj.setBlockWithNotify(var24, var25, var20, 0);
+                this.worldObj.setBlock(var24, var25, var20, 0);
             }
         }
 

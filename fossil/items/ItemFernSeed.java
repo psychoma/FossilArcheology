@@ -4,6 +4,7 @@ import java.util.Random;
 
 import fossil.blocks.BlockFern;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,11 +18,6 @@ public class ItemFernSeed extends Item
     {
         super(var1);
         this.field_318_a = var2;
-    }
-
-    public String getTextureFile()
-    {
-        return "/fossil/textures/Fos_items.png";
     }
 
     /**
@@ -40,8 +36,8 @@ public class ItemFernSeed extends Item
 
             if (var11 == Block.grass.blockID && var3.isAirBlock(var4, var5 + 1, var6) && BlockFern.CheckUnderTree(var3, var4, var5, var6))
             {
-                var3.setBlockWithNotify(var4, var5 + 1, var6, this.field_318_a);
-                var3.setBlockMetadataWithNotify(var4, var5 + 1, var6, (new Random()).nextInt(2)*8);
+                var3.setBlock(var4, var5 + 1, var6, this.field_318_a);
+                var3.setBlock(var4, var5 + 1, var6, (new Random()).nextInt(2)*8);
                 --var1.stackSize;
                 return true;
             }
@@ -51,4 +47,11 @@ public class ItemFernSeed extends Item
             }
         }
     }
+    
+    @Override
+    public void updateIcons(IconRegister iconRegister)
+    {
+             iconIndex = iconRegister.registerIcon("Fossil:FernSeeds");
+    }
+
 }

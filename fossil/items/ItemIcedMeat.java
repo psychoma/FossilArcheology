@@ -1,6 +1,7 @@
 package fossil.items;
 
 import fossil.items.forgeItems.*;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemStack;
@@ -29,4 +30,11 @@ public class ItemIcedMeat extends ForgeItemSword
         var1.damageItem(1000, var6);
         return true;
     }
+    
+    @Override
+    public void updateIcons(IconRegister iconRegister)
+    {
+             iconIndex = iconRegister.registerIcon("Fossil:IcedMeat");
+    }
+
 }

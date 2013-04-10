@@ -93,7 +93,7 @@ public class TileEntityTimeMachine extends TileEntity implements IInventory, ISi
                     var10002 = this.restoringLayer;
                     var10003 = this.zCoord + var5;
                     this.getClass();
-                    var10000.setBlockAndMetadata(var10001, var10002, var10003 - 100 / 2, var10, var12);
+                    var10000.setBlockMetadataWithNotify(var10001, var10002, var10003 - 100 / 2, var10, var12);
 
                     if (var10 != 0)
                     {
@@ -398,4 +398,14 @@ public class TileEntityTimeMachine extends TileEntity implements IInventory, ISi
             return var2.hasTileEntity() ? true : var2 == Block.blockDiamond || var2 == Block.oreDiamond;
         }
     }
+
+	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		return false;
+	}
 }

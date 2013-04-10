@@ -12,6 +12,7 @@ import fossil.entity.EntityDinoEgg;
 import fossil.entity.mob.EntityNautilus;
 import fossil.fossilEnums.EnumDinoType;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,9 +37,14 @@ public class ItemAncientEgg extends Item
         this.maxStackSize = 1;
     }
 
-    public String getTextureFile()
+    /*public String getTextureFile()
     {
         return "/fossil/textures/Fos_items.png";
+    }*/
+    @SideOnly(Side.CLIENT)
+    public void updateIcons(IconRegister par1IconRegister)
+    {
+        this.iconIndex = par1IconRegister.registerIcon("/fossil/textures/mob/Mosasaurus egg.png");
     }
 
     /**

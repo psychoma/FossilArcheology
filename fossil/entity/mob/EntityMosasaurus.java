@@ -62,7 +62,7 @@ public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
         super(var1);
         this.SelfType = EnumDinoType.Mosasaurus;
         this.looksWithInterest = false;
-        this.texture = "/fossil/textures/Mosasaurus.png";
+        this.texture = "/fossil/textures/mob/Mosasaurus.png";
         //this.setSize(0.5F, 0.5F);
         //this.moveSpeed = 0.3F;
         this.health = 10;
@@ -319,7 +319,7 @@ public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
             this.motionZ *= (double)var8;
         }
 
-        this.prevLegYaw = this.legYaw;
+        //this.prevLegYaw = this.legYaw;
         var3 = this.posX - this.prevPosX;
         double var10 = this.posZ - this.prevPosZ;
         float var7 = MathHelper.sqrt_double(var3 * var3 + var10 * var10) * 4.0F;
@@ -329,8 +329,8 @@ public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
             var7 = 1.0F;
         }
 
-        this.legYaw += (var7 - this.legYaw) * 0.4F;
-        this.legSwing += this.legYaw;
+        //this.legYaw += (var7 - this.legYaw) * 0.4F;
+        //this.legSwing += this.legYaw;
     }
 
     /**
@@ -659,7 +659,7 @@ public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
             EntityLiving var2 = null;
             EntityLiving var3 = null;
             float var4 = (float)var1 * 2.0F;
-            List var5 = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand((double)var1, (double)(var1 * 2), (double)var1));
+            List var5 = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().getAABB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand((double)var1, (double)(var1 * 2), (double)var1));
             Iterator var6 = var5.iterator();
 
             while (var6.hasNext())
@@ -746,7 +746,7 @@ public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
     public void HandleBoatSinking()
     {
         EntityBoat var1 = null;
-        List var2 = this.worldObj.getEntitiesWithinAABB(EntityBoat.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(10.0D, 4.0D, 10.0D));
+        List var2 = this.worldObj.getEntitiesWithinAABB(EntityBoat.class, AxisAlignedBB.getAABBPool().getAABB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(10.0D, 4.0D, 10.0D));
         Iterator var3 = var2.iterator();
 
         while (var3.hasNext())

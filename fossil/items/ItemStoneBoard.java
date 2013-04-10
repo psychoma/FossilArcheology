@@ -2,6 +2,7 @@ package fossil.items;
 
 import fossil.Fossil;
 import fossil.entity.EntityStoneboard;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -15,11 +16,6 @@ public class ItemStoneBoard extends Item
     {
         super(var1);
         this.setCreativeTab(CreativeTabs.tabDecorations);
-    }
-
-    public String getTextureFile()
-    {
-        return "/fossil/textures/Fos_items.png";
     }
 
     public boolean onItemUse(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6, int var7, float var8, float var9, float var10)
@@ -55,4 +51,11 @@ public class ItemStoneBoard extends Item
             }
         }
     }
+    
+    @Override
+    public void updateIcons(IconRegister iconRegister)
+    {
+             iconIndex = iconRegister.registerIcon("Fossil:StoneTablet");
+    }
+
 }

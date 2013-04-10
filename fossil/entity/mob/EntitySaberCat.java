@@ -56,7 +56,7 @@ public class EntitySaberCat extends EntityTameable
     public EntitySaberCat(World var1)
     {
         super(var1);
-        this.texture = "/fossil/textures/SaberCat_Adult.png";
+        this.texture = "/fossil/textures/mob/SaberCat_Adult.png";
         this.setSize(0.8F, 0.8F);
         this.moveSpeed = 0.3F;
         this.getNavigator().setAvoidsWater(true);
@@ -230,7 +230,7 @@ public class EntitySaberCat extends EntityTameable
         }
         else if (this.entityToAttack == null && !this.hasPath() && !this.isTamed() && !this.isChild() && this.worldObj.rand.nextInt(100) == 0)
         {
-            List var3 = this.worldObj.getEntitiesWithinAABB(EntityAnimal.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(16.0D, 4.0D, 16.0D));
+            List var3 = this.worldObj.getEntitiesWithinAABB(EntityAnimal.class, AxisAlignedBB.getAABBPool().getAABB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(16.0D, 4.0D, 16.0D));
 
             if (!var3.isEmpty())
             {

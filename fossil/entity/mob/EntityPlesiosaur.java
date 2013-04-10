@@ -74,7 +74,7 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
         this.looksWithInterest = false;
         //this.SubSpecies = (new Random()).nextInt(3) + 1;
         this.setSubSpecies((new Random()).nextInt(3) + 1);
-        this.texture = "/fossil/textures/Plesiosaur_adult.png";
+        this.texture = "/fossil/textures/mob/Plesiosaur_adult.png";
         //this.setSize(1.0F, 1.0F);
         //this.moveSpeed = 0.7F;
         this.health = 8;
@@ -894,7 +894,7 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
                                     Block.blocksList[var4].dropBlockAsItem(this.worldObj, var1, var2, var3, 1, 0);
                                 }
 
-                                this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
+                                this.worldObj.setBlock(var1, var2, var3, 0);
                                 destroyed++;
                                 //this.RushTick = 10;
                             }
@@ -1122,7 +1122,7 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
             this.motionZ *= (double)var3;
         }
 
-        this.prevLegYaw = this.legYaw;
+        //this.prevLegYaw = this.legYaw;
         var9 = this.posX - this.prevPosX;
         double var12 = this.posZ - this.prevPosZ;
         float var11 = MathHelper.sqrt_double(var9 * var9 + var12 * var12) * 4.0F;
@@ -1132,7 +1132,7 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
             var11 = 1.0F;
         }
 
-        this.legYaw += (var11 - this.legYaw) * 0.4F;
-        this.legSwing += this.legYaw;
+        //this.legYaw += (var11 - this.legYaw) * 0.4F;
+        //this.legSwing += this.legYaw;
     }
 }

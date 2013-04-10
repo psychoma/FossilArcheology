@@ -1181,7 +1181,7 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
         	        {
         	        	System.err.println("ERROR WHILE WRITING Rider Input Data to Packet");
         	        }
-        			Minecraft.getMinecraft().getSendQueue().addToSendQueue(new Packet250CustomPayload("RiderInput",var3.toByteArray()));
+        			Minecraft.getMinecraft().getNetHandler().addToSendQueue(new Packet250CustomPayload("RiderInput",var3.toByteArray()));
         			//System.out.println("Client has sent Rider Input data!");
         		}
         	}

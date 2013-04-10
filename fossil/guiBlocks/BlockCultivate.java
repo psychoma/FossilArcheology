@@ -2,20 +2,28 @@ package fossil.guiBlocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+
 import fossil.Fossil;
 import fossil.entity.mob.EntityFailuresaurus;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -27,12 +35,15 @@ public class BlockCultivate extends BlockContainer
     private Random furnaceRand = new Random();
     private final boolean isActive;
     private static boolean keepFurnaceInventory = false;
+    @SideOnly(Side.CLIENT)
+    private Icon Top;
+    @SideOnly(Side.CLIENT)
+    private Icon Bottom;
 
     public BlockCultivate(int var1, boolean var2)
     {
         super(var1, Material.glass);
         this.isActive = var2;
-        this.blockIndexInTexture = 20;
     }
 
     /**
@@ -62,34 +73,41 @@ public class BlockCultivate extends BlockContainer
             int var8 = var1.getBlockId(var2 + 1, var3, var4);
             byte var9 = 3;
 
-            if (Block.opaqueCubeLookup[var5] && !Block.opaqueCubeLookup[var6])
-            {
-                var9 = 3;
-            }
+            if (Block.opaqueCubeLookup[var5] && !Block.opaqueCubeLookup[var6])var9 = 3;
 
-            if (Block.opaqueCubeLookup[var6] && !Block.opaqueCubeLookup[var5])
-            {
-                var9 = 2;
-            }
+            if (Block.opaqueCubeLookup[var6] && !Block.opaqueCubeLookup[var5])var9 = 2;
 
-            if (Block.opaqueCubeLookup[var7] && !Block.opaqueCubeLookup[var8])
-            {
-                var9 = 5;
-            }
+            if (Block.opaqueCubeLookup[var7] && !Block.opaqueCubeLookup[var8])var9 = 5;
 
-            if (Block.opaqueCubeLookup[var8] && !Block.opaqueCubeLookup[var7])
-            {
-                var9 = 4;
-            }
+            if (Block.opaqueCubeLookup[var8] && !Block.opaqueCubeLookup[var7])var9 = 4;
 
-            var1.setBlockMetadataWithNotify(var2, var3, var4, var9);
+            var1.setBlockMetadataWithNotify(var2, var3, var4, var9,0);
         }
+    }
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+     * is the only chance you get to register icons.
+     */
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.Bottom = par1IconRegister.registerIcon("Culture_Bottom");
+        this.Top = par1IconRegister.registerIcon("Culture_Top");
+        this.blockIcon = this.isActive? par1IconRegister.registerIcon("Culture_Sides_Active") : par1IconRegister.registerIcon("Culture_Sides_Idle");
     }
 
     /**
+     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
+     */
+    public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
+    {
+        return par1 == 1 ? this.Top : (par1 != 0 ? this.blockIcon : this.Bottom);
+    }
+    /**
      * Retrieves the block texture to use based on the display side. Args: iBlockAccess, x, y, z, side
      */
-    public int getBlockTexture(IBlockAccess var1, int var2, int var3, int var4, int var5)
+    /*public int getBlockTexture(IBlockAccess var1, int var2, int var3, int var4, int var5)
     {
         if (var5 == 1)
         {
@@ -104,8 +122,25 @@ public class BlockCultivate extends BlockContainer
             int var6 = var1.getBlockMetadata(var2, var3, var4);
             return var5 != var6 ? (this.isActive ? 21 : 20) : (this.isActive ? 21 : 20);
         }
+    }*/
+    /*
+     * If this returns true, then comparators facing away from this block will use the value from
+     * getComparatorInputOverride instead of the actual redstone signal strength.
+     *
+    public boolean hasComparatorInputOverride()
+    {//TODO
+        return true;
     }
 
+    /*
+     * If hasComparatorInputOverride returns true, the return value from this is used instead of the redstone signal
+     * strength when this block inputs to a comparator.
+     *
+    public int getComparatorInputOverride(World par1World, int par2, int par3, int par4, int par5)
+    {//TODO
+        return Container.func_94526_b((IInventory)par1World.getBlockTileEntity(par2, par3, par4));
+    }*/
+    @SideOnly(Side.CLIENT)
     /**
      * A randomly called display update to be able to add particles or other items for display
      */
@@ -114,10 +149,10 @@ public class BlockCultivate extends BlockContainer
     /**
      * Returns the block texture based on the side being looked at.  Args: side
      */
-    public int getBlockTextureFromSide(int var1)
+    /*public int getBlockTextureFromSide(int var1)
     {
         return var1 == 1 ? 36 : (var1 == 0 ? 36 : (var1 == 3 ? 20 : 20));
-    }
+    }*/
 
     /**
      * Called upon block activation (right click on the block.)
@@ -143,15 +178,15 @@ public class BlockCultivate extends BlockContainer
 
         if (var0)
         {
-            var1.setBlockWithNotify(var2, var3, var4, Fossil.blockcultivateActive.blockID);
+            var1.setBlock(var2, var3, var4, Fossil.blockcultivateActive.blockID);
         }
         else
         {
-            var1.setBlockWithNotify(var2, var3, var4, Fossil.blockcultivateIdle.blockID);
+            var1.setBlock(var2, var3, var4, Fossil.blockcultivateIdle.blockID);
         }
 
         keepFurnaceInventory = false;
-        var1.setBlockMetadataWithNotify(var2, var3, var4, var5);
+        var1.setBlockMetadataWithNotify(var2, var3, var4, var5,2);
         var6.validate();
         var1.setBlockTileEntity(var2, var3, var4, var6);
     }
@@ -161,36 +196,25 @@ public class BlockCultivate extends BlockContainer
      */
     public TileEntity createNewTileEntity(World var1)
     {
-        return new TileEntityCultivate();
+    	return new TileEntityCultivate();
     }
 
     /**
      * Called when the block is placed in the world.
      */
-    public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5)
-    {
+    /*public void onBlockPlacedBy(World var1, int var2, int var3, int var4, EntityLiving var5)
+    {This Block doesnt care for directions!
+    	super.onBlockPlacedBy(par1World, par2, par3, par4, par5EntityLiving, par6ItemStack)
         int var6 = MathHelper.floor_double((double)(var5.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
-        if (var6 == 0)
-        {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 2);
-        }
+        if (var6 == 0)var1.setBlockMetadataWithNotify(var2, var3, var4, 2,2);
 
-        if (var6 == 1)
-        {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 5);
-        }
+        if (var6 == 1)var1.setBlockMetadataWithNotify(var2, var3, var4, 5,2);
 
-        if (var6 == 2)
-        {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 3);
-        }
+        if (var6 == 2)var1.setBlockMetadataWithNotify(var2, var3, var4, 3,2);
 
-        if (var6 == 3)
-        {
-            var1.setBlockMetadataWithNotify(var2, var3, var4, 4);
-        }
-    }
+        if (var6 == 3)var1.setBlockMetadataWithNotify(var2, var3, var4, 4,2);
+    }*/
 
     private void ReturnIron(World var1, int var2, int var3, int var4)
     {
@@ -229,14 +253,14 @@ public class BlockCultivate extends BlockContainer
         }
 
         this.ReturnIron(var1, var2, var3, var4);
-        var1.setBlockWithNotify(var2, var3, var4, 0);
+        var1.setBlock(var2, var3, var4, 0);
         var1.removeBlockTileEntity(var2, var3, var4);
 
         if (var5)
         {
             Object var9 = null;
             var1.playAuxSFX(2001, var2, var3, var4, Block.glass.blockID);
-            var1.setBlockWithNotify(var2, var3, var4, Block.waterMoving.blockID);
+            var1.setBlock(var2, var3, var4, Block.waterMoving.blockID);
 
             if (var1.isRemote)
             {
@@ -274,42 +298,44 @@ public class BlockCultivate extends BlockContainer
         {
             TileEntityCultivate var7 = (TileEntityCultivate)var1.getBlockTileEntity(var2, var3, var4);
 
-            for (int var8 = 0; var8 < var7.getSizeInventory(); ++var8)
+            if(var7 instanceof TileEntityCultivate)
             {
-                ItemStack var9 = var7.getStackInSlot(var8);
-
-                if (var9 != null)
-                {
-                    float var10 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
-                    float var11 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
-                    float var12 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
-
-                    while (var9.stackSize > 0)
-                    {
-                        int var13 = this.furnaceRand.nextInt(21) + 10;
-
-                        if (var13 > var9.stackSize)
-                        {
-                            var13 = var9.stackSize;
-                        }
-
-                        var9.stackSize -= var13;
-                        EntityItem var14 = new EntityItem(var1, (double)((float)var2 + var10), (double)((float)var3 + var11), (double)((float)var4 + var12), new ItemStack(var9.itemID, var13, var9.getItemDamage()));
-                        float var15 = 0.05F;
-                        var14.motionX = (double)((float)this.furnaceRand.nextGaussian() * var15);
-                        var14.motionY = (double)((float)this.furnaceRand.nextGaussian() * var15 + 0.2F);
-                        var14.motionZ = (double)((float)this.furnaceRand.nextGaussian() * var15);
-                        var1.spawnEntityInWorld(var14);
-                    }
-                }
+		        for (int var8 = 0; var8 < var7.getSizeInventory(); ++var8)
+		        {
+		            ItemStack var9 = var7.getStackInSlot(var8);
+		
+		            if (var9 != null)
+		            {
+		                float var10 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
+		                float var11 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
+		                float var12 = this.furnaceRand.nextFloat() * 0.8F + 0.1F;
+		
+		                while (var9.stackSize > 0)
+		                {
+		                    int var13 = this.furnaceRand.nextInt(21) + 10;
+		
+		                    if (var13 > var9.stackSize)
+		                    {
+		                        var13 = var9.stackSize;
+		                    }
+		
+		                    var9.stackSize -= var13;
+		                    EntityItem var14 = new EntityItem(var1, (double)((float)var2 + var10), (double)((float)var3 + var11), (double)((float)var4 + var12), new ItemStack(var9.itemID, var13, var9.getItemDamage()));
+		                    float var15 = 0.05F;
+		                    var14.motionX = (double)((float)this.furnaceRand.nextGaussian() * var15);
+		                    var14.motionY = (double)((float)this.furnaceRand.nextGaussian() * var15 + 0.2F);
+		                    var14.motionZ = (double)((float)this.furnaceRand.nextGaussian() * var15);
+		                    var1.spawnEntityInWorld(var14);
+		                }
+		            }
+		        }
             }
         }
-
         super.breakBlock(var1, var2, var3, var4, var5, var6);
     }
 
-    public String getTextureFile()
+    /*public String getTextureFile()
     {
         return "/fossil/textures/Fos_terrian.png";
-    }
+    }*/
 }

@@ -3,19 +3,21 @@ package fossil.blocks;
 import fossil.Fossil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 
 public class BlockPalaePlanks extends Block
 {
 
-	public BlockPalaePlanks(int par1, int par2)
+	public BlockPalaePlanks(int par1, Material var2Material)
     {
-        super(par1, par2, Material.wood);
+        super(par1, Material.wood);
         this.setCreativeTab(Fossil.tabFBlocks);
     }
     
-    public String getTextureFile()
+	@Override
+    public void registerIcons(IconRegister par1IconRegister)
     {
-     return "/fossil/textures/Fos_terrian.png";
+    	this.blockIcon = par1IconRegister.registerIcon("Palae_Planks"); //adding in a texture, 1.5.1 style!
     }
 	
 }

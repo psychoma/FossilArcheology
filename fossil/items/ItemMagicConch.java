@@ -7,6 +7,7 @@ import fossil.entity.mob.EntityDinosaur;
 import fossil.entity.mob.EntityPlesiosaur;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,18 +25,13 @@ public class ItemMagicConch extends Item
         this.maxStackSize = 1;
     }
 
-    public String getTextureFile()
-    {
-        return "/fossil/textures/Fos_items.png";
-    }
-
     /**
      * Gets an icon index based on an item's damage value
      */
-    public int getIconFromDamage(int var1)
-    {
-        return this.iconIndex;
-    }
+    //public int getIconFromDamage(int var1)
+    //{
+    //    return this.iconIndex;
+    //}
 
     //public String getItemNameIS(ItemStack var1)
     //{
@@ -59,7 +55,7 @@ public class ItemMagicConch extends Item
         String var11 = Fossil.GetLangTextByKey("Drum.Msg.Middle");
         String var12 = Fossil.GetLangTextByKey("Drum.Msg.Tail");
         String var13 = "";
-        List var14 = var2.getEntitiesWithinAABB(EntityPlesiosaur.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(var3.posX, var3.posY, var3.posZ, var3.posX + 1.0D, var3.posY + 1.0D, var3.posZ + 1.0D).expand(30.0D, 4.0D, 30.0D));
+        List var14 = var2.getEntitiesWithinAABB(EntityPlesiosaur.class, AxisAlignedBB.getAABBPool().getAABB(var3.posX, var3.posY, var3.posZ, var3.posX + 1.0D, var3.posY + 1.0D, var3.posZ + 1.0D).expand(30.0D, 4.0D, 30.0D));
         Iterator var15 = var14.iterator();
 
         while (var15.hasNext())
@@ -78,4 +74,11 @@ public class ItemMagicConch extends Item
         Fossil.ShowMessage(var10 + var9 + var11 + " " + var13 + var12, var3);
         return var1;
     }
+    
+    @Override
+    public void updateIcons(IconRegister iconRegister)
+    {
+             iconIndex = iconRegister.registerIcon("Fossil:MagicConch");
+    }
+
 }

@@ -199,7 +199,7 @@ public class WorldGenShipWreck implements IWorldGenerator
                                             var16 = this.SelfType.getMetaData();
                                         }
 
-                                        world.setBlockAndMetadata(blockX - this.WidthX / 2 + var10, var7 + var11, blockZ - this.WidthZ / 2 + var12, var15, var16);
+                                        world.setBlockMetadataWithNotify(blockX - this.WidthX / 2 + var10, var7 + var11, blockZ - this.WidthZ / 2 + var12, var15, var16);
 
                                         if (Block.blocksList[var15].hasTileEntity(var16))
                                         {

@@ -2,20 +2,29 @@ package fossil.guiBlocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import fossil.Fossil;
 import fossil.fossilEnums.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 
 public class BlockDrum extends BlockContainer
 {
+	Icon Top1;
+	Icon Top2;
+	Icon Top3;
+	Icon Bottom;
     public BlockDrum(int var1)
     {
-        super(var1, 74, Material.wood);
+        super(var1, Material.wood);
     }
 
     public String getTextureFile()
@@ -34,7 +43,7 @@ public class BlockDrum extends BlockContainer
     /**
      * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
      */
-    public int getBlockTextureFromSideAndMetadata(int var1, int var2)
+    /*public int getBlockTextureFromSideAndMetadata(int var1, int var2)
     {
         if (var1 != 1 && var1 != 0)
         {
@@ -53,6 +62,48 @@ public class BlockDrum extends BlockContainer
 
                 case 2:
                     return 3;
+            }
+        }
+    }*/
+    @SideOnly(Side.CLIENT)
+
+    /**
+     * When this method is called, your block should register all the icons it needs with the given IconRegister. This
+     * is the only chance you get to register icons.
+     */
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.blockIcon = par1IconRegister.registerIcon("Drum_Side");
+        this.Top1 = par1IconRegister.registerIcon("Drum_Top1");
+        this.Top2 = par1IconRegister.registerIcon("Drum_Top2");
+        this.Top3 = par1IconRegister.registerIcon("Drum_Top3");
+        this.Bottom = par1IconRegister.registerIcon("Drum_Bottom");
+    }
+
+    /**
+     * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
+     */
+    public Icon getBlockTextureFromSideAndMetadata(int par1, int par2)
+    {
+        if (par1 != 1 && par1 != 0)
+        {
+            return blockIcon;
+        }
+        else
+        {
+        	if(par1==0)
+        		return Bottom;
+            switch (par2)
+            {
+                case 0:
+                default:
+                    return Top1;
+
+                case 1:
+                    return Top2;
+
+                case 2:
+                    return Top3;
             }
         }
     }
@@ -89,7 +140,7 @@ public class BlockDrum extends BlockContainer
         {
             TileEntityDrum var10 = (TileEntityDrum)var1.getBlockTileEntity(var2, var3, var4);
             var10.TriggerOrder(var5);
-            var1.setBlockMetadataWithNotify(var2, var3, var4, var10.Order.ordinal());
+            var1.setBlock(var2, var3, var4, var10.Order.ordinal());
         }
         return true;
     }

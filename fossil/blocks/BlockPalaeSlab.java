@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import fossil.Fossil;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -29,13 +30,13 @@ public class BlockPalaeSlab extends FossilSlabs
 	{
 		if(par1World.getBlockId(par2, par3 - 1, par4) == Fossil.palaeSingleSlab.blockID)
 		{
-			par1World.setBlockWithNotify(par2, par3, par4, 0);
-			par1World.setBlockWithNotify(par2, par3 - 1, par4, Fossil.palaeDoubleSlab.blockID);
+			par1World.setBlock(par2, par3, par4, 0);
+			par1World.setBlock(par2, par3 - 1, par4, Fossil.palaeDoubleSlab.blockID);
 		}
 		if(par1World.getBlockId(par2, par3 + 1, par4) == Fossil.palaeSingleSlab.blockID)
 		{
-			par1World.setBlockWithNotify(par2, par3, par4, 0);
-			par1World.setBlockWithNotify(par2, par3 + 1, par4, Fossil.palaeDoubleSlab.blockID);
+			par1World.setBlock(par2, par3, par4, 0);
+			par1World.setBlock(par2, par3 + 1, par4, Fossil.palaeDoubleSlab.blockID);
 		}
 	}
 
@@ -49,16 +50,10 @@ public class BlockPalaeSlab extends FossilSlabs
 		return null;
 	}
 
-	//gets texture file
-	public String getTextureFile()
+	@Override
+	public void registerIcons(IconRegister par1IconRegister)
 	{
-		return "/fossil/textures/Fos_terrian.png";
-	}
-
-	@SideOnly(Side.CLIENT) //Client side only
-	public int getBlockTextureFromSide(int i)
-	{ 
-		return 80;
+	     this.blockIcon = par1IconRegister.registerIcon("Palae_Planks");
 	}
 
 }

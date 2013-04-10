@@ -31,11 +31,6 @@ public class ItemEmbryoSyringe extends ForgeItem
 
     private void initItemNameVector() {}
 
-    public String getTextureFile()
-    {
-    	return "/fossil/textures/Fos_items.png";
-    }
-
     /*
      * Gets an icon index based on an item's damage value
      */

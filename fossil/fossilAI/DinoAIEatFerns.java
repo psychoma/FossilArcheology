@@ -84,7 +84,7 @@ public class DinoAIEatFerns extends EntityAIBase
             if (this.worldObj.getBlockId(var1, var2, var3) == Fossil.ferns.blockID)
             {
                 this.worldObj.playAuxSFX(2001, var1, var2, var3, Block.tallGrass.blockID + 4096);
-                this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
+                this.worldObj.setBlock(var1, var2, var3, 0);
                 this.entityVar.increaseHunger(25);
             }
         }

@@ -1,5 +1,6 @@
 package fossil.items;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.Item;
 
 public class ItemSkull extends Item
@@ -10,8 +11,10 @@ public class ItemSkull extends Item
         this.maxStackSize = 64;
     }
 
-    public String getTextureFile()
+    @Override
+    public void updateIcons(IconRegister iconRegister)
     {
-        return "/fossil/textures/Fos_items.png";
+             iconIndex = iconRegister.registerIcon("Fossil:Skull");
     }
+
 }

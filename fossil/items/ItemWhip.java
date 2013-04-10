@@ -3,6 +3,7 @@ package fossil.items;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fossil.entity.mob.EntityDinosaur;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -38,11 +39,6 @@ public class ItemWhip extends ItemCarrotOnAStick
         return true;
     }
 
-    public String getTextureFile()
-    {
-        return "/fossil/textures/Fos_items.png";
-    }
-
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
@@ -66,4 +62,11 @@ public class ItemWhip extends ItemCarrotOnAStick
         }
         return I;
     }
+    
+    @Override
+    public void updateIcons(IconRegister iconRegister)
+    {
+             iconIndex = iconRegister.registerIcon("Fossil:Whip");
+    }
+
 }

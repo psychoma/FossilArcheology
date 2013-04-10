@@ -26,7 +26,7 @@ public class GuiFeeder extends GuiContainer
 
     protected void drawGuiContainerForegroundLayer()
     {
-        this.fontRenderer.drawString(Fossil.GetLangTextByKey("block.Feeder.Name"), 8, 6, 4210752);
+        this.fontRenderer.drawString(Fossil.GetLangTextByKey("Block.Feeder.Name"), 8, 6, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
@@ -81,9 +81,9 @@ public class GuiFeeder extends GuiContainer
      */
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
     {
-        int var4 = this.mc.renderEngine.getTexture("/fossil/textures/UIFeeder.png");
+        //int var4 = this.mc.renderEngine.getTexture("/fossil/textures/UIFeeder.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(var4);
+        this.mc.renderEngine.bindTexture("/textures/gui/Feeder.png");
         int var5 = (this.width - this.xSize) / 2;
         int var6 = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);

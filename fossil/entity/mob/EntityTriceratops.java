@@ -135,16 +135,16 @@ public class EntityTriceratops extends EntityDinosaur
         	switch (this.getSubSpecies())
             {
                 case 1:
-                    return "/fossil/textures/Triceratops_Adult_1.png";
+                    return "/fossil/textures/mob/Triceratops_Adult_1.png";
 
                 case 2:
-                    return "/fossil/textures/Triceratops_Adult_2.png";
+                    return "/fossil/textures/mob/Triceratops_Adult_2.png";
 
                 case 3:
-                    return "/fossil/textures/Triceratops_Adult_3.png";
+                    return "/fossil/textures/mob/Triceratops_Adult_3.png";
 
                 default:
-                    return "/fossil/textures/Triceratops_Adult_1.png";
+                    return "/fossil/textures/mob/Triceratops_Adult_1.png";
             }
         }
         if(this.isTeen())
@@ -152,31 +152,31 @@ public class EntityTriceratops extends EntityDinosaur
         	switch (this.getSubSpecies())
             {
                 case 1:
-                    return "/fossil/textures/Triceratops_Teen_1.png";
+                    return "/fossil/textures/mob/Triceratops_Teen_1.png";
 
                 case 2:
-                    return "/fossil/textures/Triceratops_Teen_2.png";
+                    return "/fossil/textures/mob/Triceratops_Teen_2.png";
 
                 case 3:
-                    return "/fossil/textures/Triceratops_Teen_3.png";
+                    return "/fossil/textures/mob/Triceratops_Teen_3.png";
 
                 default:
-                    return "/fossil/textures/Triceratops_Teen_1.png";
+                    return "/fossil/textures/mob/Triceratops_Teen_1.png";
             }
         }
 		switch (this.getSubSpecies())
         {
             case 1:
-                return "/fossil/textures/Triceratops_Baby_1.png";
+                return "/fossil/textures/mob/Triceratops_Baby_1.png";
 
             case 2:
-                return "/fossil/textures/Triceratops_Baby_2.png";
+                return "/fossil/textures/mob/Triceratops_Baby_2.png";
 
             case 3:
-                return "/fossil/textures/Triceratops_Baby_3.png";
+                return "/fossil/textures/mob/Triceratops_Baby_3.png";
 
             default:
-                return "/fossil/textures/Triceratops_Baby_1.png";
+                return "/fossil/textures/mob/Triceratops_Baby_1.png";
         }
 
     }
@@ -581,7 +581,7 @@ public class EntityTriceratops extends EntityDinosaur
                                     Block.blocksList[var4].dropBlockAsItem(this.worldObj, var1, var2, var3, 1, 0);
                                 }
 
-                                this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
+                                this.worldObj.setBlock(var1, var2, var3, 0);
                                 destroyed++;
                                 //this.RushTick = 10;
                             }
@@ -679,16 +679,16 @@ public class EntityTriceratops extends EntityDinosaur
                     if (this.worldObj.getBlockId((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4), (int)Math.round(this.posZ + (double)var5 + (double)var7)) == Fossil.ferns.blockID)
                     {
                         this.worldObj.playAuxSFX(2001, (int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4), (int)Math.round(this.posZ + (double)var5 + (double)var7), Block.tallGrass.blockID);
-                        this.worldObj.setBlockWithNotify((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4), (int)Math.round(this.posZ + (double)var5 + (double)var7), 0);
+                        this.worldObj.setBlock((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4), (int)Math.round(this.posZ + (double)var5 + (double)var7), 0);
 
                         if (this.worldObj.getBlockId((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4) + 1, (int)Math.round(this.posZ + (double)var5 + (double)var7)) == Fossil.ferns.blockID)//fernUpper
                         {
-                            this.worldObj.setBlockWithNotify((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4) + 1, (int)Math.round(this.posZ + (double)var5 + (double)var7), 0);
+                            this.worldObj.setBlock((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4) + 1, (int)Math.round(this.posZ + (double)var5 + (double)var7), 0);
                         }
 
                         if (this.worldObj.getBlockId((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4) - 1, (int)Math.round(this.posZ + (double)var5 + (double)var7)) == Block.grass.blockID)
                         {
-                            this.worldObj.setBlockWithNotify((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4) - 1, (int)Math.round(this.posZ + (double)var5 + (double)var7), Block.dirt.blockID);
+                            this.worldObj.setBlock((int)Math.round(this.posX + (double)var3 + (double)var6), (int)Math.round(this.posY + (double)var4) - 1, (int)Math.round(this.posZ + (double)var5 + (double)var7), Block.dirt.blockID);
                         }
                     }
                 }

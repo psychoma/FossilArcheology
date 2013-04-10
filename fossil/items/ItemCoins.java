@@ -21,10 +21,10 @@ public class ItemCoins extends ForgeItem
     /**
      * Gets an icon index based on an item's damage value
      */
-    public int getIconFromDamage(int var1)
-    {
-        return 45 + var1;
-    }
+    //public int getIconFromDamage(int var1)
+    //{
+    //    return 45 + var1;
+    //}
 
     public String getItemNameIS(ItemStack var1)
     {

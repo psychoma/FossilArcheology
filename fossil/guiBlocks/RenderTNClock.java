@@ -42,7 +42,7 @@ public class RenderTNClock extends TileEntitySpecialRenderer
         float var11 = var1.SendingCurrentFacing + var10 * var8;
         GL11.glRotatef(-var11 * 180.0F / (float)Math.PI, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-        this.bindTextureByName("/TimeMachine/TNClock.png");
+        this.bindTextureByName("/textures/blocks/TNClock.png");
         float var12 = 0.0F;
         float var13 = 0.0F;
         var12 = (var12 - (float)MathHelper.truncateDoubleToInt((double)var12)) * 1.6F - 0.3F;

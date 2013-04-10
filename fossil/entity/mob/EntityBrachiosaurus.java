@@ -54,7 +54,7 @@ public class EntityBrachiosaurus extends EntityDinosaur
     public EntityBrachiosaurus(World var1)
     {
         super(var1);
-        this.texture = "/fossil/textures/Brachiosaurus.png";
+        this.texture = "/fossil/textures/mob/Brachiosaurus.png";
         this.SelfType = EnumDinoType.Brachiosaurus;
         //this.setSize(1.5F, 1.5F);
         this.health = 8;
@@ -433,7 +433,7 @@ public class EntityBrachiosaurus extends EntityDinosaur
         {
             int var7 = this.worldObj.getBlockId(var1, var6, var3);
             this.worldObj.playAuxSFX(2001, var1, var6, var3, var7);
-            this.worldObj.setBlockWithNotify(var1, var6, var3, 0);
+            this.worldObj.setBlock(var1, var6, var3, 0);
         }
     }
 

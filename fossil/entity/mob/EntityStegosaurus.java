@@ -131,8 +131,8 @@ public class EntityStegosaurus extends EntityDinosaur
         if (this.isModelized())
             return super.getTexture();
         if(this.isAdult())
-            return "/fossil/textures/Stegosaurus_Adult.png";
-		return "/fossil/textures/Stegosaurus_Baby.png";
+            return "/fossil/textures/mob/Stegosaurus_Adult.png";
+		return "/fossil/textures/mob/Stegosaurus_Baby.png";
     }
 
     /**

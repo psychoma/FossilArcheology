@@ -190,7 +190,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
     public void updateEntity()
     {
         boolean var1 = false;
-        boolean var2 = this.MeatCurrent > 0 || this.VegCurrent > 0;
+        int var2 = ((this.MeatCurrent > 0)?2:0) + ((this.VegCurrent > 0)?1:0);
 
         if (!this.worldObj.isRemote)
         {
@@ -315,11 +315,10 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
                 }*/
             }
 
-            boolean var4 = this.MeatCurrent > 0 || this.VegCurrent > 0;
-
-            if (var2 != var4)
+            if (var2 != (((this.MeatCurrent > 0)?2:0) + ((this.VegCurrent > 0)?1:0)))
             {
-                BlockFeeder.updateFurnaceBlockState(var4, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+            	BlockFeeder.updateFurnaceBlockState(this.VegCurrent > 0, this.MeatCurrent > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+                //BlockFeeder.updateFurnaceBlockState(var4, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
             }
 
             if (var1)
@@ -370,6 +369,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
 
     public void Feed(EntityDinosaur var1, EnumDinoEating var2)
     {
+    	int var3 = this.MeatCurrent > 0?2:0 + this.VegCurrent > 0?1:0;
         while (var1.increaseHunger(1) && !this.CheckIsEmpty(var2))
         {
             if (var2 == EnumDinoEating.Herbivorous)
@@ -381,6 +381,8 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
                 --this.MeatCurrent;
             }
         }
+        if(var3 != (this.MeatCurrent > 0?2:0 + this.VegCurrent > 0?1:0))
+        	BlockFeeder.updateFurnaceBlockState(this.VegCurrent > 0, this.MeatCurrent > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);
     }
 
     /*public boolean GetIfEatingSameBreed(EnumDinoType var1)
@@ -428,4 +430,14 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
     {
         return this.VegCurrent;
     }
+
+	@Override
+	public boolean isInvNameLocalized() {
+		return false;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack) {
+		return false;
+	}
 }

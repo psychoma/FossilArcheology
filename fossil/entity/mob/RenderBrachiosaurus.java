@@ -67,8 +67,8 @@ public class RenderBrachiosaurus extends RenderLiving
             GL11.glScalef(var1.getDinoWidth(), -var1.getDinoHeight(), var1.getDinoLength());
             this.preRenderCallback(var1, var9);
             GL11.glTranslatef(0.0F, -24.0F * var14 - 0.0078125F, 0.0F);
-            float var15 = var1.prevLegYaw + (var1.legYaw - var1.prevLegYaw) * var9;
-            float var16 = var1.legSwing - var1.legYaw * (1.0F - var9);
+            float var15 = 1.0F;//var1.prevLegYaw + (var1.legYaw - var1.prevLegYaw) * var9;
+            float var16 = 1.0F;//var1.legSwing - var1.legYaw * (1.0F - var9);
 
             if (var1.isChild())
             {

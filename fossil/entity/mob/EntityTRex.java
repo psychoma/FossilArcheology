@@ -690,10 +690,10 @@ public class EntityTRex extends EntityDinosaur
         if(this.isModelized())
         	return super.getTexture();
         if (this.isWeak())
-            return "/fossil/textures/TRexWeak.png";
+            return "/fossil/textures/mob/TRexWeak.png";
         if (this.isAdult() && !this.isTamed()) 
-        	return "/fossil/textures/TRex_Adult.png";
-        return "/fossil/textures/TRex.png";
+        	return "/fossil/textures/mob/TRex_Adult.png";
+        return "/fossil/textures/mob/TRex.png";
     }
 
     /**
@@ -881,7 +881,7 @@ public class EntityTRex extends EntityDinosaur
                                     Block.blocksList[var4].dropBlockAsItem(this.worldObj, var1, var2, var3, 1, 0);
                                 }
 
-                                this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
+                                this.worldObj.setBlock(var1, var2, var3, 0);
                                 destroyed++;
                                 //this.RushTick = 10;
                             }

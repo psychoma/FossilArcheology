@@ -6,6 +6,7 @@ import fossil.Fossil;
 import fossil.entity.EntityMLighting;
 import fossil.entity.mob.EntityFriendlyPigZombie;
 import fossil.fossilEnums.EnumPigmenSpeaks;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.passive.EntityPig;
@@ -25,11 +26,6 @@ public class ItemAncientsword extends ItemSword
     public ItemAncientsword(int var1)
     {
         this(var1, EnumToolMaterial.IRON);
-    }
-
-    public String getTextureFile()
-    {
-        return "/fossil/textures/Fos_items.png";
     }
 
     /**
@@ -67,4 +63,11 @@ public class ItemAncientsword extends ItemSword
         ItemStack var2 = var1.inventory.armorInventory[3];
         return var2 == null ? false : var2.itemID == Fossil.ancienthelmet.itemID;
     }
+    
+    @Override
+    public void updateIcons(IconRegister iconRegister)
+    {
+             iconIndex = iconRegister.registerIcon("Fossil:AnchientSword");
+    }
+
 }

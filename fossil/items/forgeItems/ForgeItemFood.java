@@ -19,13 +19,14 @@ public class ForgeItemFood extends ItemFood
         return "/fossil/textures/Fos_items.png";
     }
 
-    public ItemStack onFoodEaten(ItemStack var1, World var2, EntityPlayer var3)
+    @Override
+    public void onFoodEaten(ItemStack var1, World var2, EntityPlayer var3)
     {
         if (var1.getItem().itemID == Fossil.chickenEss.itemID)
         {
             var3.inventory.addItemStackToInventory(new ItemStack(Item.glassBottle));
         }
 
-        return super.onFoodEaten(var1, var2, var3);
+        //return super.onFoodEaten(var1, var2, var3);
     }
 }

@@ -43,7 +43,7 @@ public class EntityPigBoss extends EntityZombie
     public EntityPigBoss(World var1)
     {
         super(var1);
-        this.texture = "/fossil/textures/PigBoss.png";
+        this.texture = "/fossil/textures/mob/PigBoss.png";
         this.moveSpeed = 0.5F;
         this.health = 100;
         this.isImmuneToFire = true;
@@ -104,9 +104,9 @@ public class EntityPigBoss extends EntityZombie
                 return false;
             }
             else
-            {
-                List var2 = this.worldObj.getEntitiesWithinAABB(EntityPigBoss.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(200.0D, 200.0D, 200.0D));
-                var1 = var2.size() < 2;
+            {	//No more in 1.5....what was that supposed to do?
+                //List var2 = this.worldObj.getEntitiesWithinAABB(EntityPigBoss.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(200.0D, 200.0D, 200.0D));
+                //var1 = var2.size() < 2;
                 return var1;
             }
         }
@@ -200,7 +200,7 @@ public class EntityPigBoss extends EntityZombie
 
         if (this.getAITarget() != null && (new Random()).nextInt(100) <= 25)
         {
-            var1 = this.worldObj.getEntitiesWithinAABB(EntityPigZombie.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(16.0D, 4.0D, 16.0D));
+            var1 = this.worldObj.getEntitiesWithinAABB(EntityPigZombie.class, AxisAlignedBB.getAABBPool().getAABB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(16.0D, 4.0D, 16.0D));
 
             if (!var1.isEmpty() && var1.size() >= 5)
             {
@@ -210,7 +210,7 @@ public class EntityPigBoss extends EntityZombie
 
         if (this.getAITarget() == null && (new Random()).nextInt(100) <= 20 && !this.worldObj.provider.isHellWorld)
         {
-            var1 = this.worldObj.getEntitiesWithinAABB(EntityPig.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(16.0D, 4.0D, 16.0D));
+            var1 = this.worldObj.getEntitiesWithinAABB(EntityPig.class, AxisAlignedBB.getAABBPool().getAABB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(16.0D, 4.0D, 16.0D));
 
             if (var1.size() >= 3)
             {
@@ -433,27 +433,27 @@ public class EntityPigBoss extends EntityZombie
 
                     if (var3 == Block.stone.blockID || var3 == Block.cobblestone.blockID)
                     {
-                        this.worldObj.setBlockWithNotify(var1, (int)(Math.round(this.posY) - 1L), var2, Block.netherrack.blockID);
+                        this.worldObj.setBlock(var1, (int)(Math.round(this.posY) - 1L), var2, Block.netherrack.blockID);
                     }
 
                     if (var3 == Block.dirt.blockID || var3 == Block.grass.blockID || var3 == Block.sand.blockID || var3 == Block.gravel.blockID)
                     {
-                        this.worldObj.setBlockWithNotify(var1, (int)(Math.round(this.posY) - 1L), var2, Block.slowSand.blockID);
+                        this.worldObj.setBlock(var1, (int)(Math.round(this.posY) - 1L), var2, Block.slowSand.blockID);
                     }
 
                     if (var3 == Block.ice.blockID)
                     {
-                        this.worldObj.setBlockWithNotify(var1, (int)(Math.round(this.posY) - 1L), var2, Block.obsidian.blockID);
+                        this.worldObj.setBlock(var1, (int)(Math.round(this.posY) - 1L), var2, Block.obsidian.blockID);
                     }
 
                     if (var3 == Block.blockClay.blockID)
                     {
-                        this.worldObj.setBlockWithNotify(var1, (int)(Math.round(this.posY) - 1L), var2, Block.glowStone.blockID);
+                        this.worldObj.setBlock(var1, (int)(Math.round(this.posY) - 1L), var2, Block.glowStone.blockID);
                     }
 
                     if ((long)var1 != Math.round(this.posX) && (long)var2 != Math.round(this.posZ) && (new Random()).nextInt(2000) <= 1 && this.worldObj.isAirBlock(var1, (int)Math.round(this.posY), var2))
                     {
-                        this.worldObj.setBlockWithNotify(var1, (int)Math.round(this.posY), var2, Block.fire.blockID);
+                        this.worldObj.setBlock(var1, (int)Math.round(this.posY), var2, Block.fire.blockID);
                     }
                 }
             }
@@ -507,7 +507,7 @@ public class EntityPigBoss extends EntityZombie
 
     private void SkillSwordQi()
     {
-        List var1 = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(32.0D, 4.0D, 32.0D));
+        List var1 = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getAABBPool().getAABB(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand(32.0D, 4.0D, 32.0D));
 
         if (!var1.isEmpty())
         {

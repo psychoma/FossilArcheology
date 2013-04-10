@@ -104,7 +104,7 @@ public class EntityPterosaur extends EntityDinosaur
         FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
         
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.texture = "/fossil/textures/Pterosaur.png";
+        this.texture = "/fossil/textures/mob/Pterosaur.png";
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));//, 0.34F));
@@ -987,7 +987,7 @@ public class EntityPterosaur extends EntityDinosaur
             this.motionZ *= (double)var3;
         }
 
-        this.prevLegYaw = this.legYaw;
+        //this.prevLegYaw = this.legYaw;
         var9 = this.posX - this.prevPosX;
         double var12 = this.posZ - this.prevPosZ;
         float var11 = MathHelper.sqrt_double(var9 * var9 + var12 * var12) * 4.0F;
@@ -997,7 +997,7 @@ public class EntityPterosaur extends EntityDinosaur
             var11 = 1.0F;
         }
 
-        this.legYaw += (var11 - this.legYaw) * 0.4F;
-        this.legSwing += this.legYaw;
+        //this.legYaw += (var11 - this.legYaw) * 0.4F;
+        //this.legSwing += this.legYaw;
     }
 }
