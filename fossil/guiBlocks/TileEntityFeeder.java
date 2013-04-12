@@ -212,6 +212,8 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
             		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawMosasaurus.itemID)this.ContainType[EnumDinoType.Mosasaurus.ordinal()]=true;
             		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawDilophosaurus.itemID)this.ContainType[EnumDinoType.Dilophosaurus.ordinal()]=true;
             		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawBrachiosaurus.itemID)this.ContainType[EnumDinoType.Brachiosaurus.ordinal()]=true;
+            		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawSpinosaurus.itemID)this.ContainType[EnumDinoType.Spinosaurus.ordinal()]=true;
+
             	}
             	if (val * this.feederItemStacks[0].stackSize + this.MeatCurrent < this.MeatMax)
                 {//can take all of it

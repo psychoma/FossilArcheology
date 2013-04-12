@@ -42,6 +42,7 @@ public enum EnumDinoFoodItem
 	Dilophosaurus(Fossil.rawDilophosaurus,25,2),
 	Brachiosaur(Fossil.rawBrachiosaurus,50,4),
 	DinoMeatCooked(Fossil.cookedDinoMeat,50,5),	
+	Spinosaurus(Fossil.rawSpinosaurus,20,3),
 	//DinoMeatRaw(Fossil.rawDinoMeat,30,3)
 	;
     public Item item;

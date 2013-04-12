@@ -33,6 +33,7 @@ import fossil.entity.mob.EntityVelociraptor;
 import fossil.entity.mob.EntitySaberCat;
 import fossil.entity.mob.EntityStegosaurus;
 import fossil.entity.mob.EntityTRex;
+import fossil.entity.mob.EntitySpinosaurus;
 import fossil.entity.mob.EntityTriceratops;
 import fossil.entity.mob.EntityDilophosaurus;
 import fossil.entity.mob.ModelFailuresaurus;
@@ -44,6 +45,7 @@ import fossil.entity.mob.ModelVelociraptor;
 import fossil.entity.mob.ModelSaberCat;
 import fossil.entity.mob.ModelStegosaurus;
 import fossil.entity.mob.ModelTRex;
+import fossil.entity.mob.ModelSpinosaurus;
 import fossil.entity.mob.ModelTriceratops;
 import fossil.entity.mob.ModelDilophosaurus;
 import fossil.entity.mob.RenderBrachiosaurus;
@@ -58,6 +60,7 @@ import fossil.entity.mob.RenderVelociraptor;
 import fossil.entity.mob.RenderSaberCat;
 import fossil.entity.mob.RenderStegosaurus;
 import fossil.entity.mob.RenderTRex;
+import fossil.entity.mob.RenderSpinosaurus;
 import fossil.entity.mob.RenderTriceratops;
 import fossil.entity.mob.RenderDilophosaurus;
 import fossil.guiBlocks.RenderTNClock;
@@ -134,6 +137,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.preloadTexture("/fossil/textures/Triceratops_Teen_1.png");
 		MinecraftForgeClient.preloadTexture("/fossil/textures/Triceratops_Teen_2.png");
 		MinecraftForgeClient.preloadTexture("/fossil/textures/Triceratops_Teen_3.png");
+		MinecraftForgeClient.preloadTexture("/fossil/textures/Spinosaurus_Adult.png");
 		MinecraftForgeClient.preloadTexture("/fossil/textures/UIAnalyzer.png");
 		MinecraftForgeClient.preloadTexture("/fossil/textures/UICultivate.png");
 		MinecraftForgeClient.preloadTexture("/fossil/textures/UIFeeder.png");
@@ -167,6 +171,7 @@ public class ClientProxy extends CommonProxy
 		RenderingRegistry.registerEntityRenderingHandler(EntityBones.class, new RenderBiped(new ModelBiped(), 0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBrachiosaurus.class, new RenderBrachiosaurus(0.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityMammoth.class, new RenderMammoth(new ModelMammoth(), 0.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntitySpinosaurus.class, new RenderSpinosaurus(new ModelSpinosaurus(), 0.5F));
 
 		RenderingRegistry.registerBlockHandler(new FossilBlockRenderHandler());
 		

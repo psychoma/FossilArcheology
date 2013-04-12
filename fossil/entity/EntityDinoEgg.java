@@ -21,6 +21,7 @@ import fossil.entity.mob.EntityPterosaur;
 import fossil.entity.mob.EntityVelociraptor;
 import fossil.entity.mob.EntityStegosaurus;
 import fossil.entity.mob.EntityTRex;
+import fossil.entity.mob.EntitySpinosaurus;
 import fossil.entity.mob.EntityTriceratops;
 import fossil.entity.mob.EntityDilophosaurus;
 import fossil.fossilEnums.EnumDinoType;
@@ -500,6 +501,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
                     case Stegosaurus:var5 = new EntityStegosaurus(this.worldObj);break;
                     case Dilophosaurus:var5 = new EntityDilophosaurus(this.worldObj);break;
                     case Brachiosaurus:var5 = new EntityBrachiosaurus(this.worldObj);break;
+                    case Spinosaurus:var5 = new EntitySpinosaurus(this.worldObj);break;
 
                     default:
                         Fossil.ShowMessage("Bug:Impossible result.", var4);
@@ -597,6 +599,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     	    	case Plesiosaur:  i0= Fossil.eggPlesiosaur;break;
     	    	case Brachiosaurus:i0= Fossil.eggBrachiosaurus;break;
     	    	case Dilophosaurus:   i0= Fossil.eggDilophosaurus;break;
+    	    	case Spinosaurus:   i0= Fossil.eggSpinosaurus;break;
     	    	default: i0= Fossil.eggTriceratops;System.out.println("FAULTY EGG!!!!:Dinotype " + String.valueOf(var1)+ " does not exist!");break;
         	}
         	
@@ -639,6 +642,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
             case Stegosaurus:it0=Fossil.eggStegosaurus;break;
             case Dilophosaurus:it0=Fossil.eggDilophosaurus;break;
             case Brachiosaurus:it0=Fossil.eggBrachiosaurus;break;
+            case Spinosaurus:it0=Fossil.eggSpinosaurus;break;
 
             default:it0=Fossil.eggTriceratops;
         }

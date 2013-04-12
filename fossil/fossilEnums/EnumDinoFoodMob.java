@@ -5,6 +5,7 @@ import fossil.entity.mob.EntityMosasaurus;
 import fossil.entity.mob.EntityNautilus;
 import fossil.entity.mob.EntityPlesiosaur;
 import fossil.entity.mob.EntityPterosaur;
+import fossil.entity.mob.EntitySpinosaurus;
 import fossil.entity.mob.EntityVelociraptor;
 import fossil.entity.mob.EntityStegosaurus;
 import fossil.entity.mob.EntityTRex;
@@ -39,6 +40,7 @@ public enum EnumDinoFoodMob
 	Stegosaur(EntityStegosaurus.class,50,3),
 	Dilophosaurus(EntityDilophosaurus.class,25,2),
 	Brachiosaur(EntityBrachiosaurus.class,80,5),
+	Spinosaurus(EntitySpinosaurus.class,70,5),
 	;
     public Class preyClass;
     public int FoodValue;

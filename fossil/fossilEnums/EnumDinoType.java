@@ -7,6 +7,7 @@ import fossil.entity.mob.EntityMosasaurus;
 import fossil.entity.mob.EntityNautilus;
 import fossil.entity.mob.EntityPlesiosaur;
 import fossil.entity.mob.EntityPterosaur;
+import fossil.entity.mob.EntitySpinosaurus;
 import fossil.entity.mob.EntityVelociraptor;
 import fossil.entity.mob.EntityStegosaurus;
 import fossil.entity.mob.EntityTRex;
@@ -37,7 +38,8 @@ public enum EnumDinoType
     Mosasaurus(EntityMosasaurus.class, 		C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY),
     Stegosaurus(EntityStegosaurus.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.NO_CARRY),
     Dilophosaurus(EntityDilophosaurus.class,C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY),
-    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY);
+    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY),
+    Spinosaurus(EntitySpinosaurus.class,	C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY);
 
 
     /*Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick,			Fossil.rawTriceratops, 	Fossil.dnaTriceratops, 	Fossil.eggTriceratops),
@@ -105,6 +107,7 @@ public enum EnumDinoType
         Stegosaurus.setDetails(		Item.stick,			Fossil.rawStegosaurus, 	Fossil.dnaStegosaurus, 	Fossil.eggStegosaurus);
         Dilophosaurus.setDetails(	Item.bone,			Fossil.rawDilophosaurus,Fossil.dnaDilophosaurus,Fossil.eggDilophosaurus);
         Brachiosaurus.setDetails(	Item.stick,			Fossil.rawBrachiosaurus,Fossil.dnaBrachiosaurus,Fossil.eggBrachiosaurus);
+        Spinosaurus.setDetails(		null,				Fossil.rawSpinosaurus,	Fossil.dnaSpinosaurus,	Fossil.eggSpinosaurus);
     }
     public boolean isDinoDNA(Item i0)
     {

@@ -879,6 +879,7 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
 	    	case Plesiosaur:   return Fossil.rawPlesiosaur.itemID;
 	    	case Brachiosaurus:return Fossil.rawBrachiosaurus.itemID;
 	    	case Dilophosaurus:return Fossil.rawDilophosaurus.itemID;
+	    	case Spinosaurus:return Fossil.rawSpinosaurus.itemID;
 	    	default: return Fossil.rawTriceratops.itemID;
     	}
         //return this.isModelized() ? Item.bone.itemID : Fossil.rawDinoMeat.itemID;
