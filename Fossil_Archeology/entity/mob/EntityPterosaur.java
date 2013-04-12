@@ -104,7 +104,7 @@ public class EntityPterosaur extends EntityDinosaur
         FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
         
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.texture = "/fossil/textures/mob/Pterosaur.png";
+        this.texture = "/mods/Fossil_Archeology/textures/mob/Pterosaur.png";
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));//, 0.34F));

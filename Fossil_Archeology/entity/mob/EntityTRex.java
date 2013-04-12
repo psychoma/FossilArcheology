@@ -690,10 +690,10 @@ public class EntityTRex extends EntityDinosaur
         if(this.isModelized())
         	return super.getTexture();
         if (this.isWeak())
-            return "/fossil/textures/mob/TRexWeak.png";
+            return "/mods/Fossil_Archeology/textures/mob/TRexWeak.png";
         if (this.isAdult() && !this.isTamed()) 
-        	return "/fossil/textures/mob/TRex_Adult.png";
-        return "/fossil/textures/mob/TRex.png";
+        	return "/mods/Fossil_Archeology/textures/mob/TRex_Adult.png";
+        return "/mods/Fossil_Archeology/textures/mob/TRex.png";
     }
 
     /**

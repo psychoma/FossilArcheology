@@ -1,9 +1,11 @@
 package mods.Fossil_Archeology.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import mods.Fossil_Archeology.Fossil;
 import mods.Fossil_Archeology.entity.EntityAncientJavelin;
 import mods.Fossil_Archeology.entity.EntityJavelin;
-import mods.Fossil_Archeology.items.forgeItems.*;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -14,12 +16,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemJavelin extends ForgeItem
+public class ItemJavelin extends Item
 {
     public EnumToolMaterial SelfMaterial;
     //private boolean isAncient = false;
-
-    public ItemJavelin(int var1, EnumToolMaterial var2)
+    String TextureFileName;
+    public ItemJavelin(int var1, EnumToolMaterial var2, String TextureFileName0)
     {
         super(var1);
         this.maxStackSize=16;
@@ -27,6 +29,12 @@ public class ItemJavelin extends ForgeItem
         //this.iconIndex = 48;
         this.hasSubtypes = false;
         this.SelfMaterial = var2;
+        this.TextureFileName=TextureFileName0;
+    }
+    @SideOnly(Side.CLIENT)
+    public void updateIcons(IconRegister iconRegister)
+    {
+		iconIndex = iconRegister.registerIcon("Fossil_Archeology:"+TextureFileName);
     }
 
     /**

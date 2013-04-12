@@ -2,13 +2,13 @@ package mods.Fossil_Archeology.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import mods.Fossil_Archeology.items.forgeItems.*;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 
-public class ItemIcedMeat extends ForgeItemSword
+public class ItemIcedMeat extends ItemSword
 {
     public ItemIcedMeat(int var1, EnumToolMaterial var2)
     {

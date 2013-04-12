@@ -25,7 +25,7 @@ public class RenderStoneboard extends Render
             GL11.glTranslatef((float)var2, (float)var4, (float)var6);
             GL11.glRotatef(var8, 0.0F, 1.0F, 0.0F);
             GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-            this.loadTexture("/fossil/textures/pr1.png");
+            this.loadTexture("/mods/Fossil_Archeology/textures/Stone_Boards.png");
             EnumStoneboard var10 = entitystoneboard.art;
             float var11 = 0.0625F;
             GL11.glScalef(var11, var11, var11);

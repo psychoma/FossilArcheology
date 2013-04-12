@@ -67,7 +67,7 @@ public class ItemAncientsword extends ItemSword
     @Override
     public void updateIcons(IconRegister iconRegister)
     {
-             iconIndex = iconRegister.registerIcon("Fossil_Archeology:AnchientSword");
+             iconIndex = iconRegister.registerIcon("Fossil_Archeology:Ancient_Sword");
     }
 
 }

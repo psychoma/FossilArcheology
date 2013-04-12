@@ -11,7 +11,7 @@ public class EntityFailuresaurus extends EntityZombie
     public EntityFailuresaurus(World var1)
     {
         super(var1);
-        this.texture = "/fossil/textures/Failuresaurus.png";
+        this.texture = "/mods/Fossil_Archeology/textures/Failuresaurus.png";
         this.experienceValue=4;
     }
 
@@ -28,10 +28,10 @@ public class EntityFailuresaurus extends EntityZombie
     /**
      * Returns the texture's file path as a String.
      */
-    public String getTexture()
+    /*public String getTexture()
     {
-        return "/fossil/textures/Failuresaurus.png";
-    }
+        return "/mods/Fossil_Archeology/textures/Failuresaurus.png";
+    }*/
     
     /**
      * Causes this entity to do an upwards motion (jumping).

@@ -123,7 +123,7 @@ public class BlockWorktable extends BlockContainer
         this.blockIcon = par1IconRegister.registerIcon("Fossil_Archeology:Arch_Table_Side1");
         this.Side2 = par1IconRegister.registerIcon("Fossil_Archeology:Arch_Table_Side2");
         this.Top = this.isActive? par1IconRegister.registerIcon("Fossil_Archeology:Arch_Table_Top_Active") : par1IconRegister.registerIcon("Fossil_Archeology:Arch_Table_Top_Idle");
-        this.Bottom = par1IconRegister.registerIcon("Fossil_Archeology:Arch_Table_Side1");//TODO: Bottom!
+        this.Bottom = par1IconRegister.registerIcon("Fossil_Archeology:Arch_Table_Bottom");
     }
 
     /**

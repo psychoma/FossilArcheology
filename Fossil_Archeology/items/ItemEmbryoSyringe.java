@@ -2,34 +2,42 @@ package mods.Fossil_Archeology.items;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import mods.Fossil_Archeology.Fossil;
 import mods.Fossil_Archeology.entity.mob.EntityPregnantCow;
 import mods.Fossil_Archeology.entity.mob.EntityPregnantPig;
 import mods.Fossil_Archeology.entity.mob.EntityPregnantSheep;
-import mods.Fossil_Archeology.fossilEnums.EnumEmbryos;
+import mods.Fossil_Archeology.fossilEnums.EnumAnimalType;
 import mods.Fossil_Archeology.fossilInterface.IViviparous;
-import mods.Fossil_Archeology.items.forgeItems.*;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemEmbryoSyringe extends ForgeItem
+public class ItemEmbryoSyringe extends Item
 {
     //private String[] ItemNames = new String[] {"EmbyoPig", "EmbyoSheep", "EmbyoCow", "EmbyoSaberCat", "EmbyoMammoth"};
-    public ItemEmbryoSyringe(int var1)
+	int AnimalType;
+    public ItemEmbryoSyringe(int var1, int AnimalType0)
     {
         super(var1);
         //this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.maxStackSize = 64;
-        this.initItemNameVector();
+        this.AnimalType=AnimalType0;
     }
-
-    private void initItemNameVector() {}
+    @SideOnly(Side.CLIENT)
+    public void updateIcons(IconRegister iconRegister)
+    {
+		iconIndex = iconRegister.registerIcon("Fossil_Archeology:"+EnumAnimalType.values()[AnimalType].name()+"_Syringe");
+    }
 
     /*
      * Gets an icon index based on an item's damage value
@@ -45,9 +53,9 @@ public class ItemEmbryoSyringe extends ForgeItem
     //    return var2 < this.ItemNames.length ? this.ItemNames[var2] : "EmbyoSyring";
     //}
 
-    public static EnumEmbryos GetEmbryo(int var0)
+    public static EnumAnimalType GetEmbryo(int var0)
     {
-        return EnumEmbryos.values()[var0];
+        return EnumAnimalType.values()[var0];
     }
 
     /**
@@ -78,13 +86,13 @@ public class ItemEmbryoSyringe extends ForgeItem
 
             if (var3 != null)
             {
-            	EnumEmbryos e0=EnumEmbryos.Chicken;
-            	if(var1.itemID==Fossil.embryoChicken.itemID)e0=EnumEmbryos.Chicken;
-            	if(var1.itemID==Fossil.embryoCow.itemID)e0=EnumEmbryos.Cow;
-            	if(var1.itemID==Fossil.embryoMammoth.itemID)e0=EnumEmbryos.Mammoth;
-            	if(var1.itemID==Fossil.embryoPig.itemID)e0=EnumEmbryos.Pig;
-            	if(var1.itemID==Fossil.embryoSaberCat.itemID)e0=EnumEmbryos.SaberCat;
-            	if(var1.itemID==Fossil.embryoSheep.itemID)e0=EnumEmbryos.Sheep;
+            	EnumAnimalType e0=EnumAnimalType.Chicken;
+            	if(var1.itemID==Fossil.embryoChicken.itemID)e0=EnumAnimalType.Chicken;
+            	if(var1.itemID==Fossil.embryoCow.itemID)e0=EnumAnimalType.Cow;
+            	if(var1.itemID==Fossil.embryoMammoth.itemID)e0=EnumAnimalType.Mammoth;
+            	if(var1.itemID==Fossil.embryoPig.itemID)e0=EnumAnimalType.Pig;
+            	if(var1.itemID==Fossil.embryoSaberCat.itemID)e0=EnumAnimalType.Smilodon;
+            	if(var1.itemID==Fossil.embryoSheep.itemID)e0=EnumAnimalType.Sheep;
                 ((IViviparous)var3).SetEmbryo(e0);
                 ((EntityAnimal)var3).setLocationAndAngles(var2.posX, var2.posY, var2.posZ, var2.rotationYaw, var2.rotationPitch);
                 var2.setDead();

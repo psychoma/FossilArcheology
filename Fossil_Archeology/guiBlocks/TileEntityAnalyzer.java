@@ -4,7 +4,6 @@ import java.util.Random;
 
 
 import mods.Fossil_Archeology.Fossil;
-import mods.Fossil_Archeology.items.ItemBrokenSword;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

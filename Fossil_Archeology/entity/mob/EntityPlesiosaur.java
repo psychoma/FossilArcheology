@@ -74,7 +74,7 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
         this.looksWithInterest = false;
         //this.SubSpecies = (new Random()).nextInt(3) + 1;
         this.setSubSpecies((new Random()).nextInt(3) + 1);
-        this.texture = "/fossil/textures/mob/Plesiosaur_adult.png";
+        this.texture = "/mods/Fossil_Archeology/textures/mob/Plesiosaur_adult.png";
         //this.setSize(1.0F, 1.0F);
         //this.moveSpeed = 0.7F;
         this.health = 8;

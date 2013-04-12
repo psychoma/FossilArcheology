@@ -83,7 +83,7 @@ public class EntityDinoEgg extends Entity implements IEntityAdditionalSpawnData
     public String getTexture()
     {
         int var1 = this.DinoInside.ordinal();
-        return var1 < 4 ? "/fossil/textures/eggTexture" + (var1 + 1) + ".png" : "/fossil/textures/eggTexture" + var1 + ".png";
+        return var1 < 4 ? "/mods/Fossil_Archeology/textures/mob/eggTexture" + (var1 + 1) + ".png" : "/mods/Fossil_Archeology/textures/mob/eggTexture" + var1 + ".png";
     }
 
     public EntityDinoEgg(World var1)

@@ -7,7 +7,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import mods.Fossil_Archeology.Fossil;
-import mods.Fossil_Archeology.fossilEnums.EnumEmbryos;
+import mods.Fossil_Archeology.fossilEnums.EnumAnimalType;
 import mods.Fossil_Archeology.fossilInterface.IViviparous;
 import mods.Fossil_Archeology.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
@@ -26,7 +26,7 @@ public class EntityPregnantSheep extends EntitySheep implements IViviparous, IEn
 {
     public int EmbryoProgress = 0;
     //public final int EmbryoGrowTime = 3000;
-    public EnumEmbryos Embryo = null;
+    public EnumAnimalType Embryo = null;
     //public String InsideText = "Embyo inside:";
     //spublic String GrowingText = "Growing progress:";
 
@@ -55,10 +55,10 @@ public class EntityPregnantSheep extends EntitySheep implements IViviparous, IEn
         super.readEntityFromNBT(var1);
         this.EmbryoProgress = var1.getInteger("EmbryoProgress");
         if (var1.hasKey("Inside"))
-            this.Embryo = EnumEmbryos.values()[var1.getByte("Inside")];
+            this.Embryo = EnumAnimalType.values()[var1.getByte("Inside")];
     }
 
-    public void SetEmbryo(EnumEmbryos var1)
+    public void SetEmbryo(EnumAnimalType var1)
     {
         this.Embryo = var1;
     }
@@ -121,7 +121,7 @@ public class EntityPregnantSheep extends EntitySheep implements IViviparous, IEn
                     var2 = new EntityChicken(this.worldObj);
                     break;
 
-                case SaberCat:
+                case Smilodon:
                     var2 = new EntitySaberCat(this.worldObj);
                     break;
 
@@ -195,6 +195,6 @@ public class EntityPregnantSheep extends EntitySheep implements IViviparous, IEn
 
     public void readSpawnData(ByteArrayDataInput var1)
     {
-        this.Embryo = EnumEmbryos.values()[var1.readInt()];
+        this.Embryo = EnumAnimalType.values()[var1.readInt()];
     }
 }

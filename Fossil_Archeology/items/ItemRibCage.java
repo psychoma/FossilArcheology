@@ -12,38 +12,27 @@ import net.minecraftforge.common.IArmorTextureProvider;
 
 public class ItemRibCage extends ItemArmor implements IArmorTextureProvider
 {
-	private String iconPath;
-	@SideOnly(Side.CLIENT)
-	private Icon icon;
-
 	public ItemRibCage(int par1, EnumArmorMaterial par2EnumArmorMaterial, int par3, int par4) 
 	{	
-          super(par1, par2EnumArmorMaterial, par3, par4);
+        super(par1, par2EnumArmorMaterial, par3, par4);
     }
  
 	@SideOnly(Side.CLIENT)
     public void updateIcons(IconRegister iconRegister)
     {
-             iconIndex = iconRegister.registerIcon("Fossil_Archeology:Bone_Plate");
+        iconIndex = iconRegister.registerIcon("Fossil_Archeology:Bone_Plate");
     }
 
     public String getArmorTextureFile(ItemStack par1)
     {
         if ( par1.itemID == Fossil.skullHelmet.itemID|| par1.itemID == Fossil.ribCage.itemID|| par1.itemID == Fossil.feet.itemID)
         {
-              return "/fossil/armor/bone_1.png";
+              return "/mods/Fossil_Archeology/textures/armor/bone_1.png";
         }
         if(par1.itemID == Fossil.femurs.itemID)
 		{
-              return "/fossil/armor/bone_2.png";
+              return "/mods/Fossil_Archeology/textures/armor/bone_2.png";
         }
-			  return "/fossil/armor/bone_2.png";
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public Icon getIconFromDamage(int par1) 
-    {
-      return this.icon;
-    }
-	
+			  return "/mods/Fossil_Archeology/textures/armor/bone_2.png";
+    }	
 }

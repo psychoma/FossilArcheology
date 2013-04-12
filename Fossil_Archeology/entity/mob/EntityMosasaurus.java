@@ -62,7 +62,7 @@ public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
         super(var1);
         this.SelfType = EnumDinoType.Mosasaurus;
         this.looksWithInterest = false;
-        this.texture = "/fossil/textures/mob/Mosasaurus.png";
+        this.texture = "/mods/Fossil_Archeology/textures/mob/Mosasaurus.png";
         //this.setSize(0.5F, 0.5F);
         //this.moveSpeed = 0.3F;
         this.health = 10;
@@ -124,10 +124,10 @@ public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
     /**
      * Returns the texture's file path as a String.
      */
-    public String getTexture()
+    /*public String getTexture()
     {
         return super.getTexture();
-    }
+    }*/
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.

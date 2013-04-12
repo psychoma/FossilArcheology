@@ -135,16 +135,16 @@ public class EntityTriceratops extends EntityDinosaur
         	switch (this.getSubSpecies())
             {
                 case 1:
-                    return "/fossil/textures/mob/Triceratops_Adult_1.png";
+                    return "/mods/Fossil_Archeology/textures/mob/Triceratops_Adult_1.png";
 
                 case 2:
-                    return "/fossil/textures/mob/Triceratops_Adult_2.png";
+                    return "/mods/Fossil_Archeology/textures/mob/Triceratops_Adult_2.png";
 
                 case 3:
-                    return "/fossil/textures/mob/Triceratops_Adult_3.png";
+                    return "/mods/Fossil_Archeology/textures/mob/Triceratops_Adult_3.png";
 
                 default:
-                    return "/fossil/textures/mob/Triceratops_Adult_1.png";
+                    return "/mods/Fossil_Archeology/textures/mob/Triceratops_Adult_1.png";
             }
         }
         if(this.isTeen())
@@ -152,31 +152,31 @@ public class EntityTriceratops extends EntityDinosaur
         	switch (this.getSubSpecies())
             {
                 case 1:
-                    return "/fossil/textures/mob/Triceratops_Teen_1.png";
+                    return "/mods/Fossil_Archeology/textures/mob/Triceratops_Teen_1.png";
 
                 case 2:
-                    return "/fossil/textures/mob/Triceratops_Teen_2.png";
+                    return "/mods/Fossil_Archeology/textures/mob/Triceratops_Teen_2.png";
 
                 case 3:
-                    return "/fossil/textures/mob/Triceratops_Teen_3.png";
+                    return "/mods/Fossil_Archeology/textures/mob/Triceratops_Teen_3.png";
 
                 default:
-                    return "/fossil/textures/mob/Triceratops_Teen_1.png";
+                    return "/mods/Fossil_Archeology/textures/mob/Triceratops_Teen_1.png";
             }
         }
 		switch (this.getSubSpecies())
         {
             case 1:
-                return "/fossil/textures/mob/Triceratops_Baby_1.png";
+                return "/mods/Fossil_Archeology/textures/mob/Triceratops_Baby_1.png";
 
             case 2:
-                return "/fossil/textures/mob/Triceratops_Baby_2.png";
+                return "/mods/Fossil_Archeology/textures/mob/Triceratops_Baby_2.png";
 
             case 3:
-                return "/fossil/textures/mob/Triceratops_Baby_3.png";
+                return "/mods/Fossil_Archeology/textures/mob/Triceratops_Baby_3.png";
 
             default:
-                return "/fossil/textures/mob/Triceratops_Baby_1.png";
+                return "/mods/Fossil_Archeology/textures/mob/Triceratops_Baby_1.png";
         }
 
     }

@@ -8,3 +8,7 @@ Copy armor, fossillang,Textures and Dinosounds from the src folder in the reobf/
 Copy the mcmod.info from src in the reobf/minecraft folder.
 Zip the fossil folder and the mcmod.info file up together and name the archive Fossil-Archeology.zip.
 That's it!
+
+
+
+Place this Folder in mcp/src/minecraft/mods!

@@ -27,72 +27,20 @@ import net.minecraft.world.World;
 
 public class ItemAncientEgg extends Item
 {
-    public static final int TypeCount = EnumDinoType.values().length;
-
-    public ItemAncientEgg(int var1)
+	int DinoType;
+    public ItemAncientEgg(int var1, int DinoType0)
     {
         super(var1);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.maxStackSize = 1;
+        this.DinoType=DinoType0;
     }
-
-    /*public String getTextureFile()
-    {
-        return "/fossil/textures/Fos_items.png";
-    }*/
     @SideOnly(Side.CLIENT)
     public void updateIcons(IconRegister par1IconRegister)
     {
-        this.iconIndex = par1IconRegister.registerIcon("/fossil/textures/mob/Mosasaurus egg.png");
+        this.iconIndex = par1IconRegister.registerIcon("Fossil_Archeology:"+EnumDinoType.values()[DinoType].name()+"_Egg");
     }
-
-    /**
-     * Gets an icon index based on an item's damage value
-     */
-    /*public int getIconFromDamage(int var1)
-    {
-        return var1 < TypeCount ? 22 + var1 : 0;
-    }*/
-
-    /*public String getItemNameIS(ItemStack var1)
-    {
-        switch (ItemAncientEgg$1.$SwitchMap$mod_Fossil$EnumDinoType[this.GetTypeFromInt(var1.getItemDamage()).ordinal()])
-        {
-            case 1:
-                return "Eggtriceratops";
-
-            case 2:
-                return "EggRaptor";
-
-            case 3:
-                return "EggTRex";
-
-            case 4:
-                return "EggPterosaur";
-
-            case 5:
-                return "ShellNautilus";
-
-            case 6:
-                return "EggPlesiosaur";
-
-            case 7:
-                return "EggMosasaurus";
-
-            case 8:
-                return "EggStegosaurus";
-
-            case 9:
-                return "EggUtahraptor";
-
-            case 10:
-                return "EggBrachiosaurus";
-
-            default:
-                return "Ancient egg";
-        }
-    }*/
 
     /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
@@ -218,15 +166,4 @@ public class ItemAncientEgg extends Item
     	System.out.println("FAULT!!!!:Dinotype " + String.valueOf(var1)+ " does not exist!");
     	return EnumDinoType.Triceratops;
     }
-
-    /**
-     * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
-     */
-    /*public void getSubItems(int var1, CreativeTabs var2, List var3)
-    {
-        for (int var4 = 0; var4 < EnumDinoType.values().length; ++var4)
-        {
-            var3.add(new ItemStack(var1, 1, var4));
-        }
-    }*/
 }

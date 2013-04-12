@@ -35,7 +35,7 @@ public class EntityNautilus extends EntityWaterMob
         super(var1);
         this.setSize(0.95F, 0.95F);
         this.field_70864_bA = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
-        this.texture = "/textures/mob/Nautilus.png";
+        this.texture = "/mods/Fossil_Archeology/textures/mob/Nautilus.png";
         this.experienceValue=1;
     }
 

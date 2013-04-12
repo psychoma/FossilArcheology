@@ -171,9 +171,9 @@ public class BlockFeeder extends BlockContainer
         this.Top2 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Top2");
         this.Top3 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Top3");
         this.Top4 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Top4");
-        this.Front1 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Front4");
-        this.Front2 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Front4");
-        this.Front3 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Front4");
+        this.Front1 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Front1");
+        this.Front2 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Front2");
+        this.Front3 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Front3");
         this.Front4 = par1IconRegister.registerIcon("Fossil_Archeology:Feeder_Front4");
     }
 

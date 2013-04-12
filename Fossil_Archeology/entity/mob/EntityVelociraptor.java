@@ -184,31 +184,31 @@ public class EntityVelociraptor extends EntityDinosaur
             switch (this.getSubSpecies())
             {
                 case 1:
-                    return "/fossil/textures/mob/raptor_blue_adult.png";
+                    return "/mods/Fossil_Archeology/textures/mob/raptor_blue_adult.png";
 
                 case 2:
-                    return "/fossil/textures/mob/raptor_green_adult.png";
+                    return "/mods/Fossil_Archeology/textures/mob/raptor_green_adult.png";
                     
                 case 3:
-                    return "/fossil/textures/mob/raptor_brown_adult.png";
+                    return "/mods/Fossil_Archeology/textures/mob/raptor_brown_adult.png";
 
                 default:
-                	return "/fossil/textures/mob/raptor_brown_adult.png";
+                	return "/mods/Fossil_Archeology/textures/mob/raptor_brown_adult.png";
             }
         }
         switch (this.getSubSpecies())
         {
             case 1:
-                return "/fossil/textures/mob/raptor_blue_Baby.png";
+                return "/mods/Fossil_Archeology/textures/mob/raptor_blue_Baby.png";
 
             case 2:
-                return "/fossil/textures/mob/raptor_green_Baby.png";
+                return "/mods/Fossil_Archeology/textures/mob/raptor_green_Baby.png";
             
             case 3:
-                return "/fossil/textures/mob/raptor_brown_Baby.png";
+                return "/mods/Fossil_Archeology/textures/mob/raptor_brown_Baby.png";
 
             default:
-            	return "/fossil/textures/mob/raptor_brown_Baby.png";
+            	return "/mods/Fossil_Archeology/textures/mob/raptor_brown_Baby.png";
         }
     }
 

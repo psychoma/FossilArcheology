@@ -54,7 +54,7 @@ public class EntityBrachiosaurus extends EntityDinosaur
     public EntityBrachiosaurus(World var1)
     {
         super(var1);
-        this.texture = "/fossil/textures/mob/Brachiosaurus.png";
+        this.texture = "/mods/Fossil_Archeology/textures/mob/Brachiosaurus.png";
         this.SelfType = EnumDinoType.Brachiosaurus;
         //this.setSize(1.5F, 1.5F);
         this.health = 8;

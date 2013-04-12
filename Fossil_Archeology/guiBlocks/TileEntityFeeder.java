@@ -6,7 +6,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import mods.Fossil_Archeology.Fossil;
 import mods.Fossil_Archeology.entity.mob.EntityDinosaur;
 import mods.Fossil_Archeology.fossilEnums.*;
-import mods.Fossil_Archeology.items.ItemDinoMeat;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -201,7 +200,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
             	
             	int val=EnumDinoFoodItem.getItemFood(this.feederItemStacks[0].itemID);
             	
-            	if(this.feederItemStacks[0].getItem() instanceof mods.Fossil_Archeology.items.ItemDinoMeat)
+            	//if(this.feederItemStacks[0].getItem() instanceof mods.Fossil_Archeology.items.ItemDinoMeat)
             	{//TODO the feeder contains the raw food of the dino....he wont eat out of it anymore until it has been emptied!
             		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawTriceratops.itemID)this.ContainType[EnumDinoType.Triceratops.ordinal()]=true;
             		if(this.feederItemStacks[0].getItem().itemID==Fossil.rawVelociraptor.itemID)this.ContainType[EnumDinoType.Velociraptor.ordinal()]=true;

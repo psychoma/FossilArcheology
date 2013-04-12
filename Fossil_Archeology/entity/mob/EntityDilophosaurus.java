@@ -82,7 +82,7 @@ public class EntityDilophosaurus extends EntityDinosaur
     {
         super(var1);
         this.SelfType = EnumDinoType.Dilophosaurus;
-        this.texture = "/fossil/textures/mob/UtaCalm.png";
+        this.texture = "/mods/Fossil_Archeology/textures/mob/UtaCalm.png";
         this.looksWithInterest = false;
         //this.CheckSkin();
        // this.setSize(0.3F, 0.3F);

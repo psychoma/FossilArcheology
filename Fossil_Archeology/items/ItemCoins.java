@@ -1,10 +1,10 @@
 package mods.Fossil_Archeology.items;
 
 import mods.Fossil_Archeology.fossilEnums.EnumCoinType;
-import mods.Fossil_Archeology.items.forgeItems.*;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemCoins extends ForgeItem
+public class ItemCoins extends Item
 {
     public static final int BASEICONLOC = 45;
     private EnumCoinType delfWorldType = null;

@@ -31,7 +31,7 @@ public class RenderMosasaurus extends RenderLiving
         }
         else
         {
-            this.loadTexture("/fossil/textures/RenderPassMosasaurus.png");
+            this.loadTexture(var1.getTexture());
             float var4 = 300.0F;
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glDisable(GL11.GL_ALPHA_TEST);

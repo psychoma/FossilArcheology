@@ -56,7 +56,7 @@ public class EntitySaberCat extends EntityTameable
     public EntitySaberCat(World var1)
     {
         super(var1);
-        this.texture = "/fossil/textures/mob/SaberCat_Adult.png";
+        this.texture = "/mods/Fossil_Archeology/textures/mob/SaberCat_Adult.png";
         this.setSize(0.8F, 0.8F);
         this.moveSpeed = 0.3F;
         this.getNavigator().setAvoidsWater(true);

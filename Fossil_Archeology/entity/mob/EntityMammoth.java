@@ -57,7 +57,7 @@ public class EntityMammoth extends EntityTameable implements IShearable
     public EntityMammoth(World var1)
     {
         super(var1);
-        this.texture = "/fossil/textures/mob/MammothAdult.png";
+        this.texture = "/mods/Fossil_Archeology/textures/mob/MammothAdult.png";
         this.setSize(0.9F, 1.3F);
         float var2 = 0.23F;
         this.getNavigator().setAvoidsWater(true);

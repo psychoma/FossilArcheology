@@ -15,29 +15,29 @@ public class RenderJavelin extends Render
         switch (var1.SelfMaterial.ordinal())//RenderJavelin$1.$SwitchMap$net$minecraft$item$EnumToolMaterial[var1.SelfMaterial.ordinal()])
         {
             case 1:
-                this.loadTexture("/fossil/textures/StoneJavelin.png");
+                this.loadTexture("/mods/Fossil_Archeology/textures/StoneJavelin.png");
                 break;
 
             case 2:
-                this.loadTexture("/fossil/textures/IronJavelin.png");
+                this.loadTexture("/mods/Fossil_Archeology/textures/IronJavelin.png");
                 break;
 
             case 4:
-                this.loadTexture("/fossil/textures/GoldJavelin.png");
+                this.loadTexture("/mods/Fossil_Archeology/textures/GoldJavelin.png");
                 break;
 
             case 3:
-                this.loadTexture("/fossil/textures/DiamondJavelin.png");
+                this.loadTexture("/mods/Fossil_Archeology/textures/DiamondJavelin.png");
                 break;
 
             case 0:
             default:
-                this.loadTexture("/fossil/textures/WoodenJavelin.png");
+                this.loadTexture("/mods/Fossil_Archeology/textures/WoodenJavelin.png");
         }
 
         if (var1 instanceof EntityAncientJavelin)
         {
-            this.loadTexture("/fossil/textures/AncientJavelin.png");
+            this.loadTexture("/mods/Fossil_Archeology/textures/AncientJavelin.png");
         }
 
         GL11.glPushMatrix();
