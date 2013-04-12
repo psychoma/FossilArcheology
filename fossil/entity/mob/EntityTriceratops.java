@@ -10,14 +10,12 @@ import java.util.Random;
 import fossil.Fossil;
 import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIControlledByPlayer;
-import fossil.fossilAI.DinoAIEatFerns;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItems;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIStarvation;
-import fossil.fossilAI.DinoAIUseFeeder;
 import fossil.fossilAI.DinoAIWander;
-import fossil.fossilEnums.EnumDinoEating;
+import fossil.fossilEnums.EnumDinoFoodBlock;
 import fossil.fossilEnums.EnumDinoFoodItem;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
@@ -40,9 +38,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 public class EntityTriceratops extends EntityDinosaur
 {
@@ -95,21 +96,21 @@ public class EntityTriceratops extends EntityDinosaur
         this.FoodItemList.addItem(EnumDinoFoodItem.Bread);
         this.FoodItemList.addItem(EnumDinoFoodItem.Potato);
         
+        this.FoodBlockList.addblock(EnumDinoFoodBlock.Ferns);
+        this.FoodBlockList.addblock(EnumDinoFoodBlock.Leaves);
+        
         this.setSubSpecies((new Random()).nextInt(3) + 1);
         this.getNavigator().setAvoidsWater(true);
         //this.tasks.addTask(0, new DinoAIGrowup(this));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));//, 0.34F));
-        this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
+        //this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(4, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIEatFerns(this/*, this.MaxHunger*this.Hungrylevel*/));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24, EnumDinoEating.Herbivorous));
-        //this.tasks.addTask(7, new DinoAIPickItem(this, Item.wheat, this.moveSpeed, 24, this.HuntLimit));
-        //this.tasks.addTask(7, new DinoAIPickItem(this, Item.appleRed, this.moveSpeed, 24, this.HuntLimit));
-        //this.tasks.addTask(7, new DinoAIPickItem(this, Item.melon, this.moveSpeed, 24, this.HuntLimit));
-        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
+        //this.tasks.addTask(6, new DinoAIEatFerns(this));
+        //this.tasks.addTask(6, new DinoAIUseFeeder(this, 24, EnumDinoEating.Herbivorous));
+        this.tasks.addTask(7, new DinoAIEat(this, 24));
         this.tasks.addTask(8, new DinoAIWander(this));
         this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(10, new EntityAILookIdle(this));
@@ -202,6 +203,15 @@ public class EntityTriceratops extends EntityDinosaur
         //this.setSelfAngry(var1.getBoolean("Angry"));
         //this.InitSize();
     }*/
+    /**
+     * Causes this entity to do an upwards motion (jumping).
+     */
+    protected void jump()
+    {
+        this.motionY = 0.5;
+        this.isAirBorne = true;
+        ForgeHooks.onLivingJump(this);
+    }
 
     /**
      * Returns the sound this mob makes while it's alive.
@@ -540,9 +550,9 @@ public class EntityTriceratops extends EntityDinosaur
      */
     public void applyEntityCollision(Entity var1)
     {
-        if (var1 instanceof EntityLiving && !(var1 instanceof EntityPlayer) && this.riddenByEntity != null && this.onGround)
+        if (var1 instanceof EntityLiving && this.riddenByEntity != null && this.onGround && this.RiderSneak==true)
         {//you can hurt others with the dino while you ride it
-            this.onKillEntity((EntityLiving)var1);
+            //this.onKillEntity((EntityLiving)var1);
             ((EntityLiving)var1).attackEntityFrom(DamageSource.causeMobDamage(this), 10);
         }
         else

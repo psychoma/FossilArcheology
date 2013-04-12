@@ -14,13 +14,12 @@ import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIFishing;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItems;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIStarvation;
-import fossil.fossilAI.DinoAIUseFeeder;
 import fossil.fossilAI.DinoAIWander;
 import fossil.fossilAI.WaterDinoAISwimming;
-import fossil.fossilEnums.EnumDinoEating;
 import fossil.fossilEnums.EnumDinoFoodItem;
+import fossil.fossilEnums.EnumDinoFoodMob;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilInterface.IWaterDino;
@@ -105,6 +104,9 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
         FoodItemList.addItem(EnumDinoFoodItem.Sjl);
         FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
         
+        FoodMobList.addMob(EnumDinoFoodMob.Nautilus);
+        FoodMobList.addMob(EnumDinoFoodMob.Chicken);
+        
         this.getNavigator().setCanSwim(true);
         //this.tasks.addTask(0, new DinoAIGrowup(this, 12));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
@@ -112,11 +114,11 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
         this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));
         this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(4, new DinoAIFollowOwner(this, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24,/* this.HuntLimit,*/ EnumDinoEating.Carnivorous));
+        //this.tasks.addTask(6, new DinoAIUseFeeder(this, 24,/* this.HuntLimit,*/ EnumDinoEating.Carnivorous));
         /*this.tasks.addTask(7, new DinoAIPickItem(this, Item.fishRaw, this.moveSpeed * 2.0F, 24, this.HuntLimit));
         this.tasks.addTask(7, new DinoAIPickItem(this, Item.fishCooked, this.moveSpeed * 2.0F, 24, this.HuntLimit));
         this.tasks.addTask(7, new DinoAIPickItem(this, Fossil.sjl, this.moveSpeed * 2.0F, 24, this.HuntLimit));*/
-        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(7, new DinoAIEat(this, 24));
         this.tasks.addTask(8, new DinoAIFishing(this, /*this.HuntLimit,*/ 1));
         this.tasks.addTask(9, new DinoAIWander(this));
         this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
@@ -1023,7 +1025,7 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
             this.motionY *= 0.800000011920929D;
             this.motionZ *= 0.800000011920929D;
  //           if(this.riddenByEntity==null)
-            	this.motionY += 0.02D;//gravity is on it if not ridden, then handling the riding...going straight forward
+            	this.motionY += 0.02D;//TODO + -> - gravity is on it if not ridden, then handling the riding...going straight forward
 
             if (this.isCollidedHorizontally && this.isOffsetPositionInLiquid(this.motionX, this.motionY + 0.6000000238418579D - this.posY + var9, this.motionZ))
             {
@@ -1094,7 +1096,7 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
                     var3 = Block.blocksList[var6].slipperiness * 0.91F;
                 }
             }
-//            System.out.println(String.valueOf(this.motionY));
+            //System.out.println(String.valueOf(this.motionY));
             this.moveEntity(this.motionX, this.motionY, this.motionZ);
 
             if (this.worldObj.isRemote && (!this.worldObj.blockExists((int)this.posX, 0, (int)this.posZ) || !this.worldObj.getChunkFromBlockCoords((int)this.posX, (int)this.posZ).isChunkLoaded))
@@ -1112,7 +1114,6 @@ public class EntityPlesiosaur extends EntityDinosaur implements IWaterDino
             {
             	if(!this.isInWater())
             	{
-//            		System.out.println("WOPWOPWOP");
             		this.motionY -= 0.08D;
             	}
             }

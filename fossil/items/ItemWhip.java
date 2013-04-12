@@ -3,6 +3,7 @@ package fossil.items;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fossil.entity.mob.EntityDinosaur;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -65,5 +66,15 @@ public class ItemWhip extends ItemCarrotOnAStick
             }
         }
         return I;
+    }
+    /**
+     * Current implementations of this method in child classes do not use the entry argument beside ev. They just raise
+     * the damage on the stack.
+     */
+    public boolean hitEntity(ItemStack par1ItemStack, EntityLiving par2EntityLiving, EntityLiving par3EntityLiving)
+    {
+        par1ItemStack.damageItem(1, par3EntityLiving);
+        par3EntityLiving.playSound("WhipCrack", 1.0F, 1.0F);
+        return super.hitEntity(par1ItemStack, par2EntityLiving, par3EntityLiving);
     }
 }

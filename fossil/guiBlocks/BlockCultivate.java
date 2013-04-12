@@ -225,7 +225,9 @@ public class BlockCultivate extends BlockContainer
 
         for (int var7 = 0; var7 < var1.playerEntities.size(); ++var7)
         {
-            Fossil.ShowMessage(var6, (EntityPlayer)var1.playerEntities.get(var7));
+        	EntityPlayer P=(EntityPlayer)var1.playerEntities.get(var7);
+        	if(Math.pow(var2-P.posX,2D)+Math.pow(var3-P.posY,2D)+Math.pow(var4-P.posZ,2D)<10000)//Only for Players closer than 100 Metres
+        		Fossil.ShowMessage(var6,P);
         }
 
         this.ReturnIron(var1, var2, var3, var4);

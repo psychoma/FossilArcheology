@@ -21,7 +21,7 @@ public class DinoAIAttackOnCollide extends EntityAIBase
 
     /** The PathEntity of our entity. */
     PathEntity entityPathEntity;
-    Class classTarget;
+    Class classTarget=null;
     private int field_75445_i;
 
     public DinoAIAttackOnCollide(EntityDinosaur par1EntityDinosaur, Class par2Class, boolean par4)
@@ -105,7 +105,7 @@ public class DinoAIAttackOnCollide extends EntityAIBase
         this.attackTick = Math.max(this.attackTick - 1, 0);
         double var1 = (double)(this.attacker.width * 2.0F * this.attacker.width * 2.0F);
 
-        if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.boundingBox.minY, this.entityTarget.posZ) <= var1)
+        if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.boundingBox.minY, this.entityTarget.posZ) <= (var1>2.0D?var1:2.0D))
         {
             if (this.attackTick <= 0)
             {

@@ -20,10 +20,9 @@ public class ModelPterosaurFlying extends ModelPterosaurGround
     public ModelRenderer lower_mouth;
     public ModelRenderer Left_leg;
     public ModelRenderer right_leg;
-    public float LeftWingRandomFlap = 0.0F;
-    public float RightWingRandomFlap = 0.0F;
     public float AirRoll = 0.0F;
     public float AirPitch = 0.0F;
+    public float WingState = 0.0F;
 
     public ModelPterosaurFlying()
     {
@@ -148,7 +147,7 @@ public class ModelPterosaurFlying extends ModelPterosaurGround
         this.right_leg.render(var7);
     }
 
-    protected void setRotationAngles()//float var1, float var2, float var3, float var4, float var5, float var6, boolean var7)
+    protected void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, boolean var7)
     {
         //if (var7==false)
         {
@@ -169,16 +168,25 @@ public class ModelPterosaurFlying extends ModelPterosaurGround
             this.Body.rotateAngleZ = this.AirRoll;
             this.Neck_1.rotateAngleZ = this.AirRoll;
             this.New_Shape1.rotateAngleZ = this.AirRoll;
-            this.Left_wing_1.rotateAngleZ = 2.792527F + this.AirRoll;
-            this.Left_wing_2.rotateAngleZ = this.AirRoll;
-            this.Right_wing_1.rotateAngleZ = -2.792527F + this.AirRoll;
-            this.Right_wing_2.rotateAngleZ = this.AirRoll;
+            
+            this.Left_wing_1.rotateAngleZ = -(float)(0.5F*(1-Math.sin(this.WingState)))+2.792527F + this.AirRoll;
+            this.Left_wing_2.rotateAngleZ = -(float)(0.5F*(1-Math.sin(this.WingState)))+this.AirRoll;
+            this.Right_wing_1.rotateAngleZ = (float)(0.5F*(1-Math.sin(this.WingState)))+-2.792527F + this.AirRoll;
+            this.Right_wing_2.rotateAngleZ = (float)(0.5F*(1-Math.sin(this.WingState)))+this.AirRoll;
+            
             this.Tail.rotateAngleZ = this.AirRoll;
             this.crown.rotateAngleZ = this.AirRoll;
             this.Head.rotateAngleZ = this.AirRoll;
             this.upper_mouth.rotateAngleZ = this.AirRoll;
             this.lower_mouth.rotateAngleZ = this.AirRoll;
             this.Left_leg.rotateAngleZ = this.right_leg.rotateAngleZ = this.AirRoll;
+            
+            //System.out.println("WingState: "+String.valueOf(this.WingState));
+            
+            /*this.Left_wing_1.rotateAngleY = (float)(30F*Math.sin(this.WingState))+(float)Math.PI;
+            this.Left_wing_2.rotateAngleY = (float)(30F*Math.sin(this.WingState));
+            this.Right_wing_1.rotateAngleY = (float)(30F*Math.sin(this.WingState));
+            this.Right_wing_2.rotateAngleY = (float)(30F*Math.sin(this.WingState))+(float)Math.PI;*/
         }
     }
 }

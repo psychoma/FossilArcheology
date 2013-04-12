@@ -11,18 +11,17 @@ import fossil.client.FossilOptions;
 import fossil.Fossil;
 import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIControlledByPlayer;
-import fossil.fossilAI.DinoAIEatLeavesWithHeight;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItems;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIStarvation;
-import fossil.fossilAI.DinoAIUseFeederWithHeight;
 import fossil.fossilAI.DinoAIWander;
 import fossil.fossilEnums.EnumDinoFoodItem;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilEnums.EnumSituation;
 import fossil.guiBlocks.GuiPedia;
+import fossil.guiBlocks.TileEntityFeeder;
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
@@ -38,8 +37,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class EntityBrachiosaurus extends EntityDinosaur
@@ -99,10 +100,10 @@ public class EntityBrachiosaurus extends EntityDinosaur
         this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(4, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIEatLeavesWithHeight(this, 24));//, this.HuntLimit));
-        this.tasks.addTask(6, new DinoAIUseFeederWithHeight(this, 24));//, this.HuntLimit));
+        //this.tasks.addTask(6, new DinoAIEatLeavesWithHeight(this, 24));//, this.HuntLimit));
+        //this.tasks.addTask(6, new DinoAIUseFeederWithHeight(this, 24));//, this.HuntLimit));
         this.tasks.addTask(7, new DinoAIWander(this));
-        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(7, new DinoAIEat(this, 24));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
     }
@@ -143,118 +144,125 @@ public class EntityBrachiosaurus extends EntityDinosaur
     {
         return "Brach_death";
     }
-
-    /*public String getOwnerName()
+    public Vec3 getBlockToEat(int SEARCH_RANGE)
     {
-        return this.OwnerName;
-    }
-
-    public void setOwner(String var1)
-    {
-        this.OwnerName = var1.toString();
-    }
-
-    public boolean isTamed()
-    {
-        return this.isTamed;
-    }
-
-    public void setTamed(boolean var1)
-    {
-        this.isTamed = var1;
-    }*/
-
-    /*public void SetOrder(EnumOrderType var1)
-    {
-        this.OrderStatus = var1;
-    }*/
-
-    /*public boolean HandleEating(int var1)
-    {
-        return this.HandleEating(var1, false);
-    }
-
-    public boolean HandleEating(int var1, boolean var2)
-    {
-        if (this.getHunger() >= this.getHungerLimit())
+    	Vec3 pos = null;
+    	/*for (int dx = -1; dx != -(SEARCH_RANGE+1); dx+=(dx<0)?(dx*-2):(-(2*dx+1)))//Creates the following order: -1,1,-2,2,-3,3,-4,1,....,10, stops with 10. looks at near places, first
         {
-            if (this.isTamed() && !var2)
+    		System.out.println(String.valueOf(dx));
+            for (int dy = -5; dy < 4; dy++)
             {
-                this.SendStatusMessage(EnumSituation.Full, this.SelfType);
+                for (int dz = -1; dz != -(SEARCH_RANGE+1); dz+=(dz<0)?(dz*-2):(-(2*dz+1)))//Creates the following order: -1,1,-2,2,-3,3,-4,1,....,10, stops with 10. looks at near places, first
+                {
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX+dx), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+dz))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX+dx),MathHelper.floor_double(this.posY+dy),MathHelper.floor_double(this.posZ+dz));
+                    	return pos;
+                    }
+                }
             }
-
-            return false;
-        }
-        else
+        }*/
+    	
+    	for(int r=1;r<=SEARCH_RANGE;r++)
+    	{
+	    	for (int ds = -r; ds <=r; ds++)
+	        {
+	            for (int dy = (int)this.getEyeHeight()+2; dy >= (int)this.getEyeHeight()-2; dy--)
+	            {
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX+ds), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ-r))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX+ds), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ-r));
+                    	return pos;
+                    }
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX+ds), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+r))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX+ds), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+r));
+                    	return pos;
+                    }
+	            }
+	        }
+	    	for (int ds = -r+1; ds <=r-1; ds++)
+	        {
+	    		for (int dy = (int)this.getEyeHeight()+2; dy >= (int)this.getEyeHeight()-2; dy--)
+	            {
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX-r), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+ds))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX-r), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+ds));
+                    	return pos;
+                    }
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX+r), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+ds))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX+r), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+ds));
+                    	return pos;
+                    }
+	            }
+	        }
+    	}
+    	return null;
+    }
+    public TileEntityFeeder GetNearestFeeder(int SEARCH_RANGE)
+    {
+    	/*for (int dx = -2; dx != -(SEARCH_RANGE+1); dx+=(dx<0)?(dx*-2):(-(2*dx+1)))//Creates the following order: -2,2,-3,3,-4,1,....,10, stops with 10. looks at near places, first
         {
-            this.increaseHunger(var1);
-            this.showHeartsOrSmokeFX(false);
-
-            if (this.getHunger() >= this.getHungerLimit())
+            for (int dy = -5; dy < 4; dy++)
             {
-                this.setHunger(this.getHungerLimit());
-            }
+                for (int dz = -2; dz != -(SEARCH_RANGE+1); dz+=(dz<0)?(dz*-2):(-(2*dz+1)))//Creates the following order: -2,2,-3,3,-4,1,....,10, stops with 10. looks at near places, first
+                {
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight())
+                    {
+                    	TileEntity fed = this.worldObj.getBlockTileEntity(MathHelper.floor_double(this.posX+dx), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+dz));
 
-            return true;
+                        if (fed != null && fed instanceof TileEntityFeeder && ((TileEntityFeeder)fed).isFilled())
+                        {
+                        	//pos = Vec3.createVectorHelper(this.posX+dx,this.posY+dy,this.posY+dz);
+                        	return (TileEntityFeeder)fed;//pos;
+                        }
+                    }
+                }
+            }
         }
+    	return null;*/
+    	//World var1 = this.entityVar.worldObj;
+        //double var3 = this.entityVar.posX;
+        //double var5 = this.entityVar.posY;
+        //double var7 = this.entityVar.posZ;
+        //boolean var9 = true;
+        double var10 = 0.0D;
+        double var12 = (double)(SEARCH_RANGE * SEARCH_RANGE * 2);
+
+        for (int var15 = (int)(this.posX - (double)SEARCH_RANGE); var15 < (int)(this.posX + (double)SEARCH_RANGE); ++var15)
+        {
+            for (int var16 = (int)(this.posY + (double)this.getEyeHeight() - 2.0D); var16 < (int)(this.posY + (double)this.getEyeHeight() + 2.0D); ++var16)
+            {
+                for (int var17 = (int)(this.posZ - (double)SEARCH_RANGE); var17 < (int)(this.posZ + (double)SEARCH_RANGE); ++var17)
+                {
+                    if (var16 >= 0 && var16 <= this.worldObj.getHeight())
+                    {
+                        TileEntity var14 = this.worldObj.getBlockTileEntity(var15, var16, var17);
+
+                        if (var14 != null && var14 instanceof TileEntityFeeder && ((TileEntityFeeder)var14).isFilled())
+                        {
+                            var10 = ((double)var15 - this.posX) * ((double)var15 - this.posX) + ((double)var17 - this.posZ) * ((double)var17 - this.posZ);
+
+                            if (var10 < var12)
+                            {
+                                var12 = var10;
+                                return (TileEntityFeeder)var14;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
-    public boolean CheckEatable(int var1)
-    {
-        Item var2 = Item.itemsList[var1];
-        boolean var3 = false;
-        var3 = var2 == Item.wheat || var2 == Item.melon;
-        return var3;
-    }*/
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
     {
     	super.ShowPedia(p0);
     	p0.PrintItemXY(Fossil.dnaBrachiosaurus, 120, 7);
     }
-    /*public void ShowPedia(EntityPlayer var1)
-    {
-        this.PediaTextCorrection(this.SelfType, var1);
-
-        if (this.isTamed())
-        {
-            Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
-            Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
-            Fossil.ShowMessage(HelthText + this.health + "/" + this.getMaxHealth(), var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
-        }
-        else
-        {
-            Fossil.ShowMessage(UntamedText, var1);
-        }
-    }*/
-
-    /*public String[] additionalPediaMessage()
-    {
-        String[] var1 = null;
-
-        if (!this.isTamed())
-        {
-            var1 = new String[] {UntamedText};
-        }
-        else
-        {
-            ArrayList var2 = new ArrayList();
-
-            if (this.isTamed() && this.getDinoAge() > 4 && this.riddenByEntity == null)
-            {
-                var2.add(RidiableText);
-            }
-
-            if (!var2.isEmpty())
-            {
-                var1 = new String[1];
-                var1 = (String[])var2.toArray(var1);
-            }
-        }
-
-        return var1;
-    }*/
 
     /**
      * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
@@ -270,10 +278,6 @@ public class EntityBrachiosaurus extends EntityDinosaur
         return null;
     }
 
-    /*public int getMaxHealth()
-    {
-        return 20 + 10 * this.getDinoAge();
-    }*/
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
@@ -292,13 +296,6 @@ public class EntityBrachiosaurus extends EntityDinosaur
         super.readEntityFromNBT(var1);
         //this.InitSize();
         //this.OrderStatus = EnumOrderType.values()[var1.getByte("OrderStatus")];//already done
-    }*/
-
-    /*private void InitSize()
-    {
-        this.updateSize();
-        this.setPosition(this.posX, this.posY, this.posZ);
-        this.moveSpeed = this.getSpeed();//0.3F + (float)this.getDinoAge() * 0.05F;//done centrally
     }*/
 
     /**
@@ -332,23 +329,6 @@ public class EntityBrachiosaurus extends EntityDinosaur
             }
         }
     }
-
-    /*public void setSelfSitting(boolean var1)
-    {//handled in Dinosaur
-        if (var1)
-        {
-            this.OrderStatus = EnumOrderType.Stay;
-        }
-        else
-        {
-            this.OrderStatus = EnumOrderType.FreeMove;
-        }
-    }
-
-    public boolean isSelfSitting()
-    {
-        return this.OrderStatus == EnumOrderType.Stay;
-    }*/
 
     public float getEyeHeight()
     {

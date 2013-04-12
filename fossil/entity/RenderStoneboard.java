@@ -14,13 +14,13 @@ import org.lwjgl.opengl.GL12;
 
 public class RenderStoneboard extends Render
 {
-    private Random rand = new Random();
+    //private Random rand = new Random();
 
     public void func_158_a(EntityStoneboard entitystoneboard, double var2, double var4, double var6, float var8, float var9)
     {
         if (entitystoneboard.art != null)
         {
-            this.rand.setSeed(187L);
+            //this.rand.setSeed(187L);
             GL11.glPushMatrix();
             GL11.glTranslatef((float)var2, (float)var4, (float)var6);
             GL11.glRotatef(var8, 0.0F, 1.0F, 0.0F);
@@ -106,7 +106,7 @@ public class RenderStoneboard extends Render
 
     private void func_160_a(EntityStoneboard var1, float var2, float var3)
     {
-        int var4 = MathHelper.floor_double(var1.posX);
+        /*int var4 = MathHelper.floor_double(var1.posX);
         int var5 = MathHelper.floor_double(var1.posY + (double)(var3 / 16.0F));
         int var6 = MathHelper.floor_double(var1.posZ);
 
@@ -128,7 +128,7 @@ public class RenderStoneboard extends Render
         if (var1.direction == 3)
         {
             var6 = MathHelper.floor_double(var1.posZ + (double)(var2 / 16.0F));
-        }
+        }*/
         GL11.glColor3f(1.0F, 1.0F, 1.0F);
     }
 
@@ -140,6 +140,7 @@ public class RenderStoneboard extends Render
      */
     public void doRender(Entity var1, double var2, double var4, double var6, float var8, float var9)
     {
+    	//System.out.println("UPDATEING:"+String.valueOf(var4));
         this.func_158_a((EntityStoneboard)var1, var2, var4, var6, var8, var9);
     }
 }

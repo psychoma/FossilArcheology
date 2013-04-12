@@ -9,14 +9,11 @@ import java.util.List;
 import java.util.Random;
 import fossil.Fossil;
 import fossil.fossilAI.DinoAIAttackOnCollide;
-import fossil.fossilAI.DinoAIEatFerns;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItems;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIStarvation;
-import fossil.fossilAI.DinoAIUseFeeder;
 import fossil.fossilAI.DinoAIWander;
-import fossil.fossilEnums.EnumDinoEating;
 import fossil.fossilEnums.EnumDinoFoodItem;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
@@ -102,17 +99,11 @@ public class EntityStegosaurus extends EntityDinosaur
         FoodItemList.addItem(EnumDinoFoodItem.Bread);
         
         this.getNavigator().setAvoidsWater(true);
-        //this.tasks.addTask(0, new DinoAIStarvation(this));
-        //this.tasks.addTask(0, new DinoAIGrowup(this, 12));
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAILeapAtTarget(this, 0.4F));
         this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(4, new DinoAIFollowOwner(this, 5.0F, 2.0F));
-        this.tasks.addTask(5, new DinoAIEatFerns(this/*, this.HuntLimit)*/));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Herbivorous));
-        //this.tasks.addTask(6, new DinoAIPickItem(this, Item.wheat, this.moveSpeed, 24, this.HuntLimit));
-        //this.tasks.addTask(6, new DinoAIPickItem(this, Item.appleRed, this.moveSpeed, 24, this.HuntLimit));
-        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(7, new DinoAIEat(this, 24));
         this.tasks.addTask(7, new DinoAIWander(this));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
@@ -363,11 +354,6 @@ public class EntityStegosaurus extends EntityDinosaur
         return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
     }
 
-    /*public boolean isSelfSitting()
-    {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }*/
-
     public void setSelfAngry(boolean var1)
     {
         byte var2 = this.dataWatcher.getWatchableObjectByte(16);
@@ -384,34 +370,6 @@ public class EntityStegosaurus extends EntityDinosaur
         }
     }
 
-    /*public void setSelfSitting(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 1)));
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -2)));
-        }
-    }
-
-    public void setTamed(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 4)));
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -5)));
-        }
-    }*/
-
     /**
      * Checks if the entity's current position is a valid location to spawn this entity.
      */
@@ -420,141 +378,10 @@ public class EntityStegosaurus extends EntityDinosaur
         return this.worldObj.checkIfAABBIsClear(this.boundingBox) && this.worldObj.getCollidingBoundingBoxes(this, this.boundingBox).size() == 0 && !this.worldObj.isAnyLiquid(this.boundingBox);
     }
 
-    /*private void InitSize()
-    {
-        this.CheckSkin();
-        this.updateSize();
-        this.setPosition(this.posX, this.posY, this.posZ);
-        this.moveSpeed = this.getSpeed();//0.5F + (float)(this.getDinoAge() * 3);
-    }
-    public void updateSize()
-    {
-    	this.setSize((float)(1.5D + 0.3D * (double)((float)this.getDinoAge())), (float)(1.5D + 0.3D * (double)((float)this.getDinoAge())));
-    }*/
-
     public boolean CheckSpace()
     {
         return !this.isEntityInsideOpaqueBlock();
     }
-    /*public void CheckSkin()
-    {
-        if (this.isAdult())
-        {
-            this.texture = "/fossil/textures/Stegosaurus_Adult.png";
-        }
-        else
-        {
-            this.texture = "/fossil/textures/Stegosaurus_Baby.png";
-        }
-    }*/
-
-    /*public void updateRiderPosition()
-    {
-        if (this.riddenByEntity != null)
-        {
-            this.riddenByEntity.setPosition(this.posX, this.posY + (double)this.getDinoHeight() * 0.65D + 0.07D * (double)(12 - this.getDinoAge()), this.posZ);
-        }
-    }*/
-
-    /*public boolean HandleEating(int var1)
-    {
-        return this.HandleEating(var1, false);
-    }
-
-    public boolean HandleEating(int var1, boolean var2)
-    {
-        if (this.getHunger() >= this.getHungerLimit())
-        {
-            if (this.isTamed() && !var2)
-            {
-                this.SendStatusMessage(EnumSituation.Full, this.SelfType);
-            }
-
-            return false;
-        }
-        else
-        {
-            this.increaseHunger(var1);
-            this.showHeartsOrSmokeFX(false);
-
-            if (this.getHunger() >= this.getHungerLimit())
-            {
-                this.setHunger(this.getHungerLimit());
-            }
-
-            return true;
-        }
-    }*/
-
-    /*private boolean FindWheats(int var1)
-    {
-        if (this.isSelfSitting())
-        {
-            return false;
-        }
-        else
-        {
-            List var2 = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.expand(1.0D, 0.0D, 1.0D));
-
-            if (var2 != null)
-            {
-                for (int var3 = 0; var3 < var2.size(); ++var3)
-                {
-                    if (var2.get(var3) instanceof EntityItem)
-                    {
-                        EntityItem var4 = (EntityItem)var2.get(var3);
-
-                        if (var4.func_92014_d().itemID == Item.wheat.itemID)
-                        {
-                            this.HandleEating(10);
-                            this.worldObj.playSoundAtEntity(this, "random.pop", 0.2F, (((new Random()).nextFloat() - (new Random()).nextFloat()) * 0.7F + 1.0F) * 2.0F);
-                            var4.setDead();
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            EntityItem var8 = null;
-            List var9 = this.worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool(this.posX, this.posY, this.posZ, this.posX + 1.0D, this.posY + 1.0D, this.posZ + 1.0D).expand((double)var1, 4.0D, (double)var1));
-            Iterator var5 = var9.iterator();
-
-            while (var5.hasNext())
-            {
-                Entity var6 = (Entity)var5.next();
-
-                if (var6 instanceof EntityItem)
-                {
-                    EntityItem var7 = (EntityItem)var6;
-
-                    if (var7.func_92014_d().getItem().itemID == Item.wheat.itemID)
-                    {
-                        if (var8 != null)
-                        {
-                            if (this.GetDistanceWithEntity(var7) < this.GetDistanceWithEntity(var8))
-                            {
-                                var8 = var7;
-                            }
-                        }
-                        else
-                        {
-                            var8 = var7;
-                        }
-                    }
-                }
-            }
-
-            if (var8 != null)
-            {
-                this.setPathToEntity(this.worldObj.getPathEntityToEntity(this, var8, (float)var1, true, false, true, false));
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-    }*/
 
     public void FaceToCoord(int var1, int var2, int var3)
     {
@@ -591,76 +418,6 @@ public class EntityStegosaurus extends EntityDinosaur
         return var1 + var4;
     }
 
-    /*private void HandleRiding()
-    {
-        if (this.RushTick > 0)
-        {
-            --this.RushTick;
-        }
-
-        if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayerSP && this.onGround)
-        {
-            if (((EntityPlayerSP)this.riddenByEntity).movementInput.jump)
-            {
-                this.jump();
-                ((EntityPlayerSP)this.riddenByEntity).movementInput.jump = false;
-            }
-
-            this.Running = ((EntityPlayerSP)this.riddenByEntity).movementInput.sneak && this.RushTick == 0;
-
-            if (((EntityPlayerSP)this.riddenByEntity).movementInput.sneak)
-            {
-                if (this.getDinoAge() > 4 && this.motionX != 0.0D && this.motionZ != 0.0D)
-                {
-                    this.BlockInteractive();
-                }
-
-                if (this.RushTick == 0)
-                {
-                    for (this.rotationYaw -= ((EntityPlayerSP)this.riddenByEntity).movementInput.moveStrafe * 5.0F; this.rotationYaw < -180.0F; this.rotationYaw += 360.0F)
-                    {
-                        ;
-                    }
-
-                    while (this.rotationYaw >= 180.0F)
-                    {
-                        this.rotationYaw -= 360.0F;
-                    }
-
-                    this.moveForward = ((EntityPlayerSP)this.riddenByEntity).movementInput.moveForward * this.moveSpeed * 8.0F;
-                }
-                else
-                {
-                    for (this.rotationYaw -= ((EntityPlayerSP)this.riddenByEntity).movementInput.moveStrafe * 5.0F; this.rotationYaw < -180.0F; this.rotationYaw += 360.0F)
-                    {
-                        ;
-                    }
-
-                    while (this.rotationYaw >= 180.0F)
-                    {
-                        this.rotationYaw -= 360.0F;
-                    }
-
-                    this.moveForward = ((EntityPlayerSP)this.riddenByEntity).movementInput.moveForward * this.moveSpeed * 0.0F;
-                }
-            }
-            else
-            {
-                for (this.rotationYaw -= ((EntityPlayerSP)this.riddenByEntity).movementInput.moveStrafe * 5.0F; this.rotationYaw < -180.0F; this.rotationYaw += 360.0F)
-                {
-                    ;
-                }
-
-                while (this.rotationYaw >= 180.0F)
-                {
-                    this.rotationYaw -= 360.0F;
-                }
-
-                this.moveForward = ((EntityPlayerSP)this.riddenByEntity).movementInput.moveForward * this.moveSpeed;
-            }
-        }
-    }*/
-
     /**
      * Applies a velocity to each of the entities pushing them away from each other. Args: entity
      */
@@ -677,105 +434,17 @@ public class EntityStegosaurus extends EntityDinosaur
         }
     }
 
-    /*public int BlockInteractive()
-    {
-        for (int var1 = (int)Math.round(this.boundingBox.minX) - 1; var1 <= (int)Math.round(this.boundingBox.maxX) + 1; ++var1)
-        {
-            for (int var2 = (int)Math.round(this.boundingBox.minY); var2 <= (int)Math.round(this.boundingBox.maxY); ++var2)
-            {
-                for (int var3 = (int)Math.round(this.boundingBox.minZ) - 1; var3 <= (int)Math.round(this.boundingBox.maxZ) + 1; ++var3)
-                {
-                    if (!this.worldObj.isAirBlock(var1, var2, var3))
-                    {
-                        int var4 = this.worldObj.getBlockId(var1, var2, var3);
-
-                        if (!this.inWater)
-                        {
-                            if (this.isTamed() && this.riddenByEntity == null)
-                            {
-                                if (var4 == Block.wood.blockID || var4 == Block.leaves.blockID)
-                                {
-                                    this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
-                                    this.RushTick = 10;
-                                }
-                            }
-                            else if ((double)Block.blocksList[var4].getBlockHardness(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ) < 5.0D || var4 == Block.wood.blockID)
-                            {
-                                if ((new Random()).nextInt(10) == 5)
-                                {
-                                    Block.blocksList[var4].dropBlockAsItem(this.worldObj, var1, var2, var3, 1, 0);
-                                }
-
-                                this.worldObj.setBlockWithNotify(var1, var2, var3, 0);
-                                this.RushTick = 10;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return 0;
-    }*/
-
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
     {
     	super.ShowPedia(p0);
     	p0.PrintItemXY(Fossil.dnaStegosaurus, 120, 7);
     }
-    
-    /*public void ShowPedia(EntityPlayer var1)
-    {
-        this.PediaTextCorrection(this.SelfType, var1);
-
-        if (this.isTamed())
-        {
-            Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
-            Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
-            Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
-        }
-        else
-        {
-            Fossil.ShowMessage(UntamedText, var1);
-        }
-    }*/
-
-    /*public String[] additionalPediaMessage()
-    {
-        String[] var1 = null;
-
-        if (!this.isTamed())
-        {
-            var1 = new String[] {UntamedText};
-        }
-
-        return var1;
-    }*/
-
-
-    /*public boolean CheckEatable(int var1)
-    {
-        Item var2 = Item.itemsList[var1];
-        boolean var3 = false;
-        var3 = var2 == Item.wheat || var2 == Item.melon;
-        return var3;
-    }*/
 
     public EntityStegosaurus spawnBabyAnimal(EntityAgeable var1)
     {
         return new EntityStegosaurus(this.worldObj);
     }
-
-    /*public float getGLX()
-    {
-        return (float)(1.5D + 0.3D * (double)this.getDinoAge());
-    }
-
-    public float getGLY()
-    {
-        return (float)(1.5D + 0.3D * (double)this.getDinoAge());
-    }*/
 
     public EntityAgeable func_90011_a(EntityAgeable var1)
     {

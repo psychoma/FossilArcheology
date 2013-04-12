@@ -35,7 +35,7 @@ public class DinoFoodItemList {
 			if (Items[i].item.itemID == ID)
 				return Items[i].FoodValue;
 		}
-		return 0;	
+		return 0;
 	}
 	public int getItemHeal(int ID)
 	{
@@ -43,7 +43,7 @@ public class DinoFoodItemList {
 		{
 			if (Items[i].item.itemID == ID)
 			{
-				//System.out.println("ItemHealValue:"+String.valueOf(Items[i].HealValue));
+				//System.out.println("ItemHealValueInList:"+String.valueOf(Items[i].HealValue));
 				return Items[i].HealValue;
 			}
 		}

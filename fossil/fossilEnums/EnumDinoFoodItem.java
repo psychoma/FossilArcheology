@@ -31,9 +31,8 @@ public enum EnumDinoFoodItem
 	Nautilus(Fossil.rawNautilus,20,2),
 	ChickenSoupRaw(Fossil.rawChickenSoup,30,3),
 	ChickenSoupCooked(Fossil.cookedChickenSoup,40,3),
-	//ChickenEssence(Fossil.chickenEss,60,10),
 	Triceratops(Fossil.rawTriceratops,50,3),
-	Raptor(Fossil.rawVelociraptor,20,3),
+	Velociraptor(Fossil.rawVelociraptor,20,3),
 	TRex(Fossil.rawTRex,20,3),
 	Pterosaur(Fossil.rawPterosaur,15,2),
 	Plesiosaur(Fossil.rawPlesiosaur,30,3),
@@ -42,27 +41,20 @@ public enum EnumDinoFoodItem
 	Dilophosaurus(Fossil.rawDilophosaurus,25,2),
 	Brachiosaur(Fossil.rawBrachiosaurus,50,4),
 	DinoMeatCooked(Fossil.cookedDinoMeat,50,5),	
-	//DinoMeatRaw(Fossil.rawDinoMeat,30,3)
 	;
     public Item item;
     public int FoodValue;
     public int HealValue;
     
     public static final int ISHERBIVOROUS=1;
-    public static final int ISCARNIVOROUS=-1;
+    public static final int ISCARNIVOROUS=2;
     public static final int ISNOFOOD=0;
 
-    /*private EnumDinoFoodItem(EnumDinoFoodItem Item0)
-    {
-        item = Item0;
-        FoodValue = Item0.FoodValue;
-        HealValue = Item0.HealValue;
-    }*/
     private EnumDinoFoodItem(Item item0, int Food, int Heal)
     {
-        item = item0;
-        FoodValue = Food;
-        HealValue = Heal;
+        this.item = item0;
+        this.FoodValue = Food;
+        this.HealValue = Heal;
     }
     
     /**

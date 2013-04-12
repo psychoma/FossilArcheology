@@ -29,6 +29,7 @@ public class EntityNautilus extends EntityWaterMob
     private float randomMotionVecY = 0.0F;
     private float randomMotionVecZ = 0.0F;
     public int BreedTick = 3000;
+    public boolean isOwned=false;
 
     public EntityNautilus(World var1)
     {
@@ -37,6 +38,7 @@ public class EntityNautilus extends EntityWaterMob
         this.field_70864_bA = 1.0F / (this.rand.nextFloat() + 1.0F) * 0.2F;
         this.texture = "/fossil/textures/Nautilus.png";
         this.experienceValue=1;
+        this.isOwned=false;
     }
 
     /**
@@ -97,6 +99,7 @@ public class EntityNautilus extends EntityWaterMob
         if (var3 <= 3)
         {
             this.dropItem(Fossil.emptyShell.itemID, 1);
+            this.dropItem(Fossil.rawNautilus.itemID, 1);
         }
         else
         {
@@ -292,6 +295,15 @@ public class EntityNautilus extends EntityWaterMob
             }
             this.BreedTick = 3000;
         }
+    }
+    /**
+     * Determines if an entity can be despawned, used on idle far away entities
+     */
+    protected boolean canDespawn()
+    {
+    	if(this.isOwned)
+    		return false;
+    	return true;
     }
 
     public int getMaxHealth()

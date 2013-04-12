@@ -95,10 +95,11 @@ public class RenderPterosaur extends RenderLiving
             }
             else if (this.FlyingModel)
             {
-                ((ModelPterosaurFlying)this.FlyModel).AirPitch = -((float)((double)var1.getAirPitch() * 0.017453292519943295D));
-                ((ModelPterosaurFlying)this.FlyModel).AirRoll = (float)((double)var1.getAirAngle() * 0.017453292519943295D);
+                ((ModelPterosaurFlying)this.FlyModel).AirPitch = -((float)((double)var1.AirPitch * 0.017453292519943295D));
+                ((ModelPterosaurFlying)this.FlyModel).AirRoll = (float)((double)var1.AirAngle * 0.017453292519943295D);
+                ((ModelPterosaurFlying)this.FlyModel).WingState = (float)((double)var1.WingState * 0.017453292519943295D);
                 //System.out.println("AirPitch: "+String.valueOf(var1.AirPitch));
-                ((ModelPterosaurFlying)this.FlyModel).setRotationAngles();
+                //((ModelPterosaurFlying)this.FlyModel).setRotationAngles();
                 this.FlyModel.setLivingAnimations(var1, var16, var15, var9);
                 this.FlyModel.render(var1, var16, var15, var13, var11 - var10, var12, var14);
             }

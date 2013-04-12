@@ -21,21 +21,29 @@ public enum EnumDinoFoodBlock
 	Sapling(Block.sapling,10,1),
 	TallGrass(Block.tallGrass,10,1),
 	Ferns(Fossil.ferns,50,3),
+	Palae(Fossil.palmLeaves,15,2)
 	;
-    public int blockID;
+    public Block block;
     public int FoodValue;
     public int HealValue;
 
-    private EnumDinoFoodBlock(Block block, int Food, int Heal)
+    private EnumDinoFoodBlock(Block Block, int Food, int Heal)
     {
-        blockID = block.blockID;
+        block = Block;
         FoodValue = Food;
         HealValue = Heal;
     }
-    private EnumDinoFoodBlock(EnumDinoFoodBlock block0)
-    {
-        blockID = block0.blockID;
-        FoodValue = block0.FoodValue;
-        HealValue = block0.HealValue;
-    }
+    /**
+     * 
+     * Takes the itemid and gives the food value
+     */
+    public static int getBlockFood(int i0)
+	{
+		for (int i=0;i<EnumDinoFoodBlock.values().length;i++)
+		{
+			if (EnumDinoFoodBlock.values()[i].block.blockID==i0)
+				return EnumDinoFoodBlock.values()[i].FoodValue;
+		}
+		return 0;	
+	}
 }

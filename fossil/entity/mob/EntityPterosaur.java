@@ -4,24 +4,28 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.util.ArrayList;
+import java.util.Random;
+
 import fossil.Fossil;
 import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItems;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIStarvation;
-import fossil.fossilAI.DinoAIUseFeeder;
 import fossil.fossilAI.DinoAIWander;
-import fossil.fossilEnums.EnumDinoEating;
 import fossil.fossilEnums.EnumDinoFoodItem;
+import fossil.fossilEnums.EnumDinoFoodMob;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilEnums.EnumSituation;
 import fossil.guiBlocks.GuiPedia;
 import net.minecraft.block.Block;
 import net.minecraft.block.StepSound;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
@@ -33,9 +37,12 @@ import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.network.packet.Packet34EntityTeleport;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
@@ -43,6 +50,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class EntityPterosaur extends EntityDinosaur
 {
@@ -60,12 +68,13 @@ public class EntityPterosaur extends EntityDinosaur
     public float AirSpeed = 0.0F;//Speed of the DinoAIControlledByPlayer instance
     public float AirAngle = 0.0F;
     public float AirPitch = 0.0F;
-    //public float LastAirPitch = 0.0F;
+    public float WingState = 0.0F;
+    public int wingpause=0;
     public boolean Landing = false;
     
-    //public static final int AIR_SPEED_INDEX = 25;
-    public static final int AIR_ANGLE_INDEX = 26;
-    public static final int AIR_PITCH_INDEX = 27;
+    //public static final int AIR_ANGLE_INDEX = 26;
+    //public static final int AIR_PITCH_INDEX = 27;
+    //public static final int WING_STATE_INDEX = 25;
 
     public EntityPterosaur(World var1)
     {
@@ -103,6 +112,8 @@ public class EntityPterosaur extends EntityDinosaur
         FoodItemList.addItem(EnumDinoFoodItem.Sjl);
         FoodItemList.addItem(EnumDinoFoodItem.ChickenRaw);
         
+        FoodMobList.addMob(EnumDinoFoodMob.Chicken);
+        
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.texture = "/fossil/textures/Pterosaur.png";
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
@@ -113,11 +124,11 @@ public class EntityPterosaur extends EntityDinosaur
         //this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityBrachiosaurus.class, 8.0F, 0.3F, 0.35F));
         this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
+        //this.tasks.addTask(6, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
         /*this.tasks.addTask(6, new DinoAIPickItem(this, Item.fishRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.fishCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.sjl, this.moveSpeed * 2.0F, 24, this.HuntLimit));*/
-        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(7, new DinoAIEat(this, 24));
         this.tasks.addTask(7, new DinoAIWander(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
         this.targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
@@ -141,13 +152,13 @@ public class EntityPterosaur extends EntityDinosaur
         return this.isModelized() ? false : true;//this.riddenByEntity == null;
     }
     
-    protected void entityInit()
+    /*protected void entityInit()
     {
         super.entityInit();
-        //this.dataWatcher.addObject(AIR_SPEED_INDEX, new Integer(0));
-        this.dataWatcher.addObject(AIR_ANGLE_INDEX, new Integer(0));
-        this.dataWatcher.addObject(AIR_PITCH_INDEX, new Integer(0));
-    }
+        //this.dataWatcher.addObject(WING_STATE_INDEX, new Integer(0));
+        //this.dataWatcher.addObject(AIR_ANGLE_INDEX, new Integer(0));
+        //this.dataWatcher.addObject(AIR_PITCH_INDEX, new Integer(0));
+    }*/
 
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
@@ -160,6 +171,7 @@ public class EntityPterosaur extends EntityDinosaur
         var1.setFloat("Airspeed", this.AirSpeed);
         var1.setFloat("AirAngle", this.AirAngle);
         var1.setFloat("AirPitch", this.AirPitch);
+        var1.setFloat("WingState", this.WingState);
     }
 
     /**
@@ -181,24 +193,26 @@ public class EntityPterosaur extends EntityDinosaur
         this.AirSpeed = var1.getFloat("Airspeed");
         this.AirAngle = var1.getFloat("AirAngle");
         this.AirPitch = var1.getFloat("AirPitch");
+        this.WingState = var1.getFloat("WingState");
     }
-    /*public float getAirSpeed()
-    {return (float)(this.dataWatcher.getWatchableObjectInt(AIR_SPEED_INDEX)/100F);}
     
-    public void setAirSpeed(float var1)
-    {this.dataWatcher.updateObject(AIR_SPEED_INDEX, Integer.valueOf((int)(var1*100)));}*/
-    
-    public float getAirAngle()
-    {return (float)(this.dataWatcher.getWatchableObjectInt(AIR_ANGLE_INDEX)/100.0F);}
+    /*public float getAirAngle()
+    {return (float)(this.dataWatcher.getWatchableObjectInt(AIR_ANGLE_INDEX)/10000.0F);}
     
     public void setAirAngle(float var1)
-    {this.dataWatcher.updateObject(AIR_ANGLE_INDEX, Integer.valueOf((int)(var1*100)));}
+    {this.dataWatcher.updateObject(AIR_ANGLE_INDEX, Integer.valueOf((int)(var1*10000F)));}
    
     public float getAirPitch()
-    {return (float)(this.dataWatcher.getWatchableObjectInt(AIR_PITCH_INDEX)/100.0F);}
+    {return (float)(this.dataWatcher.getWatchableObjectInt(AIR_PITCH_INDEX)/10000.0F);}
     
     public void setAirPitch(float var1)
-    {this.dataWatcher.updateObject(AIR_PITCH_INDEX, Integer.valueOf((int)(var1*100)));}
+    {this.dataWatcher.updateObject(AIR_PITCH_INDEX, Integer.valueOf((int)(var1*10000F)));}
+    
+    public float getWingState()
+    {return (float)(this.dataWatcher.getWatchableObjectInt(WING_STATE_INDEX)/10000.0F);}
+    
+    public void setWingState(float var1)
+    {this.dataWatcher.updateObject(WING_STATE_INDEX, Integer.valueOf((int)(var1*10000F)));}*/
 
     /**
      * Returns the sound this mob makes while it's alive.
@@ -236,11 +250,12 @@ public class EntityPterosaur extends EntityDinosaur
      * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
      * use this to react to sunlight and start to burn.
      */
-    /*public void onLivingUpdate()
+    public void onLivingUpdate()
     {
-        this.HandleRiding();
+    	//if(this.riddenByEntity!=null && !this.onGround && !this.inWater)
+    		//this.getWingState();
         super.onLivingUpdate();
-    }*/
+    }
 
     /**
      * Called to update the entity's position/logic.
@@ -396,81 +411,6 @@ public class EntityPterosaur extends EntityDinosaur
         return super.interact(var1);
     }*/
 
-    /*public void handleHealthUpdate(byte var1)
-    {
-        if (var1 == 7)
-        {
-            this.showHeartsOrSmokeFX(true);
-        }
-        else if (var1 == 6)
-        {
-            this.showHeartsOrSmokeFX(false);
-        }
-        else if (var1 == 8)
-        {
-            ;//this.field_25052_g = true;
-        }
-        else
-        {
-            super.handleHealthUpdate(var1);
-        }
-    }*/
-
-   /* public boolean isSelfAngry()
-    {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
-    }
-
-    /*public boolean isSelfSitting()
-    {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }*/
-
-    /*public void setSelfAngry(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 2)));
-            this.moveSpeed = 2.0F;
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -3)));
-        }
-    }*/
-
-    /*public void setSelfSitting(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 1)));
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -2)));
-        }
-    }
-
-    public void setTamed(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 4)));
-        }
-        else
-        {
-            this.ItemInMouth = null;
-            this.SendStatusMessage(EnumSituation.Bytreate);
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -5)));
-        }
-    }*/
-
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */
@@ -498,58 +438,10 @@ public class EntityPterosaur extends EntityDinosaur
         }
     }
 
-    /*private void InitSize()
-    {
-        //this.CheckSkin();
-        this.updateSize();
-        this.setPosition(this.posX, this.posY, this.posZ);
-    }*/
-
-    /*public void CheckSkin()
-    {
-        if (!this.isModelized())
-        {
-            this.texture = "/fossil/textures/Pterosaur.png";
-        }
-        else
-        {
-            this.texture = this.getModelTexture();
-        }
-    }*/
-
     public boolean CheckSpace()
     {
         return !this.isEntityInsideOpaqueBlock();
     }
-
-    /*public boolean HandleEating(int var1)
-    {
-        if (this.getHunger() >= this.getHungerLimit())
-        {
-            return false;
-        }
-        else
-        {
-            this.increaseHunger(var1);
-            this.showHeartsOrSmokeFX(false);
-
-            if (this.getHunger() >= this.getHungerLimit())
-            {
-                this.setHunger(this.getHungerLimit());
-            }
-
-            return true;
-        }
-    }*/
-
-    /*public void ChangeSubType(int var1)
-    {
-        if (var1 <= 2 && var1 >= 0)
-        {
-            this.SubType = var1;
-            this.CheckSkin();
-        }
-    }*/
     
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
@@ -562,64 +454,6 @@ public class EntityPterosaur extends EntityDinosaur
     		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Fly"), true);
     }
 
-    /*public void ShowPedia(EntityPlayer var1)
-    {
-        this.PediaTextCorrection(this.SelfType, var1);
-
-        if (this.isTamed())
-        {
-            Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
-            Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
-            Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
-
-            if (this.getDinoAge() >= 5)
-            {
-                Fossil.ShowMessage(FlyText, var1);
-            }
-
-            if (this.getDinoAge() >= 8)
-            {
-                Fossil.ShowMessage(RidiableText, var1);
-            }
-        }
-        else
-        {
-            Fossil.ShowMessage(UntamedText, var1);
-        }
-    }*/
-
-    /*public String[] additionalPediaMessage()
-    {
-        String[] var1 = null;
-
-        if (!this.isTamed())
-        {
-            var1 = new String[] {UntamedText};
-        }
-        else
-        {
-            ArrayList var2 = new ArrayList();
-
-            if (this.getDinoAge() >= 5)
-            {
-                var2.add(FlyText);
-            }
-
-            if (this.getDinoAge() >= 8)
-            {
-                var2.add(RidiableText);
-            }
-
-            if (!var2.isEmpty())
-            {
-                var1 = new String[1];
-                var1 = (String[])var2.toArray(var1);
-            }
-        }
-
-        return var1;
-    }*/
 
     /**
      * Causes this entity to do an upwards motion (jumping).
@@ -649,10 +483,10 @@ public class EntityPterosaur extends EntityDinosaur
     	
             if (!this.onGround && !this.inWater && !onlyAjump && Speed>0F)
             {
-            	if(this.AirSpeed==-1F)
+            	if(this.AirSpeed==-1.0F)
             	{
-            		this.AirPitch=-10F;
-            		this.AirSpeed=Speed*2.5F;
+            		this.AirPitch=-10.0F;
+            		this.AirSpeed=Speed*1.5F;
             	}
             	this.Landing=this.RiderSneak;
             	/*if (!this.isCollidedVertically)
@@ -661,14 +495,16 @@ public class EntityPterosaur extends EntityDinosaur
                 else
                     this.Landing = false;*/
             	
-            	if(this.RiderStrafe!=0F)
+            	if(this.RiderStrafe!=0.0F)
             		this.AirAngle -= this.RiderStrafe;
             	else
             	{
-            		if(this.AirAngle>0)
+            		if(this.AirAngle>0.0)
             			this.AirAngle-=0.5F;
-            		if(this.AirAngle<0)
+            		if(this.AirAngle<0.0)
             			this.AirAngle+=0.5F;
+            		if(this.AirAngle>-0.5F && this.AirAngle<0.5F)
+                		this.AirAngle=0.0F;
             	}
 
                 if (this.AirAngle > 30.0F)
@@ -679,7 +515,7 @@ public class EntityPterosaur extends EntityDinosaur
 
                 //if (Math.abs(this.AirAngle) > 10.0F)
                     //this.rotationYaw += (float)(this.AirAngle > 0.0F ? 1 : -1);
-                this.rotationYaw += this.AirAngle/20F;
+                this.rotationYaw += this.AirAngle/20.0F;
                 
 
                 /*while (this.rotationYaw < -180.0F)
@@ -721,67 +557,109 @@ public class EntityPterosaur extends EntityDinosaur
                         this.AirSpeed = this.moveForward * this.moveSpeed;
                     }*/
                     
-                    if(this.RiderForward!=0F)
+                    if(this.RiderForward!=0.0F)
                     	this.AirPitch -= this.RiderForward*0.5F;
                     else
                     {
-                    	if(this.AirPitch<0F)
+                    	if(this.AirPitch<0.0F)
                     		this.AirPitch+=0.5F;
-                    	if(this.AirPitch>0F)
+                    	if(this.AirPitch>0.0F)
                     		this.AirPitch-=0.5F;
+                    	if(this.AirPitch>-0.5F && this.AirPitch<0.5F)
+                    		this.AirPitch=0.0F;
                     }
-
+                    
+                    if(this.AirPitch<-25.0F || (this.AirSpeed>this.getSpeed()*2.5/MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F) && this.AirPitch<0F) || this.wingpause>0)
+                    {
+                    	if(this.wingpause>0)
+                    		this.wingpause--;
+                    	if(this.WingState!=90.0F)
+                    	{
+		                	if(this.WingState>=90.0F)
+		                		this.WingState-=1.0F;
+		                	else
+		                		this.WingState+=1.0F;
+		                	if(this.WingState<92.0F || this.WingState>88F)
+		                		this.WingState=90.0F;
+                    	}
+                    }
+                    else
+                    {
+                    	if(this.wingpause>0 && this.AirPitch>5.0F)
+                			this.wingpause=0;
+                    	if(this.wingpause==0)
+                    	{
+                    		this.WingState+=3.0F+7.0F*MathHelper.sin((this.AirPitch+30.0F) * (float)Math.PI / 180.0F)*(SpeedBoosted>0F?2F:1F);
+                    		if(this.WingState>85.0F && SpeedBoosted==0.0F && this.WingState<95.0F && this.AirPitch<=5.0F &&(new Random()).nextInt(10000)<MathHelper.floor_float(1000F-400F/3F*(this.AirPitch-5F)))
+                    		{
+                    			this.wingpause=25+(new Random()).nextInt(MathHelper.floor_float(10F-4F/3F*(this.AirPitch-5F)));
+                    		}
+                    		if(this.WingState>180.0F)
+                    			this.WingState-=180.0F;
+                    	}
+                    	else
+                    		this.wingpause--;
+                    }	
+                    
                     if (this.AirPitch > 40.0F)
                         this.AirPitch = 40.0F;
 
                     if (this.AirPitch < -60.0F)
                         this.AirPitch = -60.0F;
 
-                    //float var2 = (float)((double)this.AirPitch * 0.017453292519943295D);
+                    float var5 = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F);
+                    float var6 = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F);
+                    
+                    //this.AirSpeed=this.getSpeed()*2.5F*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
+                    
+                    if(this.AirSpeed>this.getSpeed()*2.5*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F) && this.AirPitch>=0F)//slow down when rising
+                		this.AirSpeed*=0.99F;
+                    if(this.AirSpeed>this.getSpeed()*2.5/MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F) && this.AirPitch<0F)//slow down when too fast
+                		this.AirSpeed*=0.995F;
+                    if(this.AirSpeed<this.getSpeed()*2.5*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F))
+                		this.AirSpeed*=1.01F;
+                	if(this.AirPitch<0F)
+                		this.AirSpeed-=MathHelper.sin(this.AirPitch * (float)Math.PI / 180.0F)*0.005F;//get faster
+                    
+                    this.motionX=-this.AirSpeed*(SpeedBoosted>0?1.5F:1F)*MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F)*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
+                    this.motionZ=this.AirSpeed*(SpeedBoosted>0?1.5F:1F)*MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F)*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
+                    this.motionY=/*0.20000000298023224D+*/this.AirSpeed*(SpeedBoosted>0?1.5F:1F)*MathHelper.sin(this.AirPitch * (float)Math.PI / 180.0F);
 
-                    //if (this.LastAirPitch >= this.AirPitch)
+                    //System.out.println("AirSpeed: "+String.valueOf(this.AirSpeed));
+                    /*System.out.println("AirAngle: "+String.valueOf(this.AirAngle));
+                	System.out.println("AirPitch: "+String.valueOf(this.AirPitch));
+                	System.out.println("W: "+String.valueOf(this.rotationYaw));
+                	System.out.println("X: "+String.valueOf(this.motionX));*/
+                	//System.out.println("Y: "+String.valueOf(this.motionY));
+                	/*System.out.println("Z: "+String.valueOf(this.motionZ));
+                	System.out.println("T: "+String.valueOf(this.ticksExisted));*/
+                    
+                    this.posX+=this.motionX;
+                    this.posY+=this.motionY;
+                    this.posZ+=this.motionZ;
+                    /*if (this.AirPitch < 60.0F && this.moveForward > 0.1F)
                     {
-                        //double var3 = Math.cos((double)var2);
-
-                        //this.setMoveForward(this.AirSpeed * (float)var3);
-                        float var5 = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F);
-                        float var6 = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F);
-                        
-                        //this.AirSpeed=this.getSpeed()*2.5F*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
-                        
-                        if(this.AirSpeed>this.getSpeed()*2.5*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F) && this.AirPitch>=0F)//slow down when rising
-                    		this.AirSpeed*=0.99F;
-                        if(this.AirSpeed>this.getSpeed()*2.5/MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F) && this.AirPitch<0F)//slow down when too fast
-                    		this.AirSpeed*=0.995F;
-                        if(this.AirSpeed<this.getSpeed()*2.5*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F))
-                    		this.AirSpeed*=1.01F;
-                    	if(this.AirPitch<0F)
-                    		this.AirSpeed-=MathHelper.sin(this.AirPitch * (float)Math.PI / 180.0F)*0.005F;//get faster
-                        
-                        this.motionX=-this.AirSpeed*(1.0F+(SpeedBoosted>0?0.3F:0F))*MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F)*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
-                        this.motionZ=this.AirSpeed*(1.0F+(SpeedBoosted>0?0.3F:0F))*MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F)*MathHelper.cos(this.AirPitch * (float)Math.PI / 180.0F);
-                        this.motionY=/*0.20000000298023224D+*/this.AirSpeed*(1.0F+(SpeedBoosted>0?0.3F:0F))*MathHelper.sin(this.AirPitch * (float)Math.PI / 180.0F);
-
-                        //System.out.println("AirSpeed: "+String.valueOf(this.AirSpeed));
-                        /*System.out.println("AirAngle: "+String.valueOf(this.AirAngle));
-                    	System.out.println("AirPitch: "+String.valueOf(this.AirPitch));
-                    	System.out.println("W: "+String.valueOf(this.rotationYaw));
-                    	System.out.println("X: "+String.valueOf(this.motionX));*/
-                    	//System.out.println("Y: "+String.valueOf(this.motionY));
-                    	/*System.out.println("Z: "+String.valueOf(this.motionZ));
-                    	System.out.println("T: "+String.valueOf(this.ticksExisted));*/
-                        
-                        this.posX+=this.motionX;
-                        this.posY+=this.motionY;
-                        this.posZ+=this.motionZ;
-                        /*if (this.AirPitch < 60.0F && this.moveForward > 0.1F)
-                        {
-                            this.motionY = Math.sin((double)var2) * 0.4D;
-                        }*/
-                    }
-
-                    //this.LastAirPitch = this.AirPitch;
+                        this.motionY = Math.sin((double)var2) * 0.4D;
+                    }*/
                 }
+                ByteArrayOutputStream var3 = new ByteArrayOutputStream();
+    	        DataOutputStream var4 = new DataOutputStream(var3);
+    	        try
+    	        {
+    	        	var4.writeInt(this.entityId);
+    	        	var4.writeFloat(this.AirAngle);
+    	        	var4.writeFloat(this.AirPitch);
+    	        	var4.writeFloat(this.WingState);
+    	        	//System.out.println("WingPause: "+String.valueOf(this.wingpause));
+    	        }
+    	        catch(Exception e)
+    	        {
+    	        	System.err.println("ERROR WHILE WRITING Ptero Flying Data to Packet");
+    	        }
+    	        //((EntityPlayerMP)this.riddenByEntity).playerNetServerHandler.sendPacketToPlayer(new Packet250CustomPayload("PteroFlight",var3.toByteArray()));
+    			//System.out.println("SERVER:"+String.valueOf(this.WingState));
+    	        ((WorldServer)this.riddenByEntity.worldObj).getEntityTracker().sendPacketToAllAssociatedPlayers(this.riddenByEntity, new Packet250CustomPayload("PteroFlight",var3.toByteArray()));
+    			
             }
             else
             {
@@ -831,8 +709,9 @@ public class EntityPterosaur extends EntityDinosaur
                 this.moveEntityWithHeading(0.0F, Speed+Speed*(0.3F+0.85F*MathHelper.sin(SpeedBoosted*(float)Math.PI)));
             }
         //}
-        this.setAirAngle(this.AirAngle);
-        this.setAirPitch(this.AirPitch);
+        //this.setAirAngle(this.AirAngle);
+        //this.setAirPitch(this.AirPitch);
+        //this.setWingState(this.WingState);
     	return Speed;
     }
     /**

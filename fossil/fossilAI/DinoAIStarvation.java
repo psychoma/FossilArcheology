@@ -41,11 +41,17 @@ public class DinoAIStarvation extends EntityAIBase
         this.mover.decreaseHunger();
         if(!this.mover.worldObj.isRemote)
         {
-	        if(this.mover.IsDeadlyHungry() && this.mover.OrderStatus!=EnumOrderType.FreeMove)
-	        {
-	        	this.mover.OrderStatus=EnumOrderType.FreeMove;
-	        	this.mover.SendStatusMessage(EnumSituation.StarveEsc);
-	        }
+        	if(this.mover.IsDeadlyHungry())
+        	{
+
+    			if(this.mover.OrderStatus!=EnumOrderType.FreeMove)
+    	        {
+    	        	this.mover.OrderStatus=EnumOrderType.FreeMove;
+    	        	this.mover.SendStatusMessage(EnumSituation.StarveEsc);
+    	        }
+    			else
+    				this.mover.SendStatusMessage(EnumSituation.Hungry);
+        	}
 	        if(this.mover.ItemInMouth != null)//The Dino has something in its mouth and gets hungry
 	        {
 	        	if(this.mover.FoodItemList.CheckItemById(this.mover.ItemInMouth.itemID))

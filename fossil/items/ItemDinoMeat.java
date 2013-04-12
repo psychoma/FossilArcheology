@@ -22,10 +22,10 @@ public class ItemDinoMeat extends ForgeItemFood
     /**
      * Gets an icon index based on an item's damage value
      */
-    public int getIconFromDamage(int var1)
+    /*public int getIconFromDamage(int var1)
     {
         return 54;
-    }
+    }*/
 
     /*public String getItemNameIS(ItemStack var1)
     {

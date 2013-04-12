@@ -42,53 +42,6 @@ public class ItemAncientEgg extends Item
     }
 
     /**
-     * Gets an icon index based on an item's damage value
-     */
-    /*public int getIconFromDamage(int var1)
-    {
-        return var1 < TypeCount ? 22 + var1 : 0;
-    }*/
-
-    /*public String getItemNameIS(ItemStack var1)
-    {
-        switch (ItemAncientEgg$1.$SwitchMap$mod_Fossil$EnumDinoType[this.GetTypeFromInt(var1.getItemDamage()).ordinal()])
-        {
-            case 1:
-                return "Eggtriceratops";
-
-            case 2:
-                return "EggRaptor";
-
-            case 3:
-                return "EggTRex";
-
-            case 4:
-                return "EggPterosaur";
-
-            case 5:
-                return "ShellNautilus";
-
-            case 6:
-                return "EggPlesiosaur";
-
-            case 7:
-                return "EggMosasaurus";
-
-            case 8:
-                return "EggStegosaurus";
-
-            case 9:
-                return "EggUtahraptor";
-
-            case 10:
-                return "EggBrachiosaurus";
-
-            default:
-                return "Ancient egg";
-        }
-    }*/
-
-    /**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
     public ItemStack onItemRightClick(ItemStack var1, World var2, EntityPlayer var3)
@@ -181,7 +134,7 @@ public class ItemAncientEgg extends Item
         if (var1 == EnumDinoType.Nautilus)
         {
             var8 = new EntityNautilus(var0);
-            System.out.println("WRONG");
+            ((EntityNautilus)var8).isOwned=true;
         }
         else
         {

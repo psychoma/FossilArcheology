@@ -29,10 +29,11 @@ public class ItemBioFossil extends Item
         this.maxStackSize = 64;
     }
 
-    public String getTextureFile()
+    /*public String getTextureFile()
     {
         return "/fossil/textures/Fos_items.png";
-    }
+    }*/
+    
 
     public boolean tryPlaceIntoWorld(ItemStack var1, EntityPlayer var2, World var3, int var4, int var5, int var6/*, int var7, float var8, float var9, float var10*/)
     {

@@ -210,7 +210,7 @@ public class ModelBrachiosaurus extends ModelDinosaurs
 
     protected void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, boolean var7)
     {
-        if (var7==false)
+        //if (var7==false)
         {
             this.Front_Thigh.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
             this.Front_Calf1.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;

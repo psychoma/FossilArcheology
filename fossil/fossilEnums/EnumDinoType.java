@@ -15,20 +15,32 @@ import fossil.entity.mob.EntityDilophosaurus;
 
 interface C
 {
-	public static final boolean NO_MODEL =false;
+	/*public static final boolean NO_MODEL =false;
 	public static final boolean MODEL =true;
 	public static final boolean NO_TAME =false;
 	public static final boolean TAME =true;
 	public static final boolean NO_RIDE =false;
 	public static final boolean RIDE =true;
 	public static final boolean NO_CARRY =false;
-	public static final boolean CARRY =true;
+	public static final boolean CARRY =true;*/
+	
+	public static final int NOTHING = 0;
+	
+	public static final int NO_FEEDER = 0 << 0;//Bits 0+1:	Dinos Can't use Feeder at all
+	public static final int HERBIVORE = 1 << 0;//Bit 0:		Dino can use Herbivore Part of Feeder 
+	public static final int CARNIVORE = 2 << 0;//Bit 1: 	Dino can use Carnivore Part of Feeder 
+	public static final int HERB_CARN = 3 << 0;//Bits 0+1: 	Dinos can use Herbivore and Carnivore Part of Feeder 
+	
+	public static final int MODEL =1 << 2;//Bit 2: Dino is Modelable
+	public static final int TAME =1 << 3;//Bit 3: Dino is Tameable
+	public static final int RIDE =1 << 4;//Bit 4: Dino is Rideable
+	public static final int CARRY =1 << 5;//Bit 5: Dino can Carry Items
 }
 
 public enum EnumDinoType
 {
 	//Name(Class							Modelable	Tameable	Rideable	Can Carry Items
-    Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY),
+    /*Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY),
     Velociraptor(EntityVelociraptor.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY),
     TRex(EntityTRex.class, 					C.NO_MODEL,	C.NO_TAME,	C.RIDE,		C.NO_CARRY),
     Pterosaur(EntityPterosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY),
@@ -37,25 +49,26 @@ public enum EnumDinoType
     Mosasaurus(EntityMosasaurus.class, 		C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY),
     Stegosaurus(EntityStegosaurus.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.NO_CARRY),
     Dilophosaurus(EntityDilophosaurus.class,C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY),
-    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY);
+    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY);*/
 
 
-    /*Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick,			Fossil.rawTriceratops, 	Fossil.dnaTriceratops, 	Fossil.eggTriceratops),
-    Velociraptor(EntityVelociraptor.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone,			Fossil.rawVelociraptor, Fossil.dnaVelociraptor, Fossil.eggVelociraptor),
-    TRex(EntityTRex.class, 					C.NO_MODEL,	C.NO_TAME,	C.RIDE,		C.NO_CARRY,		Fossil.skullStick,	Fossil.rawTRex, 		Fossil.dnaTRex, 		Fossil.eggTRex),
-    Pterosaur(EntityPterosaur.class, 		C.MODEL,	C.TAME,		C.NO_RIDE,	C.NO_CARRY,		Item.arrow,			Fossil.rawPterosaur, 	Fossil.dnaPterosaur, 	Fossil.eggPterosaur),
-    Nautilus(EntityNautilus.class, 			C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY,		null,				Fossil.rawNautilus, 	Fossil.dnaNautilus, 	Fossil.shellNautilus),//I think not really neccessary...
-    Plesiosaur(EntityPlesiosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Fossil.magicConch/*.emptyShell*,	Fossil.rawPlesiosaur, 	Fossil.dnaPlesiosaur, 	Fossil.eggPlesiosaur),
-    Mosasaurus(EntityMosasaurus.class, 		C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY,		null,				Fossil.rawMosasaurus, 	Fossil.dnaMosasaurus, 	Fossil.eggMosasaurus),
-    Stegosaurus(EntityStegosaurus.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.NO_CARRY,		Item.stick,			Fossil.rawStegosaurus, 	Fossil.dnaStegosaurus, 	Fossil.eggStegosaurus),
-    Dilophosaurus(EntityDilophosaurus.class,C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone,			Fossil.rawDilophosaurus,Fossil.dnaDilophosaurus,Fossil.eggDilophosaurus),
-    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick,			Fossil.rawBrachiosaurus,Fossil.dnaBrachiosaurus,Fossil.eggBrachiosaurus);*/
+    Triceratops(EntityTriceratops.class, 	C.MODEL | C.TAME | C.RIDE | C.HERBIVORE),
+    Velociraptor(EntityVelociraptor.class, 	C.TAME | C.CARRY | C.CARNIVORE),
+    TRex(EntityTRex.class, 					C.RIDE | C.CARNIVORE),
+    Pterosaur(EntityPterosaur.class, 		C.MODEL | C.TAME | C.RIDE | C.CARNIVORE),
+    Nautilus(EntityNautilus.class, 			C.NOTHING),
+    Plesiosaur(EntityPlesiosaur.class, 		C.MODEL | C.TAME | C.RIDE | C.CARNIVORE),
+    Mosasaurus(EntityMosasaurus.class, 		C.NOTHING),
+    Stegosaurus(EntityStegosaurus.class, 	C.TAME | C.HERBIVORE),
+    Dilophosaurus(EntityDilophosaurus.class,C.TAME | C.CARRY | C.CARNIVORE),
+    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL | C.TAME | C.RIDE | C.HERBIVORE);
 
     private final Class dinoClass;
-    private final boolean modelable;
+    /*private final boolean modelable;
     private final boolean tameable;
     private final boolean rideable;
-    private final boolean carryitems;
+    private final boolean carryitems;*/
+    public int Flags=0;
     public Item OrderItem;
     public Item DropItem;
     public Item DNAItem;
@@ -64,7 +77,7 @@ public enum EnumDinoType
     /**
      * Params: Class, Modelable,Tameable,Rideable,CanCarryItems
      */
-    private EnumDinoType(Class class0, boolean model0,boolean tame0,boolean ride0,boolean carry0/*,Item i0*/)
+    /*private EnumDinoType(Class class0, boolean model0,boolean tame0,boolean ride0,boolean carry0/*,Item i0*)
     {
         this.dinoClass = class0;
         this.modelable = model0;
@@ -72,20 +85,16 @@ public enum EnumDinoType
         this.rideable = ride0;
         this.carryitems = carry0;
         //this.OrderItem = i0;
-    }
-    /*private EnumDinoType(Class clas, boolean model,boolean tame,boolean ride,boolean carry,Item i,Item drop,Item dna,Item egg)
-    {
-        this.dinoClass = clas;
-        this.DropItem = drop;
-        this.DNAItem = dna;
-        this.EggItem = egg;
-        this.modelable = model;
-        this.tameable = tame;
-        this.rideable = ride;
-        this.carryitems = carry;
-        this.OrderItem = i;
-        //System.out.println(String.valueOf(this.DropItem!=null));
     }*/
+    /**
+     * Params: Class, Flags
+     */
+    private EnumDinoType(Class class0, int f0)
+    {
+        this.dinoClass = class0;
+        this.Flags=f0;
+        //this.OrderItem = i0;
+    }
     private void setDetails(Item order,Item drop,Item dna,Item egg)
     {
     	this.DropItem = drop;
@@ -157,103 +166,30 @@ public enum EnumDinoType
     }
     public boolean isModelable()
     {
-        return this.modelable;
+        return (this.Flags & C.MODEL) != 0;
     }
     public boolean isTameable()
     {
-        return this.tameable;
+        return (this.Flags & C.TAME) != 0;
     }
     public boolean isRideable()
     {
-        return this.rideable;
+        return (this.Flags & C.RIDE) != 0;
     }
     public boolean canCarryItems()
     {
-        return this.carryitems;
+        return (this.Flags & C.CARRY) != 0;
+    }
+    public boolean useFeeder()
+    {
+    	return (this.Flags & C.HERB_CARN) != 0;
+    }
+    public boolean isHerbivore()
+    {
+        return (this.Flags & C.HERBIVORE) != 0;
+    }
+    public boolean isCarnivore()
+    {
+    	return (this.Flags & C.CARNIVORE) != 0;
     }
 }
-/*package fossil.fossilEnums;
-
-import net.minecraft.item.Item;
-import fossil.Fossil;
-import fossil.entity.mob.EntityBrachiosaurus;
-import fossil.entity.mob.EntityMosasaurus;
-import fossil.entity.mob.EntityNautilus;
-import fossil.entity.mob.EntityPlesiosaur;
-import fossil.entity.mob.EntityPterosaur;
-import fossil.entity.mob.EntityRaptor;
-import fossil.entity.mob.EntityStegosaurus;
-import fossil.entity.mob.EntityTRex;
-import fossil.entity.mob.EntityTriceratops;
-import fossil.entity.mob.Entitydil;
-
-interface C
-{
-	public static final boolean NO_MODEL =false;
-	public static final boolean MODEL =true;
-	public static final boolean NO_TAME =false;
-	public static final boolean TAME =true;
-	public static final boolean NO_RIDE =false;
-	public static final boolean RIDE =true;
-	public static final boolean NO_CARRY =false;
-	public static final boolean CARRY =true;
-}
-
-public enum EnumDinoType
-{
-	//Name(Class							Modelable	Tameable	Rideable	Can Carry Items Order Item
-    Triceratops(EntityTriceratops.class, 	C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick),
-    Raptor(EntityRaptor.class, 				C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone),
-    TRex(EntityTRex.class, 					C.NO_MODEL,	C.NO_TAME,	C.RIDE,		C.NO_CARRY,		Fossil.skullStick),
-    Pterosaur(EntityPterosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.arrow),
-    Nautilus(EntityNautilus.class, 			C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY,		null),//I think not really neccessary...
-    Plesiosaur(EntityPlesiosaur.class, 		C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Fossil.emptyShell),
-    Mosasaurus(EntityMosasaurus.class, 		C.NO_MODEL,	C.NO_TAME,	C.NO_RIDE,	C.NO_CARRY,		null),
-    Stegosaurus(EntityStegosaurus.class, 	C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.NO_CARRY,		Item.stick),
-    Utahraptor(Entitydil.class, 			C.NO_MODEL,	C.TAME,		C.NO_RIDE,	C.CARRY,		Item.bone),
-    Brachiosaurus(EntityBrachiosaurus.class,C.MODEL,	C.TAME,		C.RIDE,		C.NO_CARRY,		Item.stick);
-    private final Class dinoClass;
-    private final boolean modelable;
-    private final boolean tameable;
-    private final boolean rideable;
-    private final boolean carryitems;
-    private Item OrderItem;
-
-    /**
-     * Params: Class, Modelable,Tameable,Rideable,CanCarryItems
-     *
-    private EnumDinoType(Class class0, boolean model0,boolean tame0,boolean ride0,boolean carry0,Item i0)
-    {
-        this.dinoClass = class0;
-        this.modelable = model0;
-        this.tameable = tame0;
-        this.rideable = ride0;
-        this.carryitems = carry0;
-        this.OrderItem = i0;
-    }
-
-    public Class getDinoClass()
-    {
-        return this.dinoClass;
-    }
-    public boolean isModelable()
-    {
-        return this.modelable;
-    }
-    public boolean isTameable()
-    {
-        return this.tameable;
-    }
-    public boolean isRideable()
-    {
-        return this.rideable;
-    }
-    public boolean canCarryItems()
-    {
-        return this.carryitems;
-    }
-    public Item getOrderItem()
-    {
-        return this.OrderItem;
-    }
-}*/

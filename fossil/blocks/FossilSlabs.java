@@ -5,6 +5,7 @@ import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import fossil.Fossil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -20,7 +21,7 @@ public abstract class FossilSlabs extends Block
 
     public FossilSlabs(int par1, boolean par2, Material par3Material)
     {
-        super(par1, par3Material);
+        super(par1,6, par3Material);
         this.isDoubleSlab = par2;
 
         if (par2)
@@ -157,7 +158,7 @@ public abstract class FossilSlabs extends Block
      */
     private static boolean isBlockSingleSlab(int par0)
     {
-        return par0 == Block.stoneSingleSlab.blockID || par0 == Block.woodSingleSlab.blockID;
+        return par0 == Fossil.palaeSingleSlab.blockID;
     }
 
     /**

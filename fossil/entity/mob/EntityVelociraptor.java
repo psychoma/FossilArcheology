@@ -11,13 +11,12 @@ import fossil.Fossil;
 import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItems;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAITargetNonTamedExceptSelfClass;
-import fossil.fossilAI.DinoAIUseFeeder;
 import fossil.fossilAI.DinoAIWander;
-import fossil.fossilEnums.EnumDinoEating;
 import fossil.fossilEnums.EnumDinoFoodItem;
+import fossil.fossilEnums.EnumDinoFoodMob;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilEnums.EnumSituation;
@@ -93,8 +92,8 @@ public class EntityVelociraptor extends EntityDinosaur
         //this.BaseattackStrength=;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
-        this.BaseSpeed=0.5F;
-        this.SpeedIncrease=1.3F;
+        this.BaseSpeed=0.2F;
+        this.SpeedIncrease=0.025F;
         this.MaxAge=9;
         this.BaseHealth=21;
         this.HealthIncrease=1;
@@ -108,13 +107,20 @@ public class EntityVelociraptor extends EntityDinosaur
         FoodItemList.addItem(EnumDinoFoodItem.PorkCooked);
         FoodItemList.addItem(EnumDinoFoodItem.BeefRaw);
         FoodItemList.addItem(EnumDinoFoodItem.BeefCooked);
-        //FoodItemList.addItem(EnumDinoFoodItem.DinoMeatRaw);
         FoodItemList.addItem(EnumDinoFoodItem.DinoMeatCooked);
         FoodItemList.addItem(EnumDinoFoodItem.Triceratops);
         FoodItemList.addItem(EnumDinoFoodItem.Stegosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Plesiosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Pterosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Brachiosaur);
+        
+        FoodMobList.addMob(EnumDinoFoodMob.Pig);
+        FoodMobList.addMob(EnumDinoFoodMob.Cow);
+        FoodMobList.addMob(EnumDinoFoodMob.Triceratops);
+        FoodMobList.addMob(EnumDinoFoodMob.Stegosaur);
+        FoodMobList.addMob(EnumDinoFoodMob.Plesiosaur);
+        FoodMobList.addMob(EnumDinoFoodMob.Pterosaur);
+        FoodMobList.addMob(EnumDinoFoodMob.Brachiosaur);
         
         //this.setHunger(this.getHungerLimit());
         //this.attackStrength = 2 + this.getDinoAge();
@@ -128,7 +134,7 @@ public class EntityVelociraptor extends EntityDinosaur
         this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
+        //this.tasks.addTask(6, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
         /*this.tasks.addTask(6, new DinoAIPickItem(this, Item.porkRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.beefRaw, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.chickenRaw, this.moveSpeed, 24, this.HuntLimit));
@@ -137,7 +143,7 @@ public class EntityVelociraptor extends EntityDinosaur
         this.tasks.addTask(6, new DinoAIPickItem(this, Item.chickenCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.rawDinoMeat, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(6, new DinoAIPickItem(this, Fossil.cookedDinoMeat, this.moveSpeed, 24, this.HuntLimit));*/
-        this.tasks.addTask(6, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(6, new DinoAIEat(this, 24));
         this.tasks.addTask(7, new DinoAIWander(this));
         //this.tasks.addTask(7, new DinoAILearnChest(this));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));

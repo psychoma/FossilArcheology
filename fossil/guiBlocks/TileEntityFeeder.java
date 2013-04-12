@@ -5,7 +5,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import fossil.Fossil;
 import fossil.entity.mob.EntityDinosaur;
-import fossil.fossilEnums.*;
+import fossil.fossilEnums.EnumDinoType;
+import fossil.fossilEnums.EnumDinoFoodItem;
+import fossil.fossilEnums.EnumDinoFoodBlock;
 import fossil.items.ItemDinoMeat;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -233,41 +235,11 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
                         }
                     }
                 }
-                /*var3 = this.feederItemStacks[0].itemID;
-
-                if (this.MeatValue(var3) > 0)
-                {
-                    if (this.feederItemStacks[0].getItem().itemID == Fossil.rawDinoMeat.itemID)
-                    {
-                        this.ContainType[this.feederItemStacks[0].getItemDamage()] = true;
-                    }
-
-                    if (this.MeatValue(var3) * this.feederItemStacks[0].stackSize + this.MeatCurrent < this.MeatMax)
-                    {
-                        this.MeatCurrent += this.MeatValue(var3) * this.feederItemStacks[0].stackSize;
-                        var1 = true;
-                        this.feederItemStacks[0] = null;
-                    }
-                    else
-                    {
-                        while (this.MeatValue(var3) + this.MeatCurrent < this.MeatMax && this.feederItemStacks[0] != null)
-                        {
-                            this.MeatCurrent += this.MeatValue(var3);
-                            var1 = true;
-                            --this.feederItemStacks[0].stackSize;
-
-                            if (this.feederItemStacks[0].stackSize == 0)
-                            {
-                                this.feederItemStacks[0] = null;
-                            }
-                        }
-                    }
-                }*/
             }
 
-            if (this.feederItemStacks[1] != null && this.VegCurrent<this.VegMax && EnumDinoFoodItem.foodtype(this.feederItemStacks[1].itemID)==EnumDinoFoodItem.ISHERBIVOROUS)//herbivore part
+            if (this.feederItemStacks[1] != null && this.VegCurrent<this.VegMax && (EnumDinoFoodItem.foodtype(this.feederItemStacks[1].itemID)==EnumDinoFoodItem.ISHERBIVOROUS || EnumDinoFoodBlock.getBlockFood(this.feederItemStacks[1].itemID)>0))//herbivore part
             {
-            	int val=EnumDinoFoodItem.getItemFood(this.feederItemStacks[1].itemID);
+            	int val=EnumDinoFoodItem.getItemFood(this.feederItemStacks[1].itemID)+EnumDinoFoodBlock.getBlockFood(this.feederItemStacks[1].itemID);
                 if (val * this.feederItemStacks[1].stackSize + this.VegCurrent < this.VegMax)
                 {
                     this.VegCurrent += val * this.feederItemStacks[1].stackSize;
@@ -288,31 +260,6 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
                         }
                     }
                 }
-                /*var3 = this.feederItemStacks[1].itemID;
-
-                if (this.VegValue(var3) > 0)
-                {
-                    if (this.VegValue(var3) * this.feederItemStacks[1].stackSize + this.VegCurrent < this.VegMax)
-                    {
-                        this.VegCurrent += this.VegValue(var3) * this.feederItemStacks[1].stackSize;
-                        var1 = true;
-                        this.feederItemStacks[1] = null;
-                    }
-                    else
-                    {
-                        while (this.VegValue(var3) + this.VegCurrent < this.VegMax && this.feederItemStacks[1] != null)
-                        {
-                            this.VegCurrent += this.VegValue(var3);
-                            var1 = true;
-                            --this.feederItemStacks[1].stackSize;
-
-                            if (this.feederItemStacks[1].stackSize == 0)
-                            {
-                                this.feederItemStacks[1] = null;
-                            }
-                        }
-                    }
-                }*/
             }
 
             boolean var4 = this.MeatCurrent > 0 || this.VegCurrent > 0;
@@ -329,16 +276,6 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
         }
     }
 
-    /*public int MeatValue(int var1)
-    {
-        return var1 == Item.egg.itemID ? 100 : (var1 == Item.porkRaw.itemID ? 20 : (var1 == Item.porkCooked.itemID ? 30 : (var1 == Item.chickenCooked.itemID ? 10 : (var1 == Item.chickenRaw.itemID ? 30 : (var1 == Item.beefCooked.itemID ? 20 : (var1 == Item.beefRaw.itemID ? 40 : (var1 == Item.fishRaw.itemID ? 40 : (var1 == Item.fishCooked.itemID ? 60 : (var1 == Item.slimeBall.itemID ? 10 : (var1 == Fossil.rawDinoMeat.itemID ? 100 : (var1 == Fossil.cookedDinoMeat.itemID ? 100 : -1)))))))))));
-    }
-
-    public int VegValue(int var1)
-    {
-        return var1 == Fossil.fernSeed.itemID ? 50 : (var1 == Item.appleRed.itemID ? 100 : (var1 == Item.wheat.itemID ? 40 : (var1 == Item.reed.itemID ? 20 : (var1 == Item.paper.itemID ? 60 : (var1 == Item.book.itemID ? 180 : (var1 == Item.bread.itemID ? 120 : (var1 == Item.melon.itemID ? 25 : (var1 != Block.plantRed.blockID && var1 != Block.plantYellow.blockID ? (var1 != Block.mushroomBrown.blockID && var1 != Block.mushroomBrown.blockID ? (var1 != Block.leaves.blockID && var1 != Block.vine.blockID ? (var1 == Block.sapling.blockID ? 10 : (var1 == Block.melon.blockID ? 200 : -1)) : 10) : 15) : 20))))))));
-    }*/
-
     /**
      * Do not make give this method the name canInteractWith because it clashes with Container
      */
@@ -350,7 +287,30 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
     public void openChest() {}
 
     public void closeChest() {}
+    
+    public boolean CheckIsEmpty(EnumDinoType t)
+    {
+        if ((!t.isHerbivore() || this.VegCurrent==0) && (!t.isCarnivore() || this.MeatCurrent==0) )
+            return true;
+        //this.ClearTypeRecord();TODO: necessary for dinos noticing their meat is in the feeder
+        return false;
+    }
 
+    public int Feed(EntityDinosaur var1, EnumDinoType t)
+    {
+    	int a=0;
+        while (var1.increaseHunger(1) && !this.CheckIsEmpty(t))
+        {
+            if (t.isCarnivore() && this.MeatCurrent>0)//if meatcurrent=0 it eats veggie food and the dino can eat and there is food, see checkisempty
+            	--this.MeatCurrent;
+            else
+                --this.VegCurrent;
+            a++;
+        }
+        return a;//amout fed to the dino
+    }
+
+    /*@Deprecated
     public boolean CheckIsEmpty(EnumDinoEating var1)
     {
         if (var1 == EnumDinoEating.Herbivorous)
@@ -368,6 +328,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
         }
     }
 
+    @Deprecated
     public void Feed(EntityDinosaur var1, EnumDinoEating var2)
     {
         while (var1.increaseHunger(1) && !this.CheckIsEmpty(var2))
@@ -381,7 +342,7 @@ public class TileEntityFeeder extends TileEntity implements IInventory, ISidedIn
                 --this.MeatCurrent;
             }
         }
-    }
+    }*/
 
     /*public boolean GetIfEatingSameBreed(EnumDinoType var1)
     {//Seems to be completely senseless to me, will return true for all dinos

@@ -165,13 +165,14 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
 
         var6 += this.func_411_c(this.art.sizeY);
         this.setPosition((double)var5, (double)var6, (double)var7);
-        float var9 = -0.00625F;
+        //float var9 = -0.00625F;
+        float var9 = -0.03125F;
         this.boundingBox.setBounds((double)(var5 - var2 - var9), (double)(var6 - var3 - var9), (double)(var7 - var4 - var9), (double)(var5 + var2 + var9), (double)(var6 + var3 + var9), (double)(var7 + var4 + var9));
     }
 
     private float func_411_c(int var1)
     {
-        return var1 == 32 ? 0.5F : (var1 != 64 ? 0.0F : 0.5F);
+        return var1 == 32 ? 0.5F : (var1 == 64 ? 0.5F : 0.0F);
     }
 
     /**
@@ -181,6 +182,7 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
     {
         if (this.tickCounter1++ == 100 && !this.worldObj.isRemote)
         {
+        	//System.out.println("GAAAH");
             this.tickCounter1 = 0;
 
             if (!this.onValidSurface())
@@ -199,8 +201,8 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
         }
         else
         {
-            int Width = this.art.sizeX / 16;	//Size of The Tablet
-            int Height = this.art.sizeY / 16;
+            int Width = Math.max(1, this.art.sizeX / 16);	//Size of The Tablet
+            int Height = Math.max(1, this.art.sizeY / 16);
             
             
             int xPos = this.xPosition;			//Starting Position of the Tablet
@@ -221,7 +223,7 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
             {
                 for (int up = 0; up < Height; up++)
                 {
-                    if (this.direction == 1 || this.direction == 3)
+                    if (this.direction != 2 || this.direction != 0)
                     {
                         if(!this.worldObj.getBlockMaterial(this.xPosition, yPos + up, zPos + side).isSolid())
                         	return false;
@@ -238,7 +240,7 @@ public class EntityStoneboard extends Entity implements IEntityAdditionalSpawnDa
 
             for (int i = 0; i < collidingEntities.size(); i++)
             {
-                if ((collidingEntities.get(i) instanceof EntityStoneboard))// || (collidingEntities.get(i) instanceof EntityHanging))this line seems not to be necessary
+                if ((collidingEntities.get(i) instanceof EntityStoneboard) || (collidingEntities.get(i) instanceof EntityHanging))// || (collidingEntities.get(i) instanceof EntityHanging))this line seems not to be necessary
                 {
                     return false;
                 }

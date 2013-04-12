@@ -28,7 +28,6 @@ public enum EnumDinoFoodMob
 	Pig(EntityPig.class,30,3),
 	Sheep(EntitySheep.class,35,3),
 	Squid(EntitySquid.class,30,3),
-	Mob(EntityMob.class,20,1),
 	Nautilus(EntityNautilus.class,100,5),
 	Triceratops(EntityTriceratops.class,50,3),
 	Raptor(EntityVelociraptor.class,20,3),
@@ -49,11 +48,5 @@ public enum EnumDinoFoodMob
         preyClass = pClass;
         FoodValue = Food;
         HealValue = Heal;
-    }
-    private EnumDinoFoodMob(EnumDinoFoodMob mob0)
-    {
-        preyClass = mob0.preyClass;
-        FoodValue = mob0.FoodValue;
-        HealValue = mob0.HealValue;
     }
 }

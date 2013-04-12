@@ -10,11 +10,13 @@ import java.util.Random;
 
 import fossil.Fossil;
 import fossil.fossilAI.DinoAIAttackOnCollide;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIGrowup;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.WaterDinoAINearestAttackableTarget;
 import fossil.fossilAI.WaterDinoAISwimming;
 import fossil.fossilAI.WaterDinoAIWander;
+import fossil.fossilEnums.EnumDinoFoodMob;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilInterface.IWaterDino;
@@ -89,11 +91,15 @@ public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
         //this.Hungrylevel=;
         this.updateSize();
         
+        FoodMobList.addMob(EnumDinoFoodMob.Squid);
+        FoodMobList.addMob(EnumDinoFoodMob.Nautilus);
+        
         this.getNavigator().setCanSwim(true);
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         this.tasks.addTask(1, (new WaterDinoAISwimming(this, true, 0.09374999F, 0.018749999F)).setDiveAtNight());
-        this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
+        this.tasks.addTask(2, new DinoAIAttackOnCollide(this, true));
+        this.tasks.addTask(3,new DinoAIEat(this,24));
         this.tasks.addTask(4, new WaterDinoAIWander(this, 0.003F));
         this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(6, new EntityAILookIdle(this));
@@ -692,56 +698,12 @@ public class EntityMosasaurus extends EntityDinosaur implements IWaterDino
     {
         this.isJumping = false;
     }
-
-    /*/**
-     * Heal living entity (param: amount of half-hearts)
-     *
-    public void heal(int var1)
-    {
-        if (this.health > 0)
-        {
-            this.health += var1;
-
-            if (this.health > 200)
-            {
-                this.health = 200;
-            }
-        }
-    }*/
     @SideOnly(Side.CLIENT)
     public void ShowPedia(GuiPedia p0)
     {
     	super.ShowPedia(p0);
     	p0.PrintItemXY(Fossil.dnaMosasaurus, 120, 7);
     }
-    /*public void ShowPedia(EntityPlayer var1)
-    {
-        this.PediaTextCorrection(this.SelfType, var1);
-
-        if (this.isTamed())
-        {
-            Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
-            Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
-            Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
-        }
-        else
-        {
-            Fossil.ShowMessage(CautionText, var1);
-        }
-    }
-
-    public String[] additionalPediaMessage()
-    {
-        String[] var1 = null;
-
-        if (!this.isTamed())
-        {
-            var1 = new String[] {UntamedText};
-        }
-
-        return var1;
-    }*/
 
     public void HandleBoatSinking()
     {

@@ -46,7 +46,8 @@ public class BlockPalaeSlab extends FossilSlabs
 
 	public String getFullSlabName(int var1)
 	{
-		return null;
+		return Fossil.palaeDoubleSlab.getBlockName();
+		//return null;
 	}
 
 	//gets texture file

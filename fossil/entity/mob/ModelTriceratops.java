@@ -201,7 +201,7 @@ public class ModelTriceratops extends ModelDinosaurs
     public void RunningPose(float var1, float var2, float var3, float var4, float var5, float var6, boolean var7)
     {
         super.setRotationAngles(var1, var2, var3, var4, var5, var6);
-        if (var7==false)
+        //if (var7==false)
         {
             this.noumenon1.rotateAngleX = MathHelper.cos(var1 / 0.63330555F) * 0.08726646F * var2 + 0.0F;
             this.noumenon2.rotateAngleX = MathHelper.cos(var1 / 0.63330555F) * 0.17453292F * var2 + -0.27121663F;

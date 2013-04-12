@@ -19,22 +19,30 @@ import fossil.Fossil;
 import fossil.entity.EntityDinoEgg;
 import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItems;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilEnums.EnumSituation;
 import fossil.guiBlocks.GuiPedia;
+import fossil.guiBlocks.TileEntityFeeder;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -47,6 +55,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovementInput;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public abstract class EntityDinosaur extends EntityTameable implements IEntityAdditionalSpawnData
@@ -137,10 +146,10 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
     //List of the eatable Items with the FoodValue and HealingValue belonging to
     public DinoFoodItemList FoodItemList;
     
-    //List of the eatable Items with the FoodValue and HealingValue belonging to
+    //List of the eatable Blocks with the FoodValue and HealingValue belonging to
     public DinoFoodBlockList FoodBlockList;
     
-    //List of the eatable Items with the FoodValue and HealingValue belonging to
+    //List of the eatable Mobs with the FoodValue and HealingValue belonging to
     public DinoFoodMobList FoodMobList;
     
     //Hunger Limit of the Dino, standard is 100
@@ -307,8 +316,8 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
     public void setSubSpecies(int var1)
     {this.dataWatcher.updateObject(SUBSPECIES_INDEX, Integer.valueOf(var1));}
     
-    /*@SideOnly(Side.CLIENT)
-    public void getHealthData()
+    @SideOnly(Side.CLIENT)
+    /*public void getHealthData()
     {this.setEntityHealth(this.dataWatcher.getWatchableObjectInt(HEALTH_INDEX));}*/
     public int getHealthData()
     {return this.dataWatcher.getWatchableObjectInt(HEALTH_INDEX);}
@@ -379,6 +388,16 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
     	if(this.getHunger()>this.getMaxHunger())
     		this.setHunger(this.getMaxHunger());
     	return true;
+    }
+    /**
+     * This method gets called when the entity kills another one.
+     */
+    public void onKillEntity(EntityLiving var1)
+    {
+        super.onKillEntity(var1);
+        this.increaseHunger(this.FoodMobList.getMobFood(var1.getClass()));
+        if(Fossil.FossilOptions.Heal_Dinos)
+        	this.heal(this.FoodMobList.getMobHeal(var1.getClass()));
     }
     
     public void decreaseHunger()
@@ -456,7 +475,7 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
     		p0.PrintStringXY(String.valueOf(this.getDinoAge()) +" "+ Fossil.GetLangTextByKey("PediaText.Day"), 109, 35);
     	else
     		p0.PrintStringXY(String.valueOf(this.getDinoAge()) +" "+ Fossil.GetLangTextByKey("PediaText.Days"), 109, 35);
-    	p0.PrintStringXY(String.valueOf(this.getHealth()) + '/' + this.getMaxHealth(), 109, 47);
+    	p0.PrintStringXY(String.valueOf(this.getHealthData()) + '/' + this.getMaxHealth(), 109, 47);
     	p0.PrintStringXY(String.valueOf(this.getHunger()) + '/' + this.getMaxHunger(), 109, 59);
     	
     	if(this.SelfType.isRideable() && this.isAdult())
@@ -489,7 +508,7 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
     		while(i > 0 && this.getHunger() < this.getMaxHunger())
     		{
     			this.setHunger(this.getHunger()+ this.FoodItemList.getItemFood(item0.itemID));
-    			if(Fossil.FossilOptions.Heal_Dinos)//!this.worldObj.isRemote)
+    			if(Fossil.FossilOptions.Heal_Dinos && !this.worldObj.isRemote)//!this.worldObj.isRemote)
     				this.heal(this.FoodItemList.getItemHeal(item0.itemID));
     			i--;
     		}	
@@ -566,7 +585,121 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
     {
         return this.getSpeed();
     }
+    public Vec3 getBlockToEat(int SEARCH_RANGE)
+    {
+    	Vec3 pos = null;
+    	/*for (int dx = -1; dx != -(SEARCH_RANGE+1); dx+=(dx<0)?(dx*-2):(-(2*dx+1)))//Creates the following order: -1,1,-2,2,-3,3,-4,1,....,10, stops with 10. looks at near places, first
+        {
+    		System.out.println(String.valueOf(dx));
+            for (int dy = -5; dy < 4; dy++)
+            {
+                for (int dz = -1; dz != -(SEARCH_RANGE+1); dz+=(dz<0)?(dz*-2):(-(2*dz+1)))//Creates the following order: -1,1,-2,2,-3,3,-4,1,....,10, stops with 10. looks at near places, first
+                {
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX+dx), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+dz))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX+dx),MathHelper.floor_double(this.posY+dy),MathHelper.floor_double(this.posZ+dz));
+                    	return pos;
+                    }
+                }
+            }
+        }*/
+    	for(int r=1;r<=SEARCH_RANGE;r++)
+    	{
+	    	for (int ds = -r; ds <=r; ds++)
+	        {
+	            for (int dy = 4; dy > -5; dy--)
+	            {
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX+ds), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ-r))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX+ds), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ-r));
+                    	return pos;
+                    }
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX+ds), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+r))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX+ds), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+r));
+                    	return pos;
+                    }
+	            }
+	        }
+	    	for (int ds = -r+1; ds <=r-1; ds++)
+	        {
+	            for (int dy = 4; dy > -5; dy--)
+	            {
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX-r), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+ds))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX-r), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+ds));
+                    	return pos;
+                    }
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight() && this.FoodBlockList.CheckBlockById(this.worldObj.getBlockId(MathHelper.floor_double(this.posX+r), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+ds))))
+                    {
+                    	pos = Vec3.createVectorHelper(MathHelper.floor_double(this.posX+r), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+ds));
+                    	return pos;
+                    }
+	            }
+	        }
+    	}
+    	return null;
+    }
 
+    public TileEntityFeeder GetNearestFeeder(int SEARCH_RANGE)
+    {
+        /*Vec3 var2 = null;
+        //double var3 = this.posX;
+        //double var5 = this.posY;
+        //double var7 = this.posZ;
+        //int var9 = SEARCH_RANGE / 2;
+        double var10 = 0.0D;
+        double var12 = (double)(SEARCH_RANGE * SEARCH_RANGE * 2);
+
+        for (int var15 = (int)(this.posX - (double)SEARCH_RANGE); var15 < (int)(this.posX + (double)SEARCH_RANGE); ++var15)
+        {
+            for (int var16 = (int)(this.posY - (double)SEARCH_RANGE/2D); var16 < (int)(this.posY + (double)SEARCH_RANGE/2D); ++var16)
+            {
+                for (int var17 = (int)(this.posZ - (double)SEARCH_RANGE); var17 < (int)(this.posZ + (double)SEARCH_RANGE); ++var17)
+                {
+                    if (var16 >= 0 && var16 <= this.worldObj.getHeight())
+                    {
+                        TileEntity var14 = this.worldObj.getBlockTileEntity(var15, var16, var17);
+
+                        if (var14 != null && var14 instanceof TileEntityFeeder && ((TileEntityFeeder)var14).isFilled())
+                        {
+                            var10 = ((double)var15 - this.posX) * ((double)var15 - this.posX) + ((double)var17 - this.posZ) * ((double)var17 - this.posZ);
+
+                            if (var10 < var12)
+                            {
+                                var12 = var10;
+                                var2 = Vec3.createVectorHelper((double)var15, (double)var16, (double)var17);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return var2;*/
+        //Vec3 pos = null;
+    	for (int dx = -2; dx != -(SEARCH_RANGE+1); dx+=(dx<0)?(dx*-2):(-(2*dx+1)))//Creates the following order: -2,2,-3,3,-4,1,....,10, stops with 10. looks at near places, first
+        {
+            for (int dy = -5; dy < 4; dy++)
+            {
+                for (int dz = -2; dz != -(SEARCH_RANGE+1); dz+=(dz<0)?(dz*-2):(-(2*dz+1)))//Creates the following order: -2,2,-3,3,-4,1,....,10, stops with 10. looks at near places, first
+                {
+                    if(this.posY+dy >= 0 && this.posY+dy <= this.worldObj.getHeight())
+                    {
+                    	TileEntity fed = this.worldObj.getBlockTileEntity(MathHelper.floor_double(this.posX+dx), MathHelper.floor_double(this.posY+dy), MathHelper.floor_double(this.posZ+dz));
+
+                        if (fed != null && fed instanceof TileEntityFeeder && ((TileEntityFeeder)fed).isFilled())
+                        {
+                        	//pos = Vec3.createVectorHelper(this.posX+dx,this.posY+dy,this.posY+dz);
+                        	return (TileEntityFeeder)fed;//pos;
+                        }
+                    }
+                }
+            }
+        }
+    	return null;
+    }
+    
     public float HandleRiding(float Speed, float SpeedBoosted)
     {
     	//EntityPlayer P = (EntityPlayer)this.riddenByEntity;
@@ -752,7 +885,7 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
 
     public void SendStatusMessage(EnumSituation var1)
     {
-		if(this.getOwner()!=null && this.getDistanceToEntity(this.getOwner())<25.0F);
+		if(this.getOwner()!=null && this.getDistanceToEntity(this.getOwner())<50.0F);
 		{
 			String Status1=Fossil.GetLangTextByKey("Status." + var1.toString()+".Head")+" ";
 			String Dino=this.SelfType.toString();
@@ -1134,7 +1267,12 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
     {
     	if(this.worldObj.isRemote)
     	{
-        	this.getHealthData();
+    		/*System.out.println(String.valueOf(this.ticksExisted%100));
+        	System.out.println(String.valueOf("   "+this.entityId));
+    		System.out.println(String.valueOf("   "+this.posX));
+    		System.out.println(String.valueOf("   "+this.posY));
+    		System.out.println(String.valueOf("   "+this.posZ));*/
+        	//this.getHealthData();
         	if(FMLCommonHandler.instance().getSide().isClient() && this.riddenByEntity!=null && this.riddenByEntity instanceof EntityPlayerSP)
         	{
         		boolean NeedsTransfer=false;
@@ -1183,14 +1321,36 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
         	        }
         			Minecraft.getMinecraft().getSendQueue().addToSendQueue(new Packet250CustomPayload("RiderInput",var3.toByteArray()));
         			//System.out.println("Client has sent Rider Input data!");
+        			/*this.HandleRiding(this.moveSpeed, 0F);
+        			ByteArrayOutputStream var3 = new ByteArrayOutputStream();
+        			DataOutputStream var4 = new DataOutputStream(var3);
+        	        try
+        	        {
+        	        	var4.writeInt(this.entityId);
+        	        	var4.writeDouble(this.posX);
+        	        	var4.writeDouble(this.posY);
+        	        	var4.writeDouble(this.posZ);
+        	        	var4.writeFloat(this.RiderStrafe);
+        	        	var4.writeFloat(this.RiderForward);
+        	        }
+        	        catch(Exception e)
+        	        {
+        	        	System.err.println("ERROR WHILE WRITING Rider Input Data to Packet");
+        	        }
+        			Minecraft.getMinecraft().getSendQueue().addToSendQueue(new Packet250CustomPayload("RiddenPos",var3.toByteArray()));*/
         		}
         	}
         	//System.out.println("Client has set Rider Input data!");
     	}
         else
         {
-        	if(this.dataWatcher.getWatchableObjectInt(HEALTH_INDEX)!=this.health)
+        	if(this.health!=this.prevHealth)
+        	{
         		this.setHealthData();
+        		this.prevHealth=this.health;
+        	}
+        	//if(this.dataWatcher.getWatchableObjectInt(HEALTH_INDEX)!=this.health)
+        	//	this.setHealthData();
         	//System.out.print("Server:");
         }
         //System.out.println("Data:"+String.valueOf(this.dataWatcher.getWatchableObjectInt(HEALTH_INDEX)));
@@ -1213,7 +1373,7 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
             ItemStack var2 = var1.inventory.getCurrentItem();
 
             if (var2 != null)
-            {
+            {           	
             	if (var2.itemID == Fossil.chickenEss.itemID && !var1.worldObj.isRemote)
             	{// Be grown up by chicken essence
             		if (this.getDinoAge() < this.AdultAge && this.getHunger() > 0)
@@ -1230,21 +1390,21 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
             	     }
             	     return false;
             	}
-            	if (this.FoodItemList.CheckItemById(var2.itemID))
+            	if (this.FoodItemList.CheckItemById(var2.itemID) || this.FoodBlockList.CheckBlockById(var2.itemID))
             	{//Item is one of the dinos food items
-            		//if(!var1.worldObj.isRemote)
+            		if(!var1.worldObj.isRemote)
             		{
 	            		if(this.getMaxHunger()>this.getHunger())
 	                	{	//The Dino is Hungry and it can eat the item
 	                		//this.showHeartsOrSmokeFX(false);
 	            			this.worldObj.setEntityState(this, SMOKE_MESSAGE);
-	                		this.increaseHunger(this.FoodItemList.getItemFood(var2.itemID));
+	                		this.increaseHunger(this.FoodItemList.getItemFood(var2.itemID)+this.FoodBlockList.getBlockFood(var2.itemID));
 	                		if(Fossil.FossilOptions.Heal_Dinos)
 	                		{
-	                			System.out.println("H:"+String.valueOf(this.health));
-	                			this.heal(this.FoodItemList.getItemHeal(var2.itemID));
-	                			System.out.println("I:"+String.valueOf(this.FoodItemList.getItemHeal(var2.itemID)));
-	                			System.out.println("H:"+String.valueOf(this.health));
+	                			//System.out.println("Hbefore:"+String.valueOf(this.health));
+	                			this.heal(this.FoodItemList.getItemHeal(var2.itemID)+this.FoodBlockList.getBlockHeal(var2.itemID));
+	                			//System.out.println("ItemHealValueInDino:"+String.valueOf(this.FoodItemList.getItemHeal(var2.itemID)+this.FoodBlockList.getBlockHeal(var2.itemID)));
+	                			//System.out.println("Hafter:"+String.valueOf(this.health));
 	                		}
 	                		if(this.getHunger() >= this.getMaxHunger())
 	                		{
@@ -1280,9 +1440,9 @@ public abstract class EntityDinosaur extends EntityTameable implements IEntityAd
 	            			}
 	            			else
 	            			{
-	            				if(this.FoodItemList.getItemFood(ItemInMouth.itemID)<this.FoodItemList.getItemFood(var2.itemID))
+	            				if(this.FoodItemList.getItemFood(ItemInMouth.itemID)+this.FoodBlockList.getBlockFood(ItemInMouth.itemID)<this.FoodItemList.getItemFood(var2.itemID)+this.FoodBlockList.getBlockFood(var2.itemID))
 	            				{//The item given is better food for the dino
-	            					entityDropItem(new ItemStack(this.ItemInMouth.itemID, 1, 0), 0.5F);//Spit out the old item
+	            					entityDropItem(new ItemStack(this.ItemInMouth.itemID, 1, 0), 0.5F);//TODO Spit out the old item
 	            					this.HoldItem(var2);
 	            					--var2.stackSize;
 	        	                    /*if (var2.stackSize <= 0)

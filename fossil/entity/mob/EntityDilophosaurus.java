@@ -12,13 +12,12 @@ import fossil.Fossil;
 import fossil.fossilAI.DinoAIAttackOnCollide;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItems;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAITargetNonTamedExceptSelfClass;
-import fossil.fossilAI.DinoAIUseFeeder;
 import fossil.fossilAI.DinoAIWander;
-import fossil.fossilEnums.EnumDinoEating;
 import fossil.fossilEnums.EnumDinoFoodItem;
+import fossil.fossilEnums.EnumDinoFoodMob;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilEnums.EnumSituation;
@@ -99,8 +98,8 @@ public class EntityDilophosaurus extends EntityDinosaur
         //this.BaseattackStrength=;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
-        this.BaseSpeed=0.4F;
-        this.SpeedIncrease=1.0F;
+        this.BaseSpeed=0.17F;
+        this.SpeedIncrease=0.022F;
         this.MaxAge=9;
         //this.BaseHealth=;
         //this.HealthIncrease=;
@@ -117,7 +116,13 @@ public class EntityDilophosaurus extends EntityDinosaur
         FoodItemList.addItem(EnumDinoFoodItem.ChickenCooked);
         FoodItemList.addItem(EnumDinoFoodItem.DinoMeatCooked);
         FoodItemList.addItem(EnumDinoFoodItem.Pterosaur);
+        FoodItemList.addItem(EnumDinoFoodItem.Triceratops);
         FoodItemList.addItem(EnumDinoFoodItem.Egg);
+        
+        FoodMobList.addMob(EnumDinoFoodMob.Triceratops);
+        FoodMobList.addMob(EnumDinoFoodMob.Pterosaur);
+        FoodMobList.addMob(EnumDinoFoodMob.Pig);
+        FoodMobList.addMob(EnumDinoFoodMob.Chicken);
         
         //this.attackStrength = 2 + this.getDinoAge();
         this.getNavigator().setAvoidsWater(true);
@@ -129,9 +134,9 @@ public class EntityDilophosaurus extends EntityDinosaur
         this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
         this.tasks.addTask(5, new DinoAIFollowOwner(this, 5.0F, 2.0F));
-        this.tasks.addTask(6, new DinoAIUseFeeder(this, 24, /*this.HuntLimit,*/ EnumDinoEating.Carnivorous));
+        //this.tasks.addTask(6, new DinoAIUseFeeder(this, 24, /*this.HuntLimit,*/ EnumDinoEating.Carnivorous));
         this.tasks.addTask(7, new DinoAIWander(this));
-        this.tasks.addTask(7, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(7, new DinoAIEat(this, 24));
         this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(9, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
@@ -255,6 +260,7 @@ public class EntityDilophosaurus extends EntityDinosaur
 
     protected void updateEntityActionState()
     {//TODO
+    	System.out.println("DILO OLD CODE");
         super.updateEntityActionState();
         EntityPlayer var1 = this.worldObj.getPlayerEntityByName(this.getOwnerName());
 
@@ -500,28 +506,6 @@ public class EntityDilophosaurus extends EntityDinosaur
         return super.interact(var1);
     }
 
-    public void handleHealthUpdate(byte var1)
-    {
-        if (var1 == 7)
-        {
-            this.showHeartsOrSmokeFX(true);
-        }
-        else if (var1 == 6)
-        {
-            this.showHeartsOrSmokeFX(false);
-        }
-        else if (var1 == 8)
-        {
-            //this.field_25052_g = true;
-            //this.timeWolfIsShaking = 0.0F;//WHAT is that doing????
-            //this.prevTimeWolfIsShaking = 0.0F;
-        }
-        else
-        {
-            super.handleHealthUpdate(var1);
-        }
-    }
-
     /**
      * Will return how many at most can spawn in a chunk at once.
      */
@@ -529,60 +513,6 @@ public class EntityDilophosaurus extends EntityDinosaur
     {
         return 10;
     }
-
-    /*public boolean isSelfAngry()
-    {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
-    }*/
-
-    /*public void setSelfAngry(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 2)));
-            this.moveSpeed = 2.0F;
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -3)));
-        }
-    }*/
-    
-    /*public boolean isSelfSitting()
-    {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }
-
-    public void setSelfSitting(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 1)));
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -2)));
-        }
-    }
-
-    public void setTamed(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 4)));
-        }
-        else
-        {
-            this.ItemInMouth = null;
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -5)));
-        }
-    }*/
 
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
@@ -614,6 +544,7 @@ public class EntityDilophosaurus extends EntityDinosaur
      */
     protected void updateWanderPath()
     {
+    	System.out.println("DILO PATH UPDATE");
         boolean var1 = false;
         int var2 = -1;
         int var3 = -1;
@@ -708,64 +639,15 @@ public class EntityDilophosaurus extends EntityDinosaur
     		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Chest"), true);
     }
 
-    /*public void ShowPedia(EntityPlayer var1)
-    {
-        this.PediaTextCorrection(this.SelfType, var1);
-
-        if (this.isTamed())
-        {
-            Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
-            Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
-            Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
-
-            if (this.LearningChestTick <= 0)
-            {
-                Fossil.ShowMessage(EnableChestText, var1);
-            }
-        }
-        else
-        {
-            Fossil.ShowMessage(UntamedText, var1);
-        }
-    }*/
-
-    /*public String[] additionalPediaMessage()
-    {
-        String[] var1 = null;
-
-        if (!this.isTamed())
-        {
-            var1 = new String[] {UntamedText};
-        }
-        else
-        {
-            ArrayList var2 = new ArrayList();
-
-            if (this.LearningChestTick <= 0)
-            {
-                var2.add(EnableChestText);
-            }
-
-            if (!var2.isEmpty())
-            {
-                var1 = new String[1];
-                var1 = (String[])var2.toArray(var1);
-            }
-        }
-
-        return var1;
-    }*/
-
     public EntityDilophosaurus spawnBabyAnimal(EntityAgeable var1)
     {
         return new EntityDilophosaurus(this.worldObj);
     }
 
-    public boolean IsIdle()
+    /*public boolean IsIdle()
     {
         return this.motionX < 0.03125D && this.motionY < 0.03125D && this.motionZ < 0.03125D;
-    }
+    }*/
 
     /**
      * Sets the entity which is to be attacked.

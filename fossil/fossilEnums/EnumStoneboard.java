@@ -21,7 +21,7 @@ public enum EnumStoneboard
     HolyMosa("HolyMosa", 16, "HolyMosa", 64, 32, 0, 128),
     AnciTM("AnciTM", 17, "AnciTM", 32, 32, 96, 0),
     ModTM("ModTM", 18, "ModTM", 16, 32, 128, 0),
-    VigTM("VigTM", 19, "ModTM", 32, 32, 144, 0);
+    VigTM("VigTM", 19, "VigTM", 32, 32, 144, 0);
     public static final int maxArtTitleLength = "annoyangry".length();
     public final String title;
     public final int sizeX;

@@ -10,13 +10,12 @@ import fossil.fossilAI.DinoAIAvoidEntityWhenYoung;
 import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
-import fossil.fossilAI.DinoAIPickItems;
+import fossil.fossilAI.DinoAIEat;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAITargetNonTamedExceptSelfClass;
-import fossil.fossilAI.DinoAIUseFeeder;
 import fossil.fossilAI.DinoAIWander;
-import fossil.fossilEnums.EnumDinoEating;
 import fossil.fossilEnums.EnumDinoFoodItem;
+import fossil.fossilEnums.EnumDinoFoodMob;
 import fossil.fossilEnums.EnumDinoType;
 import fossil.fossilEnums.EnumOrderType;
 import fossil.fossilEnums.EnumSituation;
@@ -100,7 +99,18 @@ public class EntityTRex extends EntityDinosaur
         FoodItemList.addItem(EnumDinoFoodItem.Plesiosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Pterosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Brachiosaur);
-        FoodItemList.addItem(EnumDinoFoodItem.Raptor);
+        FoodItemList.addItem(EnumDinoFoodItem.Velociraptor);
+        
+        FoodMobList.addMob(EnumDinoFoodMob.Pig);
+        FoodMobList.addMob(EnumDinoFoodMob.Cow);
+        FoodMobList.addMob(EnumDinoFoodMob.Chicken);
+        FoodMobList.addMob(EnumDinoFoodMob.Triceratops);
+        FoodMobList.addMob(EnumDinoFoodMob.Stegosaur);
+        FoodMobList.addMob(EnumDinoFoodMob.Dilophosaurus);
+        FoodMobList.addMob(EnumDinoFoodMob.Plesiosaur);
+        FoodMobList.addMob(EnumDinoFoodMob.Pterosaur);
+        FoodMobList.addMob(EnumDinoFoodMob.Brachiosaur);
+        FoodMobList.addMob(EnumDinoFoodMob.Raptor);
         
         //this.attackStrength = 4 + this.getDinoAge();
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8, 23));
@@ -110,7 +120,6 @@ public class EntityTRex extends EntityDinosaur
         this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));
         this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(4, new DinoAIFollowOwner(this, 5.0F, 2.0F));
-        this.tasks.addTask(5, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
         this.tasks.addTask(6, new DinoAIWander(this));
         this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         /*this.tasks.addTask(8, new DinoAIPickItem(this, Item.porkRaw, this.moveSpeed, 24, this.HuntLimit));
@@ -121,7 +130,7 @@ public class EntityTRex extends EntityDinosaur
         this.tasks.addTask(8, new DinoAIPickItem(this, Item.chickenCooked, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(8, new DinoAIPickItem(this, Fossil.rawDinoMeat, this.moveSpeed, 24, this.HuntLimit));
         this.tasks.addTask(8, new DinoAIPickItem(this, Fossil.cookedDinoMeat, this.moveSpeed, 24, this.HuntLimit));*/
-        this.tasks.addTask(6, new DinoAIPickItems(this, 24));
+        this.tasks.addTask(6, new DinoAIEat(this, 24));
         this.tasks.addTask(9, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new DinoAITargetNonTamedExceptSelfClass(this, EntityLiving.class, 16.0F, 50, false));
@@ -346,6 +355,7 @@ public class EntityTRex extends EntityDinosaur
     {
         var2 = this.applyArmorCalculations(var1, var2);
         var2 = this.applyPotionDamageCalculations(var1, var2);
+        this.prevHealth=this.health;
         this.health -= var2;
     }
 
@@ -412,40 +422,9 @@ public class EntityTRex extends EntityDinosaur
     public void onKillEntity(EntityLiving var1)
     {
         super.onKillEntity(var1);
-
         if (this.getDinoAge() >= 3)
         {
             this.worldObj.playSoundAtEntity(this, "TRex_scream", this.getSoundVolume() * 2.0F, 1.0F);
-        }
-
-        if (!this.isWeak())
-        {
-            if (var1 instanceof EntityPig)
-            {
-                this.increaseHunger(30);
-            }
-
-            if (var1 instanceof EntitySheep)
-            {
-                this.increaseHunger(35);
-            }
-
-            if (var1 instanceof EntityCow)
-            {
-                this.increaseHunger(50);
-            }
-
-            if (var1 instanceof EntityChicken)
-            {
-                this.increaseHunger(20);
-            }
-
-            if (var1 instanceof EntityMob)
-            {
-                this.increaseHunger(20);
-            }
-            if(Fossil.FossilOptions.Heal_Dinos)
-            	this.heal(5);
         }
     }
 
@@ -465,7 +444,6 @@ public class EntityTRex extends EntityDinosaur
         			if(Fossil.FossilOptions.Heal_Dinos)
         				this.heal(200);
                     this.increaseHunger(500);
-                    //this.WeakToDeath = 0;
                     this.setTamed(true);
                     this.setOwner(var1.username);
                     --var2.stackSize;
@@ -478,10 +456,8 @@ public class EntityTRex extends EntityDinosaur
         		else
                 {
                     if (!this.isWeak())
-                        //this.SendStatusMessage(EnumSituation.GemErrorHealth);//, this.SelfType);
                     	Fossil.ShowMessage(Fossil.GetLangTextByKey("Status.GemErrorHealth"),var1);
                     if (!this.isAdult())
-                        //this.SendStatusMessage(EnumSituation.GemErrorYoung);//, this.SelfType);
                     	Fossil.ShowMessage(Fossil.GetLangTextByKey("Status.GemErrorYoung"),var1);
                     return true;
                 }
@@ -497,8 +473,8 @@ public class EntityTRex extends EntityDinosaur
 		        }
                 return true;
             }
-        	//if(var2.itemID == Fossil.chickenEss.itemID)
-        		//return true;
+        	if(var2.itemID == Fossil.chickenEss.itemID)
+        		return true;
          }
         else 
         {
@@ -517,105 +493,10 @@ public class EntityTRex extends EntityDinosaur
         return super.interact(var1);
     }
 
-    /*public boolean isAngry()
-    {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 2) != 0;
-    }*/
-
-    /*public boolean isSelfSitting()
-    {
-        return (this.dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }*/
-
-    /*public void setSelfAngry(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1 != this.isSelfAngry())
-        {
-            if (var1)
-            {
-                this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 2)));
-            }
-            else
-            {
-                this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -3)));
-            }
-        }
-    }*/
-
-    /*public void setSelfSitting(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 1)));
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -2)));
-        }
-    }
-
-    public void setTamed(boolean var1)
-    {
-        byte var2 = this.dataWatcher.getWatchableObjectByte(16);
-
-        if (var1)
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 | 4)));
-            this.texture = "/fossil/textures/TRex.png";
-        }
-        else
-        {
-            this.dataWatcher.updateObject(16, Byte.valueOf((byte)(var2 & -5)));
-        }
-    }*/
-
-    /*private void InitSize()
-    {
-        this.updateSize();
-        this.setPosition(this.posX, this.posY, this.posZ);
-
-        /*if (this.isAdult() && !this.isTamed())
-        {
-            this.texture = "/fossil/textures/TRex_Adult.png";
-        }
-        else
-        {
-            this.texture = "/fossil/textures/TRex.png";
-        }*
-    }
-    public void updateSize()
-    {
-    	this.setSize(0.5F + 0.5125F * (float)this.getDinoAge(),0.5F + 0.5125F * (float)this.getDinoAge());
-    }*/
-
     public boolean CheckSpace()
     {
         return !this.isEntityInsideOpaqueBlock();
     }
-
-    /*public boolean HandleEating(int var1)
-    {
-        if (this.getHunger() >= this.getHungerLimit())
-        {
-            return false;
-        }
-        else
-        {
-            this.increaseHunger(var1);
-            this.showHeartsOrSmokeFX(false);
-
-            if (this.getHunger() >= this.getHungerLimit())
-            {
-                this.setHunger(this.getHungerLimit());
-            }
-
-            return true;
-        }
-    }*/
 
     public void updateRiderPosition()
     {
@@ -756,74 +637,6 @@ public class EntityTRex extends EntityDinosaur
     		p0.AddStringLR(Fossil.GetLangTextByKey("PediaText.Caution"), true, 255, 40, 90);
     		
     }
-
-    /*public void ShowPedia(EntityPlayer var1)
-    {
-        this.PediaTextCorrection(this.SelfType, var1);
-
-        if (this.isTamed())
-        {
-            Fossil.ShowMessage(OwnerText + this.getOwnerName(), var1);
-            Fossil.ShowMessage(AgeText + this.getDinoAge(), var1);
-            Fossil.ShowMessage(HelthText + this.health + "/" + 20, var1);
-            Fossil.ShowMessage(HungerText + this.getHunger() + "/" + this.MaxHunger, var1);
-
-            if (this.getDinoAge() >= 4 && this.isTamed())
-            {
-                Fossil.ShowMessage(RidiableText, var1);
-            }
-        }
-        else if (!this.isWeak())
-        {
-            Fossil.ShowMessage(CautionText, var1);
-        }
-        else
-        {
-            Fossil.ShowMessage(WeakText, var1);
-        }
-    }*/
-
-    /*public String[] additionalPediaMessage()
-    {
-        String[] var1 = null;
-
-        if (!this.isTamed())
-        {
-            var1 = new String[] {UntamedText};
-        }
-        else
-        {
-            ArrayList var2 = new ArrayList();
-
-            if (this.getDinoAge() >= 4 && this.isTamed())
-            {
-                var2.add(RidiableText);
-            }
-
-            if (!this.isWeak() && !this.isTamed())
-            {
-                var2.add(CautionText);
-            }
-
-            if (!var2.isEmpty())
-            {
-                var1 = new String[1];
-                var1 = (String[])var2.toArray(var1);
-            }
-        }
-
-        return var1;
-    }*/
-
-    /*public boolean HandleEating(int var1, boolean var2)
-    {
-        return this.HandleEating(var1);
-    }
-
-    public boolean CheckEatable(int var1)
-    {
-        return false;
-    }*/
 
     public EntityTRex spawnBabyAnimal(EntityAgeable var1)
     {

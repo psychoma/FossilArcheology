@@ -19,7 +19,7 @@ public class GuiCultivate extends GuiContainer
 
     protected void drawGuiContainerForegroundLayer()
     {
-        this.fontRenderer.drawString(Fossil.GetLangTextByKey("block.CultureVat.Name"), 60, 6, 4210752);
+        this.fontRenderer.drawString(Fossil.GetLangTextByKey("Block.CultureVat.Name"), 60, 6, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
