@@ -12,8 +12,12 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import fossil.entity.ModelDinoEgg;
+
 public class RenderSpinosaurus extends RenderLiving
 {
+
+    
     public RenderSpinosaurus(ModelBase var1, float var2)
     {
         super(var1, var2);
@@ -61,8 +65,8 @@ public class RenderSpinosaurus extends RenderLiving
             this.loadDownloadableImageTexture(var1.skinUrl, var1.getTexture());
             GL11.glEnable(GL11.GL_ALPHA_TEST);
             this.mainModel.setLivingAnimations(var1, var16, var15, var9);
-/*
-            if (var1.getEntityToAttack() == null && var1.ItemInMouth == null)
+
+            if (var1.getEntityToAttack() == null && var1.ItemInMouth == null && !var1.Screaming)
             {
                 ((ModelSpinosaurus)this.mainModel).CloseMouth(10);
             }
@@ -70,7 +74,7 @@ public class RenderSpinosaurus extends RenderLiving
             {
                 ((ModelSpinosaurus)this.mainModel).OpenMouth(5);
             }
-*/
+
             ((ModelSpinosaurus)this.mainModel).render(var1, var16, var15, var13, var11 - var10, var12, var14);
 
             for (int var17 = 0; var17 < 4; ++var17)

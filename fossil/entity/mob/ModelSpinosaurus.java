@@ -1,6 +1,7 @@
 package fossil.entity.mob;
 
 
+import fossil.Fossil;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MathHelper;
@@ -86,9 +87,9 @@ public class ModelSpinosaurus extends ModelDinosaurs
     setTextureOffset("tail1.tail1Piece", 0, 0);
     setTextureOffset("tail2.tail2Piece", 52, 0);
     setTextureOffset("tail3.tail3Piece", 0, 26);
-    
+
     lowerBody = new ModelRenderer(this, "lowerBody");
-    lowerBody.setRotationPoint(0F, 0F, -1F);
+    lowerBody.setRotationPoint(0F, 1F, -1F);
     setRotation(lowerBody, 0F, 0F, 0F);
     lowerBody.mirror = true;
       lowerBody.addBox("lowerBodyPiece", -7F, -4F, -2F, 14, 16, 22);
@@ -261,102 +262,53 @@ public class ModelSpinosaurus extends ModelDinosaurs
 	 */
   }
   
-  private void setRotation(ModelRenderer model, float x, float y, float z)
+  private void setRotation(ModelRenderer var1, float var2, float var3, float var4)
   {
-    model.rotateAngleX = x;
-    model.rotateAngleY = y;
-    model.rotateAngleZ = z;
+      var1.rotateAngleX = var2;
+      var1.rotateAngleY = var3;
+      var1.rotateAngleZ = var4;
   }
 
   
   
-  public void StandPose()
-  {
-      this.StandPose(20.0F);
-  }
-
-  public void StandPose(float var1)
-  {
-      if (upperBody.rotationPointZ < 2.0F)
-      {
-          upperBody.rotationPointZ += 2.0F / var1;
-      }
-      else
-      {
-          upperBody.rotationPointZ = 2.0F;
-      }
-
-      if (upperBody.rotateAngleX > -0.4068249F)
-      {
-          upperBody.rotateAngleX -= 0.4068249F / var1;
-          neck.rotateAngleX += 0.4068249F / var1;
-      }
-      else
-      {
-          upperBody.rotateAngleX = -0.4068249F;
-      }
-
-
-      if (this.rightArm.rotationPointY > 10.0F)
-      {
-          this.rightArm.rotationPointY -= 4.0F / var1;
-      }
-      else
-      {
-          this.rightArm.rotationPointY = 10.0F;
-      }
-
-      if (this.leftArm.rotationPointY > 10.0F)
-      {
-          this.leftArm.rotationPointY -= 4.0F / var1;
-      }
-      else
-      {
-          this.leftArm.rotationPointY = 10.0F;
-      }
-
-      if (this.head.rotationPointY > 0.0F)
-      {
-          this.head.rotationPointY -= 7.0F / var1;
-      }
-      else
-      {
-          this.head.rotationPointY = 0.0F;
-      }
-
-      if (this.head.rotationPointZ < -8.0F)
-      {
-          this.head.rotationPointZ += 6.0F / var1;
-      }
-      else
-      {
-          this.head.rotationPointZ = -8.0F;
-      }
-  }
  
-  
+  public void OpenMouth(int var1)
+  {
+          this.lowerJaw.rotateAngleX = 0.4363323F;
+
+  }
+
+  public void CloseMouth(int var1)
+  {
+          this.lowerJaw.rotateAngleX = 0.0F;
+
+  } 
   
   protected void setRotationAngles(float var1, float var2, float var3, float var4, float var5, float var6, boolean var7)
   {
-      if (!var7)
-      {
-          this.leftThigh.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
-          this.leftCalf.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2 - 0.372F;
-          this.leftFoot.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.4F * var2;
-          this.rightThigh.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.4F * var2;
-          this.rightCalf.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.4F * var2 - 0.372F;
-          this.rightFoot.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.4F * var2;
-          
-          
-          if (Math.abs(this.rightFoot.rotateAngleX) >= 0.174532F)
-          {
-              this.StandPose();
-          }
-          else
-          {
-              this.StandPose();
-          }
-      }
+		float PI = (float) Math.PI;
+		float initialOffset = PI / 2;
+		float offset = PI * 2 / 11;
+		float currentAngle = 0;
+
+	  
+	  
+	  
+          this.leftThigh.rotateAngleX = MathHelper.clamp_float(MathHelper.cos(var1 * 0.6662F) * 1.0F * var2 - 0.172F, -0.7F, 0.3F);
+          this.leftCalf.rotateAngleX = MathHelper.clamp_float(MathHelper.cos(var1 * 0.6662F) * -1.0F * var2 + 0.472F, 0, 1.523598776F);
+          this.leftFoot.rotateAngleX = MathHelper.cos(var1 * 0.6662F) * 1.0F * var2 - 0.172F;
+          this.rightThigh.rotateAngleX = MathHelper.clamp_float(MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.0F * var2 - 0.172F, -0.7F, 0.3F);
+          this.rightCalf.rotateAngleX = MathHelper.clamp_float(MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * -1.0F * var2 + 0.472F, 0, 1.523598776F);
+          this.rightFoot.rotateAngleX = MathHelper.cos(var1 * 0.6662F + (float)Math.PI) * 1.0F * var2 - 0.172F;
+          this.upperBody.rotateAngleX = MathHelper.cos(var1 * 0.2662F) * 0.2F * var2 - 0.172F;
+          this.neck.rotateAngleX = MathHelper.cos(var1 * 0.2662F + (float)Math.PI) * 0.2F * var2 + 0.172F;
+     
+  		tail1.rotateAngleY = ((float) Math.pow(0.25F, 1)) * (MathHelper.cos(-0.2F * var1 + initialOffset));
+  		currentAngle = tail1.rotateAngleY;
+  		tail2.rotateAngleY = ((float) Math.pow(0.25F, 2)) * (MathHelper.cos(-0.2F * var1 + 1F * offset + initialOffset)) - currentAngle;
+  		currentAngle = tail1.rotateAngleY + tail2.rotateAngleY;
+  		tail3.rotateAngleY = ((float) Math.pow(0.25F, 3)) * (MathHelper.cos(-0.2F * var1 + 1.1F * 2 * offset + PI / 9 + initialOffset)) - currentAngle;
+  		currentAngle = tail1.rotateAngleY + tail2.rotateAngleY + tail3.rotateAngleY;
   }
 
 }

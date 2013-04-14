@@ -1,6 +1,9 @@
 package fossil.entity.mob;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -10,11 +13,13 @@ import fossil.fossilAI.DinoAIAvoidEntityWhenYoung;
 import fossil.fossilAI.DinoAIControlledByPlayer;
 import fossil.fossilAI.DinoAIFollowOwner;
 import fossil.fossilAI.DinoAIGrowup;
+import fossil.fossilAI.DinoAINearestAttackableTargetSorter;
 import fossil.fossilAI.DinoAIPickItems;
 import fossil.fossilAI.DinoAIStarvation;
 import fossil.fossilAI.DinoAITargetNonTamedExceptSelfClass;
 import fossil.fossilAI.DinoAIUseFeeder;
 import fossil.fossilAI.DinoAIWander;
+import fossil.fossilAI.WaterDinoAINearestAttackableTarget;
 import fossil.fossilEnums.EnumDinoEating;
 import fossil.fossilEnums.EnumDinoFoodItem;
 import fossil.fossilEnums.EnumDinoType;
@@ -29,6 +34,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.monster.EntityMob;
@@ -72,23 +79,23 @@ public class EntitySpinosaurus extends EntityDinosaur
         this.health = 10;
         this.experienceValue=20;
         
-        this.Width0=0.2F;
-        this.WidthInc=0.5F;
-        this.Length0=0.2F;
-        this.LengthInc=0.5F;
-        this.Height0=0.2F;
-        this.HeightInc=0.5F;
+        this.Width0=0.5F;
+        this.WidthInc=0.3F;
+        this.Length0=0.5F;
+        this.LengthInc=0.3F;
+        this.Height0=0.5F;
+        this.HeightInc=0.3F;
         this.BaseattackStrength=5;
         //this.AttackStrengthIncrease=;
         //this.BreedingTime=;
-        //this.BaseSpeed=;
-        this.SpeedIncrease=0.02F;
+        this.BaseSpeed=0.2F;
+        this.SpeedIncrease=0.035F;
         this.MaxAge=23;
         //this.BaseHealth=;
         this.HealthIncrease=5;
         //this.AdultAge=;
         //this.AgingTicks=;
-        this.MaxHunger=500;
+        this.MaxHunger=550;
         //this.Hungrylevel=;
         this.updateSize();
         
@@ -102,13 +109,15 @@ public class EntitySpinosaurus extends EntityDinosaur
         FoodItemList.addItem(EnumDinoFoodItem.Pterosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Brachiosaur);
         FoodItemList.addItem(EnumDinoFoodItem.Raptor);
+        FoodItemList.addItem(EnumDinoFoodItem.TRex);
+        FoodItemList.addItem(EnumDinoFoodItem.Spinosaurus);
         
         //this.attackStrength = 4 + this.getDinoAge();
         //this.tasks.addTask(0, new DinoAIGrowup(this, 8, 23));
         //this.tasks.addTask(0, new DinoAIStarvation(this));
         //this.tasks.addTask(1, new DinoAIAvoidEntityWhenYoung(this, EntityPlayer.class, 8.0F, 0.3F, 0.35F));
         //this.tasks.addTask(2, new EntityAILeapAtTarget(this, 0.4F));
-        this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));
+        //this.tasks.addTask(2, this.ridingHandler = new DinoAIControlledByPlayer(this));
         this.tasks.addTask(3, new DinoAIAttackOnCollide(this, true));
         this.tasks.addTask(4, new DinoAIFollowOwner(this, 5.0F, 2.0F));
         this.tasks.addTask(5, new DinoAIUseFeeder(this, 24/*, this.HuntLimit*/, EnumDinoEating.Carnivorous));
@@ -126,6 +135,7 @@ public class EntitySpinosaurus extends EntityDinosaur
         this.tasks.addTask(9, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
         this.targetTasks.addTask(2, new DinoAITargetNonTamedExceptSelfClass(this, EntityLiving.class, 16.0F, 50, false));
+        
     }
 
     /**
@@ -394,6 +404,7 @@ public class EntitySpinosaurus extends EntityDinosaur
                 {
                     if (this.getDinoAge() >= 3)
                     {
+                    	Fossil.DebugMessage("RAWR");
                         this.worldObj.playSoundAtEntity(this, "TRex_scream", this.getSoundVolume() * 2.0F, 1.0F);
                     }
 
